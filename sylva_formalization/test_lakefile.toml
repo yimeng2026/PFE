@@ -1,0 +1,12 @@
+name = "test_meta_theorem"
+version = "0.1.0"
+defaultTargets = ["SuperconductivityMetaTheorem"]
+
+[[lean_lib]]
+name = "SuperconductivityMetaTheorem"
+
+[[require]]
+name = "mathlib"
+scope = "leanprover-community"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "v4.29.0"
