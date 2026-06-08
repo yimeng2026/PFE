@@ -32,7 +32,7 @@ import Basic
 
 namespace Sylva
 
-open Real
+open Real Filter
 
 -- ==============================================================================
 -- SECTION 1: Causal Network Foundations
@@ -103,7 +103,7 @@ def powerLawDegreeDist (gamma k : Real) (hgamma : gamma > 2 /\ gamma < 3) (hk : 
 noncomputable def sylvaGamma : Real := 2.2
 
 lemma sylvaGamma_in_range : sylvaGamma > 2 /\ sylvaGamma < 3 := by
-  sorry  -- AMPUTATED: proof body replaced
+  norm_num [sylvaGamma]
 end CausalNetwork
 
 
@@ -280,7 +280,8 @@ noncomputable def emergentG : Real :=
 
 /-- G > 0 -/
 lemma emergentG_pos : emergentG > 0 := by
-  sorry  -- AMPUTATED: proof body replaced
+  norm_num [emergentG, planckLength, comptonWavelength, gravityLayerFactor]
+  all_goals norm_num
 -- -----------------------------------------------------------------------------
 -- 4.2 Fine Structure Constant alpha
 -- -----------------------------------------------------------------------------
@@ -307,7 +308,8 @@ noncomputable def emergentAlpha : Real :=
 
 /-- alpha > 0 -/
 lemma emergentAlpha_pos : emergentAlpha > 0 := by
-  sorry  -- AMPUTATED: proof body replaced
+  norm_num [emergentAlpha, chiralConnectivity, topoCorrectionFactor, effectiveNodeCount2D]
+  all_goals norm_num
 -- -----------------------------------------------------------------------------
 -- 4.3 Fermi Coupling Constant G_F
 -- -----------------------------------------------------------------------------
