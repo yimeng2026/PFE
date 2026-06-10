@@ -1,9 +1,7 @@
-/-
+﻿/-
 Sylva Test Suite - Simplified Version
 Tests module imports and basic definitions
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import SylvaFormalization.Basic
 import SylvaFormalization.NumericalZeros
 import SylvaFormalization.RiemannHypothesis

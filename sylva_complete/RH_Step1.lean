@@ -1,9 +1,7 @@
-/-
+﻿/-
 Sylva Formalization Project
 Riemann Hypothesis - Step by Step Proof Attempt
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import Mathlib.NumberTheory.LSeries.RiemannZeta
 import Mathlib.NumberTheory.LSeries.Basic
 import SylvaFormalization.Basic
@@ -20,8 +18,7 @@ Mathematically: We need to define what "coarse-graining" means for the Riemann z
 
 /-- The Riemann xi function (completed zeta function)
     ξ(s) = (1/2)s(s-1)π^(-s/2)Γ(s/2)ζ(s)
-    This is entire and satisfies ξ(s) = ξ(1-s) -/
-def RiemannXi (s : ℂ) : ℂ :=
+    This is entire and satisfies ξ(s) = ξ(1-s) -/\n\ndef RiemannXi (s : ℂ) : ℂ :=
   (1 / 2 : ℂ) * s * (s - 1) * 
   Real.pi ^ (-s / 2 : ℂ) * 
   Complex.Gamma (s / 2) * 
@@ -43,8 +40,7 @@ def RiemannXi (s : ℂ) : ℂ :=
     C_λ[f](s) involves truncating the Dirichlet series
     
     FOR NOW: We treat C_λ as a black box operator satisfying certain axioms
--/
-structure CoarseGrainingOperator (λ : ℝ) where
+-/\n\nstructure CoarseGrainingOperator (λ : ℝ) where
   /-- The operator acts on functions ℂ → ℂ -/
   apply : (ℂ → ℂ) → (ℂ → ℂ)
   
@@ -63,8 +59,7 @@ structure CoarseGrainingOperator (λ : ℝ) where
 
 /-- Bootstrap Residual for zeta function
     B_λ(σ, t) = |Λ(σ+it) - Λ(C_λ(σ+it))|
-    where Λ(s) = |ξ(s)|² (squared magnitude for real-valued residual) -/
-def BootstrapResidual (λ σ t : ℝ) (C : CoarseGrainingOperator λ) : ℝ :=
+    where Λ(s) = |ξ(s)|² (squared magnitude for real-valued residual) -/\n\ndef BootstrapResidual (λ σ t : ℝ) (C : CoarseGrainingOperator λ) : ℝ :=
   let s : ℂ := σ + t * Complex.I
   let xi_val := RiemannXi s
   let xi_coarse := C.apply RiemannXi s

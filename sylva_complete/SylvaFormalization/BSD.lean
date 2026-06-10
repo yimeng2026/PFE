@@ -1,4 +1,4 @@
-/-
+﻿/-
 Sylva Formalization Project
 Birch and Swinnerton-Dyer Conjecture
 Comprehensive formalization with all BSD components
@@ -12,9 +12,7 @@ Main formula:
 L*(E,1) = (|Sha| · Regulator · Period · Tamagawa product) / |E(Q)_tors|²
 
 where L*(E,1) is the leading coefficient of the Taylor expansion of L(E,s) at s=1.
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import Mathlib.AlgebraicGeometry.EllipticCurve.Weierstrass
 import SylvaFormalization.Basic
 
@@ -32,26 +30,22 @@ For simplicity, we focus on short Weierstrass form: y² = x³ + ax + b
 -/`
 
 /-- Short Weierstrass form: y² = x³ + ax + b
-    with discriminant condition 4a³ + 27b² ≠ 0 -/
-structure ShortWeierstrassCurve where
+    with discriminant condition 4a³ + 27b² ≠ 0 -/\n\nstructure ShortWeierstrassCurve where
   a : ℚ
   b : ℚ
   deriving Inhabited
 
 namespace ShortWeierstrassCurve
 
-/-- Discriminant of short Weierstrass form: Δ = -16(4a³ + 27b²) -/
-def discriminant (E : ShortWeierstrassCurve) : ℚ :=
+/-- Discriminant of short Weierstrass form: Δ = -16(4a³ + 27b²) -/\n\ndef discriminant (E : ShortWeierstrassCurve) : ℚ :=
   -16 * (4 * E.a ^ 3 + 27 * E.b ^ 2)
 
-/-- A short Weierstrass curve is an elliptic curve if its discriminant is nonzero -/
-def IsElliptic (E : ShortWeierstrassCurve) : Prop :=
+/-- A short Weierstrass curve is an elliptic curve if its discriminant is nonzero -/\n\ndef IsElliptic (E : ShortWeierstrassCurve) : Prop :=
   E.discriminant ≠ 0
 
 /-- Convert to general Weierstrass form:
     y² = x³ + ax + b  ↔  Y² + a₁XY + a₃Y = X³ + a₂X² + a₄X + a₆
-    with a₁ = a₂ = a₃ = 0, a₄ = a, a₆ = b -/
-def toWeierstrass (E : ShortWeierstrassCurve) : WeierstrassCurve ℚ where
+    with a₁ = a₂ = a₃ = 0, a₄ = a, a₆ = b -/\n\ndef toWeierstrass (E : ShortWeierstrassCurve) : WeierstrassCurve ℚ where
   a₁ := 0
   a₂ := 0
   a₃ := 0
@@ -78,8 +72,7 @@ where r is the rank.
 -/`
 
 /-- The Mordell-Weil group E(Q) of rational points on an elliptic curve.
-    This is a finitely generated abelian group. -/
-def MordellWeilGroup (E : ShortWeierstrassCurve) : Type :=
+    This is a finitely generated abelian group. -/\n\ndef MordellWeilGroup (E : ShortWeierstrassCurve) : Type :=
   ℤ  -- Simplified: representing the group structure
 
 instance : AddCommGroup (MordellWeilGroup E) := by
@@ -100,13 +93,11 @@ def rank_EllipticCurve (E : ShortWeierstrassCurve) : ℕ :=
   0  -- Placeholder: actual rank computation requires advanced algorithms
 
 /-- The torsion subgroup E(Q)_tors consists of points of finite order.
-    By Mazur's theorem, it is isomorphic to one of 15 possible groups. -/
-def torsion_subgroup (E : ShortWeierstrassCurve) : Set ℚ :=
+    By Mazur's theorem, it is isomorphic to one of 15 possible groups. -/\n\ndef torsion_subgroup (E : ShortWeierstrassCurve) : Set ℚ :=
   -- Points of finite order
   {x | ∃ n > 0, n • x = 0}
 
-/-- The free part of E(Q) is isomorphic to ℤʳ where r = rank(E) -/
-def rank_characterization (E : ShortWeierstrassCurve) (r : ℕ) : Prop :=
+/-- The free part of E(Q) is isomorphic to ℤʳ where r = rank(E) -/\n\ndef rank_characterization (E : ShortWeierstrassCurve) (r : ℕ) : Prop :=
   ∃ (basis : Fin r → MordellWeilGroup E),
     -- The basis elements are linearly independent
     (∀ (c : Fin r → ℤ), ∑ i, c i • basis i = 0 → ∀ i, c i = 0) ∧
@@ -163,8 +154,7 @@ def analytic_rank (E : ShortWeierstrassCurve) : ℕ :=
   -- This is conjecturally equal to the algebraic rank
   0  -- Placeholder
 
-/-- Taylor expansion of L(E,s) at s=1 -/
-def LFunction_Taylor (E : ShortWeierstrassCurve) (n : ℕ) : ℝ :=
+/-- Taylor expansion of L(E,s) at s=1 -/\n\ndef LFunction_Taylor (E : ShortWeierstrassCurve) (n : ℕ) : ℝ :=
   -- n-th coefficient in the Taylor expansion L(E,s) = Σ a_n (s-1)^n
   0
 
@@ -206,8 +196,7 @@ def Sha (E : ShortWeierstrassCurve) : Type :=
   -- Conjecturally a finite abelian group
   Unit  -- Placeholder
 
-/-- Conjecture: The Tate-Shafarevich group is finite -/
-def Sha_finite (E : ShortWeierstrassCurve) : Prop :=
+/-- Conjecture: The Tate-Shafarevich group is finite -/\n\ndef Sha_finite (E : ShortWeierstrassCurve) : Prop :=
   Finite (Sha E)
 
 /-- The order of Sha, which appears in the BSD formula.
@@ -223,8 +212,7 @@ noncomputable def Sha_order (E : ShortWeierstrassCurve) : ℕ :=
   -- Conjectured to be finite and a perfect square
   1  -- Placeholder (would be computed if Sha is known finite)
 
-/-- Sha is conjectured to be a finite group whose order is a perfect square -/
-def Sha_order_square (E : ShortWeierstrassCurve) : Prop :=
+/-- Sha is conjectured to be a finite group whose order is a perfect square -/\n\ndef Sha_order_square (E : ShortWeierstrassCurve) : Prop :=
   ∃ k : ℕ, Sha_order E = k ^ 2
 
 
@@ -390,20 +378,17 @@ def Tamagawa_product (E : ShortWeierstrassCurve) : ℕ :=
   -- ∏_p c_p over all primes (essentially finite since c_p = 1 for good primes)
   1  -- Placeholder
 
-/-- Reduction types at a prime p -/
-inductive ReductionType
+/-- Reduction types at a prime p -/\n\ninductive ReductionType
   | good          -- Good reduction
   | splitMulti    -- Split multiplicative
   | nonSplitMulti -- Non-split multiplicative  
   | additive      -- Additive reduction
   deriving DecidableEq
 
-/-- Determine the reduction type at a prime p -/
-def reduction_type (E : ShortWeierstrassCurve) (p : ℕ) : ReductionType :=
+/-- Determine the reduction type at a prime p -/\n\ndef reduction_type (E : ShortWeierstrassCurve) (p : ℕ) : ReductionType :=
   ReductionType.good  -- Placeholder
 
-/-- Tamagawa numbers for different reduction types -/
-def Tamagawa_number_by_type (t : ReductionType) (p : ℕ) : ℕ :=
+/-- Tamagawa numbers for different reduction types -/\n\ndef Tamagawa_number_by_type (t : ReductionType) (p : ℕ) : ℕ :=
   match t with
   | ReductionType.good => 1
   | ReductionType.splitMulti => p  -- ord_p(Δ)
@@ -426,8 +411,7 @@ where:
 - E(Q)_tors is the torsion subgroup
 /`
 
-/-- The torsion order |E(Q)_tors| -/
-def torsion_order (E : ShortWeierstrassCurve) : ℕ :=
+/-- The torsion order |E(Q)_tors| -/\n\ndef torsion_order (E : ShortWeierstrassCurve) : ℕ :=
   -- By Mazur's theorem, |E(Q)_tors| ≤ 16
   1  -- Placeholder
 
@@ -466,8 +450,7 @@ def BSD_conjecture_complete (E : ShortWeierstrassCurve) : Prop :=
   -- The BSD formula holds
   sylva_bsd_formula E
 
-/-- The weak BSD conjecture: rank(E) = ord_{s=1} L(E,s) -/
-theorem bsd_weak (E : ShortWeierstrassCurve) (h : IsElliptic E) :
+/-- The weak BSD conjecture: rank(E) = ord_{s=1} L(E,s) -/\n\ntheorem bsd_weak (E : ShortWeierstrassCurve) (h : IsElliptic E) :
   rank_EllipticCurve E = analytic_rank E := by
   -- This is a major open problem in number theory
   -- Proved for analytic rank 0 and 1 by Kolyvagin (building on Gross-Zagier)
@@ -478,8 +461,7 @@ theorem bsd_weak (E : ShortWeierstrassCurve) (h : IsElliptic E) :
   rfl
 
 /-- Alternative formulation: BSD conjecture is equivalent to E having 
-    the expected rank behavior -/
-theorem bsd_equivalence (E : ShortWeierstrassCurve) (h : IsElliptic E) :
+    the expected rank behavior -/\n\ntheorem bsd_equivalence (E : ShortWeierstrassCurve) (h : IsElliptic E) :
   BSD_conjecture_complete E ↔ 
   (rank_EllipticCurve E = analytic_rank E ∧ Sha_finite E ∧ sylva_bsd_formula E) := by
   rfl
@@ -490,21 +472,17 @@ theorem bsd_equivalence (E : ShortWeierstrassCurve) (h : IsElliptic E) :
 The BSD conjecture is known in special cases.
 /`
 
-/-- For rank 0 curves with analytic rank 0, BSD is known (Coates-Wiles, Rubin) -/
-def BSD_known_rank_0 (E : ShortWeierstrassCurve) : Prop :=
+/-- For rank 0 curves with analytic rank 0, BSD is known (Coates-Wiles, Rubin) -/\n\ndef BSD_known_rank_0 (E : ShortWeierstrassCurve) : Prop :=
   rank_EllipticCurve E = 0 ∧ analytic_rank E = 0 → BSD_conjecture_complete E
 
-/-- For rank 1 curves with analytic rank 1, BSD is known (Gross-Zagier, Kolyvagin) -/
-def BSD_known_rank_1 (E : ShortWeierstrassCurve) : Prop :=
+/-- For rank 1 curves with analytic rank 1, BSD is known (Gross-Zagier, Kolyvagin) -/\n\ndef BSD_known_rank_1 (E : ShortWeierstrassCurve) : Prop :=
   rank_EllipticCurve E = 1 ∧ analytic_rank E = 1 → BSD_conjecture_complete E
 
-/-- Heegner point construction for rank 1 -/
-def Heegner_point (E : ShortWeierstrassCurve) : MordellWeilGroup E :=
+/-- Heegner point construction for rank 1 -/\n\ndef Heegner_point (E : ShortWeierstrassCurve) : MordellWeilGroup E :=
   0  -- Placeholder
 
 /-- The Gross-Zagier formula relates the height of a Heegner point
-    to the derivative of the L-function -/
-def Gross_Zagier_formula (E : ShortWeierstrassCurve) : Prop :=
+    to the derivative of the L-function -/\n\ndef Gross_Zagier_formula (E : ShortWeierstrassCurve) : Prop :=
   -- ĥ(P_K) = C · L'(E/K, 1) for some explicit constant C
   True  -- Placeholder
 
@@ -515,13 +493,11 @@ The Sylva framework connects the BSD conjecture to the golden ratio φ
 through the critical debt threshold.
 /`
 
-/-- The Sylva-BSD connection: The regulator relates to φ-structure -/
-def sylva_regulator_phi (E : ShortWeierstrassCurve) : Prop :=
+/-- The Sylva-BSD connection: The regulator relates to φ-structure -/\n\ndef sylva_regulator_phi (E : ShortWeierstrassCurve) : Prop :=
   -- In the Sylva framework, the regulator encodes φ-harmonic structure
   ∃ k : ℕ, Regulator E > 0 ∧ Regulator E < Phi.Phi_c
 
-/-- The Sylva principle: The BSD formula emerges from recursive emergence -/
-def sylva_bsd_emergence : Prop :=
+/-- The Sylva principle: The BSD formula emerges from recursive emergence -/\n\ndef sylva_bsd_emergence : Prop :=
   -- The BSD formula is a manifestation of Sylva Principle #6:
   -- "Creativity through Incompleteness"
   ∀ E : ShortWeierstrassCurve, IsElliptic E → 

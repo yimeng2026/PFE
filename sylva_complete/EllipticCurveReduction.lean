@@ -1,4 +1,4 @@
-/-
+﻿/-
 Sylva Formalization Project
 Elliptic Curve Reduction and Multiplicative Reduction Criterion
 ================================================================================
@@ -25,9 +25,7 @@ SYLVA INSIGHT: The multiplicative reduction criterion bridges
 number-theoretic divisibility with geometric singularity—a manifestation
 of the arithmetic-geometry correspondence that underlies modern number theory.
 ================================================================================
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import SylvaFormalization.Basic
 
 namespace Sylva
@@ -48,14 +46,11 @@ open Nat Int Real
     
     The problem states: N = 2^202712 - 6 = 2 × 5 × 19 × R
     The elliptic curve is: y² + y = x³ - x² - (2^202711 - 3)x = x³ - x² - βx
-    -/
-def beta : ℤ := 2 ^ 202711 - 3
+    -/\n\ndef beta : ℤ := 2 ^ 202711 - 3
 
-/- The full number N = 2^202712 - 6 = 2 * beta -/
-def N : ℤ := 2 ^ 202712 - 6
+/- The full number N = 2^202712 - 6 = 2 * beta -/\n\ndef N : ℤ := 2 ^ 202712 - 6
 
-/- Verify that N = 2 * beta -/
-theorem N_eq_2_mul_beta : N = 2 * beta := by
+/- Verify that N = 2 * beta -/\n\ntheorem N_eq_2_mul_beta : N = 2 * beta := by
   rw [N, beta]
   -- Use algebra: 2^202712 = 2 * 2^202711
   have h : (2 : ℤ) ^ 202712 = 2 * (2 : ℤ) ^ 202711 := by
@@ -69,32 +64,27 @@ theorem N_eq_2_mul_beta : N = 2 * beta := by
 -- Section 2: Elliptic Curve Reduction Types
 -- ============================================================
 
-/- Reduction type of an elliptic curve at a prime p -/
-inductive ReductionType
+/- Reduction type of an elliptic curve at a prime p -/\n\ninductive ReductionType
   | good           -- Good reduction: p ∤ Δ_E, non-singular reduction
   | multiplicative -- Multiplicative reduction: p | Δ_E but p ∤ c_4, nodal reduction
   | additive       -- Additive reduction: p | Δ_E and p | c_4, cuspidal reduction
   deriving DecidableEq, Inhabited
 
-/- Splitting type for multiplicative reduction -/
-inductive SplittingType
+/- Splitting type for multiplicative reduction -/\n\ninductive SplittingType
   | split          -- Split multiplicative: tangent slopes in 𝔽_p, a_p = +1
   | nonSplit       -- Non-split multiplicative: tangent slopes not in 𝔽_p, a_p = -1
   deriving DecidableEq, Inhabited
 
-/- A_p coefficient for an elliptic curve with multiplicative reduction -/
-def a_p_coefficient (splt : SplittingType) : ℤ :=
+/- A_p coefficient for an elliptic curve with multiplicative reduction -/\n\ndef a_p_coefficient (splt : SplittingType) : ℤ :=
   match splt with
   | SplittingType.split => 1
   | SplittingType.nonSplit => -1
 
-/- A_p coefficient is always ±1 for multiplicative reduction -/
-theorem a_p_coefficient_eq_pm_one (splt : SplittingType) :
+/- A_p coefficient is always ±1 for multiplicative reduction -/\n\ntheorem a_p_coefficient_eq_pm_one (splt : SplittingType) :
     a_p_coefficient splt = 1 ∨ a_p_coefficient splt = -1 := by
   cases splt <;> simp [a_p_coefficient]
 
-/- |a_p| = 1 for multiplicative reduction -/
-theorem abs_a_p_eq_one (splt : SplittingType) :
+/- |a_p| = 1 for multiplicative reduction -/\n\ntheorem abs_a_p_eq_one (splt : SplittingType) :
     |a_p_coefficient splt| = 1 := by
   cases splt <;> simp [a_p_coefficient]
 
@@ -139,17 +129,14 @@ theorem abs_a_p_eq_one (splt : SplittingType) :
       = -16(-1-β²) - 8(-8β³) - 27 + 72β
       = 16 + 16β² + 64β³ - 27 + 72β
       = 64β³ + 16β² + 72β - 11
-    -/
-def Delta_E : ℤ := 64 * beta ^ 3 + 16 * beta ^ 2 + 72 * beta - 11
+    -/\n\ndef Delta_E : ℤ := 64 * beta ^ 3 + 16 * beta ^ 2 + 72 * beta - 11
 
 /- c_4 invariant for our curve
     
     c₄ = b₂² - 24b₄ = (-4)² - 24(-2β) = 16 + 48β
-    -/
-def c4_E : ℤ := 16 + 48 * beta
+    -/\n\ndef c4_E : ℤ := 16 + 48 * beta
 
-/- The discriminant Δ_E is divisible by β (when β is not a unit) -/
-theorem Delta_E_divisible_by_beta :
+/- The discriminant Δ_E is divisible by β (when β is not a unit) -/\n\ntheorem Delta_E_divisible_by_beta :
     beta ∣ Delta_E - (-11) := by
   rw [Delta_E]
   use 64 * beta ^ 2 + 16 * beta + 72
@@ -159,8 +146,7 @@ theorem Delta_E_divisible_by_beta :
 -- Section 4: Multiplicative Reduction Criterion
 -- ============================================================
 
-/- Reduction type at prime p > 3 -/
-def reductionTypeAt (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3) : ReductionType :=
+/- Reduction type at prime p > 3 -/\n\ndef reductionTypeAt (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3) : ReductionType :=
   if h : (Delta_E : ℤ) % p ≠ 0 then
     ReductionType.good
   else if (c4_E : ℤ) % p ≠ 0 then
@@ -168,20 +154,17 @@ def reductionTypeAt (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3) : ReductionType
   else
     ReductionType.additive
 
-/- Condition for multiplicative reduction at p -/
-def hasMultiplicativeReduction (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3) : Prop :=
+/- Condition for multiplicative reduction at p -/\n\ndef hasMultiplicativeReduction (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3) : Prop :=
   reductionTypeAt p hp hp_gt = ReductionType.multiplicative
 
-/- hasMultiplicativeReduction is decidable -/
-instance hasMultiplicativeReductionDecidable (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3) :
+/- hasMultiplicativeReduction is decidable -/\n\ninstance hasMultiplicativeReductionDecidable (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3) :
     Decidable (hasMultiplicativeReduction p hp hp_gt) := by
   unfold hasMultiplicativeReduction reductionTypeAt
   infer_instance
 
 /- If p | β and p > 3, then E has multiplicative reduction at p.
     
-    This is the forward direction of the main theorem. -/
-theorem p_divides_beta_implies_multiplicative_reduction
+    This is the forward direction of the main theorem. -/\n\ntheorem p_divides_beta_implies_multiplicative_reduction
     (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3)
     (h : (beta : ℤ) % p = 0) :
     hasMultiplicativeReduction p hp hp_gt := by
@@ -201,20 +184,17 @@ theorem p_divides_beta_implies_multiplicative_reduction
 -- Section 5: Legendre Symbol and Splitting Criterion
 -- ============================================================
 
-/- p > 2 proof for legendreSymbol -/
-theorem p_gt_2 (p : ℕ) (_hp : Nat.Prime p) (hp_gt : p > 3) : p > 2 := by
+/- p > 2 proof for legendreSymbol -/\n\ntheorem p_gt_2 (p : ℕ) (_hp : Nat.Prime p) (hp_gt : p > 3) : p > 2 := by
   omega
 
 /- Legendre symbol (a/p) for odd prime p
-    We use the Mathlib definition of Legendre symbol -/
-def legendreSymbol (a : ℤ) (p : ℕ) (hp : Nat.Prime p) (_hp_odd : p > 2) : ℤ :=
+    We use the Mathlib definition of Legendre symbol -/\n\ndef legendreSymbol (a : ℤ) (p : ℕ) (hp : Nat.Prime p) (_hp_odd : p > 2) : ℤ :=
   haveI : Fact (Nat.Prime p) := ⟨hp⟩
   if (a : ZMod p) = 0 then 0
   else if IsSquare (a : ZMod p) then 1
   else -1
 
-/- The splitting type at p depends on the Legendre symbol (β/p) -/
-def splittingTypeAt (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3) : SplittingType :=
+/- The splitting type at p depends on the Legendre symbol (β/p) -/\n\ndef splittingTypeAt (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3) : SplittingType :=
   if h : hasMultiplicativeReduction p hp hp_gt then
     -- For multiplicative reduction, the node is at (x₀, 0) where x₀ is a root
     -- The tangent lines at the node have slopes m satisfying m² = f'(x₀)
@@ -229,16 +209,14 @@ def splittingTypeAt (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3) : SplittingType
     -- Default value for non-multiplicative reduction
     SplittingType.split
 
-/- The key theorem: a_p = +1 iff (β/p) = +1 -/
-theorem a_p_eq_one_iff_legendre_eq_one
+/- The key theorem: a_p = +1 iff (β/p) = +1 -/\n\ntheorem a_p_eq_one_iff_legendre_eq_one
     (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3)
     (h_mult : hasMultiplicativeReduction p hp hp_gt) :
     let splt := splittingTypeAt p hp hp_gt
     a_p_coefficient splt = 1 ↔ legendreSymbol beta p hp (p_gt_2 p hp hp_gt) = 1 := by
   sorry
 
-/- a_p = -1 iff (β/p) = -1 -/
-theorem a_p_eq_neg_one_iff_legendre_eq_neg_one
+/- a_p = -1 iff (β/p) = -1 -/\n\ntheorem a_p_eq_neg_one_iff_legendre_eq_neg_one
     (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3)
     (h_mult : hasMultiplicativeReduction p hp hp_gt) :
     let splt := splittingTypeAt p hp hp_gt
@@ -257,8 +235,7 @@ theorem a_p_eq_neg_one_iff_legendre_eq_neg_one
     And for multiplicative reduction:
     - Split multiplicative ⇔ (β/p) = +1 ⇔ a_p = +1
     - Non-split multiplicative ⇔ (β/p) = -1 ⇔ a_p = -1
-    -/
-theorem prime_divisor_correspondence
+    -/\n\ntheorem prime_divisor_correspondence
     (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3) :
     (beta : ℤ) % p = 0 ↔ hasMultiplicativeReduction p hp hp_gt := by
   constructor
@@ -271,8 +248,7 @@ theorem prime_divisor_correspondence
     -- showing that p | Δ_E but p ∤ c₄ implies p | β
     sorry -- To be filled
 
-/- Refined correspondence including the a_p = ±1 condition -/
-theorem refined_correspondence
+/- Refined correspondence including the a_p = ±1 condition -/\n\ntheorem refined_correspondence
     (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3) :
     -- The following are equivalent for multiplicative reduction:
     (beta : ℤ) % p = 0 ∧ legendreSymbol beta p hp (p_gt_2 p hp hp_gt) = 1 ↔
@@ -307,8 +283,7 @@ theorem refined_correspondence
 -- Section 7: Verification Theorems
 -- ============================================================
 
-/- Verification that a_p = ±1 for multiplicative reduction -/
-theorem verify_ap_pm_one
+/- Verification that a_p = ±1 for multiplicative reduction -/\n\ntheorem verify_ap_pm_one
     (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3)
     (_h_mult : hasMultiplicativeReduction p hp hp_gt) :
     a_p_coefficient (splittingTypeAt p hp hp_gt) = 1 ∨
@@ -324,8 +299,7 @@ noncomputable def localLFactor (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3) (s :
   else
     1  -- Good reduction case (simplified)
 
-/- Local L-factor at s=1 for split multiplicative reduction equals 0 -/
-theorem localLFactor_split_at_one
+/- Local L-factor at s=1 for split multiplicative reduction equals 0 -/\n\ntheorem localLFactor_split_at_one
     (p : ℕ) (hp : Nat.Prime p) (hp_gt : p > 3)
     (_h_split : splittingTypeAt p hp hp_gt = SplittingType.split) :
     localLFactor p hp hp_gt 1 = 0 := by
@@ -339,8 +313,7 @@ theorem localLFactor_split_at_one
 -- Section 8: Auxiliary Results and Lemmas
 -- ============================================================
 
-/- Beta positivity helper: 3 < 2^202711 -/
-theorem three_lt_pow : 3 < 2 ^ 202711 := by
+/- Beta positivity helper: 3 < 2^202711 -/\n\ntheorem three_lt_pow : 3 < 2 ^ 202711 := by
   -- 2^1 = 2, and 2^202711 = 2^1 * 2^202710 = 2 * 2^202710
   -- Since 2^202710 >= 1, we have 2^202711 >= 2
   -- Actually we need to show 2^202711 > 3
@@ -352,20 +325,17 @@ theorem three_lt_pow : 3 < 2 ^ 202711 := by
   have h2 : 3 < 2 ^ 2 := by norm_num
   exact Nat.lt_of_lt_of_le h2 h
 
-/- β is positive -/
-theorem beta_pos : beta > 0 := by
+/- β is positive -/\n\ntheorem beta_pos : beta > 0 := by
   unfold beta
   have h : (3 : ℤ) < (2 : ℤ) ^ 202711 := by
     exact_mod_cast three_lt_pow
   omega
 
-/- N = 2^202712 - 6 is even -/
-theorem N_even : N % 2 = 0 := by
+/- N = 2^202712 - 6 is even -/\n\ntheorem N_even : N % 2 = 0 := by
   rw [N_eq_2_mul_beta]
   omega
 
-/- The factorization N = 2 × 5 × 19 × R for some R -/
-theorem N_factorization :
+/- The factorization N = 2 × 5 × 19 × R for some R -/\n\ntheorem N_factorization :
     ∃ (R : ℤ), N = 2 * 5 * 19 * R := by
   use N / (2 * 5 * 19)
   have h : (2 * 5 * 19 : ℤ) ∣ N := by
@@ -379,8 +349,7 @@ theorem N_factorization :
 -- Section 9: Computational Verification (Small Primes)
 -- ============================================================
 
-/- A computable version of the reduction type check for small primes -/
-def computeReductionType (p : ℕ) (hp : p > 3) : ReductionType :=
+/- A computable version of the reduction type check for small primes -/\n\ndef computeReductionType (p : ℕ) (hp : p > 3) : ReductionType :=
   if (Delta_E % (p : ℤ)) ≠ 0 then
     ReductionType.good
   else if (c4_E % (p : ℤ)) ≠ 0 then
@@ -391,8 +360,7 @@ def computeReductionType (p : ℕ) (hp : p > 3) : ReductionType :=
 /- For small test values, verify the computation works
     Note: This verifies the computation framework is sound, not that
     beta is divisible by these small primes (it's not).
-    For these primes, the curve has good reduction since Delta_E ≢ 0 (mod p). -/
-theorem verify_small_prime (p : ℕ) (hp : p = 5 ∨ p = 7 ∨ p = 11 ∨ p = 13) :
+    For these primes, the curve has good reduction since Delta_E ≢ 0 (mod p). -/\n\ntheorem verify_small_prime (p : ℕ) (hp : p = 5 ∨ p = 7 ∨ p = 11 ∨ p = 13) :
     computeReductionType p (by omega) = ReductionType.good := by
   rcases hp with (rfl | rfl | rfl | rfl)
   all_goals

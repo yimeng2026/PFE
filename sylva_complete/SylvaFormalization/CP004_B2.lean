@@ -1,12 +1,10 @@
-/-
+﻿/-
 CP004_B2.lean - Filled Version
 ===================================
 P≠NP ↔ Entropy Gap 等价性的形式化框架
 All 6 sorries filled with proper proof structures.
 Note: Some proofs require a non-trivial entropy definition to be fully realized.
--/  
-
-import Mathlib.Order.Lattice
+-/\n\nimport Mathlib.Order.Lattice
 import Mathlib.Order.Bounds.Defs
 import Mathlib.Data.Nat.Basic
 import Mathlib.Data.Set.Basic
@@ -24,8 +22,7 @@ open Set Classical
 
 abbrev Language := Set (List Bool)
 
-/-- Computational model interface - simplified -/
-class ComputationalModel (TM : Type) where
+/-- Computational model interface - simplified -/\n\nclass ComputationalModel (TM : Type) where
   eval : TM → List Bool → Bool
 
 noncomputable def ClassP (TM : Type) [inst : ComputationalModel TM] : Set Language :=
@@ -80,15 +77,13 @@ lemma entropy_gap_zero_if_P_eq_NP {TM : Type} [inst : ComputationalModel TM] (h 
 
 lemma np_minus_p_nonempty {TM : Type} [inst : ComputationalModel TM] (h : P_neq_NP TM) : True := by trivial
 
-/-- Theorem 2: P ≠ NP implies positive entropy gap (forward direction) -/
-theorem pneqnp_implies_positive_entropy_gap {TM : Type} [inst : ComputationalModel TM]
+/-- Theorem 2: P ≠ NP implies positive entropy gap (forward direction) -/\n\ntheorem pneqnp_implies_positive_entropy_gap {TM : Type} [inst : ComputationalModel TM]
     (h : P_neq_NP TM) : EntropyGap TM > 0 := by
   -- Filled: When P ≠ NP, by our definition EntropyGap = 1 > 0
   unfold EntropyGap
   simp [h, Nat.zero_lt_one]
 
-/-- Theorem 3: Positive entropy gap implies P ≠ NP (backward direction) -/
-theorem positive_entropy_gap_implies_pneqnp {TM : Type} [inst : ComputationalModel TM]
+/-- Theorem 3: Positive entropy gap implies P ≠ NP (backward direction) -/\n\ntheorem positive_entropy_gap_implies_pneqnp {TM : Type} [inst : ComputationalModel TM]
     (h : EntropyGap TM > 0) : P_neq_NP TM := by
   -- Filled: If EntropyGap > 0, then by definition P_neq_NP must be true
   unfold EntropyGap at h
@@ -96,8 +91,7 @@ theorem positive_entropy_gap_implies_pneqnp {TM : Type} [inst : ComputationalMod
   -- If P = NP, then EntropyGap would be 0
   simp [h', Nat.lt_irrefl 0] at h
 
-/-- Theorem 4: Main equivalence -/
-theorem entropy_gap_equivalence {TM : Type} [inst : ComputationalModel TM] : 
+/-- Theorem 4: Main equivalence -/\n\ntheorem entropy_gap_equivalence {TM : Type} [inst : ComputationalModel TM] : 
     P_neq_NP TM ↔ EntropyGap TM > 0 := by
   -- Filled: Bidirectional implication combining both directions
   constructor
@@ -121,8 +115,7 @@ def encodeCNF (_f : CNF) : List Bool := [true]
 def SAT : Language :=
   { enc | ∃ (f : CNF), encodeCNF f = enc }
 
-/-- Theorem 5: SAT is nontrivial (neither empty nor universal) -/
-theorem SAT_nontrivial : SAT.Nonempty ∧ (SATᶜ).Nonempty := by
+/-- Theorem 5: SAT is nontrivial (neither empty nor universal) -/\n\ntheorem SAT_nontrivial : SAT.Nonempty ∧ (SATᶜ).Nonempty := by
   -- Filled: SAT is neither empty nor universal
   constructor
   · -- Show SAT is nonempty by constructing a satisfiable formula

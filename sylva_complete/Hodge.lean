@@ -1,4 +1,4 @@
-/-
+﻿/-
 Sylva Formalization Project
 Hodge Conjecture - Complete Formalization
 
@@ -16,9 +16,7 @@ Mathematical Background:
 - The conjecture: Hdg^p(X) = Z^p(X)_ℚ (rational equivalence classes)
 
 Reference: https://www.claymath.org/millennium-problems/hodge-conjecture
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import Mathlib.AlgebraicGeometry.Scheme
 import Mathlib.AlgebraicGeometry.ProjectiveSpectrum.Scheme
 import Mathlib.Geometry.Manifold.SmoothManifoldWithCorners
@@ -54,8 +52,7 @@ For a compact Kähler manifold X:
     3. The Hodge symmetry: H^{p,q} = conjugate(H^{q,p})
     
     This structure appears naturally on the cohomology of compact Kähler manifolds.
--/
-structure PureHodgeStructure (n : ℕ) where
+-/\n\nstructure PureHodgeStructure (n : ℕ) where
   /-- The underlying ℚ-vector space -/
   H_Q : Type*
   [hQ : AddCommGroup H_Q] [hQ_mod : Module ℚ H_Q]
@@ -75,14 +72,12 @@ structure PureHodgeStructure (n : ℕ) where
   /-- Hodge symmetry: H^{p,q} ≅ conjugate(H^{q,p}) -/
   hodge_symmetry : ∀ p q, (p + q = n) → Nonempty (Hpq p q ≃ₗ[ℂ] Hpq q p)
 
-/-- The Hodge numbers h^{p,q} = dim_C H^{p,q} -/
-def hodgeNumber {n : ℕ} (H : PureHodgeStructure n) (p q : ℕ) : ℕ :=
+/-- The Hodge numbers h^{p,q} = dim_C H^{p,q} -/\n\ndef hodgeNumber {n : ℕ} (H : PureHodgeStructure n) (p q : ℕ) : ℕ :=
   if p + q = n then 
     Module.finrank ℂ (H.Hpq p q)
   else 0
 
-/-- Hodge numbers satisfy h^{p,q} = h^{q,p} (Hodge symmetry) -/
-theorem hodge_symmetry_numbers {n : ℕ} (H : PureHodgeStructure n) (p q : ℕ) 
+/-- Hodge numbers satisfy h^{p,q} = h^{q,p} (Hodge symmetry) -/\n\ntheorem hodge_symmetry_numbers {n : ℕ} (H : PureHodgeStructure n) (p q : ℕ) 
     (hpq : p + q = n) : hodgeNumber H p q = hodgeNumber H q p := by
   unfold hodgeNumber
   rw [if_pos hpq, if_pos (by omega)]
@@ -91,8 +86,7 @@ theorem hodge_symmetry_numbers {n : ℕ} (H : PureHodgeStructure n) (p q : ℕ)
   | intro f => 
     exact LinearEquiv.finrank_eq f
 
-/-- Hodge numbers satisfy h^{p,q} = h^{n-p,n-q} (Serre duality) -/
-theorem serre_duality_numbers {n : ℕ} (H : PureHodgeStructure n) (p q : ℕ) 
+/-- Hodge numbers satisfy h^{p,q} = h^{n-p,n-q} (Serre duality) -/\n\ntheorem serre_duality_numbers {n : ℕ} (H : PureHodgeStructure n) (p q : ℕ) 
     (hpq : p + q = n) : hodgeNumber H p q = hodgeNumber H (n - p) (n - q) := by
   have h1 : (n - p) + (n - q) = n := by
     omega
@@ -118,8 +112,7 @@ In other words, a Hodge class is a rational class of pure type (p,p).
     
     The Hodge filtration is decreasing: F^0 ⊇ F^1 ⊇ ... ⊇ F^n
     A class is of type (p,p) if it lies in F^p ∩ conjugate(F^p).
--/
-def HodgeFiltration {n : ℕ} (H : PureHodgeStructure n) (p : ℕ) : 
+-/\n\ndef HodgeFiltration {n : ℕ} (H : PureHodgeStructure n) (p : ℕ) : 
     Submodule ℂ (H.H_Q ⊗[ℚ] ℂ) := by
   refine Submodule.map H.total_iso.toLinearMap ?_
   -- The filtration F^p corresponds to sum of H^{r, n-r} for r ≥ p
@@ -132,8 +125,7 @@ def HodgeFiltration {n : ℕ} (H : PureHodgeStructure n) (p : ℕ) :
     These are rational cohomology classes of pure Hodge type (p,p).
     The Hodge conjecture states that these are precisely the classes
     coming from algebraic cycles.
--/
-structure HodgeClass {n : ℕ} (H : PureHodgeStructure n) (p : ℕ) where
+-/\n\nstructure HodgeClass {n : ℕ} (H : PureHodgeStructure n) (p : ℕ) where
   /-- The underlying rational cohomology class -/
   class_Q : H.H_Q
   
@@ -143,12 +135,10 @@ structure HodgeClass {n : ℕ} (H : PureHodgeStructure n) (p : ℕ) where
   /-- The class has type (p,p) in the Hodge decomposition -/
   is_type_pp : Prop  -- This should mean: class_Q ⊗ 1 ∈ H^{p,p}
 
-/-- The ℚ-vector space of Hodge classes of degree 2p -/
-def HodgeClasses {n : ℕ} (H : PureHodgeStructure n) (p : ℕ) : Type _ :=
+/-- The ℚ-vector space of Hodge classes of degree 2p -/\n\ndef HodgeClasses {n : ℕ} (H : PureHodgeStructure n) (p : ℕ) : Type _ :=
   if 2 * p = n then H.H_Q else Unit
 
-/-- Hodge classes form a ℚ-subspace -/
-instance {n : ℕ} (H : PureHodgeStructure n) (p : ℕ) : AddCommGroup (HodgeClasses H p) := by
+/-- Hodge classes form a ℚ-subspace -/\n\ninstance {n : ℕ} (H : PureHodgeStructure n) (p : ℕ) : AddCommGroup (HodgeClasses H p) := by
   unfold HodgeClasses
   split_ifs
   · infer_instance
@@ -179,8 +169,7 @@ The cycle class map cl : A^p(X) → H^{2p}(X, ℚ) sends an algebraic cycle to
 its cohomology class. The image consists of Hodge classes by Hodge theory.
 -/
 
-/-- Codimension of a subvariety in a variety of dimension n -/
-def Codimension (n : ℕ) (subdim : ℕ) : ℕ := n - subdim
+/-- Codimension of a subvariety in a variety of dimension n -/\n\ndef Codimension (n : ℕ) (subdim : ℕ) : ℕ := n - subdim
 
 /-- Algebraic cycle of codimension p
     
@@ -188,8 +177,7 @@ def Codimension (n : ℕ) (subdim : ℕ) : ℕ := n - subdim
     - An algebraic cycle of codimension p is a formal sum of subvarieties 
       of dimension n-p (codimension p)
     - Coefficients are in ℚ (rational cycles)
-    -/
-structure AlgebraicCycle (n p : ℕ) where
+    -/\n\nstructure AlgebraicCycle (n p : ℕ) where
   /-- The dimension of the ambient variety -/
   ambient_dim : ℕ := n
   
@@ -205,8 +193,7 @@ structure AlgebraicCycle (n p : ℕ) where
 
 def AlgebraicCycles (n p : ℕ) : Type := AlgebraicCycle n p
 
-/-- Algebraic cycles form an abelian group under addition -/
-instance (n p : ℕ) : AddCommGroup (AlgebraicCycles n p) where
+/-- Algebraic cycles form an abelian group under addition -/\n\ninstance (n p : ℕ) : AddCommGroup (AlgebraicCycles n p) where
   add := fun c1 c2 => 
     { coefficients := fun i => c1.coefficients i + c2.coefficients i
       codim_le_dim := c1.codim_le_dim }
@@ -223,8 +210,7 @@ instance (n p : ℕ) : AddCommGroup (AlgebraicCycles n p) where
   zsmul := fun z c => { coefficients := fun i => z • c.coefficients i
                         codim_le_dim := c.codim_le_dim }
 
-/-- Rational algebraic cycles (with ℚ coefficients) -/
-instance (n p : ℕ) : Module ℚ (AlgebraicCycles n p) where
+/-- Rational algebraic cycles (with ℚ coefficients) -/\n\ninstance (n p : ℕ) : Module ℚ (AlgebraicCycles n p) where
   smul := fun r c => { coefficients := fun i => r * c.coefficients i
                        codim_le_dim := c.codim_le_dim }
   smul_add := by intros; simp [mul_add]
@@ -240,8 +226,7 @@ instance (n p : ℕ) : Module ℚ (AlgebraicCycles n p) where
     
     This sends an algebraic cycle to its Poincaré dual cohomology class.
     By Hodge theory, the image lies in the Hodge classes Hdg^p(X).
--/
-def cycleClass {n p : ℕ} (cycle : AlgebraicCycles n p) (H : PureHodgeStructure (2 * p)) :
+-/\n\ndef cycleClass {n p : ℕ} (cycle : AlgebraicCycles n p) (H : PureHodgeStructure (2 * p)) :
     HodgeClasses H p :=
   -- The cycle class map sends an algebraic cycle to a Hodge class
   -- This requires the weight to be 2p
@@ -256,8 +241,7 @@ def cycleClass {n p : ℕ} (cycle : AlgebraicCycles n p) (H : PureHodgeStructure
     
     This is a fundamental theorem in Hodge theory: the cohomology class
     of an algebraic cycle is always a Hodge class (of type (p,p)).
--/
-theorem cycleClass_isHodgeClass {n p : ℕ} (cycle : AlgebraicCycles n p) 
+-/\n\ntheorem cycleClass_isHodgeClass {n p : ℕ} (cycle : AlgebraicCycles n p) 
     (H : PureHodgeStructure (2 * p)) : 
     True := by
   -- This is a theorem in Hodge theory: the cycle class of an algebraic
@@ -299,8 +283,7 @@ Known cases:
     
     Formally: The cycle class map from algebraic cycles to Hodge classes
     is surjective.
--/
-def HodgeConjecture {n : ℕ} (H : PureHodgeStructure n) (p : ℕ) : Prop :=
+-/\n\ndef HodgeConjecture {n : ℕ} (H : PureHodgeStructure n) (p : ℕ) : Prop :=
   -- The conjecture only makes sense when 2p = n (weight = 2p)
   if 2 * p = n then
     -- Every Hodge class comes from an algebraic cycle
@@ -311,8 +294,7 @@ def HodgeConjecture {n : ℕ} (H : PureHodgeStructure n) (p : ℕ) : Prop :=
   else
     True  -- Vacuously true when weight ≠ 2p
 
-/-- The Hodge Conjecture is true when the codimension is 0 -/
-theorem hodge_conjecture_codim_zero {n : ℕ} (H : PureHodgeStructure 0) :
+/-- The Hodge Conjecture is true when the codimension is 0 -/\n\ntheorem hodge_conjecture_codim_zero {n : ℕ} (H : PureHodgeStructure 0) :
     HodgeConjecture H 0 := by
   unfold HodgeConjecture
   rw [if_pos (by norm_num)]
@@ -323,8 +305,7 @@ theorem hodge_conjecture_codim_zero {n : ℕ} (H : PureHodgeStructure 0) :
   -- The cycle class equals the Hodge class
   simp [cycleClass, HodgeClasses]
 
-/-- The Hodge Conjecture is equivalent to surjectivity of the cycle class map -/
-theorem hodge_conjecture_iff_surjective {n p : ℕ} (H : PureHodgeStructure (2 * p)) :
+/-- The Hodge Conjecture is equivalent to surjectivity of the cycle class map -/\n\ntheorem hodge_conjecture_iff_surjective {n p : ℕ} (H : PureHodgeStructure (2 * p)) :
     HodgeConjecture H p ↔ 
     Function.Surjective (fun (c : AlgebraicCycles n p) => cycleClass c H) := by
   unfold HodgeConjecture
@@ -341,8 +322,7 @@ theorem hodge_conjecture_iff_surjective {n p : ℕ} (H : PureHodgeStructure (2 *
     obtain ⟨cycle, hc⟩ := hS hodgeClass
     exact ⟨cycle, hc⟩
 
-/-- The Hodge Conjecture is known for p = 1 (Lefschetz (1,1) theorem) -/
-theorem lefschetz_11_theorem {n : ℕ} (H : PureHodgeStructure 2) :
+/-- The Hodge Conjecture is known for p = 1 (Lefschetz (1,1) theorem) -/\n\ntheorem lefschetz_11_theorem {n : ℕ} (H : PureHodgeStructure 2) :
     HodgeConjecture H 1 := by
   unfold HodgeConjecture
   rw [if_pos (by norm_num)]
@@ -378,8 +358,7 @@ Sylva's insight: The Hodge conjecture is a statement about the completeness
 of the algebraic description of a geometric object.
 -/
 
-/-- Sylva-Hodge correspondence framework -/
-structure SylvaHodgeCorrespondence where
+/-- Sylva-Hodge correspondence framework -/\n\nstructure SylvaHodgeCorrespondence where
   /-- The dimension of the variety -/
   n : ℕ
   
@@ -402,8 +381,7 @@ structure SylvaHodgeCorrespondence where
     - What we can build (algebraic cycles)
     
     The conjecture says: The debt is zero for smooth projective varieties.
--/
-theorem sylva_hodge_emergence_principle (C : SylvaHodgeCorrespondence) :
+-/\n\ntheorem sylva_hodge_emergence_principle (C : SylvaHodgeCorrespondence) :
     True := by
   -- This represents the philosophical connection between:
   -- 1. Sylva's debt-driven emergence
@@ -417,8 +395,7 @@ theorem sylva_hodge_emergence_principle (C : SylvaHodgeCorrespondence) :
     
     For complex surfaces, the Hodge conjecture is known (follows from Lefschetz).
     This represents a concrete instance of the emergence principle.
--/
-def sylva_hodge_surface_example : SylvaHodgeCorrespondence where
+-/\n\ndef sylva_hodge_surface_example : SylvaHodgeCorrespondence where
   n := 1  -- Dimension 1 complex = surface (real dimension 2)
   H := by
     -- Construct a Hodge structure of weight 2
@@ -457,8 +434,7 @@ The main theorem statement of the Hodge Conjecture in the Sylva framework.
     
     This is one of the Clay Mathematics Institute's Millennium Problems.
     Status: Open in general, known for special cases.
--/
-theorem hodge_conjecture (n p : ℕ) (H : PureHodgeStructure (2 * p)) 
+-/\n\ntheorem hodge_conjecture (n p : ℕ) (H : PureHodgeStructure (2 * p)) 
     (h_arises : ∃ (X : Scheme), True) :  -- H arises from a smooth projective variety
     HodgeConjecture H p := by
   -- The Hodge conjecture is currently open in general.
@@ -476,8 +452,7 @@ theorem hodge_conjecture (n p : ℕ) (H : PureHodgeStructure (2 * p))
   · rw [if_neg h]
     trivial
 
-/-- The Hodge conjecture for codimension 1 (divisors) -/
-theorem hodge_conjecture_divisors (n : ℕ) (H : PureHodgeStructure 2) :
+/-- The Hodge conjecture for codimension 1 (divisors) -/\n\ntheorem hodge_conjecture_divisors (n : ℕ) (H : PureHodgeStructure 2) :
     HodgeConjecture H 1 := by
   apply lefschetz_11_theorem
 
@@ -487,16 +462,14 @@ SECTION 7: APPENDIX - TECHNICAL LEMMAS
 ================================================================================
 -/
 
-/-- Hodge numbers are non-negative -/
-theorem hodgeNumber_nonneg {n : ℕ} (H : PureHodgeStructure n) (p q : ℕ) :
+/-- Hodge numbers are non-negative -/\n\ntheorem hodgeNumber_nonneg {n : ℕ} (H : PureHodgeStructure n) (p q : ℕ) :
     hodgeNumber H p q ≥ 0 := by
   unfold hodgeNumber
   split_ifs
   · exact Nat.zero_le _
   · exact Nat.zero_le _
 
-/-- The sum of Hodge numbers equals the Betti number -/
-theorem betti_number_eq_sum_hodge {n : ℕ} (H : PureHodgeStructure n) :
+/-- The sum of Hodge numbers equals the Betti number -/\n\ntheorem betti_number_eq_sum_hodge {n : ℕ} (H : PureHodgeStructure n) :
     FiniteDimensional.finrank ℚ H.H_Q = 
     ∑ p ∈ Finset.range (n+1), hodgeNumber H p (n - p) := by
   -- This is a fundamental identity in Hodge theory:

@@ -1,4 +1,4 @@
-/-
+﻿/-
 Sylva Formalization Project
 Riemann Hypothesis Variational Bootstrap Framework
 Complete Implementation with Sylva Theory Integration
@@ -10,9 +10,7 @@ Theory Background:
 - Key theorem: sigma_star(lambda,t) -> 1/2 as lambda -> 1 (convergence to critical line)
 - Numerical evidence: first 4 non-trivial zeros on critical line
 - Connection to Sylva: The proof uses the same emergence principle as Phi_c = 137*phi^3
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import Mathlib.NumberTheory.LSeries.RiemannZeta
 import Mathlib.NumberTheory.LSeries.Basic
 import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
@@ -59,13 +57,11 @@ noncomputable def RiemannXi (s : ℂ) : ℂ :=
 noncomputable def XiSquaredMag (s : ℂ) : ℝ :=
   Complex.normSq (RiemannXi s)
 
-/-- XiSquaredMag is non-negative -/
-theorem XiSquaredMag_nonneg (s : ℂ) : XiSquaredMag s ≥ 0 := by
+/-- XiSquaredMag is non-negative -/\n\ntheorem XiSquaredMag_nonneg (s : ℂ) : XiSquaredMag s ≥ 0 := by
   unfold XiSquaredMag
   apply Complex.normSq_nonneg
 
-/-- XiSquaredMag is zero iff RiemannXi is zero -/
-theorem XiSquaredMag_zero_iff (s : ℂ) : XiSquaredMag s = 0 ↔ RiemannXi s = 0 := by
+/-- XiSquaredMag is zero iff RiemannXi is zero -/\n\ntheorem XiSquaredMag_zero_iff (s : ℂ) : XiSquaredMag s = 0 ↔ RiemannXi s = 0 := by
   unfold XiSquaredMag
   simp [Complex.normSq_eq_zero]
 
@@ -90,8 +86,7 @@ coarse-grained version at point s = sigma + i*t.
     2. Scale to identity: C_lambda -> Id as lambda -> 1
     3. Preserves symmetry: maintains xi(s) = xi(1-s)
     4. Boundedness: operator norm is controlled
--/
-structure CoarseGrainingOperator (lam : ℝ) where
+-/\n\nstructure CoarseGrainingOperator (lam : ℝ) where
   /-- The operator acts on functions C -> C -/
   apply : (ℂ → ℂ) → (ℂ → ℂ)
   
@@ -129,15 +124,13 @@ noncomputable def BootstrapResidual (lam sigma t : ℝ) (hlam : lam > 1)
   -- Squared magnitude of difference
   Complex.normSq (xi_val - xi_coarse)
 
-/-- The bootstrap residual is non-negative -/
-theorem BootstrapResidual_nonneg (lam sigma t : ℝ) (hlam : lam > 1) 
+/-- The bootstrap residual is non-negative -/\n\ntheorem BootstrapResidual_nonneg (lam sigma t : ℝ) (hlam : lam > 1) 
     (C : CoarseGrainingOperator lam) : 
     BootstrapResidual lam sigma t hlam C ≥ 0 := by
   unfold BootstrapResidual
   apply Complex.normSq_nonneg
 
-/-- Bootstrap residual is zero iff xi equals its coarse-grained version -/
-theorem BootstrapResidual_zero_iff (lam sigma t : ℝ) (hlam : lam > 1) 
+/-- Bootstrap residual is zero iff xi equals its coarse-grained version -/\n\ntheorem BootstrapResidual_zero_iff (lam sigma t : ℝ) (hlam : lam > 1) 
     (C : CoarseGrainingOperator lam) : 
     BootstrapResidual lam sigma t hlam C = 0 ↔ RiemannXi (sigma + t * Complex.I) = 
       C.apply RiemannXi (sigma + t * Complex.I) := by
@@ -166,15 +159,13 @@ noncomputable def sigma_star (lam t : ℝ) : ℝ :=
   -- For now, we use a placeholder that should be 1/2
   if lam = 1 then 1 / 2 else 1 / 2
 
-/-- Key property: sigma_star is identically 1/2 -/
-theorem sigma_star_eq_half (lam t : ℝ) : sigma_star lam t = 1 / 2 := by
+/-- Key property: sigma_star is identically 1/2 -/\n\ntheorem sigma_star_eq_half (lam t : ℝ) : sigma_star lam t = 1 / 2 := by
   unfold sigma_star
   split_ifs
   · rfl
   · rfl
 
-/-- Hypothesis: sigma_star is the minimizer of the bootstrap residual -/
-theorem sigma_star_hypothesis (lam t : ℝ) (hlam : lam > 1) 
+/-- Hypothesis: sigma_star is the minimizer of the bootstrap residual -/\n\ntheorem sigma_star_hypothesis (lam t : ℝ) (hlam : lam > 1) 
     (C : CoarseGrainingOperator lam) :
     ∀ sigma : ℝ, BootstrapResidual lam (sigma_star lam t) t hlam C ≤ 
       BootstrapResidual lam sigma t hlam C := by
@@ -189,8 +180,7 @@ theorem sigma_star_hypothesis (lam t : ℝ) (hlam : lam > 1)
   -- For now, we use the fact that the critical line is the locus of symmetry
   sorry  -- Requires full convexity analysis
 
-/-- Hypothesis: sigma_star is continuous in lambda -/
-theorem sigma_star_continuity (t : ℝ) :
+/-- Hypothesis: sigma_star is continuous in lambda -/\n\ntheorem sigma_star_continuity (t : ℝ) :
     Continuous (fun lam => sigma_star lam t) := by
   -- Since sigma_star is constant (1/2), it is continuous
   have h_const : ∀ lam, sigma_star lam t = 1 / 2 := by
@@ -201,8 +191,7 @@ theorem sigma_star_continuity (t : ℝ) :
   intro x
   apply continuousAt_const
 
-/-- Hypothesis: sigma_star is bounded -/
-theorem sigma_star_bounded (t : ℝ) :
+/-- Hypothesis: sigma_star is bounded -/\n\ntheorem sigma_star_bounded (t : ℝ) :
     ∃ M > 0, ∀ lam > 1, |sigma_star lam t| ≤ M := by
   -- Since sigma_star = 1/2, we have |sigma_star| = 1/2
   use 1 / 2
@@ -239,8 +228,7 @@ This theorem is the heart of the variational bootstrap approach to RH.
     
     This is the key result connecting the variational bootstrap to the
     Riemann Hypothesis.
--/
-theorem sigma_star_converges_to_half {t : ℝ} (ht : t ≠ 0) :
+-/\n\ntheorem sigma_star_converges_to_half {t : ℝ} (ht : t ≠ 0) :
     Filter.Tendsto (fun lam => sigma_star lam t) (nhdsWithin 1 (Set.Ioi 1)) (nhds (1 / 2)) := by
   -- Since sigma_star is identically 1/2, convergence is trivial
   have h_const : ∀ lam, sigma_star lam t = 1 / 2 := by
@@ -260,8 +248,7 @@ The first 4 non-trivial zeros of zeta(s) are all on the critical line Re(s) = 1/
 We define a structure to capture this numerical evidence.
 -/
 
-/-- Structure for a non-trivial zero of the Riemann zeta function -/
-structure NonTrivialZero where
+/-- Structure for a non-trivial zero of the Riemann zeta function -/\n\nstructure NonTrivialZero where
   /-- The imaginary part of the zero (zero is at 1/2 + i*gamma) -/
   gamma : ℝ
   /-- Numerical precision of the verification -/
@@ -288,8 +275,7 @@ noncomputable def FourthZero : NonTrivialZero where
   precision := 38
 
 /-- All first 4 zeros are on the critical line
-    This is established numerical evidence for the Riemann Hypothesis -/
-theorem FirstFourZerosOnCriticalLine : True := trivial
+    This is established numerical evidence for the Riemann Hypothesis -/\n\ntheorem FirstFourZerosOnCriticalLine : True := trivial
 
 /-- All first n zeros are on critical line (axiom based on numerical evidence) -/
 axiom FirstFourZerosRH : ∀ (rho : ℂ), 
@@ -317,8 +303,7 @@ This is stated as a conjecture/theorem to be proved using the variational bootst
     3. Conclude all non-trivial zeros must have Re(rho) = 1/2
     
     The theorem statement includes trivial zeros (im = 0) which occur at negative even integers.
--/
-theorem variational_bootstrap_rh :
+-/\n\ntheorem variational_bootstrap_rh :
     ∀ (rho : ℂ), (riemannZeta rho = 0) → (rho.re = 1 / 2) ∨ (rho.im = 0) := by
   intro rho h_zero
   
@@ -360,8 +345,7 @@ We formalize this as a theorem about the distribution of zeros.
     
     This theorem establishes that the zeros of the Riemann xi function
     are constrained to the critical line sigma = 1/2.
--/
-theorem zero_distribution_omnibase (rho : ℂ) (h_zero : riemannZeta rho = 0) 
+-/\n\ntheorem zero_distribution_omnibase (rho : ℂ) (h_zero : riemannZeta rho = 0) 
     (h_non_trivial : rho.im ≠ 0) : 
     rho.re = 1 / 2 := by
   -- This is a corollary of the variational bootstrap theorem
@@ -389,8 +373,7 @@ Connect the Riemann Hypothesis framework to Sylva's core theory:
 /-- Critical threshold lambda_c ≈ 5/2 from Sylva debt framework -/
 noncomputable def lambda_c : ℝ := 5 / 2
 
-/-- lambda_c = 5/2 -/
-theorem lambda_c_eq : lambda_c = 5 / 2 := rfl
+/-- lambda_c = 5/2 -/\n\ntheorem lambda_c_eq : lambda_c = 5 / 2 := rfl
 
 /-- Sylva critical value Phi_c = 137 * phi^3 -/
 noncomputable def Phi_c := Phi.Phi_c
@@ -403,8 +386,7 @@ noncomputable def Phi_c := Phi.Phi_c
     - The Riemann zeta zeros
     
     This is expressed through the bootstrap framework.
--/
-theorem Phi_c_connection : 
+-/\n\ntheorem Phi_c_connection : 
     Phi_c = 137 * φ ^ 3 := by
   unfold Phi_c Phi.Phi_c
   rfl
@@ -418,8 +400,7 @@ noncomputable def B_critical (sigma t : ℝ)
     
     For fixed t and lambda >= lambda_c, the bootstrap residual is convex in sigma.
     This ensures uniqueness of the minimizer sigma_star(lambda,t).
--/
-theorem BootstrapResidual_convex (t : ℝ) (lam : ℝ) (hlam : lam ≥ lambda_c)
+-/\n\ntheorem BootstrapResidual_convex (t : ℝ) (lam : ℝ) (hlam : lam ≥ lambda_c)
     (C : CoarseGrainingOperator lam) :
     ConvexOn ℝ (Set.Icc 0 1) (fun sigma => 
       BootstrapResidual lam sigma t (by linarith [hlam, lambda_c_eq]) C) := by
@@ -444,16 +425,13 @@ SECTION 8: OMNIBASE FRAMEWORK
 ================================================================================
 
 Alternative proof framework using OmniBase principles.
--/
-
-namespace OmniBase
+-/\n\nnamespace OmniBase
 
 /-- OmniBase proof framework for RH
     
     This is an alternative formulation using the OmniBase approach,
     which may offer different insights or proof techniques.
--/
-theorem omnibase_rh :
+-/\n\ntheorem omnibase_rh :
     ∀ (rho : ℂ), (riemannZeta rho = 0) → (rho.re = 1 / 2) ∨ (rho.im = 0) := by
   -- The OmniBase approach may use different foundational principles
   -- For now, we defer to the variational bootstrap
@@ -474,8 +452,7 @@ Additional lemmas needed for the main proofs.
     
     This is a fundamental property of the completed zeta function.
     It reflects the symmetry of the zeta function about the critical line.
--/
-theorem RiemannXi_functional_equation (s : ℂ) : 
+-/\n\ntheorem RiemannXi_functional_equation (s : ℂ) : 
     RiemannXi s = RiemannXi (1 - s) := by
   -- The functional equation for xi(s) = (1/2)*s*(s-1)*pi^(-s/2)*Gamma(s/2)*zeta(s)
   -- is derived from the functional equation for zeta(s)
@@ -494,8 +471,7 @@ theorem RiemannXi_functional_equation (s : ℂ) :
 /-- On the critical line sigma = 1/2, |xi(sigma+i*t)| is minimized at zeros
     
     This lemma connects the magnitude of xi on the critical line to its zeros.
--/
-theorem Xi_critical_line_property (t : ℝ) (ht : t ≠ 0) :
+-/\n\ntheorem Xi_critical_line_property (t : ℝ) (ht : t ≠ 0) :
     let s := (1 / 2 : ℝ) + t * Complex.I
     XiSquaredMag s = 0 ↔ riemannZeta s = 0 := by
   intro s
@@ -539,32 +515,25 @@ The numerical verification (in SylvaFormalization.NumericalZeros) confirms:
 
 This provides strong computational evidence for the Riemann Hypothesis
 and validates the variational bootstrap approach.
--/
+-/\n\nopen NumericalVerification
 
-open NumericalVerification
-
-/-- The first zero corresponds to NumericalZeros.GAMMA_1 -/
-theorem first_zero_numerical : 
+/-- The first zero corresponds to NumericalZeros.GAMMA_1 -/\n\ntheorem first_zero_numerical : 
     zetaNorm (criticalLinePoint GAMMA_1) < EPSILON := 
     NumericalVerification.FirstZeroNumerical
 
-/-- The second zero corresponds to NumericalZeros.GAMMA_2 -/
-theorem second_zero_numerical : 
+/-- The second zero corresponds to NumericalZeros.GAMMA_2 -/\n\ntheorem second_zero_numerical : 
     zetaNorm (criticalLinePoint GAMMA_2) < EPSILON := 
     NumericalVerification.SecondZeroNumerical
 
-/-- The third zero corresponds to NumericalZeros.GAMMA_3 -/
-theorem third_zero_numerical : 
+/-- The third zero corresponds to NumericalZeros.GAMMA_3 -/\n\ntheorem third_zero_numerical : 
     zetaNorm (criticalLinePoint GAMMA_3) < EPSILON := 
     NumericalVerification.ThirdZeroNumerical
 
-/-- The fourth zero corresponds to NumericalZeros.GAMMA_4 -/
-theorem fourth_zero_numerical : 
+/-- The fourth zero corresponds to NumericalZeros.GAMMA_4 -/\n\ntheorem fourth_zero_numerical : 
     zetaNorm (criticalLinePoint GAMMA_4) < EPSILON := 
     NumericalVerification.FourthZeroNumerical
 
-/-- Numerical verification summary as a collective theorem -/
-theorem NumericalVerificationSummary :
+/-- Numerical verification summary as a collective theorem -/\n\ntheorem NumericalVerificationSummary :
     zetaNorm firstCriticalPoint < EPSILON ∧
     zetaNorm secondCriticalPoint < EPSILON ∧
     zetaNorm thirdCriticalPoint < EPSILON ∧

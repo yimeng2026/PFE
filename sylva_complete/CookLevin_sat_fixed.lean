@@ -1,4 +1,4 @@
-/-
+﻿/-
 Sylva Formalization Project
 CookLevin.lean - Cook-Levin Theorem Formalization
 ===============================================
@@ -17,9 +17,7 @@ STATUS: Core definitions complete. Some proofs use `sorry` as placeholders
 for complex inductive arguments that would require extensive lemma development.
 These represent known gaps in the formalization, not errors.
 ===============================================
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import SylvaFormalization.Basic
 
 namespace SylvaFormalization
@@ -28,43 +26,37 @@ namespace SylvaFormalization
 -- Section 1: Boolean Circuits
 -- ============================================
 
-/-- Boolean gate type -/
-inductive GateType
+/-- Boolean gate type -/\n\ninductive GateType
   | and
   | or
   | not
   deriving DecidableEq, Repr
 
-/-- Circuit node: either an input or a gate -/
-inductive CircuitNode
+/-- Circuit node: either an input or a gate -/\n\ninductive CircuitNode
   | input (idx : ℕ)
   | gate (gt : GateType) (left right : ℕ)
   deriving DecidableEq, Repr
 
-/-- Well-formedness predicate for circuits. -/
-structure CircuitWellFormed (numInputs : ℕ) (nodes : List CircuitNode) where
+/-- Well-formedness predicate for circuits. -/\n\nstructure CircuitWellFormed (numInputs : ℕ) (nodes : List CircuitNode) where
   len_bound : numInputs ≤ nodes.length
   input_spec : ∀ i < numInputs, ∀ h : i < nodes.length, 
     nodes.get ⟨i, h⟩ = CircuitNode.input i
   gate_spec : ∀ i, numInputs ≤ i → ∀ h : i < nodes.length,
     ∃ gt l r, nodes.get ⟨i, h⟩ = CircuitNode.gate gt l r ∧ l < i ∧ r < i
 
-/-- Boolean circuit with explicit well-founded structure. -/
-structure BooleanCircuit where
+/-- Boolean circuit with explicit well-founded structure. -/\n\nstructure BooleanCircuit where
   numInputs : ℕ
   nodes : List CircuitNode
   outputIdx : ℕ
   hwf : CircuitWellFormed numInputs nodes
   output_bound : outputIdx < nodes.length
 
-/-- Evaluate a gate -/
-def evalGate : GateType → Bool → Bool → Bool
+/-- Evaluate a gate -/\n\ndef evalGate : GateType → Bool → Bool → Bool
   | GateType.and, a, b => a && b
   | GateType.or, a, b => a || b
   | GateType.not, a, _ => !a
 
-/-- Evaluate a circuit node with well-founded recursion -/
-def evalNode (C : BooleanCircuit) (state : List Bool) (idx : ℕ) : Bool :=
+/-- Evaluate a circuit node with well-founded recursion -/\n\ndef evalNode (C : BooleanCircuit) (state : List Bool) (idx : ℕ) : Bool :=
   if h : idx < C.nodes.length then
     if h_input : idx < C.numInputs then
       match C.nodes.get ⟨idx, h⟩ with
@@ -94,8 +86,7 @@ termination_by idx
 decreasing_by
   all_goals omega
 
-/-- Evaluate circuit with given input assignment -/
-def CircuitEval (C : BooleanCircuit) (input : List Bool) : Bool :=
+/-- Evaluate circuit with given input assignment -/\n\ndef CircuitEval (C : BooleanCircuit) (input : List Bool) : Bool :=
   evalNode C input C.outputIdx
 
 /-- Key lemma: evalNode at a gate index equals evalGate of its children.
@@ -115,44 +106,35 @@ lemma evalNode_gate_eq (C : BooleanCircuit) (state : List Bool) (idx : ℕ)
 -- Section 2: CNF Formulas
 -- ============================================
 
-/-- Literal: positive or negative variable -/
-inductive Literal
+/-- Literal: positive or negative variable -/\n\ninductive Literal
   | pos (var : ℕ)
   | neg (var : ℕ)
   deriving DecidableEq, Repr
 
-/-- Get the variable of a literal -/
-def Literal.var : Literal → ℕ
+/-- Get the variable of a literal -/\n\ndef Literal.var : Literal → ℕ
   | pos v => v
   | neg v => v
 
-/-- Check if literal is positive -/
-def Literal.isPositive : Literal → Bool
+/-- Check if literal is positive -/\n\ndef Literal.isPositive : Literal → Bool
   | pos _ => true
   | neg _ => false
 
-/-- Evaluate a literal under an assignment -/
-def Literal.eval (l : Literal) (assign : ℕ → Bool) : Bool :=
+/-- Evaluate a literal under an assignment -/\n\ndef Literal.eval (l : Literal) (assign : ℕ → Bool) : Bool :=
   match l with
   | pos v => assign v
   | neg v => !(assign v)
 
-/-- Clause: disjunction of literals -/
-def Clause := List Literal
+/-- Clause: disjunction of literals -/\n\ndef Clause := List Literal
 
-/-- Evaluate a clause (disjunction) -/
-def Clause.eval (c : Clause) (assign : ℕ → Bool) : Bool :=
+/-- Evaluate a clause (disjunction) -/\n\ndef Clause.eval (c : Clause) (assign : ℕ → Bool) : Bool :=
   c.any (λ l => l.eval assign)
 
-/-- CNF formula: conjunction of clauses -/
-abbrev CNF := List Clause
+/-- CNF formula: conjunction of clauses -/\n\nabbrev CNF := List Clause
 
-/-- Evaluate a CNF formula (conjunction) -/
-def CNF.eval (φ : CNF) (assign : ℕ → Bool) : Bool :=
+/-- Evaluate a CNF formula (conjunction) -/\n\ndef CNF.eval (φ : CNF) (assign : ℕ → Bool) : Bool :=
   φ.all (λ c => c.eval assign)
 
-/-- CNF satisfiability -/
-def CNFSatisfiable (φ : CNF) : Prop :=
+/-- CNF satisfiability -/\n\ndef CNFSatisfiable (φ : CNF) : Prop :=
   ∃ (assign : ℕ → Bool), φ.eval assign = true
 
 -- ============================================
@@ -163,31 +145,26 @@ def CNFSatisfiable (φ : CNF) : Prop :=
 lemma empty_cnf_true : CNF.eval [] (λ _ => true) = true := by 
   simp [CNF.eval]
 
-/-- Unit clause for a literal -/
-def unitClause (l : Literal) : Clause := [l]
+/-- Unit clause for a literal -/\n\ndef unitClause (l : Literal) : Clause := [l]
 
-/-- Tseitin constraint: y ↔ (x₁ ∧ x₂) as CNF -/
-def tseitinAnd (y x₁ x₂ : ℕ) : CNF :=
+/-- Tseitin constraint: y ↔ (x₁ ∧ x₂) as CNF -/\n\ndef tseitinAnd (y x₁ x₂ : ℕ) : CNF :=
   [ [Literal.neg x₁, Literal.neg x₂, Literal.pos y]
   , [Literal.pos x₁, Literal.neg y]
   , [Literal.pos x₂, Literal.neg y]
   ]
 
-/-- Tseitin constraint: y ↔ (x₁ ∨ x₂) as CNF -/
-def tseitinOr (y x₁ x₂ : ℕ) : CNF :=
+/-- Tseitin constraint: y ↔ (x₁ ∨ x₂) as CNF -/\n\ndef tseitinOr (y x₁ x₂ : ℕ) : CNF :=
   [ [Literal.pos x₁, Literal.pos x₂, Literal.neg y]
   , [Literal.neg x₁, Literal.pos y]
   , [Literal.neg x₂, Literal.pos y]
   ]
 
-/-- Tseitin constraint: y ↔ ¬x as CNF -/
-def tseitinNot (y x : ℕ) : CNF :=
+/-- Tseitin constraint: y ↔ ¬x as CNF -/\n\ndef tseitinNot (y x : ℕ) : CNF :=
   [ [Literal.pos x, Literal.pos y]
   , [Literal.neg x, Literal.neg y]
   ]
 
-/-- Tseitin encoding of a single gate -/
-def gateToCNF (C : BooleanCircuit) (idx : ℕ) : CNF :=
+/-- Tseitin encoding of a single gate -/\n\ndef gateToCNF (C : BooleanCircuit) (idx : ℕ) : CNF :=
   if h : idx < C.nodes.length then
     match C.nodes.get ⟨idx, h⟩ with
     | CircuitNode.input _ => []
@@ -199,14 +176,12 @@ def gateToCNF (C : BooleanCircuit) (idx : ℕ) : CNF :=
   else
     []
 
-/-- Full Tseitin encoding of a circuit -/
-def circuitToCNF (C : BooleanCircuit) : CNF :=
+/-- Full Tseitin encoding of a circuit -/\n\ndef circuitToCNF (C : BooleanCircuit) : CNF :=
   let gateClauses : CNF := List.flatten (List.map (gateToCNF C) (List.range C.nodes.length))
   let outputConstraint : CNF := [[Literal.pos C.outputIdx]]
   gateClauses ++ outputConstraint
 
-/-- Tseitin assignment: variable i gets the node evaluation value. -/
-def tseitinAssignment (C : BooleanCircuit) (input : List Bool) : ℕ → Bool :=
+/-- Tseitin assignment: variable i gets the node evaluation value. -/\n\ndef tseitinAssignment (C : BooleanCircuit) (input : List Bool) : ℕ → Bool :=
   λ v =>
     if h : v < C.nodes.length then
       evalNode C input v
@@ -312,12 +287,10 @@ lemma tseitin_satisfies_cnf (C : BooleanCircuit) (input : List Bool)
     simp [Clause.eval, Literal.eval, tseitinAssignment, C.output_bound]
     exact h_eq
 
-/-- Circuit satisfiability -/
-def CircuitSatisfiable (C : BooleanCircuit) : Prop :=
+/-- Circuit satisfiability -/\n\ndef CircuitSatisfiable (C : BooleanCircuit) : Prop :=
   ∃ (input : List Bool), CircuitEval C input = true
 
-/-- The key reduction property -/
-def ReductionProperty (C : BooleanCircuit) (φ : CNF) : Prop :=
+/-- The key reduction property -/\n\ndef ReductionProperty (C : BooleanCircuit) (φ : CNF) : Prop :=
   (∃ (input : List Bool), CircuitEval C input = true) ↔ CNFSatisfiable φ
 
 /-- Forward direction: Circuit SAT implies CNF-SAT -/
@@ -447,8 +420,7 @@ lemma circuit_to_cnf_backward (C : BooleanCircuit) :
     rw [h_pos]
   exact h_output
 
-/-- Full reduction correctness: The Cook-Levin Theorem -/
-theorem circuit_sat_reduction_correct (C : BooleanCircuit) :
+/-- Full reduction correctness: The Cook-Levin Theorem -/\n\ntheorem circuit_sat_reduction_correct (C : BooleanCircuit) :
     ReductionProperty C (circuitToCNF C) := by
   constructor
   · exact circuit_to_cnf_forward C

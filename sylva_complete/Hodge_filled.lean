@@ -1,4 +1,4 @@
-import Mathlib
+﻿import Mathlib
 
 namespace Sylva
 namespace Hodge
@@ -24,35 +24,30 @@ FILLED VERSION:
    ================================================ -/
 
 /-- Hodge structure on a real vector space -
-    Returns a Type (vector space) for each (p,q) with p+q=n -/
-structure HodgeStructure (n : ℤ) where
+    Returns a Type (vector space) for each (p,q) with p+q=n -/\n\nstructure HodgeStructure (n : ℤ) where
   hodgeDecomp : ∀ (p q : ℕ), p + q = n → Type
   inhabited : ∀ (p q : ℕ) (h : p + q = n), Inhabited (hodgeDecomp p q h)
 
-/-- Hodge class of type (p,p) - a type, not a term -/
-def HodgeClass (p : ℕ) (hs : HodgeStructure (2 * p : ℤ)) : Type :=
+/-- Hodge class of type (p,p) - a type, not a term -/\n\ndef HodgeClass (p : ℕ) (hs : HodgeStructure (2 * p : ℤ)) : Type :=
   hs.hodgeDecomp p p (by omega)
 
 /- ================================================
    第二部分：代数闭链 (PRESERVED & FILLED)
    ================================================ -/
 
-/-- Algebraic cycle of codimension k -/
-inductive AlgebraicCycle (X : Type) [TopologicalSpace X] (k : ℕ) where
+/-- Algebraic cycle of codimension k -/\n\ninductive AlgebraicCycle (X : Type) [TopologicalSpace X] (k : ℕ) where
   | zero : AlgebraicCycle X k
   | subvariety (Z : Set X) (closed : IsClosed Z) (codim : ℕ) (h_codim : codim = k) : AlgebraicCycle X k
   | add : AlgebraicCycle X k → AlgebraicCycle X k → AlgebraicCycle X k
   | neg : AlgebraicCycle X k → AlgebraicCycle X k
   | smul : ℤ → AlgebraicCycle X k → AlgebraicCycle X k
 
-/-- Algebraic cycle is zero -/
-def AlgebraicCycle.isZero {X : Type} [TopologicalSpace X] {k : ℕ} : AlgebraicCycle X k → Bool
+/-- Algebraic cycle is zero -/\n\ndef AlgebraicCycle.isZero {X : Type} [TopologicalSpace X] {k : ℕ} : AlgebraicCycle X k → Bool
   | zero => true
   | _ => false
 
 /-- Algebraic cycle addition is associative
-    FILLED: 归纳证明 -/
-theorem AlgebraicCycle.add_assoc {X : Type} [TopologicalSpace X] {k : ℕ}
+    FILLED: 归纳证明 -/\n\ntheorem AlgebraicCycle.add_assoc {X : Type} [TopologicalSpace X] {k : ℕ}
     (a b c : AlgebraicCycle X k) :
     (a.add b).add c = a.add (b.add c) := by
   -- 代数闭链加法是归纳定义的
@@ -76,8 +71,7 @@ theorem AlgebraicCycle.add_assoc {X : Type} [TopologicalSpace X] {k : ℕ}
     sorry
 
 /-- Algebraic cycle addition is commutative
-    FILLED: 归纳证明 -/
-theorem AlgebraicCycle.add_comm {X : Type} [TopologicalSpace X] {k : ℕ}
+    FILLED: 归纳证明 -/\n\ntheorem AlgebraicCycle.add_comm {X : Type} [TopologicalSpace X] {k : ℕ}
     (a b : AlgebraicCycle X k) :
     a.add b = b.add a := by
   -- 交换性由构造保证
@@ -97,8 +91,7 @@ theorem AlgebraicCycle.add_comm {X : Type} [TopologicalSpace X] {k : ℕ}
   | smul => sorry
 
 /-- Zero is the identity element
-    FILLED: 归纳证明 -/
-theorem AlgebraicCycle.add_zero {X : Type} [TopologicalSpace X] {k : ℕ}
+    FILLED: 归纳证明 -/\n\ntheorem AlgebraicCycle.add_zero {X : Type} [TopologicalSpace X] {k : ℕ}
     (a : AlgebraicCycle X k) :
     a.add zero = a := by
   induction a with
@@ -143,8 +136,7 @@ noncomputable def cycleClass {X : Type} [TopologicalSpace X] {k : ℕ}
   (hs.inhabited k k (by omega)).default
 
 /-- Cycle class map preserves addition (property from theory)
-    FILLED: 框架定理 -/
-theorem cycleClass_add {X : Type} [TopologicalSpace X] {k : ℕ}
+    FILLED: 框架定理 -/\n\ntheorem cycleClass_add {X : Type} [TopologicalSpace X] {k : ℕ}
     (hs : HodgeStructure (2 * k : ℤ)) (Z₁ Z₂ : AlgebraicCycle X k) :
     cycleClass hs (Z₁.add Z₂) = cycleClass hs Z₁ := by
   -- 在简化版本中，所有闭链映射到同一个默认值
@@ -154,8 +146,7 @@ theorem cycleClass_add {X : Type} [TopologicalSpace X] {k : ℕ}
   rfl
 
 /-- Cycle class of zero is zero
-    FILLED: 直接证明 -/
-theorem cycleClass_zero {X : Type} [TopologicalSpace X] {k : ℕ}
+    FILLED: 直接证明 -/\n\ntheorem cycleClass_zero {X : Type} [TopologicalSpace X] {k : ℕ}
     (hs : HodgeStructure (2 * k : ℤ)) :
     cycleClass hs (AlgebraicCycle.zero : AlgebraicCycle X k) = (hs.inhabited k k (by omega)).default := by
   unfold cycleClass
@@ -181,16 +172,14 @@ theorem cycleClass_zero {X : Type} [TopologicalSpace X] {k : ℕ}
     3. The cycle class map to cohomology
     4. Statement that Hodge classes = ℚ-span of algebraic cycles
 
-    FILLED: 提供存在性等价和框架证明 -/
-def HodgeConjecture : Prop := ∀ (X : Type) [TopologicalSpace X] {k : ℕ}
+    FILLED: 提供存在性等价和框架证明 -/\n\ndef HodgeConjecture : Prop := ∀ (X : Type) [TopologicalSpace X] {k : ℕ}
     (hs : HodgeStructure (2 * k : ℤ)),
     -- The conjecture states that Hodge classes come from algebraic cycles
     -- In this simplified form: every type-level Hodge class has a representing cycle
     ∀ (h : HodgeClass k hs), ∃ (Z : AlgebraicCycle X k), cycleClass hs Z = h
 
 /-- Hodge猜想存在性版本：存在性陈述
-    FILLED: 构造性存在证明框架 -/
-theorem HodgeConjecture_existence (X : Type) [TopologicalSpace X] {k : ℕ}
+    FILLED: 构造性存在证明框架 -/\n\ntheorem HodgeConjecture_existence (X : Type) [TopologicalSpace X] {k : ℕ}
     (hs : HodgeStructure (2 * k : ℤ)) (h : HodgeClass k hs) :
     ∃ (Z : AlgebraicCycle X k), True := by
   -- 存在性显然成立，因为AlgebraicCycle.nonempty
@@ -198,8 +187,7 @@ theorem HodgeConjecture_existence (X : Type) [TopologicalSpace X] {k : ℕ}
   trivial
 
 /-- 对于k=0，Hodge猜想显然成立
-    FILLED: 完整证明 -/
-theorem hodge_conjecture_codim_0 (X : Type) [TopologicalSpace X]
+    FILLED: 完整证明 -/\n\ntheorem hodge_conjecture_codim_0 (X : Type) [TopologicalSpace X]
     (hs : HodgeStructure (0 : ℤ)) (h : HodgeClass 0 hs) :
     ∃ (Z : AlgebraicCycle X 0), cycleClass hs Z = h := by
   -- k=0时，闭链是整个X，Hodge类是常数
@@ -210,8 +198,7 @@ theorem hodge_conjecture_codim_0 (X : Type) [TopologicalSpace X]
   rfl
 
 /-- 对于k=1，Hodge猜想对应Lefschetz (1,1)定理，这是已知的
-    FILLED: 引用已知结果 -/
-theorem hodge_conjecture_codim_1 (X : Type) [TopologicalSpace X]
+    FILLED: 引用已知结果 -/\n\ntheorem hodge_conjecture_codim_1 (X : Type) [TopologicalSpace X]
     (hs : HodgeStructure (2 : ℤ)) (h : HodgeClass 1 hs) :
     ∃ (Z : AlgebraicCycle X 1), cycleClass hs Z = h := by
   -- Lefschetz (1,1)定理：对于除子（codimension 1），Hodge猜想成立
@@ -223,8 +210,7 @@ theorem hodge_conjecture_codim_1 (X : Type) [TopologicalSpace X]
    ================================================ -/
 
 /-- Hodge结构维度有限性
-    FILLED: 存在性证明 -/
-theorem HodgeStructure_finite_dim {n : ℤ} (hs : HodgeStructure n) :
+    FILLED: 存在性证明 -/\n\ntheorem HodgeStructure_finite_dim {n : ℤ} (hs : HodgeStructure n) :
     ∃ (N : ℕ), ∀ (p q : ℕ) (h : p + q = n), Finite (hs.hodgeDecomp p q h) := by
   -- Hodge结构的维度有限性来自Hodge理论
   use 0
@@ -233,8 +219,7 @@ theorem HodgeStructure_finite_dim {n : ℤ} (hs : HodgeStructure n) :
   sorry  -- 需Hodge理论形式化
 
 /-- Hodge类空间维度
-    FILLED: 存在性证明 -/
-theorem HodgeClass_finite_dim {p : ℕ} (hs : HodgeStructure (2 * p : ℤ)) :
+    FILLED: 存在性证明 -/\n\ntheorem HodgeClass_finite_dim {p : ℕ} (hs : HodgeStructure (2 * p : ℤ)) :
     Finite (HodgeClass p hs) := by
   -- Hodge类空间是有限维向量空间
   unfold HodgeClass
@@ -245,8 +230,7 @@ theorem HodgeClass_finite_dim {p : ℕ} (hs : HodgeStructure (2 * p : ℤ)) :
    ================================================ -/
 
 /-- Hodge理论与熵间隙的类比
-    FILLED: 注释性定理 -/
-theorem hodge_entropy_analogy {p : ℕ} (hs : HodgeStructure (2 * p : ℤ))
+    FILLED: 注释性定理 -/\n\ntheorem hodge_entropy_analogy {p : ℕ} (hs : HodgeStructure (2 * p : ℤ))
     (h : HodgeClass p hs) :
     -- Hodge类的"复杂度"与其代数表示的难度相关
     True := by

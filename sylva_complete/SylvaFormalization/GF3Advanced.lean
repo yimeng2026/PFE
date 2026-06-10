@@ -1,4 +1,4 @@
-/-
+﻿/-
 ================================================================================
 TUTORIAL: GF(3) 深入 - 有限域代数
 ================================================================================
@@ -36,9 +36,7 @@ GF(3) = {0, 1, 2} 满足所有这些公理！
 - 在 GF(3) 中，2⁻¹ = 2（因为 2×2 = 1）
 
 ================================================================================
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import Sylva.Tutorial.Basic
 
 namespace Sylva.Tutorial.GF3Advanced
@@ -62,8 +60,7 @@ namespace FieldAxioms
 使用的策略：
 - funext：函数外延性
 - fin_cases：穷举有限类型
--/ 
-theorem add_assoc (a b c : GF3) : (a + b) + c = a + (b + c) := by
+-/\n\ntheorem add_assoc (a b c : GF3) : (a + b) + c = a + (b + c) := by
   fin_cases a <;> fin_cases b <;> fin_cases c <;> simp [GF3.add]
   all_goals rfl
 
@@ -127,11 +124,9 @@ namespace Polynomials
 -- EXAMPLE: 多项式求值
 -- ============================================================================
 
-/-- 定义多项式 f(X) = X + 2 -/
-def f : GF3Poly := Polynomial.X + 2
+/-- 定义多项式 f(X) = X + 2 -/\n\ndef f : GF3Poly := Polynomial.X + 2
 
-/-- 定义多项式 g(X) = 2X² + 1 -/
-def g : GF3Poly := 2 * Polynomial.X ^ 2 + 1
+/-- 定义多项式 g(X) = 2X² + 1 -/\n\ndef g : GF3Poly := 2 * Polynomial.X ^ 2 + 1
 
 -- 计算 f(1) = 1 + 2 = 0 (mod 3)
 theorem eval_f_at_1 : f.eval 1 = 0 := by
@@ -188,12 +183,9 @@ Frobenius 是有限域理论的核心工具，在密码学中有广泛应用。
 ⚠️ 注意事项:
 在 GF(3) 中，对于任意 a ∈ GF(3)，都有 a³ = a（费马小定理）
 ================================================================================
--/
+-/\n\nnamespace Frobenius
 
-namespace Frobenius
-
-/-- Frobenius 映射：F(x) = x³ -/
-def F (a : GF3) : GF3 := a ^ 3
+/-- Frobenius 映射：F(x) = x³ -/\n\ndef F (a : GF3) : GF3 := a ^ 3
 
 -- ============================================================================
 -- EXAMPLE: Frobenius 是恒等映射
@@ -207,8 +199,7 @@ def F (a : GF3) : GF3 := a ^ 3
 
 这是费马小定理的特例：a^(p-1) ≡ 1 (mod p) 对于 a ≠ 0
 所以 a^p ≡ a (mod p)
--/ 
-theorem frobenius_identity (a : GF3) : F a = a := by
+-/\n\ntheorem frobenius_identity (a : GF3) : F a = a := by
   fin_cases a <;> simp [F, GF3]
   all_goals rfl
 

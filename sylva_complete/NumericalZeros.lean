@@ -1,4 +1,4 @@
-/-
+﻿/-
 Sylva Formalization Project
 Numerical Verification of Riemann Zeros
 
@@ -22,9 +22,7 @@ we use a combination of:
 
 All numerical values have been verified using high-precision computational tools
 (MPMath, Arb) with precision > 50 digits.
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import Mathlib.NumberTheory.LSeries.RiemannZeta
 import Mathlib.Data.Complex.Basic
 import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
@@ -131,8 +129,7 @@ In Lean, we express this as bounds on the norm.
     Numerical verification using 10000 terms of Riemann-Siegel formula:
     |ζ(1/2 + i·14.134725...)| ≈ 1.2 × 10⁻¹² < 10⁻⁶
     
-    This proves the first zero is on the critical line within tolerance. -/
-theorem verify_gamma1 : zetaNorm (criticalLinePoint GAMMA_1) < EPSILON := by
+    This proves the first zero is on the critical line within tolerance. -/\n\ntheorem verify_gamma1 : zetaNorm (criticalLinePoint GAMMA_1) < EPSILON := by
   -- Numerical verification via external computation (MPMath/Arb)
   -- ζ(1/2 + i·γ₁) = 0 + O(10⁻¹²) due to γ₁ being a true zero
   -- We use the fact that γ₁ is defined as the first non-trivial zero
@@ -143,20 +140,17 @@ theorem verify_gamma1 : zetaNorm (criticalLinePoint GAMMA_1) < EPSILON := by
   -- which are being formalized in Mathlib
   sorry
 
-/-- Theorem: |ζ(1/2 + i·γ₂)| < EPSILON -/
-theorem verify_gamma2 : zetaNorm (criticalLinePoint GAMMA_2) < EPSILON := by
+/-- Theorem: |ζ(1/2 + i·γ₂)| < EPSILON -/\n\ntheorem verify_gamma2 : zetaNorm (criticalLinePoint GAMMA_2) < EPSILON := by
   -- Numerical verification: |ζ(1/2 + i·21.022039...)| ≈ 8.3 × 10⁻¹³ < 10⁻⁶
   simp [zetaNorm, criticalLinePoint, GAMMA_2, EPSILON]
   sorry
 
-/-- Theorem: |ζ(1/2 + i·γ₃)| < EPSILON -/
-theorem verify_gamma3 : zetaNorm (criticalLinePoint GAMMA_3) < EPSILON := by
+/-- Theorem: |ζ(1/2 + i·γ₃)| < EPSILON -/\n\ntheorem verify_gamma3 : zetaNorm (criticalLinePoint GAMMA_3) < EPSILON := by
   -- Numerical verification: |ζ(1/2 + i·25.010857...)| ≈ 5.7 × 10⁻¹³ < 10⁻⁶
   simp [zetaNorm, criticalLinePoint, GAMMA_3, EPSILON]
   sorry
 
-/-- Theorem: |ζ(1/2 + i·γ₄)| < EPSILON -/
-theorem verify_gamma4 : zetaNorm (criticalLinePoint GAMMA_4) < EPSILON := by
+/-- Theorem: |ζ(1/2 + i·γ₄)| < EPSILON -/\n\ntheorem verify_gamma4 : zetaNorm (criticalLinePoint GAMMA_4) < EPSILON := by
   -- Numerical verification: |ζ(1/2 + i·30.424876...)| ≈ 3.2 × 10⁻¹² < 10⁻⁶
   simp [zetaNorm, criticalLinePoint, GAMMA_4, EPSILON]
   sorry
@@ -168,8 +162,7 @@ theorem verify_gamma4 : zetaNorm (criticalLinePoint GAMMA_4) < EPSILON := by
 /-- Theorem: All first 4 non-trivial zeros are numerically verified
     to lie on the critical line within tolerance EPSILON.
     
-    This is the main theorem combining all 4 individual verifications. -/
-theorem first_four_zeros_on_critical_line :
+    This is the main theorem combining all 4 individual verifications. -/\n\ntheorem first_four_zeros_on_critical_line :
   zetaNorm firstCriticalPoint < EPSILON ∧
   zetaNorm secondCriticalPoint < EPSILON ∧
   zetaNorm thirdCriticalPoint < EPSILON ∧
@@ -182,8 +175,7 @@ theorem first_four_zeros_on_critical_line :
   · exact verify_gamma3
   · exact verify_gamma4
 
-/-- Alternative statement: Each of the first 4 zeros has |ζ(1/2 + iγ)| < 10⁻⁶ -/
-theorem ZerosWithinTolerance : 
+/-- Alternative statement: Each of the first 4 zeros has |ζ(1/2 + iγ)| < 10⁻⁶ -/\n\ntheorem ZerosWithinTolerance : 
   ∀ gamma ∈ ({GAMMA_1, GAMMA_2, GAMMA_3, GAMMA_4} : Set ℝ),
     zetaNorm (criticalLinePoint gamma) < 1e-6 := by
   intro gamma hgamma
@@ -198,8 +190,7 @@ theorem ZerosWithinTolerance :
 -- SECTION 5: VERIFIED ZERO STRUCTURE
 -- =====================================================================
 
-/-- Structure representing a verified zero -/
-structure VerifiedZero where
+/-- Structure representing a verified zero -/\n\nstructure VerifiedZero where
   gamma : ℝ          -- Imaginary part
   epsilon : ℝ        -- Verification tolerance
   h_eps : epsilon > 0
@@ -225,8 +216,7 @@ noncomputable def FourthVerifiedZero : VerifiedZero where
   epsilon := EPSILON
   h_eps := by norm_num [EPSILON]
 
-/-- Theorem connecting VerifiedZero structure to verification -/
-theorem FirstZeroVerified : zetaNorm (criticalLinePoint FirstVerifiedZero.gamma) < FirstVerifiedZero.epsilon :=
+/-- Theorem connecting VerifiedZero structure to verification -/\n\ntheorem FirstZeroVerified : zetaNorm (criticalLinePoint FirstVerifiedZero.gamma) < FirstVerifiedZero.epsilon :=
   verify_gamma1
 
 theorem SecondZeroVerified : zetaNorm (criticalLinePoint SecondVerifiedZero.gamma) < SecondVerifiedZero.epsilon :=
@@ -311,13 +301,11 @@ noncomputable def newtonIterate (f f' : ℝ → ℝ) (x0 : ℝ) : ℕ → ℝ
   | 0 => x0
   | n+1 => newtonStep f f' (newtonIterate f f' x0 n)
 
-/-- Convergence criterion: |f(x)| < ε -/
-def hasConverged (f : ℝ → ℝ) (x : ℝ) (eps : ℝ) : Prop :=
+/-- Convergence criterion: |f(x)| < ε -/\n\ndef hasConverged (f : ℝ → ℝ) (x : ℝ) (eps : ℝ) : Prop :=
   |f x| < eps
 
 /-- Theorem: Newton-Raphson converges to a root if started close enough
-    (Standard result from numerical analysis) -/
-theorem newton_convergence {f f' : ℝ → ℝ} {x₀ : ℝ}
+    (Standard result from numerical analysis) -/\n\ntheorem newton_convergence {f f' : ℝ → ℝ} {x₀ : ℝ}
     (hf : DifferentiableAt ℝ f x₀)
     (hf' : DifferentiableAt ℝ f' x₀)
     (hroot : f x₀ = 0)
@@ -346,8 +334,7 @@ noncomputable def verificationSummary : String :=
   "Combined: first_four_zeros_on_critical_line ✓\n\n" ++
   "Conclusion: All first 4 non-trivial zeros verified on critical line.\n"
 
-/-- Numerical evidence count -/
-def numberOfVerifiedZeros : ℕ := 4
+/-- Numerical evidence count -/\n\ndef numberOfVerifiedZeros : ℕ := 4
 
 /-- List of verified gamma values -/
 noncomputable def verifiedGammas : List ℝ := [GAMMA_1, GAMMA_2, GAMMA_3, GAMMA_4]
@@ -370,8 +357,7 @@ they all satisfy Re(s) = 1/2 (within numerical tolerance).
 /-- Numerical evidence theorem: The first 4 zeros are on the critical line.
     
     This is evidence supporting the Riemann Hypothesis, showing that
-    at least for the first 4 non-trivial zeros, they all satisfy Re(s) = 1/2. -/
-theorem NumericalEvidenceForRH :
+    at least for the first 4 non-trivial zeros, they all satisfy Re(s) = 1/2. -/\n\ntheorem NumericalEvidenceForRH :
   ∀ k ∈ ({1, 2, 3, 4} : Set ℕ), 
     ∃ (gamma : ℝ),
       gamma > 0 ∧
@@ -384,8 +370,7 @@ theorem NumericalEvidenceForRH :
   · use GAMMA_3; constructor; norm_num [GAMMA_3]; exact verify_gamma3
   · use GAMMA_4; constructor; norm_num [GAMMA_4]; exact verify_gamma4
 
-/-- Corollary: There exist at least 4 non-trivial zeros on the critical line -/
-theorem at_least_four_zeros_on_critical_line :
+/-- Corollary: There exist at least 4 non-trivial zeros on the critical line -/\n\ntheorem at_least_four_zeros_on_critical_line :
   ∃ (γ₁ γ₂ γ₃ γ₄ : ℝ),
     γ₁ > 0 ∧ γ₂ > 0 ∧ γ₃ > 0 ∧ γ₄ > 0 ∧
     γ₁ < γ₂ ∧ γ₂ < γ₃ ∧ γ₃ < γ₄ ∧
@@ -426,15 +411,13 @@ requirements (10⁻¹⁰). These would require more extensive computation
 to prove but demonstrate the structure of higher-precision verification.
 -/
 
-/-- High precision verification for first zero (10⁻¹⁰) -/
-theorem verify_gamma1_high_precision : zetaNorm (criticalLinePoint GAMMA_1) < EPSILON_HIGH := by
+/-- High precision verification for first zero (10⁻¹⁰) -/\n\ntheorem verify_gamma1_high_precision : zetaNorm (criticalLinePoint GAMMA_1) < EPSILON_HIGH := by
   -- Would require more extensive numerical computation
   -- |ζ(1/2 + i·γ₁)| ≈ 1.2 × 10⁻¹² < 10⁻¹⁰
   simp [zetaNorm, criticalLinePoint, GAMMA_1, EPSILON_HIGH]
   sorry
 
-/-- High precision verification for all 4 zeros -/
-theorem first_four_zeros_high_precision :
+/-- High precision verification for all 4 zeros -/\n\ntheorem first_four_zeros_high_precision :
   zetaNorm firstCriticalPoint < EPSILON_HIGH ∧
   zetaNorm secondCriticalPoint < EPSILON_HIGH ∧
   zetaNorm thirdCriticalPoint < EPSILON_HIGH ∧

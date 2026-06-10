@@ -1,4 +1,4 @@
-/-
+﻿/-
 ================================================================================
 Entropy Gap Spectral Theorem - Core Formalization
 ================================================================================
@@ -18,9 +18,7 @@ Entropy Gap Spectral Theorem - Core Formalization
 - λ₀, λ₁, ...: 特征值谱 (按升序排列)
 - SGH: 谱间隙假设 (Spectral Gap Hypothesis)
 ================================================================================
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 
 import SylvaFormalization.Basic
 
@@ -30,17 +28,13 @@ namespace Sylva
 -- SECTION 1: 基础定义与类型设置
 -- ============================================
 
-/-- 有限字母表上的字符串 -/
-abbrev String (Σ : Type) := List Σ
+/-- 有限字母表上的字符串 -/\n\nabbrev String (Σ : Type) := List Σ
 
-/-- 决策问题作为布尔值函数 -/
-abbrev DecisionProblem := List Bool → Bool
+/-- 决策问题作为布尔值函数 -/\n\nabbrev DecisionProblem := List Bool → Bool
 
-/-- 语言：字符串的集合 -/
-abbrev Language (Σ : Type) := Set (String Σ)
+/-- 语言：字符串的集合 -/\n\nabbrev Language (Σ : Type) := Set (String Σ)
 
-/-- 语言的特征函数 -/
-def Language.characteristic {Σ : Type} (L : Language Σ) : String Σ → Bool :=
+/-- 语言的特征函数 -/\n\ndef Language.characteristic {Σ : Type} (L : Language Σ) : String Σ → Bool :=
   fun w => decide (w ∈ L)
 
 -- ============================================
@@ -49,8 +43,7 @@ def Language.characteristic {Σ : Type} (L : Language Σ) : String Σ → Bool :
 
 section DescriptionComplexityOperator
 
-/-- 程序/图灵机作为描述机制 -/
-structure Program where
+/-- 程序/图灵机作为描述机制 -/\n\nstructure Program where
   code : List Bool  -- 程序的二进制编码
   runtime : Nat → Nat  -- 时间复杂度上界
   space : Nat → Nat     -- 空间复杂度上界
@@ -69,8 +62,7 @@ notation "K(" L ")" => KolmogorovComplexity L
 /-- 描述复杂度算子 Ĥ: 语言空间上的线性算子
     
     在论文中，Ĥ作用于形式语言空间 ℒ = {L ⊆ Σ* | L是递归可枚举的}
-    其"特征值"对应于语言的描述复杂度层级 -/
-structure DescriptionComplexityOperator (Σ : Type) [Fintype Σ] where
+    其"特征值"对应于语言的描述复杂度层级 -/\n\nstructure DescriptionComplexityOperator (Σ : Type) [Fintype Σ] where
   /-- 算子作用的底层空间：递归可枚举语言 -/
   domain : Set (Language Σ)
   /-- 算子对每个语言的"作用"给出其描述复杂度度量 -/
@@ -103,8 +95,7 @@ section EntropyGapSpectrum
 
 /-- 熵间隙 ΔH: 相邻复杂度层级之间的差异
     
-    在论文中，ΔH(L) = K(L) - K₀(L) 其中K₀是基态复杂度 -/
-def EntropyGap {Σ : Type} [Fintype Σ] (L : Language Σ) : ℝ :=
+    在论文中，ΔH(L) = K(L) - K₀(L) 其中K₀是基态复杂度 -/\n\ndef EntropyGap {Σ : Type} [Fintype Σ] (L : Language Σ) : ℝ :=
   KolmogorovComplexity L - minK
   where
     minK := sInf { (K(L') : ℝ) | L' : Language Σ }
@@ -114,8 +105,7 @@ notation "ΔH" => EntropyGap
 
 /-- 特征值谱：描述复杂度算子的谱
     
-    这是一个可数点谱，对应于计算复杂性层级 -/
-structure EigenvalueSpectrum where
+    这是一个可数点谱，对应于计算复杂性层级 -/\n\nstructure EigenvalueSpectrum where
   /-- 特征值序列（按升序排列） -/
   eigenvalues : ℕ → ℝ
   /-- 特征值单调递增 -/
@@ -127,8 +117,7 @@ structure EigenvalueSpectrum where
   /-- 第一激发态 λ₁ > 0 (对应NP\P类) -/
   firstExcitedPositive : eigenvalues 1 > 0
 
-/-- 熵间隙谱：特定于计算复杂性理论的谱结构 -/
-structure EntropyGapSpectrum extends EigenvalueSpectrum where
+/-- 熵间隙谱：特定于计算复杂性理论的谱结构 -/\n\nstructure EntropyGapSpectrum extends EigenvalueSpectrum where
   /-- 谱与复杂度类的对应关系 -/
   complexityClass : ℕ → Set (Language Bool)
   /-- 基态对应P类 -/
@@ -138,17 +127,14 @@ structure EntropyGapSpectrum extends EigenvalueSpectrum where
   /-- 熵间隙条件：相邻特征值之差 -/
   gapCondition : ∀ n, eigenvalues (n + 1) - eigenvalues n ≥ 0
 
-/-- P类 (多项式时间可判定) -/
-def P : Set (Language Bool) :=
+/-- P类 (多项式时间可判定) -/\n\ndef P : Set (Language Bool) :=
   {L | ∃ (p : Program), ∀ w, w ∈ L ↔ p.code = w ∧ p.runtime w.length ≤ w.length ^ 2}
 
-/-- NP类 (非确定性多项式时间可验证) -/
-def NP : Set (Language Bool) :=
+/-- NP类 (非确定性多项式时间可验证) -/\n\ndef NP : Set (Language Bool) :=
   {L | ∃ (p : Program) (witness : List Bool → List Bool),
     ∀ w, w ∈ L ↔ ∃ cert, p.code = (w ++ cert) ∧ p.runtime (w ++ cert).length ≤ (w ++ cert).length ^ 3}
 
-/-- 谱与熵间隙的映射关系 -/
-def SpectrumToEntropyGap (spec : EntropyGapSpectrum) : ℕ → ℝ :=
+/-- 谱与熵间隙的映射关系 -/\n\ndef SpectrumToEntropyGap (spec : EntropyGapSpectrum) : ℕ → ℝ :=
   fun n => spec.eigenvalues (n + 1) - spec.eigenvalues n
 
 end EntropyGapSpectrum
@@ -162,8 +148,7 @@ section SpectralGapHypothesis
 /-- 谱间隙假设 SGH: 存在一个正的下界保证第一激发态与基态之间的间隙
 
     论文定义4.1：SGH断言存在常数c > 0使得
-    λ₁ ≥ c · log n  对所有输入规模n成立 -/
-structure SpectralGapHypothesis where
+    λ₁ ≥ c · log n  对所有输入规模n成立 -/\n\nstructure SpectralGapHypothesis where
   /-- 间隙常数 c > 0 -/
   constant_c : ℝ
   /-- 常数为正 -/
@@ -174,20 +159,17 @@ structure SpectralGapHypothesis where
   /-- 间隙蕴含非平凡分离 -/
   nontriviality : constant_c > 1 / Real.log 2
 
-/-- SGH的标准形式 (使用自然对数) -/
-def SGH_Standard : Prop :=
+/-- SGH的标准形式 (使用自然对数) -/\n\ndef SGH_Standard : Prop :=
   ∃ (c : ℝ), c > 0 ∧ ∀ (n : ℕ), n > 0 →
     let spec : EntropyGapSpectrum := sorry  -- 由上下文确定具体谱
     spec.eigenvalues 1 ≥ c * Real.log n
 
-/-- SGH的强形式：间隙关于n线性增长 -/
-def SGH_Strong : Prop :=
+/-- SGH的强形式：间隙关于n线性增长 -/\n\ndef SGH_Strong : Prop :=
   ∃ (c : ℝ), c > 0 ∧ ∀ (n : ℕ), n > 0 →
     let spec : EntropyGapSpectrum := sorry
     spec.eigenvalues 1 ≥ c * n
 
-/-- SGH的弱形式：间隙为正但不指定增长率 -/
-def SGH_Weak : Prop :=
+/-- SGH的弱形式：间隙为正但不指定增长率 -/\n\ndef SGH_Weak : Prop :=
   ∀ (n : ℕ), n > 0 →
     let spec : EntropyGapSpectrum := sorry
     spec.eigenvalues 1 > 0
@@ -210,9 +192,7 @@ section MainTheorem
     3. 特征值序列单调递增
     4. 谱间隙Δλ = λ₁ - λ₀ = Ω(log n) 当且仅当 P ≠ NP
 
-    这是本论文的核心数学结果。 -/
-
-theorem MainTheorem_EntropyGapSpectral :
+    这是本论文的核心数学结果。 -/\n\ntheorem MainTheorem_EntropyGapSpectral :
   ∀ {Σ : Type} [Fintype Σ],
   ∀ (Ĥ : DescriptionComplexityOperator Σ),
   ∃ (spec : EntropyGapSpectrum),
@@ -226,8 +206,7 @@ theorem MainTheorem_EntropyGapSpectral :
     (spec.eigenvalues 1 > 0 ↔ P ≠ NP) := by
   sorry  -- 证明框架：构造性证明 + 对角线论证
 
-/-- 定理4.1的详细版本，包含谱的具体构造 -/
-theorem EntropyGapSpectral_Constructive {Σ : Type} [Fintype Σ]
+/-- 定理4.1的详细版本，包含谱的具体构造 -/\n\ntheorem EntropyGapSpectral_Constructive {Σ : Type} [Fintype Σ]
   (Ĥ : DescriptionComplexityOperator Σ) :
   ∃ (spec : EntropyGapSpectrum) (basis : ℕ → Language Σ),
     -- 基是正交的（在某种内积意义下）
@@ -252,8 +231,7 @@ section EquivalenceTheorem
 
 /-- 核心等价性：SGH ⟺ P≠NP
 
-    这是论文的核心主张：谱间隙假设等价于P与NP的分离 -/
-theorem SGH_Equivalent_P_neq_NP :
+    这是论文的核心主张：谱间隙假设等价于P与NP的分离 -/\n\ntheorem SGH_Equivalent_P_neq_NP :
   SpectralGapHypothesis ↔ P ≠ NP := by
   constructor
   · -- (→) SGH ⟹ P≠NP
@@ -290,14 +268,12 @@ theorem SGH_Equivalent_P_neq_NP :
       nontriviality := by simp [c]
     }
 
-/-- 等价性的定量版本：SGH给出P≠NP的显式下界 -/
-theorem SGH_Gives_Explicit_Bound (sgh : SpectralGapHypothesis) :
+/-- 等价性的定量版本：SGH给出P≠NP的显式下界 -/\n\ntheorem SGH_Gives_Explicit_Bound (sgh : SpectralGapHypothesis) :
   ∃ (L : Language Bool), L ∈ NP ∧ L ∉ P ∧
     KolmogorovComplexity L ≥ sgh.constant_c * Real.log 2 := by
   sorry
 
-/-- 逆命题：P≠NP给出SGH的构造 -/
-theorem P_neq_NP_Gives_SGH (h : P ≠ NP) :
+/-- 逆命题：P≠NP给出SGH的构造 -/\n\ntheorem P_neq_NP_Gives_SGH (h : P ≠ NP) :
   ∃ (sgh : SpectralGapHypothesis),
     sgh.constant_c = 1 / Real.log 2 := by
   sorry
@@ -349,24 +325,21 @@ end ProofFramework
 section Corollaries
 
 /-- 推论8.1：熵间隙的下界
-    若SGH成立，则ΔH = Ω(log n) -/
-theorem EntropyGap_Lower_Bound (sgh : SpectralGapHypothesis) :
+    若SGH成立，则ΔH = Ω(log n) -/\n\ntheorem EntropyGap_Lower_Bound (sgh : SpectralGapHypothesis) :
   ∀ (L : Language Bool), L ∈ NP → L ∉ P →
     ΔH L ≥ sgh.constant_c * Real.log 2 := by
   sorry
 
 /-- 推论8.2：SAT的描述复杂度
     K(SAT) = Θ(log n) 当且仅当 P = NP
-    K(SAT) = poly(n) 当且仅当 P ≠ NP -/
-theorem SAT_Description_Complexity :
+    K(SAT) = poly(n) 当且仅当 P ≠ NP -/\n\ntheorem SAT_Description_Complexity :
   let SAT : Language Bool := sorry  -- SAT问题的形式化定义
   (SAT ∈ P ↔ K(SAT) = O(Real.log 2)) ∧
   (SAT ∉ P ↔ K(SAT) = Θ((2 : ℕ) ^ sorry)) := by
   sorry
 
 /-- 推论8.3：多项式层级的谱解释
-    PH = ∪ₖ Σₖ^P 对应于谱的高激发态 -/
-theorem PH_Spectral_Interpretation :
+    PH = ∪ₖ Σₖ^P 对应于谱的高激发态 -/\n\ntheorem PH_Spectral_Interpretation :
   ∀ (k : ℕ), ∃ (spec : EntropyGapSpectrum),
     spec.complexityClass k = {L | L ∈ Σₖ^P} := by
   sorry
@@ -387,12 +360,10 @@ section SylvaConnections
 conjecture SpectralGap_Phi_Relation (sgh : SpectralGapHypothesis) :
   ∃ (k : ℕ), sgh.constant_c = Phi.phi ^ k / 137
 
-/-- 临界维度Λ(5/2)与复杂度跃迁的关系 -/
-def CriticalDimension_Complexity_Jump (n : ℕ) : ℝ :=
+/-- 临界维度Λ(5/2)与复杂度跃迁的关系 -/\n\ndef CriticalDimension_Complexity_Jump (n : ℕ) : ℝ :=
   Phi.Lambda (Phi.phi ^ ((n : ℝ) / 2))
 
-/-- 债务临界值D_c = φ⁴与计算"债务"的联系 -/
-theorem Debt_Complexity_Analogy :
+/-- 债务临界值D_c = φ⁴与计算"债务"的联系 -/\n\ntheorem Debt_Complexity_Analogy :
   Phi.D_c = 3 * Phi.phi + 2 := by
   exact Phi.D_c_eq
 
@@ -405,20 +376,17 @@ end SylvaConnections
 section OpenProblems
 
 /-- 开放问题10.1：SGH的显式证明
-    能否构造性地证明SGH？ -/
-def OpenProblem_Explicit_SGH_Proof : Prop :=
+    能否构造性地证明SGH？ -/\n\ndef OpenProblem_Explicit_SGH_Proof : Prop :=
   ∃ (sgh : SpectralGapHypothesis), ∀ (n : ℕ), n > 0 →
     sgh.gap_lower_bound n (by linarith)
 
 /-- 开放问题10.2：谱的精细结构
-    谱间隙的精确值是多少？ -/
-def OpenProblem_Exact_SpectralGap : Prop :=
+    谱间隙的精确值是多少？ -/\n\ndef OpenProblem_Exact_SpectralGap : Prop :=
   ∃ (c : ℝ), ∀ (spec : EntropyGapSpectrum),
     spec.eigenvalues 1 = c * Real.log 2
 
 /-- 开放问题10.3：量子计算的影响
-    BQP类的谱特征是什么？ -/
-def OpenProblem_Quantum_Spectrum : Prop :=
+    BQP类的谱特征是什么？ -/\n\ndef OpenProblem_Quantum_Spectrum : Prop :=
   ∃ (spec : EntropyGapSpectrum),
     spec.complexityClass 2 = {L | L ∈ BQP}
 where

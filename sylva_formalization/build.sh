@@ -1,0 +1,1 @@
+lake build SylvaFormalization.FourForcesUnification 2>&1

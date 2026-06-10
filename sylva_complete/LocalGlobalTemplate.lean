@@ -1,4 +1,4 @@
-/-
+﻿/-
 ================================================================================
   LocalGlobal_Template.lean - Hilbert问题Local-Global统一语法模板
   
@@ -11,9 +11,7 @@
   3. 可扩展性：支持添加新的Hilbert问题
   4. 类型安全：利用Lean的类型系统确保正确性
 ================================================================================
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 
 namespace Sylva
 namespace LocalGlobalTemplate
@@ -33,8 +31,7 @@ namespace LocalGlobalTemplate
   参数：
   - L: 局部数据类型
   - Condition: 局部数据的相容性条件
-  - ProofState: 局部证明状态类型 -/
-structure LocalProblem (L : Type*) where
+  - ProofState: 局部证明状态类型 -/\n\nstructure LocalProblem (L : Type*) where
   /-- 局部相容性条件：何时局部数据可以"粘合" -/
   compatibility : L → Prop
   
@@ -50,8 +47,7 @@ def LocalProblem.dcompat {L : Type*} (lp : LocalProblem L) (l : L) : Decidable (
   - Cook-Levin: CNF公式
   - BSD: L函数在s=1的行为
   - Hodge: 代数闭链
-  - RH: 临界线上的零点分布 -/
-structure GlobalProblem (G : Type*) where
+  - RH: 临界线上的零点分布 -/\n\nstructure GlobalProblem (G : Type*) where
   /-- 全局解的存在性条件 -/
   solutionExists : G → Prop
   
@@ -81,8 +77,7 @@ instance {G : Type*} (gp : GlobalProblem G) (g : G) : Decidable (gp.solutionExis
   数学对应：
   - 下降(Descent)：从相容的局部数据构造全局对象
   - 限制(Restriction)：从全局对象提取局部数据
-  - 相容性(Compatibility)：局部数据能粘合的条件 -/
-class LocalGlobalPrinciple (L G : Type*) (Idx : Type*) where
+  - 相容性(Compatibility)：局部数据能粘合的条件 -/\n\nclass LocalGlobalPrinciple (L G : Type*) (Idx : Type*) where
   /-- 局部索引类型上的偏序（用于下降数据的一致性检查） -/
   indexOrder : Idx → Idx → Prop
   
@@ -134,8 +129,7 @@ class LocalGlobalPrinciple (L G : Type*) (Idx : Type*) where
   这是Local-Global证明中的核心数据结构，包含：
   1. 每个索引处的局部对象
   2. 对象间的转移同构（相容性证明）
-  3. 余循环条件（cocycle condition）保证相容性传递 -/
-structure DescentData {Idx : Type*} (L : Idx → Type*)
+  3. 余循环条件（cocycle condition）保证相容性传递 -/\n\nstructure DescentData {Idx : Type*} (L : Idx → Type*)
     (Transition : ∀ i j, L i → L j → Prop) where
   /-- 每个索引处的局部对象 -/
   objects : ∀ i, L i
@@ -155,8 +149,7 @@ structure DescentData {Idx : Type*} (L : Idx → Type*)
 /-- EffectiveDescent 谓词 - 有效的下降操作
 
   定义何时一个下降操作是"有效的"（即与限制操作互为逆）。
-  这是验证local-to-global原理是否成立的关键。 -/
-def EffectiveDescent {Idx : Type*} {L : Idx → Type*}
+  这是验证local-to-global原理是否成立的关键。 -/\n\ndef EffectiveDescent {Idx : Type*} {L : Idx → Type*}
     {Transition : ∀ i j, L i → L j → Prop}
     (G : Type*)
     (toGlobal : DescentData L Transition → G)
@@ -180,8 +173,7 @@ def EffectiveDescent {Idx : Type*} {L : Idx → Type*}
   - localSolution: 局部解谓词
   - globalSolution: 全局解谓词
 
-  定理意义：这是local-to-global原理的形式化表述。 -/
-theorem local_to_global_lift {L G Idx : Type*}
+  定理意义：这是local-to-global原理的形式化表述。 -/\n\ntheorem local_to_global_lift {L G Idx : Type*}
     [LG : LocalGlobalPrinciple L G Idx]
     (localData : Idx → L)
     (localSolution : ∀ i, Prop)
@@ -203,23 +195,20 @@ theorem local_to_global_lift {L G Idx : Type*}
   它保证了下降和限制操作构成一个等价（equivalence）。
 
   数学背景：这是层论和下降理论中的核心结果。
-  它说明：局部数据 ↔ 全局数据 在相容性条件下是等价的。 -/
-theorem descent_restriction {L G Idx : Type*}
+  它说明：局部数据 ↔ 全局数据 在相容性条件下是等价的。 -/\n\ntheorem descent_restriction {L G Idx : Type*}
     [LG : LocalGlobalPrinciple L G Idx]
     (localData : Idx → L)
     (compat : ∀ (i j : Idx) (h : LG.indexOrder i j), LG.compatibility_transfer localData i j)
     : ∀ i, LG.restriction (LG.descent localData (λ i j h => compat i j h)) i = localData i :=
   LG.descent_restriction_id localData (λ i j h => compat i j h)
 
-/-- 复合相容性传递谓词 - 前置声明 -/
-def compatibility_transfer_composed {L1 G1 Idx1 Idx2 : Type*}
+/-- 复合相容性传递谓词 - 前置声明 -/\n\ndef compatibility_transfer_composed {L1 G1 Idx1 Idx2 : Type*}
     [LG1 : LocalGlobalPrinciple L1 G1 Idx1]
     (d1 : Idx1 → L1) (d2 : Idx2 → G1) (i : Idx1) (j : Idx2) : Prop :=
   -- 局部数据通过G1中间层相容
   LG1.compatibility_transfer d1 i i ∧ d2 j = LG1.descent d1 (λ _ _ _ => by sorry)
 
-/-- 复合Local-Global原理的类型类 -/
-class ComposableLocalGlobalPrinciple 
+/-- 复合Local-Global原理的类型类 -/\n\nclass ComposableLocalGlobalPrinciple 
     (L1 G1 G2 : Type*) (Idx1 Idx2 : Type*)
     [LG1 : LocalGlobalPrinciple L1 G1 Idx1]
     [LG2 : LocalGlobalPrinciple G1 G2 Idx2] where
@@ -234,12 +223,9 @@ class ComposableLocalGlobalPrinciple
 
 /-! ============================================
     第五部分：具体Hilbert问题的实例化模板
-    ============================================ -/
+    ============================================ -/\n\nnamespace CookLevinTemplate
 
-namespace CookLevinTemplate
-
-/-- Cook-Levin问题的Local数据类型模板 -/
-def CircuitGateData : Type := Nat  -- 简化定义
+/-- Cook-Levin问题的Local数据类型模板 -/\n\ndef CircuitGateData : Type := Nat  -- 简化定义
 
 /-- Cook-Levin的Local-Global实例化模板
 
@@ -247,16 +233,14 @@ def CircuitGateData : Type := Nat  -- 简化定义
   1. 定义CircuitGateData为具体的门类型
   2. 实现compatibility谓词为门间的相容性
   3. 实现descent为从门构造CNF
-  4. 实现restriction为从CNF提取门约束 -/
-def CookLevinLocalGlobalTemplate :=
+  4. 实现restriction为从CNF提取门约束 -/\n\ndef CookLevinLocalGlobalTemplate :=
   LocalGlobalPrinciple CircuitGateData (List (List Int)) Nat
 
 end CookLevinTemplate
 
 namespace BSDTemplate
 
-/-- BSD问题的Local数据类型模板 -/
-def LocalEulerFactorData : Type := ℕ → ℝ  -- 简化：p ↦ a_p
+/-- BSD问题的Local数据类型模板 -/\n\ndef LocalEulerFactorData : Type := ℕ → ℝ  -- 简化：p ↦ a_p
 
 /-- BSD问题的Local-Global实例化模板
 
@@ -264,16 +248,14 @@ def LocalEulerFactorData : Type := ℕ → ℝ  -- 简化：p ↦ a_p
   1. 定义LocalEulerFactorData为Euler因子类型
   2. 实现compatibility谓词为Euler乘积收敛条件
   3. 实现descent为从Euler乘积构造L函数
-  4. 实现restriction为从L函数提取Euler因子 -/
-def BSDLocalGlobalTemplate :=
+  4. 实现restriction为从L函数提取Euler因子 -/\n\ndef BSDLocalGlobalTemplate :=
   LocalGlobalPrinciple LocalEulerFactorData (ℝ × ℝ) ℕ
 
 end BSDTemplate
 
 namespace HodgeTemplate
 
-/-- Hodge问题的Local数据类型模板 -/
-def LocalFormData : Type := ℕ → ℕ → ℂ  -- 简化：(p,q) ↦ 微分形式
+/-- Hodge问题的Local数据类型模板 -/\n\ndef LocalFormData : Type := ℕ → ℕ → ℂ  -- 简化：(p,q) ↦ 微分形式
 
 /-- Hodge问题的Local-Global实例化模板
 
@@ -281,16 +263,14 @@ def LocalFormData : Type := ℕ → ℕ → ℂ  -- 简化：(p,q) ↦ 微分形
   1. 定义LocalFormData为局部微分形式类型
   2. 实现compatibility谓词为形式间的相容性（de Rham上同调）
   3. 实现descent为从局部形式构造全局闭链
-  4. 实现restriction为从闭链提取局部形式 -/
-def HodgeLocalGlobalTemplate :=
+  4. 实现restriction为从闭链提取局部形式 -/\n\ndef HodgeLocalGlobalTemplate :=
   LocalGlobalPrinciple LocalFormData (Σ (k : ℕ), Type) ℕ
 
 end HodgeTemplate
 
 namespace RiemannHypothesisTemplate
 
-/-- RH问题的Local数据类型模板 -/
-def LocalZeroData : Type := ℝ × ℝ  -- 零点区间 (lower, upper)
+/-- RH问题的Local数据类型模板 -/\n\ndef LocalZeroData : Type := ℝ × ℝ  -- 零点区间 (lower, upper)
 
 /-- RH问题的Local-Global实例化模板
 
@@ -298,8 +278,7 @@ def LocalZeroData : Type := ℝ × ℝ  -- 零点区间 (lower, upper)
   1. 定义LocalZeroData为零点区间类型
   2. 实现compatibility谓词为区间不重叠且有序
   3. 实现descent为从零点区间构造临界线零点集
-  4. 实现restriction为从零点集提取特定区间 -/
-def RHLocalGlobalTemplate :=
+  4. 实现restriction为从零点集提取特定区间 -/\n\ndef RHLocalGlobalTemplate :=
   LocalGlobalPrinciple LocalZeroData (Set ℂ) ℕ
 
 end RiemannHypothesisTemplate
@@ -330,8 +309,7 @@ lemma descent_uniqueness {L G Idx : Type*}
   intro i
   rw [h1 i, h2 i]
 
-/-- 复合下降定义 - 返回G2类型的全局对象 -/
-def descent_compose {L1 G1 G2 Idx1 Idx2 : Type*}
+/-- 复合下降定义 - 返回G2类型的全局对象 -/\n\ndef descent_compose {L1 G1 G2 Idx1 Idx2 : Type*}
     [LG1 : LocalGlobalPrinciple L1 G1 Idx1]
     [LG2 : LocalGlobalPrinciple G1 G2 Idx2]
     [Comp : ComposableLocalGlobalPrinciple L1 G1 G2 Idx1 Idx2]
@@ -354,8 +332,7 @@ def descent_compose {L1 G1 G2 Idx1 Idx2 : Type*}
 
 /-- Local-Global原理的实例化结构
 
-  使用此结构可以更方便地创建Local-Global实例。 -/
-structure LocalGlobalInstance (L G Idx : Type*) where
+  使用此结构可以更方便地创建Local-Global实例。 -/\n\nstructure LocalGlobalInstance (L G Idx : Type*) where
   /-- 索引偏序 -/
   indexOrder : Idx → Idx → Prop
   indexOrder_wf : WellFounded indexOrder

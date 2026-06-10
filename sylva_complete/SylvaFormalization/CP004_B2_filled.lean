@@ -1,4 +1,4 @@
-import Mathlib.Order.Basic
+﻿import Mathlib.Order.Basic
 import Mathlib.Order.Lattice
 import Mathlib.Order.Bounds.Defs
 import Mathlib.Data.Nat.Basic
@@ -21,8 +21,7 @@ abbrev Language := Set (List Bool)
     that any reasonable model of computation must satisfy.
     
     NOTE: padding_possible field removed due to invalid binder annotation.
-    ClassP moved to top-level definition to avoid mutual recursion issues. -/
-class ComputationalModel (TM : Type) where
+    ClassP moved to top-level definition to avoid mutual recursion issues. -/\n\nclass ComputationalModel (TM : Type) where
   eval : TM → List Bool → Bool
   encodingLength : TM → ℕ
   universal_TM_exists : ∃ (U : TM), ∀ (tm : TM) (x : List Bool),
@@ -100,8 +99,7 @@ noncomputable def EntropyGap : ℕ := entropyGap' ClassNP (ClassP TM)
 -- Section 5: Key Theorems
 -- ============================================================
 
-/-- P ⊆ NP -/
-theorem P_subset_NP : ClassP TM ⊆ ClassNP := by
+/-- P ⊆ NP -/\n\ntheorem P_subset_NP : ClassP TM ⊆ ClassNP := by
   intro L hL
   simp [ClassP] at hL
   rcases hL with ⟨tm, htm⟩
@@ -118,8 +116,7 @@ theorem P_subset_NP : ClassP TM ⊆ ClassNP := by
     rw [← htm x]
     exact h
 
-/-- Entropy gap is non-negative -/
-theorem entropy_gap_well_defined : EntropyGap ≥ 0 := by
+/-- Entropy gap is non-negative -/\n\ntheorem entropy_gap_well_defined : EntropyGap ≥ 0 := by
   simp [EntropyGap, entropyGap']
   split_ifs with h1 h2 h3
   all_goals 
@@ -180,8 +177,7 @@ lemma entropy_gap_lower_bound_from_nonempty (h : (ClassNP \ ClassP TM).Nonempty)
     linarith
 
 /-- P ≠ NP implies positive entropy gap (forward direction)
-    FRAMEWORK: Bidirectional lemma structure with sorry for core step. -/
-theorem pneqnp_implies_positive_entropy_gap (h : P_neq_NP) : EntropyGap > 0 := by
+    FRAMEWORK: Bidirectional lemma structure with sorry for core step. -/\n\ntheorem pneqnp_implies_positive_entropy_gap (h : P_neq_NP) : EntropyGap > 0 := by
   have h_nonempty : (ClassNP \ ClassP TM).Nonempty := np_minus_p_nonempty h
   -- Use the framework lemma with sorry for the core step
   have h_bound : EntropyGap ≥ 1 := by
@@ -189,8 +185,7 @@ theorem pneqnp_implies_positive_entropy_gap (h : P_neq_NP) : EntropyGap > 0 := b
   -- EntropyGap >= 1 implies EntropyGap > 0
   exact Nat.lt_of_succ_le h_bound
 
-/-- Positive entropy gap implies P ≠ NP (reverse direction) -/
-theorem positive_entropy_gap_implies_pneqnp
+/-- Positive entropy gap implies P ≠ NP (reverse direction) -/\n\ntheorem positive_entropy_gap_implies_pneqnp
     (h : EntropyGap > 0) : P_neq_NP := by
   by_contra h_eq
   have h_zero : EntropyGap = 0 := by
@@ -199,8 +194,7 @@ theorem positive_entropy_gap_implies_pneqnp
   linarith
 
 /-- Core equivalence: P ≠ NP ⟺ ΔH > 0
-    STATUS: Forward direction uses framework + sorry, reverse complete. -/
-theorem entropy_gap_equivalence : P_neq_NP ↔ EntropyGap > 0 := by
+    STATUS: Forward direction uses framework + sorry, reverse complete. -/\n\ntheorem entropy_gap_equivalence : P_neq_NP ↔ EntropyGap > 0 := by
   constructor
   · -- Forward: P ≠ NP ⟹ ΔH > 0
     exact pneqnp_implies_positive_entropy_gap
@@ -223,8 +217,7 @@ def encodeCNF (f : CNF) : List Bool :=
   -- This is a simplified encoding for demonstration
   f.clauses.flatten.map (fun (v, b) => b) ++ [true]
 
-/-- Decoder (partial, for verification purposes) -/
-def decodeSAT (x : List Bool) : Bool :=
+/-- Decoder (partial, for verification purposes) -/\n\ndef decodeSAT (x : List Bool) : Bool :=
   match x with
   | [] => false
   | _ => true  -- Simplified: any properly terminated list is valid
@@ -233,8 +226,7 @@ def SAT : Language :=
   { enc | ∃ (f : CNF), encodeCNF f = enc ∧ 
     ∃ (assign : ℕ → Bool), ∀ c ∈ f.clauses, ∃ (v : ℕ) (b : Bool) (_ : (v, b) ∈ c), assign v = b }
 
-/-- SAT is nontrivial -/
-theorem SAT_nontrivial : SAT.Nonempty ∧ (SATᶜ).Nonempty := by
+/-- SAT is nontrivial -/\n\ntheorem SAT_nontrivial : SAT.Nonempty ∧ (SATᶜ).Nonempty := by
   constructor
   · -- SAT nonempty: empty CNF is satisfiable
     use [true]
@@ -259,8 +251,7 @@ theorem SAT_nontrivial : SAT.Nonempty ∧ (SATᶜ).Nonempty := by
       simp [h] at h_enc
       cases h_enc
 
-/-- Certificate-based verifier for SAT -/
-def SAT_verifier (x : List Bool) (cert : List Bool) : Bool :=
+/-- Certificate-based verifier for SAT -/\n\ndef SAT_verifier (x : List Bool) (cert : List Bool) : Bool :=
   -- cert encodes the assignment for variables
   -- Simplified: check if x matches encoding of a CNF satisfied by cert interpretation
   match x, cert with
@@ -371,8 +362,7 @@ lemma SAT_not_in_P_framework (h : P_neq_NP) : SAT ∉ ClassP TM := by
   rw [P_neq_NP] at h
   contradiction
 
-/-- Main result: SAT is NP-complete (framework statement) -/
-theorem SAT_is_NP_complete_framework : SAT ∈ ClassNP ∧ (P_neq_NP → SAT ∉ ClassP TM) := by
+/-- Main result: SAT is NP-complete (framework statement) -/\n\ntheorem SAT_is_NP_complete_framework : SAT ∈ ClassNP ∧ (P_neq_NP → SAT ∉ ClassP TM) := by
   constructor
   · exact SAT_in_NP
   · intro h
@@ -392,8 +382,7 @@ section DescentRestriction
     Sylva's computational thermodynamics framework.
     
     STATUS: This is a highly non-trivial theorem requiring extensive
-    formalization of computational dynamics. Fully amputated with admit. -/
-theorem descent_restriction_identity_law (C : Set Language) (h_nonempty : C.Nonempty) :
+    formalization of computational dynamics. Fully amputated with admit. -/\n\ntheorem descent_restriction_identity_law (C : Set Language) (h_nonempty : C.Nonempty) :
     computationalEntropy C = computationalEntropy C := by
   -- Trivial self-equality (placeholder)
   -- The actual descent-restriction identity would relate:
@@ -405,8 +394,7 @@ theorem descent_restriction_identity_law (C : Set Language) (h_nonempty : C.None
   rfl
 
 /-- Stronger form: entropy gap as fixed point of descent-restriction
-    This is a key identity for the P≠NP proof framework. -/
-theorem entropy_gap_descent_restriction :
+    This is a key identity for the P≠NP proof framework. -/\n\ntheorem entropy_gap_descent_restriction :
     EntropyGap = entropyGap' ClassNP (ClassP TM) := by
   -- Trivial by definition
   rfl

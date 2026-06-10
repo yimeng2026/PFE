@@ -1,4 +1,4 @@
-/-
+﻿/-
 ================================================================================
 Theorem Gravitational Field System (TheoremGravitationalField.lean)
 ================================================================================
@@ -20,9 +20,7 @@ REFERENCE: The "energy level" metaphor is inspired by quantum mechanics,
 where particles occupy discrete energy states. Similarly, theorems naturally
 cluster into "energy bands" based on their mathematical relationships.
 ================================================================================
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import Mathlib.Data.Finset.Basic
 import Mathlib.Data.Set.Basic
 import Mathlib.Data.List.Basic
@@ -36,29 +34,24 @@ set_option autoImplicit false
 -- SECTION 1: Core Types and Structures
 -- ============================================
 
-/-- A TheoremID uniquely identifies a theorem in the system -/
-abbrev TheoremID := String
+/-- A TheoremID uniquely identifies a theorem in the system -/\n\nabbrev TheoremID := String
 
-/-- A DefinitionID uniquely identifies a definition -/
-abbrev DefinitionID := String
+/-- A DefinitionID uniquely identifies a definition -/\n\nabbrev DefinitionID := String
 
-/-- Dependency edge: theorem A depends on theorem B -/
-structure DependencyEdge where
+/-- Dependency edge: theorem A depends on theorem B -/\n\nstructure DependencyEdge where
   fromTheorem : TheoremID
   toTheorem : TheoremID
   weight : ℕ  -- Dependency strength (how deeply A depends on B)
   deriving Repr, BEq, Hashable
 
-/-- A theorem with its metadata -/
-structure TheoremNode where
+/-- A theorem with its metadata -/\n\nstructure TheoremNode where
   id : TheoremID
   usesDefinitions : List DefinitionID  -- Definitions this theorem uses
   provedBy : List TheoremID            -- Theorems used in the proof
   depth : ℕ                           -- Depth in the dependency hierarchy
   deriving Repr, BEq
 
-/-- The full theorem universe - a dependency graph -/
-structure TheoremUniverse where
+/-- The full theorem universe - a dependency graph -/\n\nstructure TheoremUniverse where
   theorems : List TheoremNode
   dependencies : List DependencyEdge
   definitions : List DefinitionID
@@ -129,21 +122,18 @@ structure GravitationalStrength where
 
 namespace GravitationalStrength
 
-/-- Calculate shared definition count between two theorems -/
-def calculateSharedMass (t₁ t₂ : TheoremNode) : ℕ :=
+/-- Calculate shared definition count between two theorems -/\n\ndef calculateSharedMass (t₁ t₂ : TheoremNode) : ℕ :=
   let defs₁ := t₁.usesDefinitions.toFinset
   let defs₂ := t₂.usesDefinitions.toFinset
   (defs₁ ∩ defs₂).card
 
-/-- Calculate dependency depth similarity -/
-def calculateDepthCoupling (t₁ t₂ : TheoremNode) : ℕ :=
+/-- Calculate dependency depth similarity -/\n\ndef calculateDepthCoupling (t₁ t₂ : TheoremNode) : ℕ :=
   if t₁.depth = t₂.depth then 10
   else if |t₁.depth - t₂.depth| ≤ 1 then 5
   else if |t₁.depth - t₂.depth| ≤ 2 then 2
   else 0
 
-/-- Calculate interface coupling (simplified: proof overlap) -/
-def calculateInterfaceCoupling (t₁ t₂ : TheoremNode) : ℕ :=
+/-- Calculate interface coupling (simplified: proof overlap) -/\n\ndef calculateInterfaceCoupling (t₁ t₂ : TheoremNode) : ℕ :=
   let proofs₁ := t₁.provedBy.toFinset
   let proofs₂ := t₂.provedBy.toFinset
   let overlap := (proofs₁ ∩ proofs₂).card
@@ -200,29 +190,24 @@ def TarjanState.new : TarjanState :=
   , lowLinks := Std.HashMap.empty
   , sccs := [] }
 
-/-- Get all theorems that a given theorem depends on -/
-def getDependencies (universe : TheoremUniverse) (theoremId : TheoremID) : List TheoremID :=
+/-- Get all theorems that a given theorem depends on -/\n\ndef getDependencies (universe : TheoremUniverse) (theoremId : TheoremID) : List TheoremID :=
   universe.dependencies
     |>.filter (·.fromTheorem = theoremId)
     |>.map (·.toTheorem)
 
-/-- Strongly Connected Component (SCC) - a cluster of mutually dependent theorems -/
-def SCC := List TheoremID
+/-- Strongly Connected Component (SCC) - a cluster of mutually dependent theorems -/\n\ndef SCC := List TheoremID
 
 deriving instance Repr for SCC
 
 namespace SCC
 
-/-- Check if a theorem is in an SCC -/
-def contains (scc : SCC) (theoremId : TheoremID) : Bool :=
+/-- Check if a theorem is in an SCC -/\n\ndef contains (scc : SCC) (theoremId : TheoremID) : Bool :=
   theoremId ∈ scc
 
-/-- Size of the SCC -/
-def size (scc : SCC) : ℕ :=
+/-- Size of the SCC -/\n\ndef size (scc : SCC) : ℕ :=
   scc.length
 
-/-- Check if two SCCs are the same (as sets) -/
-def equivalent (scc₁ scc₂ : SCC) : Bool :=
+/-- Check if two SCCs are the same (as sets) -/\n\ndef equivalent (scc₁ scc₂ : SCC) : Bool :=
   scc₁.toFinset = scc₂.toFinset
 
 end SCC
@@ -248,8 +233,7 @@ structure GravitationalCluster where
 
 namespace GravitationalCluster
 
-/-- Create a cluster from an SCC with computed properties -/
-def fromSCC (universe : TheoremUniverse) (scc : SCC) (level : ℕ) : GravitationalCluster :=
+/-- Create a cluster from an SCC with computed properties -/\n\ndef fromSCC (universe : TheoremUniverse) (scc : SCC) (level : ℕ) : GravitationalCluster :=
   -- Find the theorem with maximum mass as center
   let theoremNodes := universe.theorems.filter (fun t => scc.contains t.id)
   let center := theoremNodes.head?.map (·.id) |>.getD ""
@@ -270,12 +254,10 @@ def fromSCC (universe : TheoremUniverse) (scc : SCC) (level : ℕ) : Gravitation
   , bindingEnergy := binding / 2  -- Divide by 2 to avoid double counting
   , energyLevel := level }
 
-/-- Check if a theorem belongs to this cluster -/
-def contains (cluster : GravitationalCluster) (theoremId : TheoremID) : Bool :=
+/-- Check if a theorem belongs to this cluster -/\n\ndef contains (cluster : GravitationalCluster) (theoremId : TheoremID) : Bool :=
   cluster.theorems.contains theoremId
 
-/-- Number of theorems in the cluster -/
-def size (cluster : GravitationalCluster) : ℕ :=
+/-- Number of theorems in the cluster -/\n\ndef size (cluster : GravitationalCluster) : ℕ :=
   cluster.theorems.size
 
 end GravitationalCluster
@@ -300,22 +282,18 @@ structure GravitationalFieldAnalysis where
 
 namespace GravitationalFieldAnalysis
 
-/-- Get the cluster containing a specific theorem -/
-def findCluster (analysis : GravitationalFieldAnalysis) (theoremId : TheoremID) : Option GravitationalCluster :=
+/-- Get the cluster containing a specific theorem -/\n\ndef findCluster (analysis : GravitationalFieldAnalysis) (theoremId : TheoremID) : Option GravitationalCluster :=
   analysis.clusters.find? (·.contains theoremId)
 
-/-- Get the energy level of a theorem -/
-def getEnergyLevel (analysis : GravitationalFieldAnalysis) (theoremId : TheoremID) : ℕ :=
+/-- Get the energy level of a theorem -/\n\ndef getEnergyLevel (analysis : GravitationalFieldAnalysis) (theoremId : TheoremID) : ℕ :=
   match findCluster analysis theoremId with
   | some cluster => cluster.energyLevel
   | none => 0  -- Orphan theorems are at ground level
 
-/-- Calculate the total gravitational potential of the field -/
-def totalPotential (analysis : GravitationalFieldAnalysis) : ℝ :=
+/-- Calculate the total gravitational potential of the field -/\n\ndef totalPotential (analysis : GravitationalFieldAnalysis) : ℝ :=
   analysis.clusters.foldl (fun acc c => acc + c.bindingEnergy) 0
 
-/-- Find the strongest gravitational coupling for a theorem -/
-def strongestCoupling (analysis : GravitationalFieldAnalysis) (theoremId : TheoremID) : Option (TheoremID × GravitationalStrength) :=
+/-- Find the strongest gravitational coupling for a theorem -/\n\ndef strongestCoupling (analysis : GravitationalFieldAnalysis) (theoremId : TheoremID) : Option (TheoremID × GravitationalStrength) :=
   let relevant := analysis.fieldStrength.toList.filter (fun ((t₁, t₂), _) => t₁ = theoremId || t₂ = theoremId)
   match relevant with
   | [] => none
@@ -330,8 +308,7 @@ end GravitationalFieldAnalysis
 -- SECTION 7: Instance for TheoremUniverse
 -- ============================================
 
-/-- TheoremUniverse is a GravitationalField -/
-instance : GravitationalField TheoremUniverse where
+/-- TheoremUniverse is a GravitationalField -/\n\ninstance : GravitationalField TheoremUniverse where
   position u id :=
     match u.theorems.find? (·.id = id) with
     | some t => t.depth
@@ -435,8 +412,7 @@ def analyzeGravitationalField (universe : TheoremUniverse) : GravitationalFieldA
 -- SECTION 9: Example Theorem Universe
 -- ============================================
 
-/-- Example: A small universe of theorems about the Golden Ratio -/
-def exampleTheoremUniverse : TheoremUniverse :=
+/-- Example: A small universe of theorems about the Golden Ratio -/\n\ndef exampleTheoremUniverse : TheoremUniverse :=
   let theorems : List TheoremNode :=
     [ { id := "phi_def", usesDefinitions := ["Real.sqrt", "division"], provedBy := [], depth := 0 }
     , { id := "phi_sq_eq", usesDefinitions := ["phi_def", "Real.sqrt_sq", "nlinarith"], provedBy := ["phi_def"], depth := 1 }
@@ -464,25 +440,21 @@ def exampleTheoremUniverse : TheoremUniverse :=
 -- SECTION 10: Theorems and Properties
 -- ============================================
 
-/-- Gravitational strength is symmetric -/
-theorem gravitationalStrength_symmetric (t₁ t₂ : TheoremNode) :
+/-- Gravitational strength is symmetric -/\n\ntheorem gravitationalStrength_symmetric (t₁ t₂ : TheoremNode) :
   (GravitationalStrength.compute t₁ t₂).sharedMass = (GravitationalStrength.compute t₂ t₁).sharedMass := by
   simp [GravitationalStrength.compute, GravitationalStrength.calculateSharedMass]
   rw [Finset.inter_comm]
 
-/-- Mass is always positive -/
-theorem mass_positive (u : TheoremUniverse) (id : TheoremID) :
+/-- Mass is always positive -/\n\ntheorem mass_positive (u : TheoremUniverse) (id : TheoremID) :
   GravitationalField.mass u id > 0 := by
   apply GravitationalField.mass_pos
 
-/-- Distance is always non-negative -/
-theorem distance_nonneg (u : TheoremUniverse) (id₁ id₂ : TheoremID) :
+/-- Distance is always non-negative -/\n\ntheorem distance_nonneg (u : TheoremUniverse) (id₁ id₂ : TheoremID) :
   GravitationalField.distance u id₁ id₂ ≥ 0 := by
   simp [GravitationalField.distance]
   split <;> split <;> simp [abs_nonneg]
 
-/-- Theorem at same depth have zero distance (in that dimension) -/
-theorem distance_zero_same_depth (u : TheoremUniverse) (t₁ t₂ : TheoremNode) 
+/-- Theorem at same depth have zero distance (in that dimension) -/\n\ntheorem distance_zero_same_depth (u : TheoremUniverse) (t₁ t₂ : TheoremNode) 
   (h₁ : t₁ ∈ u.theorems) (h₂ : t₂ ∈ u.theorems)
   (h_depth : t₁.depth = t₂.depth) :
   GravitationalField.distance u t₁.id t₂.id = 0 := by
@@ -491,24 +463,21 @@ theorem distance_zero_same_depth (u : TheoremUniverse) (t₁ t₂ : TheoremNode)
   · simp_all [h_depth, abs_zero]
   all_goals simp_all
 
-/-- Energy level is bounded -/
-theorem energyLevel_bounded (u : TheoremUniverse) (id : TheoremID) :
+/-- Energy level is bounded -/\n\ntheorem energyLevel_bounded (u : TheoremUniverse) (id : TheoremID) :
   GravitationalField.energyBand u id ≤ 2 := by
   simp [GravitationalField.energyBand]
   split
   · simp
   · split <;> simp
 
-/-- Gravitational clusters have positive mass -/
-theorem cluster_mass_positive (cluster : GravitationalCluster) :
+/-- Gravitational clusters have positive mass -/\n\ntheorem cluster_mass_positive (cluster : GravitationalCluster) :
   cluster.totalMass > 0 := by
   simp [GravitationalCluster.totalMass]
   -- Mass is sum of definition counts + 1 for each theorem
   -- Since there are no empty SCCs (by construction), mass > 0
   sorry  -- TODO: Prove that SCCs are non-empty
 
-/-- Total potential is sum of all binding energies -/
-theorem totalPotential_correct (analysis : GravitationalFieldAnalysis) :
+/-- Total potential is sum of all binding energies -/\n\ntheorem totalPotential_correct (analysis : GravitationalFieldAnalysis) :
   analysis.totalPotential = analysis.clusters.foldl (fun acc c => acc + c.bindingEnergy) 0 := by
   rfl  -- True by definition
 
@@ -516,8 +485,7 @@ theorem totalPotential_correct (analysis : GravitationalFieldAnalysis) :
 -- SECTION 11: Advanced SCC Detection (Kosaraju)
 -- ============================================
 
-/-- First DFS pass for Kosaraju's algorithm -/
-def dfsFirstPass (universe : TheoremUniverse) (visited : Std.HashSet TheoremID) 
+/-- First DFS pass for Kosaraju's algorithm -/\n\ndef dfsFirstPass (universe : TheoremUniverse) (visited : Std.HashSet TheoremID) 
   (finishOrder : List TheoremID) (current : TheoremID) : Std.HashSet TheoremID × List TheoremID :=
   if visited.contains current then
     (visited, finishOrder)
@@ -528,8 +496,7 @@ def dfsFirstPass (universe : TheoremUniverse) (visited : Std.HashSet TheoremID)
       dfsFirstPass universe v fo d) (visited, finishOrder)
     (visited, current :: finishOrder)
 
-/-- Second DFS pass on transposed graph -/
-def dfsSecondPass (universe : TheoremUniverse) (visited : Std.HashSet TheoremID)
+/-- Second DFS pass on transposed graph -/\n\ndef dfsSecondPass (universe : TheoremUniverse) (visited : Std.HashSet TheoremID)
   (current : TheoremID) : Std.HashSet TheoremID × List TheoremID :=
   if visited.contains current then
     (visited, [])
@@ -544,8 +511,7 @@ def dfsSecondPass (universe : TheoremUniverse) (visited : Std.HashSet TheoremID)
       (v', acc ++ found)) (visited, [current])
     (visited, scc)
 
-/-- Kosaraju's SCC algorithm -/
-def kosarajuSCC (universe : TheoremUniverse) : List SCC :=
+/-- Kosaraju's SCC algorithm -/\n\ndef kosarajuSCC (universe : TheoremUniverse) : List SCC :=
   -- First pass: get finish order
   let (_, finishOrder) := universe.theorems.foldl (fun (v, fo) t =>
     dfsFirstPass universe v fo t.id) (Std.HashSet.empty, [])
@@ -564,8 +530,7 @@ def kosarajuSCC (universe : TheoremUniverse) : List SCC :=
 -- SECTION 12: Energy Level Classification
 -- ============================================
 
-/-- Classification of theorems by their energy characteristics -/
-inductive EnergyClass where
+/-- Classification of theorems by their energy characteristics -/\n\ninductive EnergyClass where
   | groundState      -- Isolated theorems, no dependencies
   | lowEnergy       -- Few dependencies, simple structure
   | excitedState    -- Moderate coupling, some complexity
@@ -575,8 +540,7 @@ inductive EnergyClass where
 
 namespace EnergyClass
 
-/-- Classify a theorem based on the analysis -/
-def classify (analysis : GravitationalFieldAnalysis) (theoremId : TheoremID) : EnergyClass :=
+/-- Classify a theorem based on the analysis -/\n\ndef classify (analysis : GravitationalFieldAnalysis) (theoremId : TheoremID) : EnergyClass :=
   match analysis.findCluster theoremId with
   | some cluster =>
     if cluster.size > 5 then
@@ -589,8 +553,7 @@ def classify (analysis : GravitationalFieldAnalysis) (theoremId : TheoremID) : E
       lowEnergy
   | none => groundState
 
-/-- Human-readable description -/
-def description : EnergyClass → String
+/-- Human-readable description -/\n\ndef description : EnergyClass → String
   | groundState => "Ground State: Isolated theorem with no dependencies"
   | lowEnergy => "Low Energy: Simple structure with minimal coupling"
   | excitedState => "Excited State: Moderate complexity and coupling"
@@ -627,12 +590,10 @@ def formatGravitationalFieldReport (analysis : GravitationalFieldAnalysis) : Str
 -- SECTION 14: Main Entry Point
 -- ============================================
 
-/-- Run complete gravitational field analysis on a theorem universe -/
-def runAnalysis (universe : TheoremUniverse) : GravitationalFieldAnalysis :=
+/-- Run complete gravitational field analysis on a theorem universe -/\n\ndef runAnalysis (universe : TheoremUniverse) : GravitationalFieldAnalysis :=
   analyzeGravitationalField universe
 
-/-- Example usage -/
-def exampleAnalysis : GravitationalFieldAnalysis :=
+/-- Example usage -/\n\ndef exampleAnalysis : GravitationalFieldAnalysis :=
   runAnalysis exampleTheoremUniverse
 
 end Sylva

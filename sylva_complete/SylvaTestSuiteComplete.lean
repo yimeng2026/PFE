@@ -1,4 +1,4 @@
-/-
+﻿/-
 SylvaFormalization Comprehensive Test Suite
 ================================================================================
 Complete test coverage for all computable definitions and key theorems.
@@ -17,9 +17,7 @@ NOTE: ZetaVerifier and RiemannHypothesis are excluded due to a pre-existing
       compilation error in ZetaVerifier.error_bound_verified_region.
 
 Run with: lake build SylvaTestSuiteComplete
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import SylvaFormalization.Basic
 import SylvaFormalization.Complexity
 import SylvaFormalization.CP004

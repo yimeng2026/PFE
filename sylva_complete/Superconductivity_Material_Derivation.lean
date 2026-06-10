@@ -1,4 +1,4 @@
-/-
+﻿/-
 # Superconductivity_Material_Derivation.lean
 # 超导材料族的表示论约束推导
 
@@ -17,9 +17,7 @@ theorem candidate_materials_from_theory :
 
 作者：SYLVA
 版本：v1.0
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import CrystalStructure
 import BandTheory
 
@@ -31,8 +29,7 @@ open CrystalStructure BandTheory
 -- Section 1: 配对机制的形式化定义
 -- ============================================
 
-/-- 配对对称性 -/
-inductive PairingSymmetry
+/-- 配对对称性 -/\n\ninductive PairingSymmetry
   | sWave       -- s波：L=0, S=0
   | pWave       -- p波：L=1, S=1 (triplet)
   | dWave       -- d波：L=2, S=0
@@ -43,8 +40,7 @@ inductive PairingSymmetry
   | dPlusID     -- d_x2-y2 + i d_xy
   deriving DecidableEq, Repr
 
-/-- 配对机制类型 -/
-inductive PairingMechanismType
+/-- 配对机制类型 -/\n\ninductive PairingMechanismType
   | phononMediated       -- 声子媒介 (BCS)
   | magneticFluctuation  -- 磁涨落媒介 (自旋涨落)
   | chargeFluctuation    -- 电荷涨落媒介
@@ -54,8 +50,7 @@ inductive PairingMechanismType
   | topological          -- 拓扑保护配对
   deriving DecidableEq, Repr
 
-/-- 配对机制完整描述 -/
-structure PairingMechanism where
+/-- 配对机制完整描述 -/\n\nstructure PairingMechanism where
   mechanismType : PairingMechanismType
   symmetry : PairingSymmetry
   -- 必需的结构特征
@@ -65,8 +60,7 @@ structure PairingMechanism where
   couplingStrengthRange : Set ℝ
   cutoffEnergy : ℝ
 
-/-- 配对机制有效性 -/
-def valid_mechanism (pm : PairingMechanism) : Prop :=
+/-- 配对机制有效性 -/\n\ndef valid_mechanism (pm : PairingMechanism) : Prop :=
   -- 至少存在一个材料可以实现该机制
   ∃ mat : CrystalStructure 3, realizes_mechanism mat pm
 
@@ -74,18 +68,15 @@ def valid_mechanism (pm : PairingMechanism) : Prop :=
 -- Section 2: 材料-机制实现关系
 -- ============================================
 
-/-- 材料实现配对机制 -/
-def realizes_mechanism (mat : CrystalStructure 3) (pm : PairingMechanism) : Prop :=
+/-- 材料实现配对机制 -/\n\ndef realizes_mechanism (mat : CrystalStructure 3) (pm : PairingMechanism) : Prop :=
   -- 结构条件满足
   pm.requiredCrystalSymmetry mat.spaceGroup ∧
   -- 电子结构条件满足
   (∃ bands : BandStructure 3, bands.crystal = mat ∧ pm.requiredElectronStructure bands)
 
-/-- 候选材料族 -/
-def MaterialFamily := Set (CrystalStructure 3)
+/-- 候选材料族 -/\n\ndef MaterialFamily := Set (CrystalStructure 3)
 
-/-- 从理论推导材料的核心定理 -/
-theorem candidate_materials_from_theory (pm : PairingMechanism)
+/-- 从理论推导材料的核心定理 -/\n\ntheorem candidate_materials_from_theory (pm : PairingMechanism)
     (h_valid : valid_mechanism pm) :
     ∃ (material_family : MaterialFamily),
       ∀ m ∈ material_family, realizes_mechanism m pm := by
@@ -100,8 +91,7 @@ theorem candidate_materials_from_theory (pm : PairingMechanism)
 -- Section 3: 材料族的表示论定义
 -- ============================================
 
-/-- 材料族的表示论特征 -/
-structure MaterialFamilyRepresentation where
+/-- 材料族的表示论特征 -/\n\nstructure MaterialFamilyRepresentation where
   -- 点群表示
   pointGroupRep : PointOperation 3 → Matrix (Fin 3) (Fin 3) ℂ
   -- 空间群表示
@@ -111,8 +101,7 @@ structure MaterialFamilyRepresentation where
   -- 表示的特征标
   character : ∀ op, Matrix.trace (pointGroupRep op)
 
-/-- 材料族的结构约束 -/
-structure StructuralConstraint where
+/-- 材料族的结构约束 -/\n\nstructure StructuralConstraint where
   -- 维度要求
   dimension : ℕ
   -- 晶格类型约束
@@ -122,8 +111,7 @@ structure StructuralConstraint where
   -- Wyckoff位置约束
   requiredWyckoffPositions : List (WyckoffPosition dimension)
 
-/-- 材料族的电子约束 -/
-structure ElectronicConstraint where
+/-- 材料族的电子约束 -/\n\nstructure ElectronicConstraint where
   -- 能带特征
   requiredBandTopology : List BandTopology
   -- 费米面特征
@@ -133,8 +121,7 @@ structure ElectronicConstraint where
   -- 轨道特征
   activeOrbitals : List String  -- ["d_x2-y2", "d_z2", "p_x", ...]
 
-/-- 完整的材料族定义 -/
-structure MaterialFamilyDefinition where
+/-- 完整的材料族定义 -/\n\nstructure MaterialFamilyDefinition where
   name : String
   structural : StructuralConstraint
   electronic : ElectronicConstraint
@@ -144,8 +131,7 @@ structure MaterialFamilyDefinition where
 -- Section 4: 层状d电子化合物的表示论约束
 -- ============================================
 
-/-- CuO2面的对称性分析 -/
-def CuO2_plane_symmetry : StructuralConstraint where
+/-- CuO2面的对称性分析 -/\n\ndef CuO2_plane_symmetry : StructuralConstraint where
   dimension := 3
   requiredBravaisTypes := [BravaisType.primitive]
   allowedSpaceGroups := ["I4/mmm", "Cmmm", "P4/mmm"]
@@ -154,15 +140,13 @@ def CuO2_plane_symmetry : StructuralConstraint where
     { letter := 'c', multiplicity := 2, siteSymmetry := sorry, coordinates := sorry }   -- O位置
   ]
 
-/-- 层状铜氧化物的电子结构要求 -/
-def cuprate_electronic_requirements : ElectronicConstraint where
+/-- 层状铜氧化物的电子结构要求 -/\n\ndef cuprate_electronic_requirements : ElectronicConstraint where
   requiredBandTopology := [BandTopology.semimetal]
   fermiSurfaceType := "cylindrical"
   correlationStrengthRange := (4.0, 10.0)  -- 强关联区域
   activeOrbitals := ["d_x2-y2", "p_x", "p_y"]
 
-/-- 层状d电子化合物的表示论约束定理 -/
-theorem layered_d_compound_representation_constraints :
+/-- 层状d电子化合物的表示论约束定理 -/\n\ntheorem layered_d_compound_representation_constraints :
     ∀ (pm : PairingMechanism),
       pm.mechanismType = PairingMechanismType.magneticFluctuation →
       pm.symmetry = PairingSymmetry.dWave →
@@ -173,8 +157,7 @@ theorem layered_d_compound_representation_constraints :
   -- 证明：磁涨落+d波配对要求层状d电子结构
   sorry
 
-/-- d_x2-y2轨道表示 -/
-def d_x2_y2_representation : MaterialFamilyRepresentation where
+/-- d_x2-y2轨道表示 -/\n\ndef d_x2_y2_representation : MaterialFamilyRepresentation where
   pointGroupRep := sorry
   spaceGroupRep := sorry
   orbitalRep := λ orbital =>
@@ -188,8 +171,7 @@ def d_x2_y2_representation : MaterialFamilyRepresentation where
 -- Section 5: 笼目晶格的表示论约束
 -- ============================================
 
-/-- 笼目晶格的结构约束 -/
-def kagome_structural_constraints : StructuralConstraint where
+/-- 笼目晶格的结构约束 -/\n\ndef kagome_structural_constraints : StructuralConstraint where
   dimension := 2
   requiredBravaisTypes := [BravaisType.primitive]
   allowedSpaceGroups := ["P6/mmm", "P-6m2", "P6_322"]
@@ -198,15 +180,13 @@ def kagome_structural_constraints : StructuralConstraint where
     { letter := 'b', multiplicity := 3, siteSymmetry := sorry, coordinates := sorry }
   ]
 
-/-- 笼目晶格的电子结构约束 -/
-def kagome_electronic_constraints : ElectronicConstraint where
+/-- 笼目晶格的电子结构约束 -/\n\ndef kagome_electronic_constraints : ElectronicConstraint where
   requiredBandTopology := [BandTopology.topological, BandTopology.semimetal]
   fermiSurfaceType := "nested_with_flat_band"
   correlationStrengthRange := (1.0, 5.0)  -- 中等关联
   activeOrbitals := ["d_xy", "d_x2-y2"]
 
-/-- 笼目晶格的平带表示论起源 -/
-theorem kagome_flat_band_rep_theory_origin :
+/-- 笼目晶格的平带表示论起源 -/\n\ntheorem kagome_flat_band_rep_theory_origin :
     ∀ (kg : KagomeLattice),
       ∃ (rep : MaterialFamilyRepresentation),
         rep.character (PointOperation.identity 2) = 3 ∧  -- 三子格导致平带
@@ -215,8 +195,7 @@ theorem kagome_flat_band_rep_theory_origin :
   -- 证明：笼目晶格的几何阻挫导致平带
   sorry
 
-/-- 笼目晶格超导的表示论条件 -/
-theorem kagome_superconducting_rep_constraints :
+/-- 笼目晶格超导的表示论条件 -/\n\ntheorem kagome_superconducting_rep_constraints :
     ∀ (pm : PairingMechanism),
       pm.symmetry ∈ [PairingSymmetry.chiralD, PairingSymmetry.dWave] →
       ∀ (mat : CrystalStructure 2),
@@ -230,8 +209,7 @@ theorem kagome_superconducting_rep_constraints :
 -- Section 6: 镍酸盐的表示论约束
 -- ============================================
 
-/-- RNiO3镍酸盐的结构约束 -/
-def nickelate_structural_constraints : StructuralConstraint where
+/-- RNiO3镍酸盐的结构约束 -/\n\ndef nickelate_structural_constraints : StructuralConstraint where
   dimension := 3
   requiredBravaisTypes := [BravaisType.primitive, BravaisType.bodyCentered]
   allowedSpaceGroups := ["Pnma", "P6_3/mmc", "Immm"]
@@ -241,15 +219,13 @@ def nickelate_structural_constraints : StructuralConstraint where
     { letter := 'c', multiplicity := 1, siteSymmetry := sorry, coordinates := sorry }   -- R位置
   ]
 
-/-- 镍酸盐的电子结构约束 -/
-def nickelate_electronic_constraints : ElectronicConstraint where
+/-- 镍酸盐的电子结构约束 -/\n\ndef nickelate_electronic_constraints : ElectronicConstraint where
   requiredBandTopology := [BandTopology.trivial]
   fermiSurfaceType := "quasi_1d_with_hybridization"
   correlationStrengthRange := (2.0, 6.0)
   activeOrbitals := ["d_z2", "d_x2-y2", "p_sigma"]
 
-/-- 镍酸盐的稀土依赖表示论 -/
-theorem nickelate_rare_earth_rep_dependence :
+/-- 镍酸盐的稀土依赖表示论 -/\n\ntheorem nickelate_rare_earth_rep_dependence :
     ∀ (R : String) (nick : NickelateStructure),
       nick.rareEarth = R →
       ∃ (rep : MaterialFamilyRepresentation),
@@ -260,8 +236,7 @@ theorem nickelate_rare_earth_rep_dependence :
   intro R nick h_eq
   sorry
 
-/-- 镍酸盐无限层结构的推导 -/
-theorem infinite_layer_nickelate_derivation :
+/-- 镍酸盐无限层结构的推导 -/\n\ntheorem infinite_layer_nickelate_derivation :
     ∀ (pm : PairingMechanism),
       pm.mechanismType = PairingMechanismType.chargeFluctuation →
       ∃ (mat : CrystalStructure 3),
@@ -276,8 +251,7 @@ theorem infinite_layer_nickelate_derivation :
 -- Section 7: 表示论枚举算法框架
 -- ============================================
 
-/-- 候选结构枚举器 -/
-structure CandidateEnumerator where
+/-- 候选结构枚举器 -/\n\nstructure CandidateEnumerator where
   -- 输入：配对机制
   mechanism : PairingMechanism
   -- 输出：候选材料族
@@ -289,13 +263,11 @@ structure CandidateEnumerator where
     ¬∃ mat' ∉ candidates, realizes_mechanism mat' mechanism ∧
       material_score mat' > material_score mat
 
-/-- 材料评分函数 -/
-def material_score (mat : CrystalStructure 3) : ℝ :=
+/-- 材料评分函数 -/\n\ndef material_score (mat : CrystalStructure 3) : ℝ :=
   -- 综合评分：电子结构、可合成性、稳定性
   sorry
 
-/-- 表示论约束求解器 -/
-def representation_solver (pm : PairingMechanism) : CandidateEnumerator :=
+/-- 表示论约束求解器 -/\n\ndef representation_solver (pm : PairingMechanism) : CandidateEnumerator :=
   -- 实现：通过表示论约束枚举候选结构
   {
     mechanism := pm,
@@ -308,8 +280,7 @@ def representation_solver (pm : PairingMechanism) : CandidateEnumerator :=
 -- Section 8: 具体推导实例
 -- ============================================
 
-/-- 实例1：从d波配对推导铜氧化物 -/
-theorem derive_cuprates_from_dwave_pairing :
+/-- 实例1：从d波配对推导铜氧化物 -/\n\ntheorem derive_cuprates_from_dwave_pairing :
     let pm : PairingMechanism := {
       mechanismType := PairingMechanismType.magneticFluctuation,
       symmetry := PairingSymmetry.dWave,
@@ -327,8 +298,7 @@ theorem derive_cuprates_from_dwave_pairing :
         mat.atoms.any (λ a => a.element = "O") := by
   sorry
 
-/-- 实例2：从平带物理推导笼目超导体 -/
-theorem derive_kagome_from_flat_band_physics :
+/-- 实例2：从平带物理推导笼目超导体 -/\n\ntheorem derive_kagome_from_flat_band_physics :
     let pm : PairingMechanism := {
       mechanismType := PairingMechanismType.topological,
       symmetry := PairingSymmetry.chiralD,
@@ -346,8 +316,7 @@ theorem derive_kagome_from_flat_band_physics :
         isKagomeLattice mat := by
   sorry
 
-/-- 实例3：从电荷转移推导镍酸盐 -/
-theorem derive_nickelates_from_charge_transfer :
+/-- 实例3：从电荷转移推导镍酸盐 -/\n\ntheorem derive_nickelates_from_charge_transfer :
     let pm : PairingMechanism := {
       mechanismType := PairingMechanismType.chargeFluctuation,
       symmetry := PairingSymmetry.sWave,
@@ -368,8 +337,7 @@ theorem derive_nickelates_from_charge_transfer :
 -- Section 9: 理论与材料的对应框架
 -- ============================================
 
-/-- 理论-材料映射 -/
-structure TheoryMaterialCorrespondence where
+/-- 理论-材料映射 -/\n\nstructure TheoryMaterialCorrespondence where
   -- 理论侧
   mechanism : PairingMechanism
   -- 材料侧
@@ -379,8 +347,7 @@ structure TheoryMaterialCorrespondence where
   -- 完备性
   completeness : ∀ mat, realizes_mechanism mat mechanism → mat ∈ predictedMaterials
 
-/-- 主要定理：理论正确则材料可推导 -/
-theorem theory_implies_materials (pm : PairingMechanism)
+/-- 主要定理：理论正确则材料可推导 -/\n\ntheorem theory_implies_materials (pm : PairingMechanism)
     (h_valid : valid_mechanism pm) :
     ∃ (correspondence : TheoryMaterialCorrespondence),
       correspondence.mechanism = pm := by
@@ -397,8 +364,7 @@ theorem theory_implies_materials (pm : PairingMechanism)
 -- Section 10: 合成可及性约束
 -- ============================================
 
-/-- 合成可行性 -/
-structure SynthesisFeasibility where
+/-- 合成可行性 -/\n\nstructure SynthesisFeasibility where
   -- 热力学稳定性
   formationEnergy : ℝ  -- eV/atom
   -- 动力学可及性
@@ -406,8 +372,7 @@ structure SynthesisFeasibility where
   -- 相纯度
   phasePurity : ℝ  -- 0-1
 
-/-- 将合成约束加入材料枚举 -/
-def add_synthesis_constraints (enum : CandidateEnumerator)
+/-- 将合成约束加入材料枚举 -/\n\ndef add_synthesis_constraints (enum : CandidateEnumerator)
     (feasibility : SynthesisFeasibility → Prop) : CandidateEnumerator :=
   {
     mechanism := enum.mechanism,

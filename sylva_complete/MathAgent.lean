@@ -1,4 +1,4 @@
-/-
+﻿/-
 Sylva Math Research Agent
 Complete implementation with theorem database, proof suggestions, and numerical verification
 
@@ -9,9 +9,7 @@ This module provides a mathematical research agent framework that integrates:
 - Numerical verification tools
 - Literature search capabilities
 - Integration with Sylva's core theory (φ, Φ_c, RH framework)
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import Mathlib.Data.String.Defs
 import SylvaFormalization.Basic
 import SylvaFormalization.NumericalZeros
@@ -27,8 +25,7 @@ open NumericalVerification RH
 -- SECTION 1: MATHEMATICAL QUERY STRUCTURE
 -- =====================================================================
 
-/-- Source types for mathematical literature -/
-inductive SourceType
+/-- Source types for mathematical literature -/\n\ninductive SourceType
   | arXiv
   | MathOverflow
   | Wikipedia
@@ -37,8 +34,7 @@ inductive SourceType
   | SylvaDatabase
   deriving DecidableEq, Repr, Inhabited
 
-/-- Mathematical query categories -/
-inductive QueryCategory
+/-- Mathematical query categories -/\n\ninductive QueryCategory
   | Theorem          -- Search for a specific theorem
   | Proof            -- Find or verify a proof
   | Definition       -- Look up a definition
@@ -49,8 +45,7 @@ inductive QueryCategory
   | OpenProblem      -- Open problems
   deriving DecidableEq, Repr, Inhabited
 
-/-- Mathematical domain/tags -/
-inductive MathDomain
+/-- Mathematical domain/tags -/\n\ninductive MathDomain
   | NumberTheory
   | Algebra
   | Analysis
@@ -62,8 +57,7 @@ inductive MathDomain
   | SylvaTheory
   deriving DecidableEq, Repr, Inhabited
 
-/-- Mathematical query structure -/
-structure MathQuery where
+/-- Mathematical query structure -/\n\nstructure MathQuery where
   keywords : List String
   category : QueryCategory
   domain : Option MathDomain
@@ -74,8 +68,7 @@ structure MathQuery where
 
 namespace MathQuery
 
-/-- Default query constructor -/
-def default : MathQuery where
+/-- Default query constructor -/\n\ndef default : MathQuery where
   keywords := []
   category := .Theorem
   domain := none
@@ -83,24 +76,20 @@ def default : MathQuery where
   includeNumerical := false
   precision := none
 
-/-- Create a query from keywords -/
-def fromKeywords (kw : List String) : MathQuery :=
+/-- Create a query from keywords -/\n\ndef fromKeywords (kw : List String) : MathQuery :=
   { default with keywords := kw }
 
-/-- Create a theorem query -/
-def theoremQuery (name : String) : MathQuery :=
+/-- Create a theorem query -/\n\ndef theoremQuery (name : String) : MathQuery :=
   { default with keywords := [name], category := .Theorem }
 
-/-- Create a numerical verification query -/
-def numericalQuery (target : String) (prec : ℝ) : MathQuery :=
+/-- Create a numerical verification query -/\n\ndef numericalQuery (target : String) (prec : ℝ) : MathQuery :=
   { default with 
     keywords := [target], 
     category := .Numerical,
     includeNumerical := true,
     precision := some prec }
 
-/-- Create a proof suggestion query -/
-def proofQuery (theoremName : String) : MathQuery :=
+/-- Create a proof suggestion query -/\n\ndef proofQuery (theoremName : String) : MathQuery :=
   { default with 
     keywords := [theoremName], 
     category := .Proof,
@@ -112,8 +101,7 @@ end MathQuery
 -- SECTION 2: THEOREM DATABASE INTERFACE
 -- =====================================================================
 
-/-- Search result from theorem database -/
-structure TheoremResult where
+/-- Search result from theorem database -/\n\nstructure TheoremResult where
   name : String
   statement : String
   source : SourceType
@@ -121,8 +109,7 @@ structure TheoremResult where
   hasFormalProof : Bool
   deriving Repr
 
-/-- Theorem database interface -/
-structure TheoremDatabase where
+/-- Theorem database interface -/\n\nstructure TheoremDatabase where
   /-- Search for theorems matching query -/
   search : MathQuery → List TheoremResult
   
@@ -137,22 +124,19 @@ structure TheoremDatabase where
 
 namespace TheoremDatabase
 
-/-- Default empty database -/
-def empty : TheoremDatabase where
+/-- Default empty database -/\n\ndef empty : TheoremDatabase where
   search _ := []
   getByName _ := none
   listByDomain _ := []
   exists _ := false
 
-/-- Create a singleton database with one theorem -/
-def singleton (result : TheoremResult) : TheoremDatabase where
+/-- Create a singleton database with one theorem -/\n\ndef singleton (result : TheoremResult) : TheoremDatabase where
   search q := if result.name ∈ q.keywords then [result] else []
   getByName name := if name = result.name then some result else none
   listByDomain _ := [result]
   exists name := name = result.name
 
-/-- Merge two databases (left-biased for duplicates) -/
-def merge (db1 db2 : TheoremDatabase) : TheoremDatabase where
+/-- Merge two databases (left-biased for duplicates) -/\n\ndef merge (db1 db2 : TheoremDatabase) : TheoremDatabase where
   search q := db1.search q ++ db2.search q
   getByName name := db1.getByName name <|> db2.getByName name
   listByDomain d := db1.listByDomain d ++ db2.listByDomain d
@@ -164,8 +148,7 @@ end TheoremDatabase
 -- SECTION 3: PROOF SUGGESTION ENGINE
 -- =====================================================================
 
-/-- Tactic suggestion types -/
-inductive TacticSuggestion
+/-- Tactic suggestion types -/\n\ninductive TacticSuggestion
   | intro          -- Introduction
   | apply          -- Apply a theorem
   | rw             -- Rewrite
@@ -184,16 +167,14 @@ inductive TacticSuggestion
   | sorry          -- Admit (placeholder)
   deriving DecidableEq, Repr
 
-/-- Proof step suggestion -/
-structure ProofStep where
+/-- Proof step suggestion -/\n\nstructure ProofStep where
   tactic : TacticSuggestion
   arguments : List String
   explanation : String
   priority : Nat  -- Higher = more likely to succeed
   deriving Repr
 
-/-- Proof suggestion result -/
-structure ProofSuggestion where
+/-- Proof suggestion result -/\n\nstructure ProofSuggestion where
   theoremName : String
   steps : List ProofStep
   estimatedDifficulty : Nat  -- 1-10 scale
@@ -203,24 +184,21 @@ structure ProofSuggestion where
 
 namespace ProofSuggestion
 
-/-- Empty proof suggestion -/
-def empty (name : String) : ProofSuggestion where
+/-- Empty proof suggestion -/\n\ndef empty (name : String) : ProofSuggestion where
   theoremName := name
   steps := []
   estimatedDifficulty := 5
   alternativeApproaches := []
   references := []
 
-/-- Add a step to a proof suggestion -/
-def addStep (ps : ProofSuggestion) (step : ProofStep) : ProofSuggestion where
+/-- Add a step to a proof suggestion -/\n\ndef addStep (ps : ProofSuggestion) (step : ProofStep) : ProofSuggestion where
   theoremName := ps.theoremName
   steps := ps.steps ++ [step]
   estimatedDifficulty := ps.estimatedDifficulty
   alternativeApproaches := ps.alternativeApproaches
   references := ps.references
 
-/-- Suggest proof for algebraic identities -/
-def suggestAlgebraicProof (name : String) (isNonlinear : Bool) : ProofSuggestion where
+/-- Suggest proof for algebraic identities -/\n\ndef suggestAlgebraicProof (name : String) (isNonlinear : Bool) : ProofSuggestion where
   theoremName := name
   steps := [
     { tactic := .intro, arguments := [], explanation := "Introduce variables", priority := 10 },
@@ -235,8 +213,7 @@ def suggestAlgebraicProof (name : String) (isNonlinear : Bool) : ProofSuggestion
   alternativeApproaches := ["Direct computation", "Induction"]
   references := ["Mathlib.Algebra.Ring.Basic"]
 
-/-- Suggest proof for properties of φ -/
-def suggestPhiProof (name : String) : ProofSuggestion where
+/-- Suggest proof for properties of φ -/\n\ndef suggestPhiProof (name : String) : ProofSuggestion where
   theoremName := name
   steps := [
     { tactic := .rw, arguments := ["phi definition"], explanation "Expand φ = (1 + √5)/2", priority := 10 },
@@ -250,8 +227,7 @@ def suggestPhiProof (name : String) : ProofSuggestion where
 -- Fix: use constructor instead of .have
 def have : TacticSuggestion := .intro  -- Use intro as placeholder for have
 
-/-- Suggest proof based on theorem type -/
-def suggestForTheorem (name : String) (category : QueryCategory) : ProofSuggestion :=
+/-- Suggest proof based on theorem type -/\n\ndef suggestForTheorem (name : String) (category : QueryCategory) : ProofSuggestion :=
   match category with
   | .Theorem => suggestAlgebraicProof name false
   | .Proof => suggestPhiProof name
@@ -263,8 +239,7 @@ end ProofSuggestion
 -- SECTION 4: NUMERICAL VERIFICATION TOOLS
 -- =====================================================================
 
-/-- Numerical verification result -/
-structure VerificationResult where
+/-- Numerical verification result -/\n\nstructure VerificationResult where
   target : String
   computed : ℝ
   expected : Option ℝ
@@ -274,8 +249,7 @@ structure VerificationResult where
   method : String
   deriving Repr
 
-/-- Numerical verification tools -/
-structure NumericalVerifier where
+/-- Numerical verification tools -/\n\nstructure NumericalVerifier where
   /-- Verify a Riemann zero -/
   verifyZero : ℝ → ℝ → VerificationResult
   
@@ -290,14 +264,11 @@ structure NumericalVerifier where
 
 namespace NumericalVerifier
 
-/-- Default tolerance for numerical verification -/
-def defaultTolerance : ℝ := 1e-6
+/-- Default tolerance for numerical verification -/\n\ndef defaultTolerance : ℝ := 1e-6
 
-/-- High precision tolerance -/
-def highPrecisionTolerance : ℝ := 1e-10
+/-- High precision tolerance -/\n\ndef highPrecisionTolerance : ℝ := 1e-10
 
-/-- Create a standard numerical verifier -/
-def standard : NumericalVerifier where
+/-- Create a standard numerical verifier -/\n\ndef standard : NumericalVerifier where
   verifyZero gamma tolerance :=
     let computed := zetaNorm (criticalLinePoint gamma)
     {
@@ -349,12 +320,10 @@ def standard : NumericalVerifier where
       method := "Function evaluation"
     }
 
-/-- Verify first 4 Riemann zeros -/
-def verifyFirstFourZeros (verifier : NumericalVerifier) : List VerificationResult :=
+/-- Verify first 4 Riemann zeros -/\n\ndef verifyFirstFourZeros (verifier : NumericalVerifier) : List VerificationResult :=
   [GAMMA_1, GAMMA_2, GAMMA_3, GAMMA_4].map (fun g => verifier.verifyZero g defaultTolerance)
 
-/-- Summary of verification results -/
-def verificationSummary (results : List VerificationResult) : String :=
+/-- Summary of verification results -/\n\ndef verificationSummary (results : List VerificationResult) : String :=
   let header := "Numerical Verification Summary\n"
   let separator := "==============================\n"
   let body := results.foldl (fun acc r =>
@@ -372,8 +341,7 @@ end NumericalVerifier
 -- SECTION 5: LITERATURE SEARCH INTERFACE
 -- =====================================================================
 
-/-- Literature search result -/
-structure LiteratureResult where
+/-- Literature search result -/\n\nstructure LiteratureResult where
   title : String
   authors : List String
   year : Option Nat
@@ -384,8 +352,7 @@ structure LiteratureResult where
   tags : List String
   deriving Repr
 
-/-- Literature search interface -/
-structure LiteratureSearch where
+/-- Literature search interface -/\n\nstructure LiteratureSearch where
   /-- Search literature by query -/
   search : MathQuery → List LiteratureResult
   
@@ -400,15 +367,13 @@ structure LiteratureSearch where
 
 namespace LiteratureSearch
 
-/-- Empty literature search -/
-def empty : LiteratureSearch where
+/-- Empty literature search -/\n\ndef empty : LiteratureSearch where
   search _ := []
   searchByAuthor _ := []
   searchByYear _ _ := []
   getRelated _ := []
 
-/-- Create mock literature search with predefined results -/
-def mock : LiteratureSearch where
+/-- Create mock literature search with predefined results -/\n\ndef mock : LiteratureSearch where
   search q :=
     if "Riemann" ∈ q.keywords then
       [{
@@ -460,8 +425,7 @@ end LiteratureSearch
 -- SECTION 6: AGENT STATE AND CONFIGURATION
 -- =====================================================================
 
-/-- Agent configuration -/
-structure AgentConfig where
+/-- Agent configuration -/\n\nstructure AgentConfig where
   defaultTolerance : ℝ
   highPrecisionTolerance : ℝ
   maxSearchResults : Nat
@@ -473,8 +437,7 @@ structure AgentConfig where
 
 namespace AgentConfig
 
-/-- Default configuration -/
-def default : AgentConfig where
+/-- Default configuration -/\n\ndef default : AgentConfig where
   defaultTolerance := 1e-6
   highPrecisionTolerance := 1e-10
   maxSearchResults := 10
@@ -483,8 +446,7 @@ def default : AgentConfig where
   enableProofSuggestions := true
   enableLiteratureSearch := true
 
-/-- High precision configuration -/
-def highPrecision : AgentConfig where
+/-- High precision configuration -/\n\ndef highPrecision : AgentConfig where
   defaultTolerance := 1e-12
   highPrecisionTolerance := 1e-15
   maxSearchResults := 20
@@ -495,8 +457,7 @@ def highPrecision : AgentConfig where
 
 end AgentConfig
 
-/-- Agent state -/
-structure AgentState where
+/-- Agent state -/\n\nstructure AgentState where
   config : AgentConfig
   theoremDb : TheoremDatabase
   verifier : NumericalVerifier
@@ -507,8 +468,7 @@ structure AgentState where
 
 namespace AgentState
 
-/-- Create initial agent state -/
-def initial : AgentState where
+/-- Create initial agent state -/\n\ndef initial : AgentState where
   config := AgentConfig.default
   theoremDb := TheoremDatabase.empty
   verifier := NumericalVerifier.standard
@@ -516,8 +476,7 @@ def initial : AgentState where
   queryHistory := []
   lastResult := none
 
-/-- Update configuration -/
-def withConfig (state : AgentState) (config : AgentConfig) : AgentState where
+/-- Update configuration -/\n\ndef withConfig (state : AgentState) (config : AgentConfig) : AgentState where
   config := config
   theoremDb := state.theoremDb
   verifier := state.verifier
@@ -525,8 +484,7 @@ def withConfig (state : AgentState) (config : AgentConfig) : AgentState where
   queryHistory := state.queryHistory
   lastResult := state.lastResult
 
-/-- Add query to history -/
-def addQuery (state : AgentState) (query : MathQuery) : AgentState where
+/-- Add query to history -/\n\ndef addQuery (state : AgentState) (query : MathQuery) : AgentState where
   config := state.config
   theoremDb := state.theoremDb
   verifier := state.verifier
@@ -540,8 +498,7 @@ end AgentState
 -- SECTION 7: AGENT RESPONSE TYPES
 -- =====================================================================
 
-/-- Response types from the math agent -/
-inductive AgentResponse
+/-- Response types from the math agent -/\n\ninductive AgentResponse
   | theorems (results : List TheoremResult)
   | proof (suggestion : ProofSuggestion)
   | verification (result : VerificationResult)
@@ -550,8 +507,7 @@ inductive AgentResponse
   | multi (responses : List AgentResponse)
   deriving Repr
 
-/-- Formatted output for agent response -/
-def formatResponse (response : AgentResponse) : String :=
+/-- Formatted output for agent response -/\n\ndef formatResponse (response : AgentResponse) : String :=
   match response with
   | .theorems results =>
       let header := s!"Found {results.length} theorem(s):\n"
@@ -597,28 +553,24 @@ def formatResponse (response : AgentResponse) : String :=
 -- SECTION 8: MAIN AGENT FUNCTIONS
 -- =====================================================================
 
-/-- Execute mathematical search (legacy function) -/
-def executeSearch (query : MathQuery) : List String :=
+/-- Execute mathematical search (legacy function) -/\n\ndef executeSearch (query : MathQuery) : List String :=
   query.keywords
 
-/-- Process a theorem query -/
-def processTheoremQuery (state : AgentState) (query : MathQuery) : AgentResponse :=
+/-- Process a theorem query -/\n\ndef processTheoremQuery (state : AgentState) (query : MathQuery) : AgentResponse :=
   let results := state.theoremDb.search query
   if results.isEmpty then
     .error "No theorems found matching the query"
   else
     .theorems results
 
-/-- Process a proof query -/
-def processProofQuery (state : AgentState) (query : MathQuery) : AgentResponse :=
+/-- Process a proof query -/\n\ndef processProofQuery (state : AgentState) (query : MathQuery) : AgentResponse :=
   match query.keywords with
   | [] => .error "No theorem specified for proof suggestion"
   | name :: _ =>
       let suggestion := ProofSuggestion.suggestForTheorem name query.category
       .proof suggestion
 
-/-- Process a numerical verification query -/
-def processNumericalQuery (state : AgentState) (query : MathQuery) : AgentResponse :=
+/-- Process a numerical verification query -/\n\ndef processNumericalQuery (state : AgentState) (query : MathQuery) : AgentResponse :=
   let tolerance := query.precision.getD state.config.defaultTolerance
   
   -- Check if query is about Riemann zeros
@@ -639,16 +591,14 @@ def processNumericalQuery (state : AgentState) (query : MathQuery) : AgentRespon
   else
     .error "Unknown numerical verification target"
 
-/-- Process a literature search query -/
-def processLiteratureQuery (state : AgentState) (query : MathQuery) : AgentResponse :=
+/-- Process a literature search query -/\n\ndef processLiteratureQuery (state : AgentState) (query : MathQuery) : AgentResponse :=
   let results := state.literature.search query
   if results.isEmpty then
     .error "No literature found matching the query"
   else
     .literature results
 
-/-- Main agent dispatch function -/
-def dispatchQuery (state : AgentState) (query : MathQuery) : AgentResponse × AgentState :=
+/-- Main agent dispatch function -/\n\ndef dispatchQuery (state : AgentState) (query : MathQuery) : AgentResponse × AgentState :=
   let newState := state.addQuery query
   
   let response := match query.category with
@@ -680,28 +630,24 @@ def dispatchQuery (state : AgentState) (query : MathQuery) : AgentResponse × Ag
     let query := MathQuery.numericalQuery "phi" 1e-6
     let response := sylva_math_agent query
     ```
--/
-def sylva_math_agent (query : MathQuery) : AgentResponse :=
+-/\n\ndef sylva_math_agent (query : MathQuery) : AgentResponse :=
   let state := AgentState.initial
   let (response, _) := dispatchQuery state query
   response
 
-/-- Sylva Math Agent with configuration -/
-def sylva_math_agent_with_config (query : MathQuery) (config : AgentConfig) : AgentResponse :=
+/-- Sylva Math Agent with configuration -/\n\ndef sylva_math_agent_with_config (query : MathQuery) (config : AgentConfig) : AgentResponse :=
   let state := AgentState.initial.withConfig config
   let (response, _) := dispatchQuery state query
   response
 
-/-- Sylva Math Agent with full state -/
-def sylva_math_agent_with_state (query : MathQuery) (state : AgentState) : AgentResponse × AgentState :=
+/-- Sylva Math Agent with full state -/\n\ndef sylva_math_agent_with_state (query : MathQuery) (state : AgentState) : AgentResponse × AgentState :=
   dispatchQuery state query
 
 -- =====================================================================
 -- SECTION 10: SPECIALIZED QUERY FUNCTIONS
 -- =====================================================================
 
-/-- Query the Riemann Hypothesis theorem from Sylva database -/
-def queryRiemannHypothesis : AgentResponse :=
+/-- Query the Riemann Hypothesis theorem from Sylva database -/\n\ndef queryRiemannHypothesis : AgentResponse :=
   let query := MathQuery.theoremQuery "Riemann Hypothesis"
   let state := AgentState.initial
   
@@ -717,8 +663,7 @@ def queryRiemannHypothesis : AgentResponse :=
   let state := { state with theoremDb := TheoremDatabase.singleton rhResult }
   processTheoremQuery state query
 
-/-- Query for φ-related theorems -/
-def queryGoldenRatio : AgentResponse :=
+/-- Query for φ-related theorems -/\n\ndef queryGoldenRatio : AgentResponse :=
   let query := { MathQuery.default with 
     keywords := ["phi", "golden ratio", "φ² = φ + 1"],
     domain := some .SylvaTheory
@@ -749,18 +694,15 @@ def queryGoldenRatio : AgentResponse :=
   
   processTheoremQuery state query
 
-/-- Verify the first 4 Riemann zeros numerically -/
-def verifyRiemannZeros : AgentResponse :=
+/-- Verify the first 4 Riemann zeros numerically -/\n\ndef verifyRiemannZeros : AgentResponse :=
   let results := NumericalVerifier.standard.verifyFirstFourZeros
   .multi (results.map .verification)
 
-/-- Query Φ_c (Sylva critical value) -/
-def querySylvaCriticalValue : AgentResponse :=
+/-- Query Φ_c (Sylva critical value) -/\n\ndef querySylvaCriticalValue : AgentResponse :=
   let query := MathQuery.numericalQuery "Phi_c" 1e-6
   sylva_math_agent query
 
-/-- Get proof suggestion for φ² = φ + 1 -/
-def suggestPhiSquaredProof : AgentResponse :=
+/-- Get proof suggestion for φ² = φ + 1 -/\n\ndef suggestPhiSquaredProof : AgentResponse :=
   let query := MathQuery.proofQuery "phi_sq_eq_phi_add_one"
   sylva_math_agent query
 
@@ -768,8 +710,7 @@ def suggestPhiSquaredProof : AgentResponse :=
 -- SECTION 11: UTILITIES AND HELPERS
 -- =====================================================================
 
-/-- List all available query categories -/
-def listQueryCategories : List (QueryCategory × String) :=
+/-- List all available query categories -/\n\ndef listQueryCategories : List (QueryCategory × String) :=
   [
     (.Theorem, "Search for theorems"),
     (.Proof, "Get proof suggestions"),
@@ -781,8 +722,7 @@ def listQueryCategories : List (QueryCategory × String) :=
     (.OpenProblem, "Open problems")
   ]
 
-/-- List all available math domains -/
-def listMathDomains : List (MathDomain × String) :=
+/-- List all available math domains -/\n\ndef listMathDomains : List (MathDomain × String) :=
   [
     (.NumberTheory, "Number Theory (including RH, zeta function)"),
     (.Algebra, "Abstract Algebra"),
@@ -795,8 +735,7 @@ def listMathDomains : List (MathDomain × String) :=
     (.SylvaTheory, "Sylva Theory (GF(3), φ, Φ_c)")
   ]
 
-/-- Agent help text -/
-def agentHelp : String :=
+/-- Agent help text -/\n\ndef agentHelp : String :=
   "Sylva Math Research Agent\n" ++
   "========================\n\n" ++
   "Available query categories:\n" ++
@@ -818,24 +757,19 @@ def agentHelp : String :=
 -- SECTION 12: INTEGRATION WITH SYLVA CORE
 -- =====================================================================
 
-/-- Access Sylva critical value Φ_c -/
-def getSylvaCriticalValue : ℝ :=
+/-- Access Sylva critical value Φ_c -/\n\ndef getSylvaCriticalValue : ℝ :=
   Phi.Phi_c
 
-/-- Access golden ratio φ -/
-def getGoldenRatio : ℝ :=
+/-- Access golden ratio φ -/\n\ndef getGoldenRatio : ℝ :=
   φ
 
-/-- Access GF(3) structure -/
-def getGF3 : Type :=
+/-- Access GF(3) structure -/\n\ndef getGF3 : Type :=
   GF3
 
-/-- Access first Riemann zero -/
-def getFirstRiemannZero : ℝ :=
+/-- Access first Riemann zero -/\n\ndef getFirstRiemannZero : ℝ :=
   GAMMA_1
 
-/-- Sylva theory connection summary -/
-def sylvaTheorySummary : String :=
+/-- Sylva theory connection summary -/\n\ndef sylvaTheorySummary : String :=
   "Sylva Theory Mathematical Framework\n" ++
   "===================================\n\n" ++
   s!"Golden Ratio φ = {getGoldenRatio} ≈ 1.618...\n" ++

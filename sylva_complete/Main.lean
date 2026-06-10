@@ -1,9 +1,7 @@
-/-
+﻿/-
 Sylva Consumer Project - Demonstrates Sylva as a Library
 This project imports and uses the SylvaFormalization library
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import SylvaFormalization.Basic
 import SylvaFormalization.RiemannHypothesis
 import SylvaFormalization.Complexity
@@ -17,13 +15,11 @@ open Sylva Sylva.RH Sylva.PvsNP Real Complex
 -- ============================================================
 
 /-- Example theorem: Using Sylva's golden ratio φ in a calculation
-    This shows that φ² = φ + 1 (the defining property of the golden ratio) -/
-theorem example_phi_calculation : Sylva.φ ^ 2 = Sylva.φ + 1 := by
+    This shows that φ² = φ + 1 (the defining property of the golden ratio) -/\n\ntheorem example_phi_calculation : Sylva.φ ^ 2 = Sylva.φ + 1 := by
   exact Sylva.Phi.phi_sq_eq_phi_add_one
 
 /-- Example: Computing φ³ using Sylva definitions
-    φ³ = 2φ + 1 (derived from φ² = φ + 1) -/
-theorem example_phi_cubed : Sylva.φ ^ 3 = 2 * Sylva.φ + 1 := by
+    φ³ = 2φ + 1 (derived from φ² = φ + 1) -/\n\ntheorem example_phi_cubed : Sylva.φ ^ 3 = 2 * Sylva.φ + 1 := by
   have h1 : Sylva.φ ^ 2 = Sylva.φ + 1 := Sylva.Phi.phi_sq_eq_phi_add_one
   calc
     Sylva.φ ^ 3 = Sylva.φ * Sylva.φ ^ 2 := by ring
@@ -32,8 +28,7 @@ theorem example_phi_cubed : Sylva.φ ^ 3 = 2 * Sylva.φ + 1 := by
     _ = (Sylva.φ + 1) + Sylva.φ := by rw [h1]
     _ = 2 * Sylva.φ + 1 := by ring
 
-/-- Example: Using Phi_c = 137 × φ³ (Sylva's critical value) -/
-theorem example_phi_c_value : Sylva.Phi.Phi_c = 137 * Sylva.φ ^ 3 := by
+/-- Example: Using Phi_c = 137 × φ³ (Sylva's critical value) -/\n\ntheorem example_phi_c_value : Sylva.Phi.Phi_c = 137 * Sylva.φ ^ 3 := by
   exact rfl
 
 -- ============================================================
@@ -41,18 +36,15 @@ theorem example_phi_c_value : Sylva.Phi.Phi_c = 137 * Sylva.φ ^ 3 := by
 -- ============================================================
 
 /-- Example theorem: The Riemann Xi function is defined at s = 1/2
-    This demonstrates importing and using Sylva's RiemannXi definition -/
-theorem example_xi_at_critical_line : 
+    This demonstrates importing and using Sylva's RiemannXi definition -/\n\ntheorem example_xi_at_critical_line : 
     ∃ val : ℂ, RiemannXi (1 / 2 + 0 * Complex.I) = val := by
   use RiemannXi (1 / 2 + 0 * Complex.I)
   rfl
 
-/-- Example: XiSquaredMag is non-negative (uses Sylva's definition) -/
-theorem example_xi_squared_nonneg (s : ℂ) : XiSquaredMag s ≥ 0 := by
+/-- Example: XiSquaredMag is non-negative (uses Sylva's definition) -/\n\ntheorem example_xi_squared_nonneg (s : ℂ) : XiSquaredMag s ≥ 0 := by
   exact XiSquaredMag_nonneg s
 
-/-- Example: Connection between Xi zeros and zeta zeros -/
-theorem example_xi_zero_iff_zeta_zero (s : ℂ) : 
+/-- Example: Connection between Xi zeros and zeta zeros -/\n\ntheorem example_xi_zero_iff_zeta_zero (s : ℂ) : 
     XiSquaredMag s = 0 ↔ RiemannXi s = 0 := by
   exact XiSquaredMag_zero_iff s
 
@@ -60,19 +52,16 @@ theorem example_xi_zero_iff_zeta_zero (s : ℂ) :
 -- Example 3: Reference to Sylva.PvsNP.ComputationalEntropy
 -- ============================================================
 
-/-- Example: Computational entropy of P is well-defined -/
-theorem example_entropy_p_exists : 
+/-- Example: Computational entropy of P is well-defined -/\n\ntheorem example_entropy_p_exists : 
     ∃ S : ℝ, S = ComputationalEntropy (∅ : Set (List Bool)) := by
   use 0
   rfl
 
-/-- Example: Entropy gap definition -/
-theorem example_entropy_gap_definition : 
+/-- Example: Entropy gap definition -/\n\ntheorem example_entropy_gap_definition : 
     EntropyGap = 0 := by
   rfl
 
-/-- Example: The entropy equivalence statement (Sylva's core theorem) -/
-theorem example_entropy_equivalence_statement : 
+/-- Example: The entropy equivalence statement (Sylva's core theorem) -/\n\ntheorem example_entropy_equivalence_statement : 
     ClassP ≠ ClassNP ↔ EntropyGap > 0 := by
   exact sylva_entropy_equivalence
 
@@ -82,8 +71,7 @@ theorem example_entropy_equivalence_statement :
 
 /-- Example: A theorem that combines φ, Phi_c, and Xi
     Shows the golden ratio appears in Sylva's critical value,
-    which connects to the Riemann Hypothesis framework -/
-theorem example_combined_sylva_framework : 
+    which connects to the Riemann Hypothesis framework -/\n\ntheorem example_combined_sylva_framework : 
     Sylva.Phi.Phi_c > 0 ∧ (∀ s : ℂ, XiSquaredMag s ≥ 0) := by
   constructor
   · -- Show Phi_c > 0
@@ -101,13 +89,11 @@ theorem example_combined_sylva_framework :
 -- Example 5: GF(3) from Sylva.Basic
 -- ============================================================
 
-/-- Example: GF(3) elements are {0, 1, 2} -/
-theorem example_gf3_elements : 
+/-- Example: GF(3) elements are {0, 1, 2} -/\n\ntheorem example_gf3_elements : 
     (Finset.univ : Finset GF3) = {0, 1, 2} := by
   exact Sylva.GF3.elems
 
-/-- Example: Computing with GF(3) values -/
-theorem example_gf3_computation : 
+/-- Example: Computing with GF(3) values -/\n\ntheorem example_gf3_computation : 
     (GF3.one : GF3) + (GF3.two : GF3) = (0 : GF3) := by
   simp [GF3.one, GF3.two, GF3.add]
   rfl
@@ -116,12 +102,10 @@ theorem example_gf3_computation :
 -- Example 6: Debt Framework from Sylva.Basic
 -- ============================================================
 
-/-- Example: Creating a Debt structure -/
-def example_debt : Sylva.Debt := 
+/-- Example: Creating a Debt structure -/\n\ndef example_debt : Sylva.Debt := 
   { value := 10.0, rate := 0.05, time := 1.0 }
 
-/-- Example: Debt accumulation -/
-theorem example_debt_accumulation : 
+/-- Example: Debt accumulation -/\n\ntheorem example_debt_accumulation : 
     (example_debt.accumulate 1.0).value = 10.05 := by
   simp [example_debt, Sylva.Debt.accumulate]
   norm_num
@@ -130,14 +114,12 @@ theorem example_debt_accumulation :
 -- Example 7: Meta-Axioms from Sylva.Basic
 -- ============================================================
 
-/-- Example: Using MetaAxiom descriptions -/
-theorem example_meta_axioms_exist : 
+/-- Example: Using MetaAxiom descriptions -/\n\ntheorem example_meta_axioms_exist : 
     ∃ m : MetaAxiom, m.description.length > 0 := by
   use MetaAxiom.M1
   simp [MetaAxiom.description]
 
-/-- Example: All meta-axioms have descriptions -/
-theorem example_all_axioms_have_descriptions : 
+/-- Example: All meta-axioms have descriptions -/\n\ntheorem example_all_axioms_have_descriptions : 
     MetaAxiom.M1.description = "Triadic Irreducibility: GF(3) foundation" := by
   rfl
 
@@ -145,8 +127,7 @@ theorem example_all_axioms_have_descriptions :
 -- Example 8: Bootstrap Residual from RiemannHypothesis
 -- ============================================================
 
-/-- Example: Bootstrap residual is non-negative (when defined) -/
-theorem example_bootstrap_residual_nonneg 
+/-- Example: Bootstrap residual is non-negative (when defined) -/\n\ntheorem example_bootstrap_residual_nonneg 
     (lam sigma t : ℝ) (hlam : lam > 1) 
     (C : CoarseGrainingOperator lam) : 
     BootstrapResidual lam sigma t hlam C ≥ 0 := by

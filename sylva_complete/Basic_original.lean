@@ -1,15 +1,12 @@
-/-
+﻿/-
 Sylva Formalization Project
 Core Definitions: GF(3), Golden Ratio, and Basic Structures
 EXTENDED VERSION - Enhanced φ-fractional dimension theory
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 
 namespace Sylva
 
-/-- GF(3) - The Galois Field with 3 elements -/
-abbrev GF3 := Fin 3
+/-- GF(3) - The Galois Field with 3 elements -/\n\nabbrev GF3 := Fin 3
 
 namespace GF3
 
@@ -21,8 +18,7 @@ def add (a b : GF3) : GF3 := a + b
 def mul (a b : GF3) : GF3 := a * b
 def neg (a : GF3) : GF3 := -a
 
-/-- All elements of GF(3) -/
-theorem elems : (Finset.univ : Finset GF3) = {0, 1, 2} := by
+/-- All elements of GF(3) -/\n\ntheorem elems : (Finset.univ : Finset GF3) = {0, 1, 2} := by
   simp [Finset.ext_iff, GF3]
   intro x
   fin_cases x <;> simp
@@ -39,33 +35,28 @@ namespace Phi
 -- SECTION 1: Core φ Properties
 -- ============================================
 
-/-- φ satisfies φ² = φ + 1 -/
-theorem phi_sq_eq_phi_add_one : φ ^ 2 = φ + 1 := by
+/-- φ satisfies φ² = φ + 1 -/\n\ntheorem phi_sq_eq_phi_add_one : φ ^ 2 = φ + 1 := by
   have h1 : Real.sqrt 5 ^ 2 = 5 := Real.sq_sqrt (show 0 ≤ (5 : ℝ) by norm_num)
   have h2 : φ = (1 + Real.sqrt 5) / 2 := rfl
   rw [h2]
   nlinarith [h1, Real.sqrt_pos.mpr (show (0 : ℝ) < 5 by norm_num)]
 
-/-- φ > 1 -/
-theorem phi_gt_one : φ > 1 := by
+/-- φ > 1 -/\n\ntheorem phi_gt_one : φ > 1 := by
   have h : Real.sqrt 5 > 1 := by
     have : Real.sqrt 5 > Real.sqrt 1 := Real.sqrt_lt_sqrt (by norm_num) (by norm_num)
     rw [Real.sqrt_one] at this
     linarith
   linarith [show φ = (1 + Real.sqrt 5) / 2 from rfl, h]
 
-/-- φ > 0 -/
-theorem phi_pos : φ > 0 := by linarith [phi_gt_one]
+/-- φ > 0 -/\n\ntheorem phi_pos : φ > 0 := by linarith [phi_gt_one]
 
-/-- Explicit formula: φ = (1 + √5)/2 -/
-theorem phi_explicit : φ = (1 + Real.sqrt 5) / 2 := rfl
+/-- Explicit formula: φ = (1 + √5)/2 -/\n\ntheorem phi_explicit : φ = (1 + Real.sqrt 5) / 2 := rfl
 
 -- ============================================
 -- SECTION 2: φ Power Identities (Variants of φ² = φ + 1)
 -- ============================================
 
-/-- φ³ = 2φ + 1 -/
-theorem phi_cubed_eq : φ ^ 3 = 2 * φ + 1 := by
+/-- φ³ = 2φ + 1 -/\n\ntheorem phi_cubed_eq : φ ^ 3 = 2 * φ + 1 := by
   have h1 : φ ^ 2 = φ + 1 := phi_sq_eq_phi_add_one
   calc φ ^ 3 = φ * φ ^ 2 := by ring
        _ = φ * (φ + 1) := by rw [h1]
@@ -73,8 +64,7 @@ theorem phi_cubed_eq : φ ^ 3 = 2 * φ + 1 := by
        _ = (φ + 1) + φ := by rw [h1]
        _ = 2 * φ + 1 := by ring
 
-/-- φ⁴ = 3φ + 2 -/
-theorem phi_fourth_eq : φ ^ 4 = 3 * φ + 2 := by
+/-- φ⁴ = 3φ + 2 -/\n\ntheorem phi_fourth_eq : φ ^ 4 = 3 * φ + 2 := by
   have h1 : φ ^ 2 = φ + 1 := phi_sq_eq_phi_add_one
   have h3 : φ ^ 3 = 2 * φ + 1 := phi_cubed_eq
   calc φ ^ 4 = φ * φ ^ 3 := by ring
@@ -83,8 +73,7 @@ theorem phi_fourth_eq : φ ^ 4 = 3 * φ + 2 := by
        _ = 2 * (φ + 1) + φ := by rw [h1]
        _ = 3 * φ + 2 := by ring
 
-/-- φ⁵ = 5φ + 3 -/
-theorem phi_fifth_eq : φ ^ 5 = 5 * φ + 3 := by
+/-- φ⁵ = 5φ + 3 -/\n\ntheorem phi_fifth_eq : φ ^ 5 = 5 * φ + 3 := by
   have h3 : φ ^ 3 = 2 * φ + 1 := phi_cubed_eq
   have h4 : φ ^ 4 = 3 * φ + 2 := phi_fourth_eq
   calc φ ^ 5 = φ * φ ^ 4 := by ring
@@ -93,8 +82,7 @@ theorem phi_fifth_eq : φ ^ 5 = 5 * φ + 3 := by
        _ = 3 * (φ + 1) + 2 * φ := by rw [phi_sq_eq_phi_add_one]
        _ = 5 * φ + 3 := by ring
 
-/-- General formula: φⁿ = Fₙφ + Fₙ₋₁ where Fₙ is the nth Fibonacci number -/
-def fibonacci : Nat → Nat
+/-- General formula: φⁿ = Fₙφ + Fₙ₋₁ where Fₙ is the nth Fibonacci number -/\n\ndef fibonacci : Nat → Nat
   | 0 => 0
   | 1 => 1
   | n + 2 => fibonacci n + fibonacci (n + 1)
@@ -114,8 +102,7 @@ theorem phi_pow_eq_fibonacci_formula (n : Nat) :
     <;> simp [phi_sq_eq_phi_add_one]
     <;> ring
 
-/-- Negative power: φ⁻¹ = φ - 1 -/
-theorem phi_inv_eq : φ ⁻¹ = φ - 1 := by
+/-- Negative power: φ⁻¹ = φ - 1 -/\n\ntheorem phi_inv_eq : φ ⁻¹ = φ - 1 := by
   have h1 : φ * (φ - 1) = 1 := by
     have h2 : φ ^ 2 = φ + 1 := phi_sq_eq_phi_add_one
     linarith [h2]
@@ -123,8 +110,7 @@ theorem phi_inv_eq : φ ⁻¹ = φ - 1 := by
   field_simp at h1 ⊢
   linarith
 
-/-- φ + φ⁻¹ = √5 -/
-theorem phi_plus_inv_eq_sqrt5 : φ + φ ⁻¹ = Real.sqrt 5 := by
+/-- φ + φ⁻¹ = √5 -/\n\ntheorem phi_plus_inv_eq_sqrt5 : φ + φ ⁻¹ = Real.sqrt 5 := by
   rw [phi_inv_eq]
   have h2 : φ = (1 + Real.sqrt 5) / 2 := rfl
   rw [h2]
@@ -147,16 +133,14 @@ noncomputable def Phi_c : ℝ := 137 * φ ^ 3
 /-- The Debt Critical Value D_c = φ⁴ -/
 noncomputable def D_c : ℝ := φ ^ 4
 
-/-- D_c = 3φ + 2 (algebraic identity) -/
-theorem D_c_eq : D_c = 3 * φ + 2 := by
+/-- D_c = 3φ + 2 (algebraic identity) -/\n\ntheorem D_c_eq : D_c = 3 * φ + 2 := by
   have h4 : φ ^ 4 = 3 * φ + 2 := phi_fourth_eq
   calc D_c = φ ^ 4 := rfl
        _ = 3 * φ + 2 := by rw [h4]
 
 -- Λ(5/2) Mathematical Properties
 
-/-- Λ(5/2) is strictly increasing for x > 0 -/
-theorem Lambda_strictMonoOn_pos : StrictMonoOn Lambda (Set.Ioi 0) := by
+/-- Λ(5/2) is strictly increasing for x > 0 -/\n\ntheorem Lambda_strictMonoOn_pos : StrictMonoOn Lambda (Set.Ioi 0) := by
   intro x hx y hy hxy
   simp [Lambda] at *
   have hx_pos : x > 0 := hx
@@ -166,30 +150,25 @@ theorem Lambda_strictMonoOn_pos : StrictMonoOn Lambda (Set.Ioi 0) := by
     all_goals linarith
   exact h1
 
-/-- Λ(5/2) is continuous -/
-theorem Lambda_continuous : Continuous Lambda := by
+/-- Λ(5/2) is continuous -/\n\ntheorem Lambda_continuous : Continuous Lambda := by
   apply Real.continuous_rpow_const
   norm_num
 
-/-- Λ(5/2)(1) = 1 -/
-theorem Lambda_one_eq_one : Lambda 1 = 1 := by
+/-- Λ(5/2)(1) = 1 -/\n\ntheorem Lambda_one_eq_one : Lambda 1 = 1 := by
   simp [Lambda]
   all_goals norm_num
 
-/-- Λ(5/2)(0) = 0 -/
-theorem Lambda_zero_eq_zero : Lambda 0 = 0 := by
+/-- Λ(5/2)(0) = 0 -/\n\ntheorem Lambda_zero_eq_zero : Lambda 0 = 0 := by
   simp [Lambda]
   all_goals norm_num
 
-/-- Scaling property: Λ(5/2)(cx) = c^(5/2) × Λ(5/2)(x) -/
-theorem Lambda_scale (c x : ℝ) (hc : c > 0) (hx : x > 0) :
+/-- Scaling property: Λ(5/2)(cx) = c^(5/2) × Λ(5/2)(x) -/\n\ntheorem Lambda_scale (c x : ℝ) (hc : c > 0) (hx : x > 0) :
   Lambda (c * x) = c ^ (5 / 2 : ℝ) * Lambda x := by
   simp [Lambda]
   rw [Real.mul_rpow]
   all_goals linarith
 
-/-- Λ(5/2)(φ) > φ (since 5/2 > 1 and φ > 1) -/
-theorem Lambda_phi_gt_phi : Lambda_phi > φ := by
+/-- Λ(5/2)(φ) > φ (since 5/2 > 1 and φ > 1) -/\n\ntheorem Lambda_phi_gt_phi : Lambda_phi > φ := by
   simp [Lambda_phi, Lambda]
   have h1 : φ > 1 := phi_gt_one
   have h2 : φ ^ (5 / 2 : ℝ) > φ ^ (1 : ℝ) := by
@@ -200,8 +179,7 @@ theorem Lambda_phi_gt_phi : Lambda_phi > φ := by
   rw [h3] at h2
   linarith [h2]
 
-/-- Explicit formula for Λ(5/2)(φ) using φ properties -/
-theorem Lambda_phi_formula : Lambda_phi = φ ^ 2 * Real.sqrt φ := by
+/-- Explicit formula for Λ(5/2)(φ) using φ properties -/\n\ntheorem Lambda_phi_formula : Lambda_phi = φ ^ 2 * Real.sqrt φ := by
   simp [Lambda_phi, Lambda]
   have h1 : φ ^ (5 / 2 : ℝ) = φ ^ (2 : ℝ) * φ ^ (1 / 2 : ℝ) := by
     rw [show (5 / 2 : ℝ) = (2 : ℝ) + (1 / 2 : ℝ) by norm_num]
@@ -213,8 +191,7 @@ theorem Lambda_phi_formula : Lambda_phi = φ ^ 2 * Real.sqrt φ := by
     rw [Real.rpow_two]
   rw [h1, h2, h3]
 
-/-- Upper bound: Λ(5/2)(φ) < φ³ -/
-theorem Lambda_phi_lt_phi_cubed : Lambda_phi < φ ^ 3 := by
+/-- Upper bound: Λ(5/2)(φ) < φ³ -/\n\ntheorem Lambda_phi_lt_phi_cubed : Lambda_phi < φ ^ 3 := by
   simp [Lambda_phi, Lambda]
   have h1 : φ > 1 := phi_gt_one
   have h2 : φ ^ (5 / 2 : ℝ) < φ ^ (3 : ℝ) := by
@@ -224,8 +201,7 @@ theorem Lambda_phi_lt_phi_cubed : Lambda_phi < φ ^ 3 := by
   convert h2
   simp
 
-/-- Λ(5/2) relates to Φ_c via: Λ(5/2)(φ^(6/5)) = φ³ -/
-theorem Lambda_relates_to_Phi_c : Lambda (φ ^ (6 / 5 : ℝ)) = φ ^ 3 := by
+/-- Λ(5/2) relates to Φ_c via: Λ(5/2)(φ^(6/5)) = φ³ -/\n\ntheorem Lambda_relates_to_Phi_c : Lambda (φ ^ (6 / 5 : ℝ)) = φ ^ 3 := by
   simp [Lambda]
   rw [← Real.rpow_mul]
   · norm_num
@@ -235,8 +211,7 @@ theorem Lambda_relates_to_Phi_c : Lambda (φ ^ (6 / 5 : ℝ)) = φ ^ 3 := by
 -- SECTION 4: φ and Fractal Dimension Applications
 -- ============================================
 
-/-- Fractal dimension type: can be integer or fractional -/
-abbrev FractalDimension := ℝ
+/-- Fractal dimension type: can be integer or fractional -/\n\nabbrev FractalDimension := ℝ
 
 /-- The φ-dimension: a special fractional dimension based on golden ratio -/
 noncomputable def phi_dimension : FractalDimension := φ
@@ -248,8 +223,7 @@ noncomputable def cantor_dimension : FractalDimension := Real.log 2 / Real.log 3
 /- For a set with scaling factor 1/φ, the dimension is log(2)/log(φ) -/
 noncomputable def phi_cantor_dimension : FractalDimension := Real.log 2 / Real.log φ
 
-/-- The φ-Cantor dimension satisfies: d_φ = log(2)/log(φ) ≈ 1.44 -/
-theorem phi_cantor_dimension_approx : 1.4 < phi_cantor_dimension ∧ phi_cantor_dimension < 1.5 := by
+/-- The φ-Cantor dimension satisfies: d_φ = log(2)/log(φ) ≈ 1.44 -/\n\ntheorem phi_cantor_dimension_approx : 1.4 < phi_cantor_dimension ∧ phi_cantor_dimension < 1.5 := by
   simp [phi_cantor_dimension]
   -- Use numerical approximation with tighter bounds
   -- φ = (1 + √5)/2 ≈ 1.618, log(2) ≈ 0.6931, log(φ) ≈ 0.4812
@@ -462,8 +436,7 @@ theorem phi_cantor_dimension_approx : 1.4 < phi_cantor_dimension ∧ phi_cantor_
   · -- Prove Real.log 2 / Real.log φ < 1.5
     apply (div_lt_iff₀ h_pos).mpr
     linarith [h_bounds.right]
-/- If a set consists of N copies scaled by factor r, its dimension is log(N)/log(1/r) -/
-theorem self_similarity_dimension_phi (N : ℕ) (r : ℝ) (hr : r = 1 / φ) :
+/- If a set consists of N copies scaled by factor r, its dimension is log(N)/log(1/r) -/\n\ntheorem self_similarity_dimension_phi (N : ℕ) (r : ℝ) (hr : r = 1 / φ) :
   Real.log N / Real.log (1 / r) = Real.log N / Real.log φ := by
   rw [hr]
   have h1 : (1 : ℝ) / (1 / φ) = φ := by field_simp [ne_of_gt phi_pos]
@@ -474,8 +447,7 @@ theorem self_similarity_dimension_phi (N : ℕ) (r : ℝ) (hr : r = 1 / φ) :
 noncomputable def fibonacci_word_fractal_dim : FractalDimension :=
   Real.log φ / Real.log (φ + 1)
 
-/-- Relationship: fibonacci_word_fractal_dim = log(φ)/log(φ²) = 1/2 -/
-theorem fibonacci_word_fractal_dim_eq_half :
+/-- Relationship: fibonacci_word_fractal_dim = log(φ)/log(φ²) = 1/2 -/\n\ntheorem fibonacci_word_fractal_dim_eq_half :
   fibonacci_word_fractal_dim = 1 / 2 := by
   simp [fibonacci_word_fractal_dim]
   have h1 : φ + 1 = φ ^ 2 := by rw [phi_sq_eq_phi_add_one]
@@ -496,8 +468,7 @@ noncomputable def phi_measure (s : Set ℝ) (ε : ℝ) : ℝ :=
   ε ^ (1 / φ)
 
 /-- φ-Hausdorff dimension relationship -/
-/- For a set E, the φ-Hausdorff measure generalizes standard Hausdorff measure -/
-def phi_hausdorff_condition (E : Set ℝ) (d : ℝ) : Prop :=
+/- For a set E, the φ-Hausdorff measure generalizes standard Hausdorff measure -/\n\ndef phi_hausdorff_condition (E : Set ℝ) (d : ℝ) : Prop :=
   ∀ ε > 0, ∃ (n : ℕ) (B : Fin n → Set ℝ),
     (∀ i, ∃ c r, B i = Metric.ball c r ∧ r ≤ ε) ∧
     E ⊆ ⋃ i, B i ∧
@@ -506,15 +477,13 @@ def phi_hausdorff_condition (E : Set ℝ) (d : ℝ) : Prop :=
 /-- The critical φ-dimension for emergence in Sylva theory -/
 noncomputable def critical_phi_dimension : FractalDimension := 5 / 2
 
-/-- Connection: Λ(5/2) emerges from φ-dimension at critical threshold -/
-theorem phi_dimension_critical_connection :
+/-- Connection: Λ(5/2) emerges from φ-dimension at critical threshold -/\n\ntheorem phi_dimension_critical_connection :
   critical_phi_dimension = 5 / 2 ∧ Lambda φ = φ ^ critical_phi_dimension := by
   constructor
   · rfl
   · simp [Lambda, critical_phi_dimension]
 
-/-- The Sylva emergence condition: fractal dimension > 5/2 triggers level jumps -/
-def emergence_condition (dim : FractalDimension) : Prop :=
+/-- The Sylva emergence condition: fractal dimension > 5/2 triggers level jumps -/\n\ndef emergence_condition (dim : FractalDimension) : Prop :=
   dim > 5 / 2
 
 /-- Golden ratio spiral dimension: logarithmic spiral with growth factor φ -/
@@ -529,18 +498,15 @@ noncomputable def golden_spiral_intrinsic_dim : FractalDimension :=
 /-- The conjugate golden ratio: φ̄ = (1 - √5)/2 = 1 - φ -/
 noncomputable def phi_conjugate : ℝ := (1 - Real.sqrt 5) / 2
 
-/-- φ̄ = 1 - φ -/
-theorem phi_conjugate_eq : phi_conjugate = 1 - φ := by
+/-- φ̄ = 1 - φ -/\n\ntheorem phi_conjugate_eq : phi_conjugate = 1 - φ := by
   simp [phi_conjugate]
   nlinarith [show φ = (1 + Real.sqrt 5) / 2 from rfl]
 
-/-- φ + φ̄ = 1 -/
-theorem phi_plus_conjugate_eq_one : φ + phi_conjugate = 1 := by
+/-- φ + φ̄ = 1 -/\n\ntheorem phi_plus_conjugate_eq_one : φ + phi_conjugate = 1 := by
   rw [phi_conjugate_eq]
   nlinarith [show φ = (1 + Real.sqrt 5) / 2 from rfl]
 
-/-- φ · φ̄ = -1 -/
-theorem phi_times_conjugate_eq_neg_one : φ * phi_conjugate = -1 := by
+/-- φ · φ̄ = -1 -/\n\ntheorem phi_times_conjugate_eq_neg_one : φ * phi_conjugate = -1 := by
   rw [phi_conjugate_eq]
   have h1 : Real.sqrt 5 ^ 2 = 5 := Real.sq_sqrt (show 0 ≤ (5 : ℝ) by norm_num)
   have h2 : φ = (1 + Real.sqrt 5) / 2 := rfl
@@ -549,8 +515,7 @@ theorem phi_times_conjugate_eq_neg_one : φ * phi_conjugate = -1 := by
   <;> nlinarith [h1]
 
 /-- Binet formula connection for φ -/
-/- Fibonacci numbers: F_n = (φⁿ - φ̄ⁿ)/√5 -/
-theorem binet_formula (n : Nat) :
+/- Fibonacci numbers: F_n = (φⁿ - φ̄ⁿ)/√5 -/\n\ntheorem binet_formula (n : Nat) :
   (fibonacci n : ℝ) = (φ ^ n - phi_conjugate ^ n) / Real.sqrt 5 := by
   -- Use strong induction
   match n with
@@ -605,8 +570,7 @@ noncomputable def phi_continued_fraction (n : Nat) : ℝ :=
   | 0 => 1
   | n + 1 => 1 + 1 / phi_continued_fraction n
 
-/-- The continued fraction converges to φ -/
-theorem phi_continued_fraction_converges (n : Nat) :
+/-- The continued fraction converges to φ -/\n\ntheorem phi_continued_fraction_converges (n : Nat) :
   |(phi_continued_fraction n : ℝ) - φ| < 1 / φ ^ n := by
   induction n with
   | zero =>
@@ -712,8 +676,7 @@ end Phi
 -- SECTION 6: H-CND Structure
 -- ============================================
 
-/-- H-CND Structure: Seven-Layer Emergence Architecture -/
-inductive Level
+/-- H-CND Structure: Seven-Layer Emergence Architecture -/\n\ninductive Level
   | L0 | L1 | L2 | L3 | L4 | L5 | L6 | L7
   deriving DecidableEq, Inhabited
 
@@ -733,8 +696,7 @@ end Level
 -- SECTION 7: Debt Structure
 -- ============================================
 
-/-- Debt as a fundamental ontological concept -/
-structure Debt where
+/-- Debt as a fundamental ontological concept -/\n\nstructure Debt where
   value : ℝ
   rate : ℝ
   time : ℝ
@@ -759,8 +721,7 @@ end Debt
 -- SECTION 8: Meta-Theory Axioms
 -- ============================================
 
-/-- Meta-Theory Axioms M1-M7 -/
-inductive MetaAxiom
+/-- Meta-Theory Axioms M1-M7 -/\n\ninductive MetaAxiom
   | M1 | M2 | M3 | M4 | M5 | M6 | M7
   deriving DecidableEq
 
@@ -782,8 +743,7 @@ end MetaAxiom
 -- SECTION 9: Decision Problem for Complexity
 -- ============================================
 
-/-- Decision problem for complexity theory -/
-abbrev DecisionProblem := List Bool → Bool
+/-- Decision problem for complexity theory -/\n\nabbrev DecisionProblem := List Bool → Bool
 
 
 end Sylva

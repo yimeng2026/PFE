@@ -1,4 +1,4 @@
-/-
+﻿/-
 Sylva Formalization Test Suite
 ================================================================================
 Basic tests for:
@@ -7,7 +7,7 @@ Basic tests for:
 3. Boolean circuit evaluation
 4. CNF formulas
 ================================================================================
--/import Mathlib
+-/\n\nimport Mathlib
 import SylvaFormalization.Basic
 import SylvaFormalization.CookLevin
 

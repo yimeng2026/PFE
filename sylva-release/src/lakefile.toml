@@ -1,0 +1,18 @@
+name = "sylva_formalization"
+version = "0.1.0"
+defaultTargets = ["sylva_formalization"]
+
+[[lean_lib]]
+name = "SylvaFormalization"
+
+[[lean_lib]]
+name = "SylvaExamples"
+
+[[lean_exe]]
+name = "sylva_formalization"
+root = "Main"
+
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "v4.29.0"

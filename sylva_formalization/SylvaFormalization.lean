@@ -1,39 +1,38 @@
 /-
-Sylva Formalization Project - Entry Point (FIXED)
-==================================================
+Sylva Formalization Project - Entry Point (UPDATED 2026-06-03)
+=============================================================
 
-This entry point now includes all repaired modules:
-- ZetaVerifier (FIXED - all proofs completed)
-- RiemannHypothesis (FIXED - structure restored, numerics verified)
-
-Modules still removed (pending repair):
-- NumericalZeros  (corrupted, noncomputable issues)
-- Hodge           (typeclass synthesis failures)
-
-Modules RETAINED:
+All modules enabled for compilation:
 - Basic (foundation)
 - Complexity
 - BSD
+- EllipticCurveReduction
 - NavierStokes
 - CP004
-- CookLevin
+- ZetaVerifier
+- RiemannHypothesis
+- CookLevin (with submodules: SAT, Reduction, Encoding)
 - SylvaInfrastructure
 - MathAgent
-- ZetaVerifier (restored)
-- RiemannHypothesis (restored)
+- NumericalZeros (stub, restored)
+- Hodge (stub, restored)
+- NPClass (with submodules: Basic, PolynomialTime)
+- FifteenConstants
+- ChernNumber
 -/
 
 -- Level 0: Foundation Layer
 import SylvaFormalization.Basic
 
 -- Level 1: Core Modules
--- import SylvaFormalization.NumericalZeros  -- REMOVED (repair pending)
+import SylvaFormalization.NumericalZeros
 import SylvaFormalization.Complexity
 import SylvaFormalization.BSD
 import SylvaFormalization.EllipticCurveReduction
--- import SylvaFormalization.Hodge          -- REMOVED (repair pending)
+import SylvaFormalization.Hodge
 import SylvaFormalization.NavierStokes
 import SylvaFormalization.CP004
+import SylvaFormalization.NPClass
 
 -- Level 2: Intermediate Modules
 import SylvaFormalization.ZetaVerifier
@@ -42,6 +41,8 @@ import SylvaFormalization.CookLevin
 import SylvaFormalization.SylvaInfrastructure
 
 -- Level 3: Application Modules
+import SylvaFormalization.FifteenConstants
+import SylvaFormalization.ChernNumber
 import SylvaFormalization.MathAgent
 
 namespace Sylva

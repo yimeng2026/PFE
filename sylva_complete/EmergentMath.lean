@@ -1,4 +1,4 @@
-/-
+﻿/-
 ================================================================================
 EMERGENT MATHEMATICS - Sylva Formalization
 涌现数学形式化框架
@@ -19,9 +19,7 @@ mathematical structures.
 
 DEPENDENCY: Basic (for φ, GF3, and foundational structures)
 ================================================================================
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import SylvaFormalization.Basic
 
 namespace Sylva
@@ -40,8 +38,7 @@ namespace EmergentMath
     - 
     SYLVA INSIGHT: This is not just a mapping—it's a BIRTH process.
     The physical constraint "gives birth to" the mathematical structure
-    through necessity, not convenience. -/
-structure EmergentStructure (PhysicalConstraint : Type) (MathematicalStructure : Type) where
+    through necessity, not convenience. -/\n\nstructure EmergentStructure (PhysicalConstraint : Type) (MathematicalStructure : Type) where
   /-- The physical constraint that serves as the "mother" of the structure -/
   constraint : PhysicalConstraint
   
@@ -78,8 +75,7 @@ structure EmergentStructure (PhysicalConstraint : Type) (MathematicalStructure :
     SYLVA INSIGHT: The generation is not arbitrary. Physical constraints
     CREATE the mathematical structure through necessity. You cannot have
     quantum mechanics without complex Hilbert spaces—the structure is
-    FORCED by the physics. -/
-structure GenerationMechanism (Constraint : Type) (Structure : Type) where
+    FORCED by the physics. -/\n\nstructure GenerationMechanism (Constraint : Type) (Structure : Type) where
   /-- The mapping from physical constraint to mathematical necessity -/
   generate : Constraint → Structure
   
@@ -113,8 +109,7 @@ def SymmetryGroup (G : Type) [Group G] : GenerationMechanism (G → Prop) (G →
     SYLVA INSIGHT: Uniqueness is not imposed from outside—it is SELECTED
     by the constraint itself. The constraint "chooses" its mathematical
     expression through optimization principles (least action, minimality,
-    stability, etc.). -/
-structure UniquenessMechanism (Constraint : Type) (Structure : Type) where
+    stability, etc.). -/\n\nstructure UniquenessMechanism (Constraint : Type) (Structure : Type) where
   /-- The space of all possible structures compatible with the constraint -/
   candidate_structures : Set Structure
   
@@ -154,8 +149,7 @@ noncomputable def GoldenRatioUniqueness : UniquenessMechanism (ℝ × ℝ) ℝ w
     SYLVA INSIGHT: Locking is not a limitation—it is an ENABLING.
     Before locking, the structure is fluid, potential. After locking,
     it becomes a SOLID FOUNDATION that other structures can build upon.
-    This is the "crystallization" of mathematical truth. -/
-structure LockingMechanism (Structure : Type) where
+    This is the "crystallization" of mathematical truth. -/\n\nstructure LockingMechanism (Structure : Type) where
   /-- The axioms that lock the structure in place -/
   axioms : Set String
   
@@ -210,8 +204,7 @@ def RealNumbersLocking : LockingMechanism ℝ where
     - Geometry (pentagons, golden rectangles)
     - Analysis (limit ratios)
     - Physics (quasicrystals, optimal packing)
-    - Biology (phyllotaxis) -/
-structure RadiationMechanism (Source : Type) (Target : Type) where
+    - Biology (phyllotaxis) -/\n\nstructure RadiationMechanism (Source : Type) (Target : Type) where
   /-- The source structure that radiates influence -/
   source : Source
   
@@ -233,8 +226,7 @@ structure RadiationMechanism (Source : Type) (Target : Type) where
   /-- Proof that the shadow is non-trivial -/
   shadow_non_trivial : ∃ t : Target, shadow t
 
-/-- The complete four-phase emergent system -/
-structure EmergentSystem (Constraint Structure Source Target : Type) where
+/-- The complete four-phase emergent system -/\n\nstructure EmergentSystem (Constraint Structure Source Target : Type) where
   /-- Generation: physical → mathematical -/
   generation : GenerationMechanism Constraint Structure
   
@@ -291,8 +283,7 @@ where
     SYLVA INSIGHT: This mapping is not arbitrary. It is determined by
     the "shape" of physical reality. When we do mathematics, we are
     not creating—we are DISCOVERING the necessary mathematical forms
-    that physical constraints must take. -/
-class ConstraintToStructure (Constraint : Type) (Structure : Type) where
+    that physical constraints must take. -/\n\nclass ConstraintToStructure (Constraint : Type) (Structure : Type) where
   /-- The mapping function -/
   map : Constraint → Structure
   
@@ -309,27 +300,22 @@ class ConstraintToStructure (Constraint : Type) (Structure : Type) where
   quotient_unique : Prop
 
 /-- Physical constraints have ENERGY LEVELS.
-    Higher energy = more constrained = more specific mathematical structure -/
-def ConstraintEnergyLevel (Constraint : Type) : Type := ℕ
+    Higher energy = more constrained = more specific mathematical structure -/\n\ndef ConstraintEnergyLevel (Constraint : Type) : Type := ℕ
 
 /-- Mathematical structures have FORMALIZATION DEPTH.
-    Deeper formalization = more theorems = more radiation -/
-def FormalizationDepth (Structure : Type) : Type := ℕ
+    Deeper formalization = more theorems = more radiation -/\n\ndef FormalizationDepth (Structure : Type) : Type := ℕ
 
 -- ============================================
 -- SECTION 7.5: Type Class Instances for Type Aliases
 -- ============================================
 
-/-- OfNat instance for ConstraintEnergyLevel -/
-instance {C : Type} : OfNat (ConstraintEnergyLevel C) n := 
+/-- OfNat instance for ConstraintEnergyLevel -/\n\ninstance {C : Type} : OfNat (ConstraintEnergyLevel C) n := 
   ⟨n⟩
 
-/-- OfNat instance for FormalizationDepth -/
-instance {S : Type} : OfNat (FormalizationDepth S) n := 
+/-- OfNat instance for FormalizationDepth -/\n\ninstance {S : Type} : OfNat (FormalizationDepth S) n := 
   ⟨n⟩
 
-/-- DecidableEq instance for ConstraintEnergyLevel -/
-instance {C : Type} : DecidableEq (ConstraintEnergyLevel C) := 
+/-- DecidableEq instance for ConstraintEnergyLevel -/\n\ninstance {C : Type} : DecidableEq (ConstraintEnergyLevel C) := 
   inferInstanceAs (DecidableEq ℕ)
 
 -- ============================================
@@ -337,8 +323,7 @@ instance {C : Type} : DecidableEq (ConstraintEnergyLevel C) :=
 -- ============================================
 
 /-- The Emergence Law: Energy Level × Constraint → Formalization Depth × Structure
-    This is the fundamental law of Emergent Mathematics. -/
-def EmergenceLaw {C S : Type} [ConstraintToStructure C S] 
+    This is the fundamental law of Emergent Mathematics. -/\n\ndef EmergenceLaw {C S : Type} [ConstraintToStructure C S] 
     (energy : ConstraintEnergyLevel C) (constraint : C) : 
     FormalizationDepth S × S :=
   let s := ConstraintToStructure.map constraint
@@ -368,8 +353,7 @@ example (X : Type) [MetricSpace X] : GenerationMechanism (MetricSpace X) (Topolo
 -- ============================================
 
 /-- Sylva's core insight: Mathematical structures are like ENERGY LEVELS.
-    They can absorb and emit "mathematical radiation"—influence on other domains. -/
-structure MathematicalEnergyLevel where
+    They can absorb and emit "mathematical radiation"—influence on other domains. -/\n\nstructure MathematicalEnergyLevel where
   /-- The energy level (higher = more constrained = more specific) -/
   level : ℕ
   
@@ -388,8 +372,7 @@ structure MathematicalEnergyLevel where
   /-- Stability: how resistant to perturbation -/
   stability : ℝ
 
-/-- The Sylva Spectrum: All mathematical energy levels arranged by complexity -/
-def SylvaSpectrum : List MathematicalEnergyLevel := [
+/-- The Sylva Spectrum: All mathematical energy levels arranged by complexity -/\n\ndef SylvaSpectrum : List MathematicalEnergyLevel := [
   { level := 0, structure_name := "ℕ", absorbed_from := [], 
     radiates_to := ["ℤ", "ℚ"], temperature := 1.0, stability := 0.9 },
   { level := 1, structure_name := "ℤ", absorbed_from := ["ℕ"], 
@@ -403,8 +386,7 @@ def SylvaSpectrum : List MathematicalEnergyLevel := [
 ]
 
 /-- Cross-layer constants appear at multiple energy levels.
-    φ appears at levels 2, 3, 4, 5, ... -/
-def CrossLayerConstant := 
+    φ appears at levels 2, 3, 4, 5, ... -/\n\ndef CrossLayerConstant := 
   { c : ℝ // c = φ ∨ c = Real.pi ∨ c = Real.exp 1 }
 
 -- ============================================
@@ -420,8 +402,7 @@ def CrossLayerConstant :=
     of physical constraints when expressed formally.
     
     Status: This is a philosophical/metamathematical claim that guides
-    the Sylva research program, not a formal theorem (yet). -/
-def SylvaHypothesis : Prop :=
+    the Sylva research program, not a formal theorem (yet). -/\n\ndef SylvaHypothesis : Prop :=
   ∀ (Constraint Structure : Type) [ConstraintToStructure Constraint Structure],
   ∀ (c : Constraint),
     (∃ p : GenerationMechanism Constraint Structure, p.physically_realizable c) →
@@ -429,8 +410,7 @@ def SylvaHypothesis : Prop :=
       s.constraint = c ∧ s.structure_emergent = ConstraintToStructure.map c)
 
 /-- The weaker, provable version: For specific well-understood constraints,
-    the emergence process can be demonstrated. -/
-theorem phi_emergence_demonstration : 
+    the emergence process can be demonstrated. -/\n\ntheorem phi_emergence_demonstration : 
   let c : ℝ × ℝ := (1, 1)
   let s := PhiEmergentStructure
   s.constraint = c ∧ s.structure_emergent = φ := by

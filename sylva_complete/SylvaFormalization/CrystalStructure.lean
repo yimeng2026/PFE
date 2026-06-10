@@ -1,13 +1,11 @@
-/-
+﻿/-
 # CrystalStructure.lean - 晶体结构的形式化定义
 
 为超导材料族的表示论推导提供晶体结构基础。
 核心概念：Bravais晶格、空间群、Wyckoff位置
 作者：SYLVA
 版本：v1.0
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 
 namespace CrystalStructure
 
@@ -15,22 +13,18 @@ namespace CrystalStructure
 -- Section 1: 基础数学定义
 -- ============================================
 
-/-- 维度参数，支持2D和3D晶体 -/
-def Dimension := ℕ
+/-- 维度参数，支持2D和3D晶体 -/\n\ndef Dimension := ℕ
 
-/-- 实数向量空间 -/
-def RealVector (n : ℕ) := Fin n → ℝ
+/-- 实数向量空间 -/\n\ndef RealVector (n : ℕ) := Fin n → ℝ
 
 instance : AddCommGroup (RealVector n) := by
   unfold RealVector
   infer_instance
 
-/-- 内积空间结构 -/
-def innerProduct {n : ℕ} (v w : RealVector n) : ℝ :=
+/-- 内积空间结构 -/\n\ndef innerProduct {n : ℕ} (v w : RealVector n) : ℝ :=
   ∑ i : Fin n, v i * w i
 
-/-- 晶格常数 -/
-structure LatticeConstants (n : ℕ) where
+/-- 晶格常数 -/\n\nstructure LatticeConstants (n : ℕ) where
   a : ℝ  -- 第一晶格常数
   b : ℝ  -- 第二晶格常数（2D/3D）
   c : ℝ  -- 第三晶格常数（3D）
@@ -48,8 +42,7 @@ structure LatticeConstants (n : ℕ) where
 -- Section 2: Bravais晶格
 -- ============================================
 
-/-- Bravais晶格类型 -/
-inductive BravaisType (n : ℕ)
+/-- Bravais晶格类型 -/\n\ninductive BravaisType (n : ℕ)
   | primitive       -- 原始晶格 (P)
   | bodyCentered    -- 体心晶格 (I)
   | faceCentered    -- 面心晶格 (F)
@@ -57,8 +50,7 @@ inductive BravaisType (n : ℕ)
   | rhombohedral    -- 三方晶格 (R)
   deriving DecidableEq, Repr
 
-/-- Bravais晶格结构 -/
-structure BravaisLattice (n : ℕ) where
+/-- Bravais晶格结构 -/\n\nstructure BravaisLattice (n : ℕ) where
   type : BravaisType n
   constants : LatticeConstants n
   primitiveVectors : Fin n → RealVector n
@@ -72,39 +64,33 @@ structure BravaisLattice (n : ℕ) where
 -- Section 3: 空间群与对称性
 -- ============================================
 
-/-- 晶体点操作：旋转、反射、反演 -/
-inductive PointOperation (n : ℕ)
+/-- 晶体点操作：旋转、反射、反演 -/\n\ninductive PointOperation (n : ℕ)
   | rotation (angle : ℝ) (axis : RealVector n)  -- 旋转
   | reflection (planeNormal : RealVector n)      -- 反射
   | inversion                                    -- 反演
   | identity                                     -- 恒等
   deriving DecidableEq, Repr
 
-/-- 空间群操作：点操作 + 平移 -/
-structure SpaceGroupOperation (n : ℕ) where
+/-- 空间群操作：点操作 + 平移 -/\n\nstructure SpaceGroupOperation (n : ℕ) where
   pointOp : PointOperation n
   translation : RealVector n
 
-/-- 空间群结构 -/
-structure SpaceGroup (n : ℕ) where
+/-- 空间群结构 -/\n\nstructure SpaceGroup (n : ℕ) where
   operations : List (SpaceGroupOperation n)
   closedUnderComposition : ∀ op1 op2, op1 ∈ operations → op2 ∈ operations →
     ∃ op3 ∈ operations, composition op1 op2 = op3
   hasIdentity : ∃ op ∈ operations, isIdentity op
   hasInverse : ∀ op ∈ operations, ∃ op' ∈ operations, isInverse op op'
 
-/-- 操作合成 -/
-def composition {n : ℕ} (op1 op2 : SpaceGroupOperation n) : SpaceGroupOperation n :=
+/-- 操作合成 -/\n\ndef composition {n : ℕ} (op1 op2 : SpaceGroupOperation n) : SpaceGroupOperation n :=
   -- 简化定义：实际应为semmidirect product
   { pointOp := PointOperation.identity,
     translation := op1.translation + op2.translation }
 
-/-- 判断是否为恒等操作 -/
-def isIdentity {n : ℕ} (op : SpaceGroupOperation n) : Prop :=
+/-- 判断是否为恒等操作 -/\n\ndef isIdentity {n : ℕ} (op : SpaceGroupOperation n) : Prop :=
   op.pointOp = PointOperation.identity ∧ op.translation = 0
 
-/-- 判断是否为逆操作 -/
-def isInverse {n : ℕ} (op1 op2 : SpaceGroupOperation n) : Prop :=
+/-- 判断是否为逆操作 -/\n\ndef isInverse {n : ℕ} (op1 op2 : SpaceGroupOperation n) : Prop :=
   -- 简化定义
   composition op1 op2 = { pointOp := PointOperation.identity, translation := 0 }
 
@@ -112,15 +98,13 @@ def isInverse {n : ℕ} (op1 op2 : SpaceGroupOperation n) : Prop :=
 -- Section 4: Wyckoff位置与原子位置
 -- ============================================
 
-/-- Wyckoff位置：轨道和对称性 -/
-structure WyckoffPosition (n : ℕ) where
+/-- Wyckoff位置：轨道和对称性 -/\n\nstructure WyckoffPosition (n : ℕ) where
   letter : Char  -- a, b, c, ...
   multiplicity : ℕ
   siteSymmetry : SpaceGroupOperation n → Prop  -- 位置的对称性群
   coordinates : RealVector n → Prop  -- 位置满足的坐标条件
 
-/-- 原子在晶体中的位置 -/
-structure AtomicPosition (n : ℕ) where
+/-- 原子在晶体中的位置 -/\n\nstructure AtomicPosition (n : ℕ) where
   element : String  -- 元素符号
   wyckoff : WyckoffPosition n
   fractionalCoords : RealVector n  -- 分数坐标
@@ -131,8 +115,7 @@ structure AtomicPosition (n : ℕ) where
 -- Section 5: 晶体结构
 -- ============================================
 
-/-- 完整晶体结构 -/
-structure CrystalStructure (n : ℕ) where
+/-- 完整晶体结构 -/\n\nstructure CrystalStructure (n : ℕ) where
   bravais : BravaisLattice n
   spaceGroup : SpaceGroup n
   atoms : List (AtomicPosition n)
@@ -144,14 +127,12 @@ structure CrystalStructure (n : ℕ) where
 -- Section 6: 层状结构特定定义
 -- ============================================
 
-/-- 层状晶体结构 -/
-structure LayeredCrystal extends CrystalStructure 3 where
+/-- 层状晶体结构 -/\n\nstructure LayeredCrystal extends CrystalStructure 3 where
   layerSpacing : ℝ  -- 层间距
   intraLayerSymmetry : SpaceGroup 2  -- 面内对称性
   hspacing : layerSpacing > 0
 
-/-- d电子层状化合物（如铜氧化物、镍酸盐） -/
-structure DLayeredCompound extends LayeredCrystal where
+/-- d电子层状化合物（如铜氧化物、镍酸盐） -/\n\nstructure DLayeredCompound extends LayeredCrystal where
   dOrbitalOccupancy : ℕ → ℝ  -- 各d轨道的占据数
   dOrbitalCharacters : List String  -- d轨道类型 (d_x2-y2, d_z2, etc.)
   chargeReservoirLayers : ℕ  -- 电荷库层数
@@ -161,15 +142,13 @@ structure DLayeredCompound extends LayeredCrystal where
 -- Section 7: 笼目晶格特定定义
 -- ============================================
 
-/-- 笼目晶格结构（二维） -/
-structure KagomeLattice where
+/-- 笼目晶格结构（二维） -/\n\nstructure KagomeLattice where
   latticeConstant : ℝ
   hoppingAmplitude : ℝ  -- 跃迁振幅t
   nearestNeighborDist : ℝ
   hpositive : latticeConstant > 0
 
-/-- 笼目晶格的三子格结构 -/
-structure KagomeSublattice where
+/-- 笼目晶格的三子格结构 -/\n\nstructure KagomeSublattice where
   sublatticeA : Fin 3 → ℝ × ℝ  -- A子格位置
   sublatticeB : Fin 3 → ℝ × ℝ  -- B子格位置
   sublatticeC : Fin 3 → ℝ × ℝ  -- C子格位置
@@ -179,8 +158,7 @@ structure KagomeSublattice where
 -- Section 8: 镍酸盐特定定义
 -- ============================================
 
-/-- 镍酸盐RNiO3结构（R为稀土元素） -/
-structure NickelateStructure where
+/-- 镍酸盐RNiO3结构（R为稀土元素） -/\n\nstructure NickelateStructure where
   rareEarth : String  -- 稀土元素 (Nd, Pr, La, etc.)
   perovskiteDistortion : ℝ  -- 钙钛矿畸变程度
   NiO6_octahedraTilt : ℝ  -- NiO6八面体倾斜角
@@ -191,8 +169,7 @@ structure NickelateStructure where
 -- Section 9: 结构-电子耦合
 -- ============================================
 
-/-- 结构参数对电子性质的影响 -/
-structure StructureElectronCoupling where
+/-- 结构参数对电子性质的影响 -/\n\nstructure StructureElectronCoupling where
   crystal : CrystalStructure 3
   -- 结构参数
   bondAngles : List ℝ
@@ -208,17 +185,14 @@ structure StructureElectronCoupling where
 -- Section 10: 材料族的分类函数
 -- ============================================
 
-/-- 判断是否为层状d电子化合物 -/
-def isLayeredDCompound (mat : CrystalStructure 3) : Prop :=
+/-- 判断是否为层状d电子化合物 -/\n\ndef isLayeredDCompound (mat : CrystalStructure 3) : Prop :=
   ∃ ldc : DLayeredCompound, ldc.toCrystalStructure = mat
 
-/-- 判断是否为笼目晶格 -/
-def isKagomeLattice (mat : CrystalStructure 2) : Prop :=
+/-- 判断是否为笼目晶格 -/\n\ndef isKagomeLattice (mat : CrystalStructure 2) : Prop :=
   ∃ kg : KagomeLattice, -- 简化判断
     mat.bravais.type = BravaisType.primitive
 
-/-- 判断是否为镍酸盐 -/
-def isNickelate (mat : CrystalStructure 3) : Prop :=
+/-- 判断是否为镍酸盐 -/\n\ndef isNickelate (mat : CrystalStructure 3) : Prop :=
   ∃ nick : NickelateStructure,
     mat.atoms.any (λ a => a.element = "Ni")
 

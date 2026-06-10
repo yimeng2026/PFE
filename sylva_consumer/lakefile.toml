@@ -1,0 +1,14 @@
+name = "sylva_consumer"
+version = "0.1.0"
+defaultTargets = ["sylva_consumer"]
+
+[[lean_lib]]
+name = "SylvaConsumer"
+
+[[lean_exe]]
+name = "sylva_consumer"
+root = "Main"
+
+[[require]]
+name = "SylvaFormalization"
+path = "../sylva_formalization"

@@ -1,4 +1,4 @@
-import Mathlib
+﻿import Mathlib
 
 namespace Sylva
 
@@ -7,8 +7,7 @@ namespace Sylva
 -- All sorry filled using SAIP-FILL protocol tactics
 -- ============================================
 
-/-- GF(3) - The Galois Field with 3 elements -/
-abbrev GF3 := Fin 3
+/-- GF(3) - The Galois Field with 3 elements -/\n\nabbrev GF3 := Fin 3
 
 namespace GF3
 

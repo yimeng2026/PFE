@@ -14,8 +14,10 @@ lean_lib SylvaFormalization where
   roots := #[
     `Basic,
     `BSD,
+    `ChernNumber,
     `Complexity,
     `CookLevin,
+    `FifteenConstants,
     `CP004,
     `CP004_B2,
     `DynamicalSystem,
@@ -28,6 +30,7 @@ lean_lib SylvaFormalization where
     `LocalGlobal,
     `MathAgent,
     `NavierStokes,
+    `NPClass,
     `NumericalZeros,
     `QFT,
     `QuantumArithmetic,

@@ -1,4 +1,4 @@
-/-
+﻿/-
 ================================================================================
 Sylva Formalization Project
 Superconductivity Pairing Theory Framework in Many-Body Systems
@@ -20,9 +20,7 @@ the system pays to achieve the paired ground state.
 ================================================================================
 DEPENDENCIES: Basic.lean (for φ, Debt structure, and foundational types)
 ================================================================================
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 
 namespace Sylva
 
@@ -51,11 +49,9 @@ theorem phi_pos : φ > 0 := by linarith [phi_gt_one]
 -- SECTION 1: Many-Body System Foundation
 -- ============================================
 
-/-- Site index for lattice models - can be finite or infinite -/
-abbrev Site := ℤ
+/-- Site index for lattice models - can be finite or infinite -/\n\nabbrev Site := ℤ
 
-/-- Spin index: Up (↑) or Down (↓) -/
-inductive Spin
+/-- Spin index: Up (↑) or Down (↓) -/\n\ninductive Spin
   | up | down
   deriving DecidableEq, Inhabited, Fintype
 
@@ -77,30 +73,25 @@ theorem opposite_ne_self (s : Spin) : s.opposite ≠ s := by
 
 end Spin
 
-/-- Fermion creation/annihilation operator index -/
-structure FermionIndex where
+/-- Fermion creation/annihilation operator index -/\n\nstructure FermionIndex where
   site : Site
   spin : Spin
   deriving DecidableEq, Inhabited
 
-/-- Momentum space index -/
-abbrev Momentum := ℝ
+/-- Momentum space index -/\n\nabbrev Momentum := ℝ
 
 /-- Energy dispersion relation: ε(k) for free electrons -/
 noncomputable def freeElectronDispersion (k : Momentum) (m : ℝ) (ħ : ℝ) : ℝ :=
   (ħ ^ 2) * (k ^ 2) / (2 * m)
 
-/-- Fermi energy at zero temperature -/
-structure FermiEnergy where
+/-- Fermi energy at zero temperature -/\n\nstructure FermiEnergy where
   value : ℝ
   positive : value > 0
 
-/-- Chemical potential μ -/
-structure ChemicalPotential where
+/-- Chemical potential μ -/\n\nstructure ChemicalPotential where
   value : ℝ
 
-/-- Temperature in energy units (k_B T) -/
-structure Temperature where
+/-- Temperature in energy units (k_B T) -/\n\nstructure Temperature where
   value : ℝ
   nonneg : value ≥ 0
 
@@ -108,8 +99,7 @@ structure Temperature where
 -- SECTION 2: Hubbard Model Formalization
 -- ============================================
 
-/-- Hubbard model parameters -/
-structure HubbardParams where
+/-- Hubbard model parameters -/\n\nstructure HubbardParams where
   t : ℝ  -- Hopping parameter
   U : ℝ  -- On-site interaction (U > 0 for repulsion, U < 0 for attraction)
   μ : ChemicalPotential  -- Chemical potential
@@ -117,45 +107,36 @@ structure HubbardParams where
   -- Physical constraints
   hopping_pos : t > 0
 
-/-- The kinetic energy term coefficient -/
-def HubbardParams.hoppingCoeff (p : HubbardParams) : ℝ := p.t
+/-- The kinetic energy term coefficient -/\n\ndef HubbardParams.hoppingCoeff (p : HubbardParams) : ℝ := p.t
 
-/-- The interaction strength -/
-def HubbardParams.interaction (p : HubbardParams) : ℝ := p.U
+/-- The interaction strength -/\n\ndef HubbardParams.interaction (p : HubbardParams) : ℝ := p.U
 
 /-- Low-energy effective theory parameter: ratio U/t -/
 noncomputable def HubbardParams.couplingRatio (p : HubbardParams) : ℝ := p.U / p.t
 
-/-- Strong coupling regime: |U| >> t -/
-def HubbardParams.isStrongCoupling (p : HubbardParams) : Prop :=
+/-- Strong coupling regime: |U| >> t -/\n\ndef HubbardParams.isStrongCoupling (p : HubbardParams) : Prop :=
   |p.U| > 10 * p.t
 
-/-- Weak coupling regime: |U| << t -/
-def HubbardParams.isWeakCoupling (p : HubbardParams) : Prop :=
+/-- Weak coupling regime: |U| << t -/\n\ndef HubbardParams.isWeakCoupling (p : HubbardParams) : Prop :=
   |p.U| < 0.1 * p.t
 
-/-- Attractive interaction (necessary for s-wave pairing) -/
-def HubbardParams.isAttractive (p : HubbardParams) : Prop :=
+/-- Attractive interaction (necessary for s-wave pairing) -/\n\ndef HubbardParams.isAttractive (p : HubbardParams) : Prop :=
   p.U < 0
 
-/-- The Hubbard Hamiltonian density at a single site -/
-def hubbardLocalHamiltonian (n_up n_down : ℝ) (U : ℝ) : ℝ :=
+/-- The Hubbard Hamiltonian density at a single site -/\n\ndef hubbardLocalHamiltonian (n_up n_down : ℝ) (U : ℝ) : ℝ :=
   U * n_up * n_down
 
-/-- Kinetic energy contribution from hopping between sites i and j -/
-def hubbardHoppingTerm (c_dagger_i c_j : Complex) (t : Real) : Complex :=
+/-- Kinetic energy contribution from hopping between sites i and j -/\n\ndef hubbardHoppingTerm (c_dagger_i c_j : Complex) (t : Real) : Complex :=
   -t * c_dagger_i * c_j
 
 /-- Low-energy effective Hamiltonian: At the Fermi surface, only states
-    within energy cutoff Lambda contribute -/
-structure LowEnergyEffectiveTheory where
+    within energy cutoff Lambda contribute -/\n\nstructure LowEnergyEffectiveTheory where
   cutoff : ℝ  -- Energy cutoff
   params : HubbardParams
   cutoff_pos : cutoff > 0
   cutoff_valid : cutoff < |params.U|
 
-/-- Fermi surface: states with |ε(k) - μ| < Λ -/
-def fermiSurface (μ : ℝ) (Λ : ℝ) : Set Momentum :=
+/-- Fermi surface: states with |ε(k) - μ| < Λ -/\n\ndef fermiSurface (μ : ℝ) (Λ : ℝ) : Set Momentum :=
   {k | |freeElectronDispersion k 1 1 - μ| < Λ}
 
 /-- The density of states at Fermi level -/
@@ -167,14 +148,12 @@ noncomputable def densityOfStates (μ : ℝ) : ℝ :=
 -- SECTION 3: Pairing Theory Foundation
 -- ============================================
 
-/-- Pairing amplitude: the order parameter for superconductivity -/
-structure PairingAmplitude where
+/-- Pairing amplitude: the order parameter for superconductivity -/\n\nstructure PairingAmplitude where
   value : ℂ
 
 def PairingAmplitude.zero : PairingAmplitude := ⟨0⟩
 
-/-- The BCS gap parameter Δ -/
-structure BCSGap where
+/-- The BCS gap parameter Δ -/\n\nstructure BCSGap where
   amplitude : PairingAmplitude
   -- Self-consistency condition
   isSelfConsistent : Prop
@@ -209,8 +188,7 @@ noncomputable def bcsCoherenceFactorV (ε_k : ℝ) (E_k : ℝ) : ℝ :=
 -- SECTION 4: Cooper Pair Formalization
 -- ============================================
 
-/-- Cooper pair: two fermions with opposite spin and momentum -/
-structure CooperPair where
+/-- Cooper pair: two fermions with opposite spin and momentum -/\n\nstructure CooperPair where
   k : Momentum  -- Center of mass momentum
   k1 : Momentum  -- Relative momentum of particle 1
   k2 : Momentum  -- Relative momentum of particle 2
@@ -262,8 +240,7 @@ noncomputable def bcsCriticalTemperature (ωD : ℝ) (gN0 : ℝ) : ℝ :=
   -- T_c ≈ 1.13 * ħω_D * exp(-1/(g*N0))
   1.13 * ωD * Real.exp (-1 / gN0)
 
-/-- Weak-coupling BCS relation: 2Δ(0) = 3.52 k_B T_c -/
-theorem bcsGapToTcRatio (Δ0 Tc : ℝ) (gN0 ωD : ℝ)
+/-- Weak-coupling BCS relation: 2Δ(0) = 3.52 k_B T_c -/\n\ntheorem bcsGapToTcRatio (Δ0 Tc : ℝ) (gN0 ωD : ℝ)
     (_hΔ : Δ0 = 2 * ωD * Real.exp (-1 / gN0))
     (_hTc : Tc = bcsCriticalTemperature ωD gN0) :
     True := by
@@ -279,20 +256,17 @@ noncomputable def bcsGroundStateEnergy (N0 : ℝ) (Δ : BCSGap) (ωD : ℝ) : �
 -- SECTION 6: Core Theorem - Cooper Pair Stability
 -- ============================================
 
-/-- The pairing interaction is attractive -/
-structure AttractiveInteraction where
+/-- The pairing interaction is attractive -/\n\nstructure AttractiveInteraction where
   V : ℝ  -- Interaction strength (negative for attraction)
   attractive : V < 0
 
-/-- Fermi surface average of interaction -/
-def fermiSurfaceAverage (V : ℝ → ℝ → ℝ) (N0 : ℝ) : ℝ :=
+/-- Fermi surface average of interaction -/\n\ndef fermiSurfaceAverage (V : ℝ → ℝ → ℝ) (N0 : ℝ) : ℝ :=
   -- Average over the Fermi surface
   V 0 0 * N0
 
 /-- Theorem 6.1: Existence of Cooper instability
     For any attractive interaction, no matter how weak, there exists
-    a bound state of two electrons near the Fermi surface. -/
-theorem cooperInstabilityTheorem
+    a bound state of two electrons near the Fermi surface. -/\n\ntheorem cooperInstabilityTheorem
     (_V : AttractiveInteraction)
     (_εF : FermiEnergy)
     (_N0 : ℝ)
@@ -307,8 +281,7 @@ theorem cooperInstabilityTheorem
 
 /-- Theorem 6.2: Cooper pair as stable energy eigenstate
     In the presence of attractive interaction, the Cooper pair is a
-    stable configuration with lower energy than two unpaired electrons. -/
-theorem cooperPairStableEigenstate
+    stable configuration with lower energy than two unpaired electrons. -/\n\ntheorem cooperPairStableEigenstate
     (_pair : CooperPair)
     (Δ : BCSGap)
     (_V : AttractiveInteraction)
@@ -333,8 +306,7 @@ theorem cooperPairStableEigenstate
   linarith
 
 /-- Theorem 6.3: Spin singlet is the lowest energy configuration
-    For s-wave pairing, the antisymmetric spin singlet has the lowest energy. -/
-theorem singletLowestEnergy
+    For s-wave pairing, the antisymmetric spin singlet has the lowest energy. -/\n\ntheorem singletLowestEnergy
     (_pair : CooperPair)
     (_hSinglet : _pair.spin1 = _pair.spin2.opposite) :
     -- The singlet state has lower energy than triplet states
@@ -351,22 +323,18 @@ theorem singletLowestEnergy
 noncomputable def crossoverParameter (kF a : ℝ) : ℝ :=
   1 / (kF * a)
 
-/-- BCS regime: weakly attractive, 1/(k_F a) << -1 -/
-def isBCSRegime (x : ℝ) : Prop :=
+/-- BCS regime: weakly attractive, 1/(k_F a) << -1 -/\n\ndef isBCSRegime (x : ℝ) : Prop :=
   x < -1
 
-/-- BEC regime: deeply bound molecules, 1/(k_F a) >> 1 -/
-def isBECRegime (x : ℝ) : Prop :=
+/-- BEC regime: deeply bound molecules, 1/(k_F a) >> 1 -/\n\ndef isBECRegime (x : ℝ) : Prop :=
   x > 1
 
-/-- Unitary regime: |1/(k_F a)| << 1 -/
-def isUnitaryRegime (x : ℝ) : Prop :=
+/-- Unitary regime: |1/(k_F a)| << 1 -/\n\ndef isUnitaryRegime (x : ℝ) : Prop :=
   |x| < 0.1
 
 /-- Theorem 7.1: Continuous crossover from BCS to BEC
     The system evolves smoothly from Cooper pairs to composite bosons
-    as the interaction strength increases. -/
-theorem bcsBecContinuousCrossover
+    as the interaction strength increases. -/\n\ntheorem bcsBecContinuousCrossover
     (_params : HubbardParams)
     (_x : ℝ)
     (_hx : _x = crossoverParameter 1 (-_x)) :
@@ -385,8 +353,7 @@ noncomputable def crossoverChemicalPotential (x : ℝ) (εF : ℝ) : ℝ :=
   else
     εF * (1 - x / 2)  -- Interpolation in unitary regime
 
-/-- Theorem 7.2: Gap-to-chemical potential ratio through crossover -/
-theorem gapToChemicalPotentialRatio
+/-- Theorem 7.2: Gap-to-chemical potential ratio through crossover -/\n\ntheorem gapToChemicalPotentialRatio
     (_Δ : BCSGap)
     (_μ : ℝ)
     (_εF : ℝ)
@@ -408,8 +375,7 @@ noncomputable def becCondensateFraction (T Tc : ℝ) : ℝ :=
 
 /-- Theorem 7.3: BEC limit recovery
     In the deep BEC regime, the theory reduces to the Bogoliubov theory
-    of weakly interacting bosons. -/
-theorem becLimitRecovery
+    of weakly interacting bosons. -/\n\ntheorem becLimitRecovery
     (_x : ℝ)
     (_hx : isBECRegime _x)
     (T : ℝ)
@@ -453,8 +419,7 @@ theorem becLimitRecovery
 noncomputable def u1PhaseRotation (Δ : PairingAmplitude) (θ : ℝ) : PairingAmplitude :=
   ⟨Δ.value * Complex.exp (Complex.I * θ)⟩
 
-/-- The order parameter manifold: U(1) ≅ S¹ -/
-abbrev orderParameterManifold : Type := {x : ℝ × ℝ // x.1 ^ 2 + x.2 ^ 2 = 1}
+/-- The order parameter manifold: U(1) ≅ S¹ -/\n\nabbrev orderParameterManifold : Type := {x : ℝ × ℝ // x.1 ^ 2 + x.2 ^ 2 = 1}
 
 theorem goldstoneModeExistence : True := trivial
 
@@ -474,8 +439,7 @@ noncomputable def sylvaGapScaling (Δ0 Tc : ℝ) : ℝ :=
   2 * Δ0 / Tc
 
 /-- Theorem 9.1: φ-scaling of the superconducting gap
-    Under optimal conditions, the gap exhibits φ-scaling. -/
-theorem phiScalingSuperconductingGap
+    Under optimal conditions, the gap exhibits φ-scaling. -/\n\ntheorem phiScalingSuperconductingGap
     (Δ : BCSGap)
     (Tc : ℝ)
     (_hOptimal : Complex.normSq Δ.amplitude.value > 0) :
@@ -493,8 +457,7 @@ noncomputable def sylvaCriticalExponent : ℝ :=
   1 / φ  -- Golden ratio conjugate
 
 /-- Theorem 9.2: Correlation length exponent
-    The coherence length exponent may involve φ-dependence. -/
-theorem phiCorrelationLengthExponent
+    The coherence length exponent may involve φ-dependence. -/\n\ntheorem phiCorrelationLengthExponent
     (_ξ : ℝ → ℝ)  -- Correlation length as function of T - T_c
     (_T Tc : ℝ)
     (_hTc : Tc > 0) :
@@ -537,23 +500,20 @@ noncomputable def unitaryFermiGasParams : HubbardParams := {
 -- SECTION 11: Integration with H-CND Structure
 -- ============================================
 
-/-- Emergence level of superconductivity -/
-inductive SuperconductingLevel
+/-- Emergence level of superconductivity -/\n\ninductive SuperconductingLevel
   | normal    -- L0: Normal metal
   | pairing   -- L1: Pairing fluctuations
   | pseudogap -- L2: Pseudogap regime
   | supercon  -- L3: True superconductivity (long-range order)
   deriving DecidableEq
 
-/-- Debt-energy correspondence in superconductivity -/
-def superconductingDebtEnergy (d : ℝ) (Δ : BCSGap) : ℝ :=
+/-- Debt-energy correspondence in superconductivity -/\n\ndef superconductingDebtEnergy (d : ℝ) (Δ : BCSGap) : ℝ :=
   -- The "debt" paid to create the superconducting state
   d * Complex.normSq Δ.amplitude.value
 
 /-- Theorem 11.1: Superconductivity as emergent phenomenon
     Superconductivity emerges from the collective behavior of electrons,
-    not present in individual electron properties. -/
-theorem superconductivityEmergence :
+    not present in individual electron properties. -/\n\ntheorem superconductivityEmergence :
     -- Superconducting properties are emergent
     ∀ (Δ : BCSGap), Complex.normSq Δ.amplitude.value > 0 →
     -- The whole has properties the parts don't have

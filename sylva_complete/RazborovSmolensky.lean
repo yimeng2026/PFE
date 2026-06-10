@@ -1,4 +1,4 @@
-/-
+﻿/-
 Razborov-Smolensky Theorem Formalization
 ======================================
 
@@ -19,13 +19,13 @@ References:
 
 Author: Sylva Formalization Project
 Version: 1.0
--/ 
-
-import Mathlib
-import Mathlib.FieldTheory.Finite.Basic
-import Mathlib.Analysis.Fourier.FiniteAbelian
+-/\n\nimport Mathlib
+import Mathlib.FieldTheory.Finite.GaloisField
 import Mathlib.Probability.Distributions.Uniform
-import Mathlib.LinearAlgebra.FiniteDimensional
+-- NOTE: Mathlib.Analysis.Fourier.FiniteAbelian does not exist in v4.29.0
+-- import Mathlib.Analysis.Fourier.FiniteAbelian
+-- NOTE: Mathlib.LinearAlgebra.FiniteDimensional is a directory, not a file in v4.29.0
+import Mathlib.LinearAlgebra.FiniteDimensional.Defs
 
 namespace Sylva
 namespace PvsNP
@@ -41,8 +41,7 @@ open Fintype FiniteDimensional
 /-- 
 The finite field 𝔽_p for a prime p.
 We use this as the coefficient field for our approximating polynomials.
--/ 
-def F_p (p : ℕ) [Fact p.Prime] := GaloisField p 1
+-/\n\ndef F_p (p : ℕ) [Fact p.Prime] := GaloisField p 1
 
 instance (p : ℕ) [Fact p.Prime] : Field (F_p p) := by
   unfold F_p
@@ -60,8 +59,7 @@ instance (p : ℕ) [Fact p.Prime] : CommRing (F_p p) := by
 -- Section 2: Boolean Functions and MOD Functions
 -- ============================================================
 
-/-- Boolean function on n variables -/
-def BoolFunc (n : ℕ) := (Fin n → Bool) → Bool
+/-- Boolean function on n variables -/\n\ndef BoolFunc (n : ℕ) := (Fin n → Bool) → Bool
 
 /-- 
 MOD_q function: outputs true iff the sum of inputs is divisible by q.
@@ -82,8 +80,7 @@ Properties:
 
 Note: When p = q, MOD_q can be computed by a single MOD_p gate, so
 the theorem is trivially false in this case.
--/
-def MOD_q (n q : ℕ) : BoolFunc n := fun x =>
+-/\n\ndef MOD_q (n q : ℕ) : BoolFunc n := fun x =>
   (∑ i : Fin n, if x i then 1 else 0) % q = 0
 
 /-- 
@@ -93,8 +90,7 @@ MAJ(x₁, ..., xₙ) = 1 iff Σxᵢ ≥ n/2
 
 This is another important symmetric function that is hard for AC⁰
 (and AC⁰[p] for small p) but computable in TC⁰.
--/
-def Majority (n : ℕ) : BoolFunc n := fun x =>
+-/\n\ndef Majority (n : ℕ) : BoolFunc n := fun x =>
   2 * (∑ i : Fin n, if x i then 1 else 0) ≥ n
 
 /-- 
@@ -103,8 +99,7 @@ Parity function: outputs true iff the number of true inputs is odd.
 PARITY(x₁, ..., xₙ) = Σxᵢ mod 2
 
 This is the MOD_2 function and is hard for AC⁰ (Furst-Saxe-Sipser, Ajtai).
--/
-def Parity (n : ℕ) : BoolFunc n := fun x =>
+-/\n\ndef Parity (n : ℕ) : BoolFunc n := fun x =>
   (∑ i : Fin n, if x i then 1 else 0) % 2 = 1
 
 -- ============================================================
@@ -126,8 +121,7 @@ The MOD_p gate is crucial because:
 1. It enables computation of MOD_p in constant depth
 2. It does not enable computation of MOD_q for q ≠ p (Razborov-Smolensky)
 3. It provides a natural barrier between AC⁰ and TC⁰
--/
-inductive AC0_p_GateType (p : ℕ) [Fact p.Prime]
+-/\n\ninductive AC0_p_GateType (p : ℕ) [Fact p.Prime]
   | and : AC0_p_GateType p    -- Boolean AND
   | or : AC0_p_GateType p     -- Boolean OR  
   | not : AC0_p_GateType p    -- Boolean NOT
@@ -145,8 +139,7 @@ Each gate has:
 
 The circuit is acyclic by construction: gates only reference
 gates with smaller indices.
--/
-structure AC0_p_Gate (p : ℕ) [Fact p.Prime] where
+-/\n\nstructure AC0_p_Gate (p : ℕ) [Fact p.Prime] where
   gateType : AC0_p_GateType p
   inputs : List ℕ
   deriving DecidableEq
@@ -172,8 +165,7 @@ Key properties:
 - AC⁰[p] ⊄ AC⁰ (for all p, MOD_p ∈ AC⁰[p] \ AC⁰)
 - AC⁰[p] ⊄ AC⁰[q] when p ≠ q (Razborov-Smolensky)
 - TC⁰ ⊇ AC⁰[p] for all p (threshold gates are more powerful)
--/ 
-structure AC0_p_Circuit (p : ℕ) [Fact p.Prime] where
+-/\n\nstructure AC0_p_Circuit (p : ℕ) [Fact p.Prime] where
   gates : List (AC0_p_Gate p)
   numInputs : ℕ
   outputGate : ℕ
@@ -190,8 +182,7 @@ For the family to be in AC⁰[p], we require:
 - Each Cₙ is an AC⁰[p] circuit
 - depth(Cₙ) = O(1) (constant depth)
 - size(Cₙ) = n^O(1) (polynomial size)
--/
-def AC0_p_CircuitFamily (p : ℕ) [Fact p.Prime] :=
+-/\n\ndef AC0_p_CircuitFamily (p : ℕ) [Fact p.Prime] :=
   ∀ (n : ℕ), AC0_p_Circuit p
 
 /-- 
@@ -199,8 +190,7 @@ Polynomial-size bound for circuit families.
 
 A circuit family has polynomial size if there exists a polynomial
 q(n) such that size(Cₙ) ≤ q(n) for all n.
--/
-def PolySize (C : AC0_p_CircuitFamily p) : Prop :=
+-/\n\ndef PolySize (C : AC0_p_CircuitFamily p) : Prop :=
   ∃ (q : Polynomial ℕ), ∀ (n : ℕ), (C n).size ≤ q.eval n
 
 /-- 
@@ -210,8 +200,7 @@ A circuit family has constant depth if there exists a constant d
 such that depth(Cₙ) ≤ d for all n.
 
 Note: d must not depend on n. This is what makes AC⁰ "constant depth."
--/
-def ConstantDepth (C : AC0_p_CircuitFamily p) : Prop :=
+-/\n\ndef ConstantDepth (C : AC0_p_CircuitFamily p) : Prop :=
   ∃ (d : ℕ), ∀ (n : ℕ), (C n).depth ≤ d
 
 /-- 
@@ -232,8 +221,7 @@ Key results:
 - Majority ∉ AC⁰[p] for any prime p (requires threshold gates)
 - PARITY ∉ AC⁰ (Furst-Saxe-Sipser, Ajtai)
 - PARITY ∈ AC⁰[2] (trivial: single MOD_2 gate)
--/
-def Class_AC0_p (p : ℕ) [Fact p.Prime] : Set (Set (List Bool)) :=
+-/\n\ndef Class_AC0_p (p : ℕ) [Fact p.Prime] : Set (Set (List Bool)) :=
   { L : Set (List Bool) |
     ∃ (C : AC0_p_CircuitFamily p),
       PolySize C ∧ ConstantDepth C ∧
@@ -255,8 +243,7 @@ Key operations:
 - Degree computation
 - Addition and multiplication
 - Partial derivatives
--/
-abbrev Poly_p (p : ℕ) [Fact p.Prime] (n : ℕ) :=
+-/\n\nabbrev Poly_p (p : ℕ) [Fact p.Prime] (n : ℕ) :=
   MvPolynomial (Fin n) (F_p p)
 
 /-- 
@@ -285,8 +272,7 @@ noncomputable def evalPoly {p : ℕ} [Fact p.Prime] {n : ℕ}
 Convert boolean input to field element.
 
 We map 0 ↦ 0 and 1 ↦ 1, viewing booleans as elements of 𝔽_p.
--/
-def boolToFp {p : ℕ} [Fact p.Prime] (b : Bool) : F_p p :=
+-/\n\ndef boolToFp {p : ℕ} [Fact p.Prime] (b : Bool) : F_p p :=
   if b then 1 else 0
 
 /-- 
@@ -301,8 +287,7 @@ as field elements. We typically map:
 - f(x) = false ↦ 0 ∈ 𝔽_p
 
 Then the error is: Pr[P(x) ≠ boolToFp(f(x))]
--/
-def approxError {p : ℕ} [Fact p.Prime] {n : ℕ}
+-/\n\ndef approxError {p : ℕ} [Fact p.Prime] {n : ℕ}
     (f : BoolFunc n) (P : Poly_p p n) : ℝ :=
   let total := 2^n
   let errors := Nat.card {x : Fin n → Bool |
@@ -311,8 +296,7 @@ def approxError {p : ℕ} [Fact p.Prime] {n : ℕ}
 
 /-- 
 Approximation quality: polynomial P ε-approximates f if error ≤ ε.
--/
-def EpsilonApprox {p : ℕ} [Fact p.Prime] {n : ℕ}
+-/\n\ndef EpsilonApprox {p : ℕ} [Fact p.Prime] {n : ℕ}
     (f : BoolFunc n) (P : Poly_p p n) (ε : ℝ) : Prop :=
   approxError f P ≤ ε
 
@@ -360,8 +344,7 @@ Proof sketch:
 
 Key insight: MOD_p gates have constant-degree polynomials!
 This is why AC⁰[p] is different from AC⁰.
--/
-theorem circuit_to_polynomial_approximation
+-/\n\ntheorem circuit_to_polynomial_approximation
     {p : ℕ} [Fact p.Prime]
     (C : AC0_p_Circuit p)
     (ε : ℝ) (hε : ε > 0) :
@@ -384,8 +367,7 @@ Then the approximating polynomial has degree:
 (log s)^d = (O(log n))^O(1) = (log n)^O(1)
 
 This is the critical bound that makes the proof work.
--/
-theorem AC0_p_polylog_degree
+-/\n\ntheorem AC0_p_polylog_degree
     {p : ℕ} [Fact p.Prime]
     (C : AC0_p_CircuitFamily p)
     (hSize : PolySize C)
@@ -447,8 +429,7 @@ Technical details:
 This lemma shows the fundamental limitation: low-degree polynomials
 over 𝔽_p cannot distinguish between inputs with sum ≡ 0 (mod q) and
 other sums, because they cannot capture the periodic structure mod q.
--/
-theorem low_degree_polynomial_limitation
+-/\n\ntheorem low_degree_polynomial_limitation
     {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
     (hpq : p ≠ q)
     {n d : ℕ}
@@ -466,8 +447,7 @@ For any non-constant polynomial P ∈ 𝔽_p[x₁, ..., xₙ] of degree d:
 |Pr[P(x) = MOD_q(x)] - 1/q| ≤ (1 - 1/q) · (d/n)^(1/2)
 
 This explicit bound is useful for quantitative applications.
--/
-theorem smolensky_correlation_bound
+-/\n\ntheorem smolensky_correlation_bound
     {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
     (hpq : p ≠ q)
     (n d : ℕ)
@@ -518,8 +498,7 @@ This result is tight in the sense that:
 - MOD_q ∈ TC⁰ (threshold circuits can compute all MOD functions)
 - The condition that p and q are prime is necessary for the proof
   technique (uses field properties of 𝔽_p and 𝔽_q)
--/
-theorem Razborov_Smolensky
+-/\n\ntheorem Razborov_Smolensky
     (p q : ℕ) [Fact p.Prime] [Fact q.Prime]
     (hpq : p ≠ q) :
     ¬(∃ (C : AC0_p_CircuitFamily p),
@@ -536,8 +515,7 @@ For distinct primes p and q, we have AC⁰[p] ⊄ AC⁰[q].
 
 This shows that the MOD_p gates provide genuinely different
 computational power for different primes.
--/
-theorem AC0_p_hierarchy
+-/\n\ntheorem AC0_p_hierarchy
     (p q : ℕ) [Fact p.Prime] [Fact q.Prime]
     (hpq : p ≠ q) :
     Class_AC0_p p ⊈ Class_AC0_p q := by
@@ -551,8 +529,7 @@ MOD_p gates and bounded fan-in AND/OR gates.
 
 This shows that the MOD_p gate is the "essential" ingredient
 that distinguishes AC⁰[p] from AC⁰.
--/
-theorem MOD_p_completeness
+-/\n\ntheorem MOD_p_completeness
     (p : ℕ) [Fact p.Prime]
     (L : Set (List Bool))
     (hL : L ∈ Class_AC0_p p) :
@@ -573,8 +550,7 @@ The ε-approximate degree of MOD_q over 𝔽_p is Ω(√n) for any ε < 1/2 - 1/
 
 This follows directly from the limitation lemma: to achieve error < 1/2,
 the polynomial must have degree Ω(√n).
--/
-theorem MOD_q_approximate_degree
+-/\n\ntheorem MOD_q_approximate_degree
     {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
     (hpq : p ≠ q)
     (n : ℕ) (hn : n ≥ 1)
@@ -592,8 +568,7 @@ for some constant c > 0.
 
 This exponential lower bound follows from combining the polynomial
 approximation bound with the degree limitation.
--/
-theorem MOD_q_circuit_size_lower_bound
+-/\n\ntheorem MOD_q_circuit_size_lower_bound
     {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
     (hpq : p ≠ q) :
     ∃ (c : ℝ) (hc : c > 0),
@@ -611,8 +586,7 @@ over 𝔽_q fool AC⁰[p] when p ≠ q.
 
 This connection between circuit lower bounds and pseudorandomness
 is a deep and fruitful area of research.
--/
-theorem small_bias_fools_AC0_p
+-/\n\ntheorem small_bias_fools_AC0_p
     {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
     (hpq : p ≠ q)
     (n : ℕ)
@@ -635,8 +609,7 @@ AC⁰[p] and the class of functions containing MOD_q (p ≠ q).
 
 Specifically, for any AC⁰[p] circuit C trying to compute MOD_q,
 the conditional entropy H(MOD_q(X) | C(X)) is bounded away from 0.
--/
-theorem razborov_smolensky_entropy_gap
+-/\n\ntheorem razborov_smolensky_entropy_gap
     {p q : ℕ} [Fact p.Prime] [Fact q.Prime]
     (hpq : p ≠ q)
     (n : ℕ) (hn : n ≥ 10) :
@@ -657,8 +630,7 @@ of their polynomial approximations.
 
 This connects to the broader entropy gap framework by showing that
 circuit complexity classes have distinct entropy signatures.
--/
-theorem AC0_p_entropy_bound
+-/\n\ntheorem AC0_p_entropy_bound
     (p : ℕ) [Fact p.Prime]
     (L : Set (List Bool))
     (hL : L ∈ Class_AC0_p p) :
@@ -732,8 +704,7 @@ Status: Fundamental barrier; no clear path forward.
 Fermat's Little Theorem: For prime p and a ≢ 0 (mod p), a^(p-1) ≡ 1 (mod p).
 
 This is used to construct low-degree polynomials for MOD_p gates.
--/
-theorem fermat_little_theorem_fp
+-/\n\ntheorem fermat_little_theorem_fp
     {p : ℕ} [Fact p.Prime]
     (a : F_p p) (ha : a ≠ 0) :
     a ^ (p - 1) = 1 := by
@@ -744,8 +715,7 @@ theorem fermat_little_theorem_fp
 The polynomial 1 - x^(p-1) over 𝔽_p is the indicator of x = 0.
 
 This gives a degree-(p-1) polynomial for testing if an element is zero.
--/
-theorem mod_p_indicator_polynomial
+-/\n\ntheorem mod_p_indicator_polynomial
     {p : ℕ} [Fact p.Prime]
     (x : F_p p) :
     (1 - x ^ (p - 1) : F_p p) = if x = 0 then 1 else 0 := by
@@ -765,8 +735,7 @@ For any ε > 0, there exists a random polynomial P of degree O(log(1/ε))
 that computes AND correctly with probability ≥ 1-ε on any input.
 
 This is key for approximating high-fan-in AND gates with low degree.
--/
-theorem probabilistic_and_polynomial
+-/\n\ntheorem probabilistic_and_polynomial
     {p : ℕ} [Fact p.Prime]
     (k : ℕ) (hk : k ≥ 1)
     (ε : ℝ) (hε : ε > 0) :
@@ -783,8 +752,7 @@ Given a probabilistic polynomial with error ε, we can reduce
 the error to ε^k by taking the majority of k independent trials.
 
 This boosts the approximation quality at the cost of increased degree.
--/
-theorem error_reduction
+-/\n\ntheorem error_reduction
     {p : ℕ} [Fact p.Prime]
     {n : ℕ}
     (P : Poly_p p n)

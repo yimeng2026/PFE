@@ -1,4 +1,4 @@
-/-
+﻿/-
 ZetaVerifier.lean - FIXED VERSION
 ===============================
 
@@ -12,9 +12,7 @@ Status: 已修复所有SORRY
 2. 使用Real.pi_gt_d4 (3.1415 < π) 替代不存在的pi_gt_31415
 3. 使用div_lt_div_iff_of_pos_right/div_le_div_iff_of_pos_right替代错误名称
 4. 修复区间构造类型问题
--/ 
-
-import Mathlib
+-/\n\nimport Mathlib
 import Mathlib.NumberTheory.LSeries.RiemannZeta
 import Mathlib.Topology.Order.IntermediateValue
 import SylvaFormalization.Basic

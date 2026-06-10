@@ -1,4 +1,4 @@
-/-
+﻿/-
 Sylva Formalization Project
 CP-004: Entropy Gap ↔ P≠NP Equivalence
 Complete Implementation with sInf/sSup
@@ -22,9 +22,7 @@ TECHNICAL NOTES:
 - computationalEntropy defined via conditional sSup
 - EntropyGap defined via sInf of NP\P minus sSup of P
 ================================================================================
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import Mathlib.Order.Basic
 import Mathlib.Order.Lattice
 import Mathlib.Order.Bounds.Defs
@@ -42,8 +40,7 @@ open Set Classical
 -- Section 0: Type Aliases and Basic Definitions
 -- ============================================================
 
-/-- Language: set of boolean lists -/
-abbrev Language := Set (List Bool)
+/-- Language: set of boolean lists -/\n\nabbrev Language := Set (List Bool)
 
 -- ============================================================
 -- Section 1: ComputationalModel Interface
@@ -190,8 +187,7 @@ noncomputable def EntropyGap (TM : Type) [ComputationalModel TM] : ℕ :=
     - Nat.sInf_nonneg: sInf of ℕ set is ≥ 0
     - sSup_nonneg: sSup of non-negative set is ≥ 0
     - Nat.sub_nonneg_of_le: a - b ≥ 0 when a ≥ b
-    -/
-theorem entropy_gap_well_defined (TM : Type) [ComputationalModel TM] : 
+    -/\n\ntheorem entropy_gap_well_defined (TM : Type) [ComputationalModel TM] : 
     EntropyGap TM ≥ 0 := by
   unfold EntropyGap entropyGap'
   -- Use simp to simplify all the if-then-else expressions
@@ -211,8 +207,7 @@ end EntropyGap
 
 section EquivalenceFramework
 
-/-- Theorem: P ⊆ NP -/
-theorem P_subset_NP (TM : Type) [ComputationalModel TM] : ClassP TM ⊆ ClassNP TM := by
+/-- Theorem: P ⊆ NP -/\n\ntheorem P_subset_NP (TM : Type) [ComputationalModel TM] : ClassP TM ⊆ ClassNP TM := by
   intro L hL
   rcases hL with ⟨tm, htm⟩
   use (λ x (_cert : List Bool) => eval tm x)
@@ -256,8 +251,7 @@ lemma np_minus_p_nonempty (TM : Type) [ComputationalModel TM] (h : P_neq_NP TM) 
     exact h_eq
   contradiction
 
-/-- Forward direction framework (conditional) -/
-theorem pneqnp_implies_positive_entropy_gap (TM : Type) [ComputationalModel TM]
+/-- Forward direction framework (conditional) -/\n\ntheorem pneqnp_implies_positive_entropy_gap (TM : Type) [ComputationalModel TM]
     (h : P_neq_NP TM)
     (h_p_bounded : ∃ (C : ℕ), C > 0 ∧ ∀ (L : Language), L ∈ ClassP TM → descriptionComplexity TM L ≤ C)
     (h_sep : ∀ (L : Language), L ∈ ClassNP TM \ ClassP TM → 
@@ -265,8 +259,7 @@ theorem pneqnp_implies_positive_entropy_gap (TM : Type) [ComputationalModel TM]
     EntropyGap TM > 0 := by 
   sorry
 
-/-- Reverse direction -/
-theorem positive_entropy_gap_implies_pneqnp (TM : Type) [ComputationalModel TM]
+/-- Reverse direction -/\n\ntheorem positive_entropy_gap_implies_pneqnp (TM : Type) [ComputationalModel TM]
     (h : EntropyGap TM > 0) : P_neq_NP TM := by
   by_contra h_eq
   have h_zero : EntropyGap TM = 0 := by
@@ -277,8 +270,7 @@ theorem positive_entropy_gap_implies_pneqnp (TM : Type) [ComputationalModel TM]
     exact entropy_gap_zero_if_P_eq_NP TM this
   linarith
 
-/-- Core Equivalence Theorem (conditional) -/
-theorem entropy_gap_equivalence (TM : Type) [ComputationalModel TM]
+/-- Core Equivalence Theorem (conditional) -/\n\ntheorem entropy_gap_equivalence (TM : Type) [ComputationalModel TM]
     (h_fwd_assump : P_neq_NP TM → 
       (∃ (C : ℕ), C > 0 ∧ ∀ (L : Language), L ∈ ClassP TM → descriptionComplexity TM L ≤ C) ∧
       (∀ (L : Language), L ∈ ClassNP TM \ ClassP TM → 

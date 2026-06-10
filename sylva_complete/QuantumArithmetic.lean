@@ -1,6 +1,5 @@
-/-
+﻿/-
 # Quantum Arithmetic
--/
-import Mathlib
+-/\n\nimport Mathlib
 namespace SylvaFormalization
 end SylvaFormalization

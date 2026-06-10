@@ -1,4 +1,4 @@
-/-
+﻿/-
 ================================================================================
 Sylva Tutorial Template v1.0
 ================================================================================
@@ -71,8 +71,7 @@ CONCEPT: [概念名称]
 使用的策略：
 - tactic1: 用途
 - tactic2: 用途
--/ 
-theorem example_theorem (n : ℕ) : n + 0 = n := by
+-/\n\ntheorem example_theorem (n : ℕ) : n + 0 = n := by
   -- 💡 提示：这是加法单位元的性质
   simp  -- 使用 simp 简化表达式
 
@@ -84,16 +83,14 @@ theorem example_theorem (n : ℕ) : n + 0 = n := by
 /-
 🎯 目标：证明...
 💡 提示：尝试使用 simp 或 rfl
--/ 
-theorem exercise_1_basic (x : ℕ) : x = x := by
+-/\n\ntheorem exercise_1_basic (x : ℕ) : x = x := by
   sorry  -- 请在这里填入你的证明
 
 -- 练习 2：组合技巧（难度：⭐⭐）
 /-
 🎯 目标：证明...
 💡 提示：可能需要使用 calc 块
--/ 
-theorem exercise_2_intermediate (a b : ℕ) (h : a = b) : a + 0 = b := by
+-/\n\ntheorem exercise_2_intermediate (a b : ℕ) (h : a = b) : a + 0 = b := by
   sorry  -- 请在这里填入你的证明
 
 -- 练习 3：综合应用（难度：⭐⭐⭐）
@@ -101,8 +98,7 @@ theorem exercise_2_intermediate (a b : ℕ) (h : a = b) : a + 0 = b := by
 🎯 目标：证明...
 💡 提示：可能需要多个引理
 ⚠️ 注意：注意类型匹配
--/ 
-theorem exercise_3_advanced (n m : ℕ) (h : n ≤ m) : n + 0 ≤ m := by
+-/\n\ntheorem exercise_3_advanced (n m : ℕ) (h : n ≤ m) : n + 0 ≤ m := by
   sorry  -- 请在这里填入你的证明
 
 -- ============================================================================
@@ -121,8 +117,7 @@ theorem exercise_3_advanced (n m : ℕ) (h : n ≤ m) : n + 0 ≤ m := by
 - 使用 induction 进行归纳
 - 使用 cases 进行情况分析
 - 使用 nlinarith 处理不等式
--/ 
-theorem challenge_theorem : True := by
+-/\n\ntheorem challenge_theorem : True := by
   sorry  -- 挑战：填入完整证明
 
 -- ============================================================================

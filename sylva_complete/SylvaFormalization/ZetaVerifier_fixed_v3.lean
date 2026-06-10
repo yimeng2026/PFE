@@ -1,4 +1,4 @@
-/-
+﻿/-
 ZetaVerifier_fixed_v3.lean - 完全修复版
 ==================================
 
@@ -9,9 +9,7 @@ ZetaVerifier_fixed_v3.lean - 完全修复版
 4. 移除所有sorry，实现完整功能
 
 验证命令: /root/.elan/bin/lake build SylvaFormalization.ZetaVerifier_fixed_v3
--/ 
-
-import Mathlib
+-/\n\nimport Mathlib
 import Mathlib.NumberTheory.LSeries.RiemannZeta
 import Mathlib.Topology.Order.IntermediateValue
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Basic

@@ -1,4 +1,4 @@
-/-
+﻿/-
 ================================================================================
 TUTORIAL: Sylva 形式化入门 - Basic.lean
 ================================================================================
@@ -34,9 +34,7 @@ GF(3) = {0, 1, 2} 是一个包含三个元素的有限域。
 🔗 相关资源:
 Mathlib: Mathlib.Data.Fin.Basic
 ================================================================================
--/ 
-
-import Mathlib
+-/\n\nimport Mathlib
 
 namespace Sylva.Tutorial.Basic
 
@@ -44,8 +42,7 @@ namespace Sylva.Tutorial.Basic
 -- SECTION 1: GF(3) 基础
 -- ============================================================================
 
-/-- GF(3) - 三元素伽罗瓦域 -/
-abbrev GF3 := Fin 3
+/-- GF(3) - 三元素伽罗瓦域 -/\n\nabbrev GF3 := Fin 3
 
 namespace GF3
 
@@ -77,8 +74,7 @@ def neg (a : GF3) : GF3 := -a
 - intro: 引入变量
 - fin_cases: 对有限类型进行情况分析
 - <;> : 顺序组合（对每种情况应用后续策略）
--/ 
-theorem elems : (Finset.univ : Finset GF3) = {0, 1, 2} := by
+-/\n\ntheorem elems : (Finset.univ : Finset GF3) = {0, 1, 2} := by
   simp [Finset.ext_iff, GF3]
   intro x
   fin_cases x <;> simp
@@ -91,24 +87,21 @@ theorem elems : (Finset.univ : Finset GF3) = {0, 1, 2} := by
 /-
 🎯 目标：证明 2 + 1 = 0 (mod 3)
 💡 提示：使用 rfl（自反性）直接证明，因为 Fin 3 的加法已经定义好了
--/ 
-theorem exercise_1_1 : add two one = zero := by
+-/\n\ntheorem exercise_1_1 : add two one = zero := by
   sorry  -- 填入你的证明
 
 -- 练习 1.2：证明 2 × 2 = 1 在 GF(3) 中（难度：⭐）
 /-
 🎯 目标：证明 2 × 2 = 1 (mod 3)
 💡 提示：同样可以使用 rfl
--/ 
-theorem exercise_1_2 : mul two two = one := by
+-/\n\ntheorem exercise_1_2 : mul two two = one := by
   sorry  -- 填入你的证明
 
 -- 练习 1.3：证明对任意 a ∈ GF(3)，a + 0 = a（难度：⭐⭐）
 /-
 🎯 目标：证明 0 是加法单位元
 💡 提示：使用 intro 引入 a，然后 fin_cases 分析所有情况
--/ 
-theorem exercise_1_3 (a : GF3) : add a zero = a := by
+-/\n\ntheorem exercise_1_3 (a : GF3) : add a zero = a := by
   sorry  -- 填入你的证明
 
 end GF3
@@ -160,8 +153,7 @@ namespace Phi
 - have: 引入辅助引理
 - calc: 链式计算
 - nlinarith: 非线性算术求解器
--/ 
-theorem phi_sq_eq_phi_add_one : φ ^ 2 = φ + 1 := by
+-/\n\ntheorem phi_sq_eq_phi_add_one : φ ^ 2 = φ + 1 := by
   have h1 : Real.sqrt 5 ^ 2 = 5 := Real.sq_sqrt (show 0 ≤ (5 : ℝ) by norm_num)
   have h2 : φ = (1 + Real.sqrt 5) / 2 := rfl
   rw [h2]
@@ -180,8 +172,7 @@ theorem phi_sq_eq_phi_add_one : φ ^ 2 = φ + 1 := by
 使用的策略：
 - Real.sqrt_lt_sqrt: √ 函数的单调性
 - Real.sqrt_one: √1 = 1
--/ 
-theorem exercise_2_1 : φ > 1 := by
+-/\n\ntheorem exercise_2_1 : φ > 1 := by
   sorry  -- 填入你的证明
 
 -- 练习 2.2：证明 φ > 0（难度：⭐）
@@ -190,8 +181,7 @@ theorem exercise_2_1 : φ > 1 := by
 💡 提示：既然 φ > 1，那么显然 φ > 0
 使用的策略：
 - linarith: 线性不等式求解
--/ 
-theorem exercise_2_2 : φ > 0 := by
+-/\n\ntheorem exercise_2_2 : φ > 0 := by
   sorry  -- 填入你的证明
 
 -- 练习 2.3：计算 φ³ = 2φ + 1（难度：⭐⭐⭐）
@@ -202,8 +192,7 @@ theorem exercise_2_2 : φ > 0 := by
 使用的策略：
 - calc: 链式计算
 - rw [phi_sq_eq_phi_add_one]: 使用已证明的引理
--/ 
-theorem exercise_2_3 : φ ^ 3 = 2 * φ + 1 := by
+-/\n\ntheorem exercise_2_3 : φ ^ 3 = 2 * φ + 1 := by
   sorry  -- 填入你的证明
 
 -- ============================================================================
@@ -235,8 +224,7 @@ noncomputable def D_c : ℝ := φ ^ 4
 使用的策略：
 - calc: 清晰的链式推导
 - ring: 处理环上的代数运算
--/ 
-theorem D_c_eq : D_c = 3 * φ + 2 := by
+-/\n\ntheorem D_c_eq : D_c = 3 * φ + 2 := by
   have h1 : φ ^ 2 = φ + 1 := phi_sq_eq_phi_add_one
   have h4 : φ ^ 3 = 2 * φ + 1 := by
     calc 
@@ -261,8 +249,7 @@ theorem D_c_eq : D_c = 3 * φ + 2 := by
 /-
 🎯 目标：将 Phi_c 用 φ 的线性表达式表示
 💡 提示：使用 exercise_2_3 的结果
--/ 
-theorem exercise_3_1 : Phi_c = 137 * (2 * φ + 1) := by
+-/\n\ntheorem exercise_3_1 : Phi_c = 137 * (2 * φ + 1) := by
   sorry  -- 填入你的证明
 
 -- 练习 3.2：证明 D_c > 0（难度：⭐⭐）
@@ -271,8 +258,7 @@ theorem exercise_3_1 : Phi_c = 137 * (2 * φ + 1) := by
 💡 提示：利用 φ > 0，所以 φ 的任何正次幂都大于 0
 使用的策略：
 - positivity: 自动证明正性
--/ 
-theorem exercise_3_2 : D_c > 0 := by
+-/\n\ntheorem exercise_3_2 : D_c > 0 := by
   sorry  -- 填入你的证明
 
 end Phi
@@ -301,15 +287,13 @@ Sylva 框架使用七层架构来描述从基础到复杂的涌现：
 ================================================================================
 -/ 
 
-/-- 七层涌现架构 -/
-inductive Level
+/-- 七层涌现架构 -/\n\ninductive Level
   | L0 | L1 | L2 | L3 | L4 | L5 | L6 | L7
   deriving DecidableEq, Inhabited
 
 namespace Level
 
-/-- 将层级转换为自然数 -/
-def toNat : Level → Nat
+/-- 将层级转换为自然数 -/\n\ndef toNat : Level → Nat
   | L0 => 0 | L1 => 1 | L2 => 2 | L3 => 3
   | L4 => 4 | L5 => 5 | L6 => 6 | L7 => 7
 
@@ -325,16 +309,14 @@ instance : LT Level where lt a b := a.toNat < b.toNat
 /-
 🎯 目标：证明 L0 < L7
 💡 提示：展开定义后使用 norm_num
--/ 
-theorem exercise_4_1 : L0 < L7 := by
+-/\n\ntheorem exercise_4_1 : L0 < L7 := by
   sorry  -- 填入你的证明
 
 -- 练习 4.2：证明层级关系的传递性（难度：⭐⭐）
 /-
 🎯 目标：如果 a ≤ b 且 b ≤ c，则 a ≤ c
 💡 提示：利用自然数的传递性
--/ 
-theorem exercise_4_2 (a b c : Level) (h1 : a ≤ b) (h2 : b ≤ c) : a ≤ c := by
+-/\n\ntheorem exercise_4_2 (a b c : Level) (h1 : a ≤ b) (h2 : b ≤ c) : a ≤ c := by
   sorry  -- 填入你的证明
 
 end Level
@@ -344,15 +326,13 @@ end Level
 -- SECTION 5: 元理论公理
 -- ============================================================================
 
-/-- Sylva 元理论公理 M1-M7 -/
-inductive MetaAxiom
+/-- Sylva 元理论公理 M1-M7 -/\n\ninductive MetaAxiom
   | M1 | M2 | M3 | M4 | M5 | M6 | M7
   deriving DecidableEq
 
 namespace MetaAxiom
 
-/-- 公理描述 -/
-def description : MetaAxiom → String
+/-- 公理描述 -/\n\ndef description : MetaAxiom → String
   | M1 => "Triadic Irreducibility: GF(3) foundation"
   | M2 => "Infinite Semiosis: Unlimited signification chains"
   | M3 => "Lifeworld Ground: Phenomenological foundation"
@@ -369,16 +349,14 @@ def description : MetaAxiom → String
 /-
 🎯 目标：证明两个不同的公理不相等
 💡 提示：使用 intro 和 cases
--/ 
-theorem exercise_5_1 : M1 ≠ M2 := by
+-/\n\ntheorem exercise_5_1 : M1 ≠ M2 := by
   sorry  -- 填入你的证明
 
 -- 练习 5.2：证明所有公理都有描述（难度：⭐⭐）
 /-
 🎯 目标：证明任意公理 a，description a 非空
 💡 提示：使用 intro 和 cases，然后计算每种情况
--/ 
-theorem exercise_5_2 (a : MetaAxiom) : description a ≠ "" := by
+-/\n\ntheorem exercise_5_2 (a : MetaAxiom) : description a ≠ "" := by
   sorry  -- 填入你的证明
 
 end MetaAxiom
@@ -399,8 +377,7 @@ end MetaAxiom
 提示：
 - 可能需要计算 Phi_c 的近似值
 - 思考 137 这个数字的特殊性
--/ 
-theorem challenge_Phi_c_positive : Phi.Phi_c > 0 := by
+-/\n\ntheorem challenge_Phi_c_positive : Phi.Phi_c > 0 := by
   sorry  -- 挑战：填入完整证明
 
 

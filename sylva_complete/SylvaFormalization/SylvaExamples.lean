@@ -1,4 +1,4 @@
-/-
+﻿/-
 Sylva 代码示例集
 ==============
 
@@ -12,9 +12,7 @@ Sylva 代码示例集
 
 作者: Sylva Tutorial
 版本: 0.1.0
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import SylvaFormalization.Basic
 import SylvaFormalization.RiemannHypothesis
 import SylvaFormalization.Complexity

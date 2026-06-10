@@ -1,4 +1,4 @@
-/-
+﻿/-
 Odlyzko-Schönhage算法实现报告 (FILLED VERSION)
 ================================
 
@@ -8,9 +8,7 @@ Odlyzko-Schönhage算法实现报告 (FILLED VERSION)
 3. 确保文件可编译
 
 原始功能保留，FFT相关定义因noncomputable问题被移除。
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import Mathlib.Analysis.Fourier.FourierTransform
 import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
 

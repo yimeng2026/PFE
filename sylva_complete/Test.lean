@@ -1,12 +1,10 @@
-/-
+﻿/-
 Sylva Formalization Project - Comprehensive Test Suite
 ========================================================
 Tests all modules, definitions, and key constants.
 
 Usage: lake build Test
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import SylvaFormalization.Basic
 import SylvaFormalization.NumericalZeros
 import SylvaFormalization.Complexity
@@ -134,8 +132,7 @@ example : (Finset.univ : Finset Level).card = 8 := by
 -- Note: RiemannHypothesis module temporarily excluded due to Mathlib dependency issue
 -- lambda_c = 5/2 is the critical threshold for Riemann Hypothesis
 
-/-- Verify phi_c is positive -/
-theorem phi_c_positive : Phi.Phi_c > 0 := by
+/-- Verify phi_c is positive -/\n\ntheorem phi_c_positive : Phi.Phi_c > 0 := by
   have h : Phi.Phi_c = 137 * φ ^ 3 := rfl
   rw [h]
   have hφ : φ > 0 := by
@@ -143,8 +140,7 @@ theorem phi_c_positive : Phi.Phi_c > 0 := by
     linarith
   nlinarith
 
-/-- Verify D_c is positive -/
-theorem D_c_positive : Phi.D_c > 0 := by
+/-- Verify D_c is positive -/\n\ntheorem D_c_positive : Phi.D_c > 0 := by
   have h : Phi.D_c = φ ^ 4 := rfl
   rw [h]
   have hφ : φ > 0 := by
@@ -156,11 +152,9 @@ theorem D_c_positive : Phi.D_c > 0 := by
 -- SECTION 7: MODULE IMPORT VERIFICATION
 -- =====================================================================
 
-/-- All modules imported successfully -/
-theorem all_modules_imported : True := trivial
+/-- All modules imported successfully -/\n\ntheorem all_modules_imported : True := trivial
 
-/-- Key definitions accessible -/
-theorem key_definitions_accessible :
+/-- Key definitions accessible -/\n\ntheorem key_definitions_accessible :
   True ∧ True ∧ True ∧ True := ⟨trivial, trivial, trivial, trivial⟩
 
 end Test

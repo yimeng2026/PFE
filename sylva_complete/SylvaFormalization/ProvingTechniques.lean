@@ -1,4 +1,4 @@
-/-
+﻿/-
 ================================================================================
 TUTORIAL: 证明技巧进阶
 ================================================================================
@@ -53,9 +53,7 @@ CONCEPT: 证明策略工具箱
 - 复杂证明 → have, calc, induction
 
 ================================================================================
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 
 namespace Sylva.Tutorial.ProvingTechniques
 
@@ -96,8 +94,7 @@ calc
 证明：(a + b)² + (a - b)² = 2(a² + b²)
 
 这个证明展示了 calc 块的典型用法。
--/ 
-theorem calc_example_1 (a b : ℝ) : (a + b) ^ 2 + (a - b) ^ 2 = 2 * (a ^ 2 + b ^ 2) := by
+-/\n\ntheorem calc_example_1 (a b : ℝ) : (a + b) ^ 2 + (a - b) ^ 2 = 2 * (a ^ 2 + b ^ 2) := by
   calc
     (a + b) ^ 2 + (a - b) ^ 2 
         = (a^2 + 2*a*b + b^2) + (a^2 - 2*a*b + b^2) := by ring
@@ -113,24 +110,21 @@ theorem calc_example_1 (a b : ℝ) : (a + b) ^ 2 + (a - b) ^ 2 = 2 * (a ^ 2 + b 
 /-
 🎯 证明：a³ - b³ = (a-b)(a² + ab + b²)
 💡 提示：从右边展开，使用 ring
--/ 
-theorem exercise_1_1 (a b : ℝ) : a^3 - b^3 = (a - b) * (a^2 + a*b + b^2) := by
+-/\n\ntheorem exercise_1_1 (a b : ℝ) : a^3 - b^3 = (a - b) * (a^2 + a*b + b^2) := by
   sorry
 
 -- 练习 1.2：不等式链（难度：⭐⭐⭐）
 /-
 🎯 证明：若 0 < a < b，则 a² < b²
 💡 提示：使用 nlinarith 或分步推导
--/ 
-theorem exercise_1_2 (a b : ℝ) (ha : 0 < a) (h : a < b) : a^2 < b^2 := by
+-/\n\ntheorem exercise_1_2 (a b : ℝ) (ha : 0 < a) (h : a < b) : a^2 < b^2 := by
   sorry
 
 -- 练习 1.3：复杂等式（难度：⭐⭐⭐）
 /-
 🎯 证明黄金比例恒等式：φ⁵ = 5φ + 3
 💡 提示：利用 φ² = φ + 1 反复降次
--/ 
-theorem exercise_1_3 {φ : ℝ} (hφ : φ^2 = φ + 1) : φ^5 = 5*φ + 3 := by
+-/\n\ntheorem exercise_1_3 {φ : ℝ} (hφ : φ^2 = φ + 1) : φ^5 = 5*φ + 3 := by
   sorry
 
 
@@ -170,8 +164,7 @@ have name : statement := by
 证明：对于所有 n ≥ 1，1 + 2 + ... + n = n(n+1)/2
 
 这个证明展示了如何使用 have 来组织归纳证明。
--/ 
-theorem sum_formula (n : ℕ) : ∑ i in Finset.Icc 1 n, (i : ℝ) = n * (n + 1) / 2 := by
+-/\n\ntheorem sum_formula (n : ℕ) : ∑ i in Finset.Icc 1 n, (i : ℝ) = n * (n + 1) / 2 := by
   induction n with
   | zero =>
     -- 基础情况：n = 0
@@ -198,8 +191,7 @@ theorem sum_formula (n : ℕ) : ∑ i in Finset.Icc 1 n, (i : ℝ) = n * (n + 1)
 1. 先证明 a² ≥ 0 和 b² ≥ 0
 2. 然后证明 a² = 0 和 b² = 0
 3. 最后推出 a = 0 和 b = 0
--/ 
-theorem exercise_2_1 (a b : ℝ) (h : a^2 + b^2 = 0) : a = 0 ∧ b = 0 := by
+-/\n\ntheorem exercise_2_1 (a b : ℝ) (h : a^2 + b^2 = 0) : a = 0 ∧ b = 0 := by
   sorry
 
 -- 练习 2.2：多辅助引理（难度：⭐⭐⭐）
@@ -207,8 +199,7 @@ theorem exercise_2_1 (a b : ℝ) (h : a^2 + b^2 = 0) : a = 0 ∧ b = 0 := by
 🎯 证明柯西-施瓦茨不等式的一个特例：
 (a² + b²)(c² + d²) ≥ (ac + bd)²
 💡 提示：展开右边，证明差值非负
--/ 
-theorem exercise_2_2 (a b c d : ℝ) : (a^2 + b^2) * (c^2 + d^2) ≥ (a*c + b*d)^2 := by
+-/\n\ntheorem exercise_2_2 (a b c d : ℝ) : (a^2 + b^2) * (c^2 + d^2) ≥ (a*c + b*d)^2 := by
   sorry
 
 
@@ -264,16 +255,14 @@ example : ¬ ∃ q : ℚ, (q : ℝ) = Real.sqrt 2 := by
 /-
 🎯 证明：若 n² 是偶数，则 n 是偶数（n 为自然数）
 💡 提示：反设 n 是奇数，推出 n² 是奇数，矛盾
--/ 
-theorem exercise_3_1 (n : ℕ) (h : Even (n^2)) : Even n := by
+-/\n\ntheorem exercise_3_1 (n : ℕ) (h : Even (n^2)) : Even n := by
   sorry
 
 -- 练习 3.2：唯一性证明（难度：⭐⭐⭐）
 /-
 🎯 证明：方程 x³ = x 在自然数中只有 x = 0 或 x = 1 的解
 💡 提示：反设 x ≥ 2，证明 x³ > x
--/ 
-theorem exercise_3_2 (x : ℕ) (h : x^3 = x) : x = 0 ∨ x = 1 := by
+-/\n\ntheorem exercise_3_2 (x : ℕ) (h : x^3 = x) : x = 0 ∨ x = 1 := by
   sorry
 
 
@@ -314,8 +303,7 @@ induction n with
 斐波那契数列：F(0) = 0, F(1) = 1, F(n+2) = F(n) + F(n+1)
 
 证明：F(0) + F(1) + ... + F(n) = F(n+2) - 1
--/ 
-def fib : ℕ → ℕ
+-/\n\ndef fib : ℕ → ℕ
   | 0 => 0
   | 1 => 1
   | n + 2 => fib n + fib (n + 1)
@@ -339,8 +327,7 @@ theorem fib_sum (n : ℕ) : ∑ i in Finset.range (n + 1), fib i = fib (n + 2) -
 /-
 🎯 证明：1 + 2 + 2² + ... + 2ⁿ = 2ⁿ⁺¹ - 1
 💡 提示：使用归纳法，基础情况 n = 0
--/ 
-theorem exercise_4_1 (n : ℕ) : ∑ i in Finset.range (n + 1), (2 : ℕ)^i = 2^(n + 1) - 1 := by
+-/\n\ntheorem exercise_4_1 (n : ℕ) : ∑ i in Finset.range (n + 1), (2 : ℕ)^i = 2^(n + 1) - 1 := by
   sorry
 
 -- 练习 4.2：整除性质（难度：⭐⭐⭐⭐）
@@ -350,8 +337,7 @@ theorem exercise_4_1 (n : ℕ) : ∑ i in Finset.range (n + 1), (2 : ℕ)^i = 2^
 1. 基础情况 n = 1：1³ - 1 = 0 能被 3 整除
 2. 归纳步骤：假设 3 | (n³ - n)，证明 3 | ((n+1)³ - (n+1))
 3. 展开 (n+1)³ - (n+1) = n³ + 3n² + 3n + 1 - n - 1 = (n³ - n) + 3(n² + n)
--/ 
-theorem exercise_4_2 (n : ℕ) (hn : n ≥ 1) : 3 ∣ (n^3 - n) := by
+-/\n\ntheorem exercise_4_2 (n : ℕ) (hn : n ≥ 1) : 3 ∣ (n^3 - n) := by
   sorry
 
 
@@ -410,8 +396,7 @@ Lean 提供了强大的自动化策略：
 证明：若 0 < x < y 且 0 < a < b，则 ax < by
 
 这个证明展示了多种策略的组合使用。
--/ 
-theorem auto_example (x y a b : ℝ) 
+-/\n\ntheorem auto_example (x y a b : ℝ) 
     (h1 : 0 < x) (h2 : x < y) 
     (h3 : 0 < a) (h4 : a < b) : 
     a * x < b * y := by
@@ -426,8 +411,7 @@ theorem auto_example (x y a b : ℝ)
 🎯 证明：对于正实数 a, b, c，有
 (a+b+c)(1/a + 1/b + 1/c) ≥ 9
 💡 提示：使用 nlinarith，可能需要展开
--/ 
-theorem exercise_5_1 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
+-/\n\ntheorem exercise_5_1 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
     (a + b + c) * (1/a + 1/b + 1/c) ≥ 9 := by
   sorry
 
@@ -436,8 +420,7 @@ theorem exercise_5_1 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) :
 🎯 化简并证明：
 ((a+b)² - (a-b)²) / (4ab) = 1
 💡 提示：使用 field_simp 和 ring
--/ 
-theorem exercise_5_2 (a b : ℝ) (ha : a ≠ 0) (hb : b ≠ 0) :
+-/\n\ntheorem exercise_5_2 (a b : ℝ) (ha : a ≠ 0) (hb : b ≠ 0) :
     ((a + b)^2 - (a - b)^2) / (4 * a * b) = 1 := by
   sorry
 
@@ -458,8 +441,7 @@ theorem exercise_5_2 (a b : ℝ) (ha : a ≠ 0) (hb : b ≠ 0) :
 3. 证明 (a-b)² ≥ 0 蕴含所需不等式
 
 提示：使用 have 组织证明，使用 nlinarith 处理不等式
--/ 
-theorem challenge_AM_GM (a b : ℝ) (ha : 0 ≤ a) (hb : 0 ≤ b) :
+-/\n\ntheorem challenge_AM_GM (a b : ℝ) (ha : 0 ≤ a) (hb : 0 ≤ b) :
     (a + b) / 2 ≥ Real.sqrt (a * b) := by
   sorry
 

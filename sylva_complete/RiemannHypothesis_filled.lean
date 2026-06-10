@@ -1,4 +1,4 @@
-/-
+﻿/-
 RiemannHypothesis.lean - FILLED VERSION (Core Proofs Implemented)
 ==========================================================
 
@@ -15,9 +15,7 @@ Key improvements over skeleton version:
 5. Connection to NumericalZeros for first 50 verified zeros
 
 Status: PROOFS IMPLEMENTED - Ready for gradual completion
--/
-
-import Mathlib
+-/\n\nimport Mathlib
 import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
 import Mathlib.Analysis.SpecialFunctions.Gamma.Beta
 import Mathlib.Analysis.Analytic.Basic
@@ -78,8 +76,7 @@ def criticalStrip : Set ℂ := {s | 0 < s.re ∧ s.re < 1}
 @[simp]
 def onCriticalLine (t : ℝ) : ℂ := 1 / 2 + Complex.I * t
 
-/-- Points in critical strip with given real and imaginary parts -/
-def inCriticalStrip (σ t : ℝ) : ℂ := σ + Complex.I * t
+/-- Points in critical strip with given real and imaginary parts -/\n\ndef inCriticalStrip (σ t : ℝ) : ℂ := σ + Complex.I * t
 
 -- ================================================
 -- SECTION 3: Trivial Zeros (Filled Proof)
@@ -90,8 +87,7 @@ def inCriticalStrip (σ t : ℝ) : ℂ := σ + Complex.I * t
     PROOF IMPLEMENTED using Mathlib's riemannZeta_neg_two_mul_nat.
     The key insight is that the functional equation relates
     ζ(-2n) to ζ(2n+1) with a prefactor that vanishes.
--/
-theorem zeta_trivial_zeros (n : ℕ) (hn : n > 0) : zeta (-(2 * n : ℝ)) = 0 := by
+-/\n\ntheorem zeta_trivial_zeros (n : ℕ) (hn : n > 0) : zeta (-(2 * n : ℝ)) = 0 := by
   have h1 : -(2 * n : ℝ) = -(2 * (n : ℕ+) : ℕ) := by
     simp
     norm_cast
@@ -133,8 +129,7 @@ noncomputable def xi (s : ℂ) : ℂ :=
     1. The reflection formula for the gamma function
     2. The functional equation for the theta function
     3. The Mellin transform relationship
--/
-theorem xi_functional_equation (s : ℂ) : xi s = xi (1 - s) := by
+-/\n\ntheorem xi_functional_equation (s : ℂ) : xi s = xi (1 - s) := by
   -- The functional equation for completed zeta is xi(s) = xi(1-s)
   -- This is a fundamental property of the Riemann zeta function
   -- Mathlib provides completedRiemannZeta with this property
@@ -189,8 +184,7 @@ theorem xi_functional_equation (s : ℂ) : xi s = xi (1 - s) := by
     
     This means xi(1/2 + it) is real for all real t.
     This is crucial for locating zeros numerically.
--/
-theorem xi_real_on_critical_line (t : ℝ) : (xi (onCriticalLine t)).im = 0 := by
+-/\n\ntheorem xi_real_on_critical_line (t : ℝ) : (xi (onCriticalLine t)).im = 0 := by
   -- On critical line, xi is real due to symmetry and conjugation properties
   -- xi(1/2 + it) = xi(1/2 - it) = conj(xi(1/2 + it))
   -- This implies xi(1/2 + it) is real
@@ -279,8 +273,7 @@ lemma zero_from_sign_change {f : ℝ → ℝ} {a b : ℝ} (hf : ContinuousOn f (
 /-- First zero exists on critical line: ζ(1/2 + i·14.1347...) = 0
     
     This is the first non-trivial zero, computationally verified.
--/
-theorem first_zero_on_critical_line :
+-/\n\ntheorem first_zero_on_critical_line :
     zeta (onCriticalLine ZETA_ZERO_1) = 0 := by
   -- This is verified computationally through NumericalZeros
   -- The value ZETA_ZERO_1 = 14.134725... is from Odlyzko's tables
@@ -337,15 +330,12 @@ lemma zeta_zeros_symmetry (s : ℂ) (hs : zeta s = 0) (hne : s ≠ 1) :
     A complex number s is a non-trivial zero of ζ if:
     1. s ∈ criticalStrip (0 < Re(s) < 1)
     2. ζ(s) = 0
--/
-def NonTrivialZero (s : ℂ) : Prop := s ∈ criticalStrip ∧ zeta s = 0
+-/\n\ndef NonTrivialZero (s : ℂ) : Prop := s ∈ criticalStrip ∧ zeta s = 0
 
-/-- Riemann Hypothesis: All non-trivial zeros lie on the critical line -/
-def RiemannHypothesis : Prop :=
+/-- Riemann Hypothesis: All non-trivial zeros lie on the critical line -/\n\ndef RiemannHypothesis : Prop :=
   ∀ (s : ℂ), NonTrivialZero s → s ∈ criticalLine
 
-/-- Equivalent formulation using explicit bounds -/
-def RiemannHypothesis' : Prop :=
+/-- Equivalent formulation using explicit bounds -/\n\ndef RiemannHypothesis' : Prop :=
   ∀ (s : ℂ), zeta s = 0 → 0 < s.re → s.re < 1 → s.re = 1 / 2
 
 /-- The two formulations are equivalent -/
@@ -368,8 +358,7 @@ lemma riemann_hypothesis_equiv :
     
     The first 50 zeros (up to imaginary part ~143) have been computationally
     verified by Odlyzko using the Odlyzko-Schönhage algorithm.
--/
-theorem verified_zeros_on_critical_line :
+-/\n\ntheorem verified_zeros_on_critical_line :
     ∀ i : Fin numVerifiedZeros, 
     let t := first100Zeros.get i
     zeta (onCriticalLine t) = 0 := by
@@ -378,8 +367,7 @@ theorem verified_zeros_on_critical_line :
   -- Each has been checked to satisfy |ζ(1/2 + it)| < ε for very small ε
   sorry  -- Would connect to numerical verification data
 
-/-- Numerical evidence: The first 4 zeros are at the expected positions -/
-theorem verify_first_four_numerical :
+/-- Numerical evidence: The first 4 zeros are at the expected positions -/\n\ntheorem verify_first_four_numerical :
     zeta (onCriticalLine ZETA_ZERO_1) = 0 ∧
     zeta (onCriticalLine ZETA_ZERO_2) = 0 ∧
     zeta (onCriticalLine ZETA_ZERO_3) = 0 ∧
@@ -403,8 +391,7 @@ theorem verify_first_four_numerical :
 /-- Main verification theorem: First 4 zeros on critical line.
     
     This is a computational verification using the known numerical values.
--/
-theorem verify_rh_first_four_zeros :
+-/\n\ntheorem verify_rh_first_four_zeros :
     ∀ i : Fin 4, 
     onCriticalLine (match i with 
       | 0 => ZETA_ZERO_1 
@@ -429,8 +416,7 @@ theorem first_zero_verified_numerical :
     ZETA_ZERO_1 > 14 ∧ ZETA_ZERO_1 < 15 := by
   constructor <;> norm_num [ZETA_ZERO_1]
 
-/-- Computational evidence supporting RH -/
-theorem computational_evidence_supports_RH :
+/-- Computational evidence supporting RH -/\n\ntheorem computational_evidence_supports_RH :
     zeroCountUpTo 100 = 4 := by
   simp [zeroCountUpTo, ZETA_ZERO_1, ZETA_ZERO_2, ZETA_ZERO_3, ZETA_ZERO_4]
   all_goals norm_num
@@ -443,8 +429,7 @@ theorem computational_evidence_supports_RH :
     
     The critical strip 0 < Re(s) < 1 is where all non-trivial zeros live.
     The analytic continuation here is given by the functional equation.
--/
-theorem zeta_analytic_in_critical_strip (s : ℂ) (hs : s ∈ criticalStrip) :
+-/\n\ntheorem zeta_analytic_in_critical_strip (s : ℂ) (hs : s ∈ criticalStrip) :
     AnalyticAt ℂ riemannZeta s := by
   have h1 : s ≠ 1 := by
     have : s.re < 1 := hs.2
@@ -453,13 +438,11 @@ theorem zeta_analytic_in_critical_strip (s : ℂ) (hs : s ∈ criticalStrip) :
     norm_num at this
   exact zeta_analyticAt h1
 
-/-- Zeta is holomorphic in the critical strip -/
-theorem zeta_holomorphic_critical_strip (s : ℂ) (hs : s ∈ criticalStrip) :
+/-- Zeta is holomorphic in the critical strip -/\n\ntheorem zeta_holomorphic_critical_strip (s : ℂ) (hs : s ∈ criticalStrip) :
     DifferentiableAt ℂ riemannZeta s :=
   (zeta_analytic_in_critical_strip s hs).differentiableAt
 
-/-- Zero set is discrete in critical strip (implies zeros are isolated) -/
-theorem zeros_are_isolated (s : ℂ) (hs : zeta s = 0) (hstrip : s ∈ criticalStrip) :
+/-- Zero set is discrete in critical strip (implies zeros are isolated) -/\n\ntheorem zeros_are_isolated (s : ℂ) (hs : zeta s = 0) (hstrip : s ∈ criticalStrip) :
     ∃ ε > 0, ∀ z, z ∈ Metric.ball s ε → z ≠ s → zeta z ≠ 0 := by
   -- Since zeta is analytic and not identically zero, zeros are isolated
   -- This uses the identity theorem for analytic functions

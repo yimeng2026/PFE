@@ -1,4 +1,4 @@
-/-
+﻿/-
 Sylva Formalization Project - Automated Proofs
 ================================================
 
@@ -10,9 +10,7 @@ This file contains automated proofs for simple lemmas using:
 - `by nlinarith` for nonlinear inequalities
 
 All proofs in this file have been verified to compile successfully.
--/]
-
-import Mathlib
+-/\n\nimport Mathlib
 import Mathlib.NumberTheory.LSeries.RiemannZeta
 import Mathlib.NumberTheory.LSeries.Basic
 import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
@@ -28,8 +26,7 @@ namespace Sylva
 
 namespace GF3
 
-/-- GF(3) is the finite field with 3 elements -/
-abbrev GF3 := Fin 3
+/-- GF(3) is the finite field with 3 elements -/\n\nabbrev GF3 := Fin 3
 
 /-- All elements of GF(3) - proven by exhaustive enumeration -/
 @[simp] theorem elems : (Finset.univ : Finset GF3) = {0, 1, 2} := by
@@ -41,8 +38,7 @@ abbrev GF3 := Fin 3
 @[simp] theorem add_zero (a : GF3) : a + 0 = a := by simp
 @[simp] theorem zero_add (a : GF3) : 0 + a = a := by simp
 
-/-- GF(3) is closed under addition -/
-theorem add_closed (a b : GF3) : ∃ c : GF3, a + b = c := by
+/-- GF(3) is closed under addition -/\n\ntheorem add_closed (a b : GF3) : ∃ c : GF3, a + b = c := by
   refine ⟨a + b, rfl⟩
 
 end GF3
@@ -99,12 +95,10 @@ noncomputable def Phi_c : ℝ := 137 * φ ^ 3
 /-- Debt Critical Value D_c = φ⁴ -/
 noncomputable def D_c : ℝ := φ ^ 4
 
-/-- D_c = 3φ + 2 (algebraic simplification) -/
-theorem D_c_eq : D_c = 3 * φ + 2 := by
+/-- D_c = 3φ + 2 (algebraic simplification) -/\n\ntheorem D_c_eq : D_c = 3 * φ + 2 := by
   rw [D_c, phi_four_eq]
 
-/-- Phi_c = 137 × (2φ + 1) -/
-theorem Phi_c_eq : Phi_c = 137 * (2 * φ + 1) := by
+/-- Phi_c = 137 × (2φ + 1) -/\n\ntheorem Phi_c_eq : Phi_c = 137 * (2 * φ + 1) := by
   rw [Phi_c, phi_cubed_eq]
   ring
 
@@ -140,8 +134,7 @@ instance : LT Level where lt a b := a.toNat < b.toNat
 @[simp] theorem le_refl (l : Level) : l ≤ l := by
   simp [LE.le]
 
-/-- toNat produces values in range 0..7 -/
-theorem toNat_range (l : Level) : l.toNat < 8 := by
+/-- toNat produces values in range 0..7 -/\n\ntheorem toNat_range (l : Level) : l.toNat < 8 := by
   cases l <;> simp [toNat]
 
 end Level
@@ -167,8 +160,7 @@ open Complex
 @[simp] theorem normSq_zero : normSq (0 : ℂ) = 0 := by
   simp
 
-/-- The squared magnitude of a real number -/
-theorem normSq_ofReal (r : ℝ) : normSq (r : ℂ) = r ^ 2 := by
+/-- The squared magnitude of a real number -/\n\ntheorem normSq_ofReal (r : ℝ) : normSq (r : ℂ) = r ^ 2 := by
   simp [Complex.normSq, Complex.ofReal']
 
 end ComplexUtils
@@ -210,8 +202,7 @@ namespace SetLemmas
 @[simp] theorem subset_refl (α : Type*) (s : Set α) : s ⊆ s := by
   simp
 
-/-- Set equality via extensionality -/
-theorem set_eq_of_subset {α : Type*} {s t : Set α} (h1 : s ⊆ t) (h2 : t ⊆ s) : s = t := by
+/-- Set equality via extensionality -/\n\ntheorem set_eq_of_subset {α : Type*} {s t : Set α} (h1 : s ⊆ t) (h2 : t ⊆ s) : s = t := by
   ext x
   constructor
   · intro hx; exact h1 hx
@@ -270,12 +261,10 @@ end RHAux
 
 namespace PropLogic
 
-/-- Law of excluded middle -/
-theorem lem (p : Prop) : p ∨ ¬p := by
+/-- Law of excluded middle -/\n\ntheorem lem (p : Prop) : p ∨ ¬p := by
   apply Classical.em
 
-/-- Double negation elimination -/
-theorem dne (p : Prop) : ¬¬p → p := by
+/-- Double negation elimination -/\n\ntheorem dne (p : Prop) : ¬¬p → p := by
   intro h
   by_contra h'
   exact h h'
@@ -288,8 +277,7 @@ theorem dne (p : Prop) : ¬¬p → p := by
 @[simp] theorem or_comm (p q : Prop) : p ∨ q ↔ q ∨ p := by
   aesop
 
-/-- Implication is transitive -/
-theorem imp_trans {p q r : Prop} (h1 : p → q) (h2 : q → r) : p → r := by
+/-- Implication is transitive -/\n\ntheorem imp_trans {p q r : Prop} (h1 : p → q) (h2 : q → r) : p → r := by
   intro hp
   exact h2 (h1 hp)
 

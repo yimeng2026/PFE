@@ -1,4 +1,4 @@
-import Lean
+﻿import Lean
 
 namespace Sylva
 
@@ -16,8 +16,7 @@ namespace Sylva
 -- 第一部分：基础类型定义
 -- ============================================
 
-/-- Sylva 七层架构层级标识 -/
-inductive Layer
+/-- Sylva 七层架构层级标识 -/\n\ninductive Layer
   | L1_CookLevin      -- NP-完全性基础层
   | L2_Complexity     -- 复杂度理论层
   | L3_NumberTheory   -- 数论层（黎曼假设等）
@@ -49,8 +48,7 @@ def fromNat (n : Nat) : Option Layer :=
   | 7 => some L7_Meta
   | _ => none
 
-/-- 获取相邻层级 -/
-def neighbors (l : Layer) : List Layer :=
+/-- 获取相邻层级 -/\n\ndef neighbors (l : Layer) : List Layer :=
   match l with
   | L1_CookLevin => [L2_Complexity]
   | L2_Complexity => [L1_CookLevin, L3_NumberTheory]
@@ -60,8 +58,7 @@ def neighbors (l : Layer) : List Layer :=
   | L6_Topology => [L5_Algebra, L7_Meta]
   | L7_Meta => [L6_Topology]
 
-/-- 层级距离 (用于计算辐射衰减) -/
-def distance (l1 l2 : Layer) : Nat :=
+/-- 层级距离 (用于计算辐射衰减) -/\n\ndef distance (l1 l2 : Layer) : Nat :=
   let d := Int.natAbs ((l1.toNat : Int) - (l2.toNat : Int))
   d
 
@@ -71,14 +68,12 @@ end Layer
 -- 第二部分：证明状态追踪
 -- ============================================
 
-/-- 证明状态：云雾态(sorry)或固态(exact) -/
-inductive ProofState
+/-- 证明状态：云雾态(sorry)或固态(exact) -/\n\ninductive ProofState
   | Cloudy    -- sorry 状态：未完成的证明，高熵态
   | Crystallized (filledAt : Nat) -- exact 状态：完成的证明，低熵态，记录填充时间戳
   deriving Inhabited, BEq, Repr
 
-/-- 证明项元数据 -/
-structure ProofEntry where
+/-- 证明项元数据 -/\n\nstructure ProofEntry where
   name : String                    -- 定理名称
   layer : Layer                    -- 所属层级
   state : ProofState               -- 当前状态
@@ -93,16 +88,14 @@ structure ProofEntry where
 -- 第三部分：辐射压力数据结构
 -- ============================================
 
-/-- 塌缩事件类型 -/
-inductive CollapseType
+/-- 塌缩事件类型 -/\n\ninductive CollapseType
   | DirectExact      -- 直接填充 exact
   | LemmaIntroduction -- 引入辅助引理后填充
   | Refactoring      -- 重构后填充
   | Amputation       -- 截肢降级后填充
   deriving Inhabited, BEq, Repr
 
-/-- 塌缩事件记录 -/
-structure CollapseEvent where
+/-- 塌缩事件记录 -/\n\nstructure CollapseEvent where
   timestamp : Nat
   theoremName : String
   fromLayer : Layer
@@ -113,16 +106,14 @@ structure CollapseEvent where
   affectedNeighbors : List String  -- 受影响的相邻定理
   deriving Inhabited, BEq, Repr
 
-/-- 影响类型 - 必须在CrossLayerImpact之前定义 -/
-inductive ImpactType
+/-- 影响类型 - 必须在CrossLayerImpact之前定义 -/\n\ninductive ImpactType
   | EntropyFlow          -- 信息熵流动
   | DependencyBinding    -- 依赖绑定加强
   | InterfaceContract    -- 接口契约收紧
   | GravitationalPull    -- 引力牵引
   deriving Inhabited, BEq, Repr
 
-/-- 跨层影响记录 -/
-structure CrossLayerImpact where
+/-- 跨层影响记录 -/\n\nstructure CrossLayerImpact where
   sourceLayer : Layer
   targetLayer : Layer
   impactType : ImpactType
@@ -134,16 +125,14 @@ structure CrossLayerImpact where
 -- 第四部分：自动依赖分析器
 -- ============================================
 
-/-- 依赖关系类型 -/
-inductive DependencyRelation
+/-- 依赖关系类型 -/\n\ninductive DependencyRelation
   | Direct              -- 直接依赖
   | Transitive          -- 传递依赖
   | Mutual              -- 相互依赖（同一引力场）
   | LayerBridge         -- 跨层桥接
   deriving Inhabited, BEq, Repr
 
-/-- 依赖边 -/
-structure DependencyEdge where
+/-- 依赖边 -/\n\nstructure DependencyEdge where
   fromNode : String
   toNode : String
   relation : DependencyRelation
@@ -151,15 +140,13 @@ structure DependencyEdge where
   layerDistance : Nat              -- 层级距离
   deriving Inhabited, BEq, Repr
 
-/-- 依赖图 - 简化版本，移除函数字段以便派生Inhabited -/
-structure DependencyGraph where
+/-- 依赖图 - 简化版本，移除函数字段以便派生Inhabited -/\n\nstructure DependencyGraph where
   nodes : List String
   edges : List DependencyEdge
   -- 移除 layerPartition 函数字段，它阻止了Inhabited的自动派生
   deriving Inhabited, BEq, Repr
 
-/-- 自动依赖分析器接口 -/
-class DependencyAnalyzer (α : Type) where
+/-- 自动依赖分析器接口 -/\n\nclass DependencyAnalyzer (α : Type) where
   /-- 分析定理间的依赖关系 -/
   analyzeDependencies : α → List ProofEntry → List DependencyEdge
 
@@ -176,8 +163,7 @@ class DependencyAnalyzer (α : Type) where
 -- 第五部分：辐射压力计算器
 -- ============================================
 
-/-- 辐射压力配置 -/
-structure RadiationConfig where
+/-- 辐射压力配置 -/\n\nstructure RadiationConfig where
   basePressure : Nat := 50
   decayFactor : Nat := 10            -- 每层的衰减因子
   entropyWeight : Nat := 30          -- 熵权重
@@ -185,8 +171,7 @@ structure RadiationConfig where
   layerWeight : Nat := 30            -- 层级权重
   deriving Inhabited, BEq, Repr
 
-/-- 辐射压力计算器 -/
-def calculateRadiationPressure
+/-- 辐射压力计算器 -/\n\ndef calculateRadiationPressure
     (config : RadiationConfig)
     (entry : ProofEntry)
     (neighbors : List ProofEntry) : Nat :=
@@ -196,8 +181,7 @@ def calculateRadiationPressure
   let neighborPressure := neighbors.foldl (fun acc n => acc + n.radiationPressure / 2) 0
   min 100 (base + entropyContrib + depContrib + neighborPressure)
 
-/-- 计算跨层辐射压力 -/
-def calculateCrossLayerPressure
+/-- 计算跨层辐射压力 -/\n\ndef calculateCrossLayerPressure
     (config : RadiationConfig)
     (source : ProofEntry)
     (_targetLayer : Layer)
@@ -215,8 +199,7 @@ def calculateCrossLayerPressure
 -- 第六部分：辐射压力追踪器
 -- ============================================
 
-/-- 辐射压力追踪器状态 -/
-structure RadiationTracker where
+/-- 辐射压力追踪器状态 -/\n\nstructure RadiationTracker where
   proofEntries : List ProofEntry
   collapseEvents : List CollapseEvent
   crossLayerImpacts : List CrossLayerImpact
@@ -236,15 +219,13 @@ def empty : RadiationTracker := {
   currentTimestamp := 0
 }
 
-/-- 添加证明项 -/
-def addProofEntry (tracker : RadiationTracker) (entry : ProofEntry) : RadiationTracker :=
+/-- 添加证明项 -/\n\ndef addProofEntry (tracker : RadiationTracker) (entry : ProofEntry) : RadiationTracker :=
   { tracker with
     proofEntries := entry :: tracker.proofEntries,
     currentTimestamp := tracker.currentTimestamp + 1
   }
 
-/-- 记录塌缩事件并计算连锁反应 -/
-def recordCollapse
+/-- 记录塌缩事件并计算连锁反应 -/\n\ndef recordCollapse
     (tracker : RadiationTracker)
     (theoremName : String)
     (collapseType : CollapseType) : RadiationTracker :=
@@ -307,28 +288,23 @@ def recordCollapse
       currentTimestamp := newTimestamp
     }
 
-/-- 查询指定层级的辐射压力分布 -/
-def getLayerPressureDistribution (tracker : RadiationTracker) (layer : Layer) : List ProofEntry :=
+/-- 查询指定层级的辐射压力分布 -/\n\ndef getLayerPressureDistribution (tracker : RadiationTracker) (layer : Layer) : List ProofEntry :=
   tracker.proofEntries.filter (·.layer == layer)
 
-/-- 获取指定证明的跨层影响 -/
-def getCrossLayerImpactsFor (tracker : RadiationTracker) (theoremName : String) : List CrossLayerImpact :=
+/-- 获取指定证明的跨层影响 -/\n\ndef getCrossLayerImpactsFor (tracker : RadiationTracker) (theoremName : String) : List CrossLayerImpact :=
   tracker.crossLayerImpacts.filter (fun (impact : CrossLayerImpact) =>
     tracker.proofEntries.any (fun (e : ProofEntry) =>
       e.name == theoremName && e.layer == impact.sourceLayer
     )
   )
 
-/-- 辅助函数：计算Cloudy状态的证明数量 -/
-def countCloudy (entries : List ProofEntry) : Nat :=
+/-- 辅助函数：计算Cloudy状态的证明数量 -/\n\ndef countCloudy (entries : List ProofEntry) : Nat :=
   entries.filter (fun e => match e.state with | ProofState.Cloudy => true | _ => false) |>.length
 
-/-- 辅助函数：计算Crystallized状态的证明数量 -/
-def countCrystallized (entries : List ProofEntry) : Nat :=
+/-- 辅助函数：计算Crystallized状态的证明数量 -/\n\ndef countCrystallized (entries : List ProofEntry) : Nat :=
   entries.filter (fun e => match e.state with | ProofState.Crystallized _ => true | _ => false) |>.length
 
-/-- 生成辐射压力报告 -/
-def generatePressureReport (tracker : RadiationTracker) : String :=
+/-- 生成辐射压力报告 -/\n\ndef generatePressureReport (tracker : RadiationTracker) : String :=
   let totalEvents := tracker.collapseEvents.length
   let totalImpacts := tracker.crossLayerImpacts.length
   let crystallizedCount := countCrystallized tracker.proofEntries
@@ -383,8 +359,7 @@ end RadiationTracker
 -- 第七部分：实用接口和示例
 -- ============================================
 
-/-- 创建证明项的便捷函数 -/
-def mkProofEntry (name : String) (layer : Layer) (deps : List String) : ProofEntry := {
+/-- 创建证明项的便捷函数 -/\n\ndef mkProofEntry (name : String) (layer : Layer) (deps : List String) : ProofEntry := {
   name := name,
   layer := layer,
   state := ProofState.Cloudy,
@@ -395,8 +370,7 @@ def mkProofEntry (name : String) (layer : Layer) (deps : List String) : ProofEnt
   lastModified := 0
 }
 
-/-- 示例：初始化 Sylva 项目的辐射追踪器 -/
-def initSylvaTracker : RadiationTracker :=
+/-- 示例：初始化 Sylva 项目的辐射追踪器 -/\n\ndef initSylvaTracker : RadiationTracker :=
   let tracker := RadiationTracker.empty
 
   -- L1: Cook-Levin 层
@@ -419,8 +393,7 @@ def initSylvaTracker : RadiationTracker :=
 
   tracker
 
-/-- 示例：模拟一次塌缩事件 -/
-def simulateCollapseExample : IO Unit := do
+/-- 示例：模拟一次塌缩事件 -/\n\ndef simulateCollapseExample : IO Unit := do
   let tracker := initSylvaTracker
   IO.println "Initial Sylva Tracker State:"
   IO.println s!"Total entries: {tracker.proofEntries.length}"

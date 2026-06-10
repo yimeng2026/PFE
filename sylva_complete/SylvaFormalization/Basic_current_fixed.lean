@@ -1,25 +1,22 @@
-/-
+﻿/-
 Sylva Formalization Project
 Core Definitions: GF(3), Golden Ratio, and Basic Structures
 ================================================================================
--/import Mathlib
+-/\n\nimport Mathlib
 
 namespace Sylva
 
-/-- GF(3) - The Galois Field with 3 elements -/
-abbrev GF3 := Fin 3
+/-- GF(3) - The Galois Field with 3 elements -/\n\nabbrev GF3 := Fin 3
 
 /-- The Golden Ratio φ = (1 + √5) / 2 -/
 noncomputable def φ : ℝ := (1 + Real.sqrt 5) / 2
 
-/-- φ > 0 -/
-theorem phi_pos : φ > 0 := by
+/-- φ > 0 -/\n\ntheorem phi_pos : φ > 0 := by
   have h1 : Real.sqrt 5 > 0 := Real.sqrt_pos.mpr (by norm_num)
   have h2 : (1 + Real.sqrt 5) / 2 > 0 := by linarith
   exact h2
 
-/-- φ > 1 -/
-theorem phi_gt_one : φ > 1 := by
+/-- φ > 1 -/\n\ntheorem phi_gt_one : φ > 1 := by
   have h1 : Real.sqrt 5 > 1 := by
     have h : Real.sqrt 5 > Real.sqrt 1 := Real.sqrt_lt_sqrt (by norm_num) (by norm_num)
     have h2 : Real.sqrt 1 = 1 := Real.sqrt_one
@@ -27,8 +24,7 @@ theorem phi_gt_one : φ > 1 := by
   have h2 : (1 + Real.sqrt 5) / 2 > 1 := by linarith
   exact h2
 
-/-- φ satisfies φ² = φ + 1 -/
-theorem phi_sq_eq_phi_add_one : φ ^ 2 = φ + 1 := by
+/-- φ satisfies φ² = φ + 1 -/\n\ntheorem phi_sq_eq_phi_add_one : φ ^ 2 = φ + 1 := by
   have h1 : Real.sqrt 5 ^ 2 = 5 := Real.sq_sqrt (show 0 ≤ (5 : ℝ) by norm_num)
   have h2 : φ = (1 + Real.sqrt 5) / 2 := rfl
   rw [h2]
@@ -46,13 +42,11 @@ def fibonacci : Nat → Nat
 /-- The conjugate golden ratio: φ̄ = (1 - √5)/2 = 1 - φ -/
 noncomputable def phi_conjugate : ℝ := (1 - Real.sqrt 5) / 2
 
-/-- φ̄ = 1 - φ -/
-theorem phi_conjugate_eq : phi_conjugate = 1 - φ := by
+/-- φ̄ = 1 - φ -/\n\ntheorem phi_conjugate_eq : phi_conjugate = 1 - φ := by
   simp [phi_conjugate]
   nlinarith [show φ = (1 + Real.sqrt 5) / 2 from rfl]
 
-/-- Binet formula for Fibonacci numbers -/
-theorem binet_formula (n : Nat) :
+/-- Binet formula for Fibonacci numbers -/\n\ntheorem binet_formula (n : Nat) :
   (fibonacci n : ℝ) = (φ ^ n - phi_conjugate ^ n) / Real.sqrt 5 := by
   induction n with
   | zero =>
@@ -93,8 +87,7 @@ abbrev FractalDimension := ℝ
 /-- φ-Cantor set dimension: log(2)/log(φ) -/
 noncomputable def phi_cantor_dimension : FractalDimension := Real.log 2 / Real.log φ
 
-/-- The φ-Cantor dimension satisfies: 1.4 < d_φ < 1.5 -/
-theorem phi_cantor_dimension_approx : 1.4 < phi_cantor_dimension ∧ phi_cantor_dimension < 1.5 := by
+/-- The φ-Cantor dimension satisfies: 1.4 < d_φ < 1.5 -/\n\ntheorem phi_cantor_dimension_approx : 1.4 < phi_cantor_dimension ∧ phi_cantor_dimension < 1.5 := by
   have h1 : Real.log φ > 0 := by
     apply Real.log_pos
     exact phi_gt_one
@@ -183,8 +176,7 @@ noncomputable def phi_continued_fraction (n : Nat) : ℝ :=
   | 0 => 1
   | n + 1 => 1 + 1 / phi_continued_fraction n
 
-/-- The continued fraction converges to φ -/
-theorem phi_continued_fraction_converges (n : Nat) :
+/-- The continued fraction converges to φ -/\n\ntheorem phi_continued_fraction_converges (n : Nat) :
   |(phi_continued_fraction n : ℝ) - φ| < 1 / φ ^ n := by
   induction n with
   | zero =>
