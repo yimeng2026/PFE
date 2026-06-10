@@ -51,48 +51,43 @@ open scoped ENNReal NNReal
 namespace DifferentialOperators
 
 /-- Gradient of a scalar field: ∇p
-    For p: ℝ³ → ℝ, ∇p = (∂p/∂x₁, ∂p/∂x₂, ∂p/∂x₃) -/
+    For p: ℝ³ → ℝ, ∇p = (∂p/∂x₁, ∂p/∂x₂, ∂p/∂x₃)
+    Uses Mathlib's Fréchet derivative (fderiv) instead of finite difference approximation. -/
 noncomputable def gradient (p : SpatialDomain → ℝ) (x : SpatialDomain) : SpatialDomain :=
-  fun i => 
-    let h := 1e-8
-    (p (x + fun j => if j = i then h else 0) - p x) / h
+  fun i => (fderiv ℝ p x) (fun j => if j = i then 1 else 0)
 
 /-- Divergence of a vector field: ∇·u
-    For u: ℝ³ → ℝ³, ∇·u = ∂u₁/∂x₁ + ∂u₂/∂x₂ + ∂u₃/∂x₃ -/
+    For u: ℝ³ → ℝ³, ∇·u = ∂u₁/∂x₁ + ∂u₂/∂x₂ + ∂u₃/∂x₃
+    Uses Mathlib's Fréchet derivative (fderiv) for the trace of the Jacobian. -/
 noncomputable def divergence (u : SpatialDomain → SpatialDomain) (x : SpatialDomain) : ℝ :=
-  ∑ i : Fin SpatialDim, 
-    let h := 1e-8
-    (u (x + fun j => if j = i then h else 0) i - u x i) / h
+  ∑ i : Fin SpatialDim, (fderiv ℝ (fun y => u y i) x) (fun j => if j = i then 1 else 0)
+
+/-- Laplacian of a scalar field: Δf = ∇·(∇f) -/
+noncomputable def laplacianScalar (f : SpatialDomain → ℝ) (x : SpatialDomain) : ℝ :=
+  divergence (gradient f) x
 
 /-- Laplacian of a vector field: Δu
-    Δu = (∂²u/∂x₁² + ∂²u/∂x₂² + ∂²u/∂x₃²) component-wise -/
+    Δu = (∂²u/∂x₁² + ∂²u/∂x₂² + ∂²u/∂x₃²) component-wise
+    Uses divergence of gradient instead of second difference approximation. -/
 noncomputable def laplacian (u : SpatialDomain → SpatialDomain) (x : SpatialDomain) : SpatialDomain :=
-  fun i => 
-    let h := 1e-8
-    let u_i := fun y => u y i
-    -- Second difference approximation
-    (u_i (x + fun j => h) - 2 * u_i x + u_i (x - fun j => h)) / (h * h)
+  fun i => laplacianScalar (fun y => u y i) x
 
-/-- Material derivative: Du/Dt = ∂u/∂t + (u·∇)u -/
+/-- Material derivative: Du/Dt = ∂u/∂t + (u·∇)u
+    Uses Mathlib's derivative (deriv) for time derivative and Fréchet derivative (fderiv) for spatial derivative. -/
 noncomputable def materialDerivative (u : VelocityField) (t : ℝ) (x : SpatialDomain) : SpatialDomain :=
-  let timeDeriv := fun i =>
-    let dt := 1e-8
-    (u (t + dt) x i - u t x i) / dt
-  let spaceDeriv := fun i =>
-    let grad_ui := gradient (fun y => u t y i) x
-    ∑ j : Fin SpatialDim, u t x j * grad_ui j
-  fun i => timeDeriv i + spaceDeriv i
+  fun i =>
+    deriv (fun s => u s x i) t +
+    ∑ j : Fin SpatialDim, u t x j * (fderiv ℝ (fun y => u t y i) x) (fun l => if l = j then 1 else 0)
 
-/-- Curl of a vector field: ∇×u (vorticity) -/
+/-- Curl of a vector field: ∇×u (vorticity)
+    Uses Mathlib's Fréchet derivative (fderiv) for the antisymmetric part of the Jacobian. -/
 noncomputable def curl (u : SpatialDomain → SpatialDomain) (x : SpatialDomain) : SpatialDomain :=
   fun i =>
     let j := (i + 1) % SpatialDim
     let k := (i + 2) % SpatialDim
-    let h := 1e-8
-    -- ∂uₖ/∂xⱼ - ∂uⱼ/∂xₖ
-    let du_k_dxj := (u (x + fun l => if l = j then h else 0) k - u x k) / h
-    let du_j_dxk := (u (x + fun l => if l = k then h else 0) j - u x j) / h
-    du_k_dxj - du_j_dxk
+    -- ∂uₖ/∂xⱼ - ∂uⱼ/∂xₖ using fderiv
+    (fderiv ℝ (fun y => u y k) x) (fun l => if l = j then 1 else 0) -
+    (fderiv ℝ (fun y => u y j) x) (fun l => if l = k then 1 else 0)
 
 end DifferentialOperators
 
