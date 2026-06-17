@@ -1,4 +1,4 @@
-﻿/-
+/-
 Sylva Formalization Project - Comprehensive Test Suite
 ========================================================
 Tests all modules, definitions, and key constants.

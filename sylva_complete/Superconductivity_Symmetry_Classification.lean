@@ -1,4 +1,4 @@
-﻿/-
+/-
 # 超导体对称性配对通道分类定理 (Superconductivity Symmetry Classification)
 
 ## 核心目标

@@ -1,4 +1,4 @@
-﻿/-
+/-
 Sylva Test Suite - Simplified Version
 Tests module imports and basic definitions
 -/\n\nimport Mathlib

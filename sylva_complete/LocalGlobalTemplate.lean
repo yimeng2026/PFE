@@ -1,4 +1,4 @@
-﻿/-
+/-
 ================================================================================
   LocalGlobal_Template.lean - Hilbert问题Local-Global统一语法模板
   
@@ -206,7 +206,9 @@ instance {G : Type*} (gp : GlobalProblem G) (g : G) : Decidable (gp.solutionExis
     [LG1 : LocalGlobalPrinciple L1 G1 Idx1]
     (d1 : Idx1 → L1) (d2 : Idx2 → G1) (i : Idx1) (j : Idx2) : Prop :=
   -- 局部数据通过G1中间层相容
-  LG1.compatibility_transfer d1 i i ∧ d2 j = LG1.descent d1 (λ _ _ _ => by sorry)
+  LG1.compatibility_transfer d1 i i ∧ d2 j = LG1.descent d1 (λ _ _ _ => by
+    -- composite descent compatibility: open — requires proof that local data agrees on all index pairs
+    sorry)
 
 /-- 复合Local-Global原理的类型类 -/\n\nclass ComposableLocalGlobalPrinciple 
     (L1 G1 G2 : Type*) (Idx1 Idx2 : Type*)
@@ -323,7 +325,7 @@ lemma descent_uniqueness {L G Idx : Type*}
   let c2' : ∀ (i j : Idx2) (h : LG2.indexOrder i j), LG2.compatibility_transfer d2' i j := 
     λ i j h => by
       simp [d2']
-      sorry
+      try { rfl } <;> try { trivial } <;> sorry
   LG2.descent d2' c2'
 
 /-! ============================================

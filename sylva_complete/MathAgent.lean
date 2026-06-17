@@ -1,4 +1,4 @@
-﻿/-
+/-
 Sylva Math Research Agent
 Complete implementation with theorem database, proof suggestions, and numerical verification
 

@@ -1,4 +1,4 @@
-﻿/- Sylva 形式化项目验证测试 -/\n\nimport SylvaFormalization.Basic
+/- Sylva 形式化项目验证测试 -/\n\nimport SylvaFormalization.Basic
 import SylvaFormalization.RiemannHypothesis
 import SylvaFormalization.Complexity
 import SylvaFormalization.MathAgent

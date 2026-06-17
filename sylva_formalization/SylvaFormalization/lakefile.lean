@@ -8,30 +8,41 @@ package SylvaFormalization where
   ]
 
 require mathlib from git
-  "https://github.com/leanprover-community/mathlib4.git" @ "v4.18.0"
+  "https://github.com/leanprover-community/mathlib4.git"
 
 @[default_target]
 lean_lib SylvaFormalization where
   roots := #[
-    `Basic,
     `BCSTherory,
     `ChernNumber,
+    `ChernSimons,
     `CondensedMatter,
+    `ContinuumLimit,
     `CookLevin,
     `Cosmology,
+    `DeterminantComplexity,
+    `EinsteinCartan,
     `EllipticCurveReduction,
     `FifteenConstants,
     `FourForcesUnification,
     `GaugeTheory,
+    `GraphTheoreticCharge,
     `Hodge,
     `InformationGeometry,
+    `LowDepthLowerBound,
     `NPClass,
     `QuantumGravity,
     `Renormalization,
     `RiemannHypothesis,
+    `SAT,
+    `SpectralAction,
     `StandardModel,
+    `StratifiedGeometry,
+    `StratifiedTopologicalInsulator,
     `StringTheory,
     `SylvaInfrastructure,
+    `SymmetricFunctions,
     `TestSInf,
-    `TopologicalInsulator
+    `TopologicalInsulator,
+    `ZetaVerifier_backup
   ]

@@ -1,4 +1,4 @@
-﻿/-
+/-
 Sylva Formalization Project
 CookLevin.lean - Cook-Levin Theorem Formalization
 ===============================================

@@ -1,4 +1,4 @@
-﻿import Mathlib
+import Mathlib
 import SylvaFormalization.Basic
 
 namespace SylvaFormalization

@@ -1,4 +1,4 @@
-﻿/-
+/-
 ================================================================================
 Sylva Formalization Project
 Superconductivity Pairing Theory Framework in Many-Body Systems

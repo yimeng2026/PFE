@@ -1,4 +1,4 @@
-﻿/-
+/-
 Sylva Formalization Project - Automated Proofs
 ================================================
 

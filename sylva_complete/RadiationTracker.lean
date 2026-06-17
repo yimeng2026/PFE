@@ -1,4 +1,4 @@
-﻿import Lean
+import Lean
 
 namespace Sylva
 

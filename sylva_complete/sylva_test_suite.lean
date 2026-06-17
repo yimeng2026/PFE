@@ -1,4 +1,4 @@
-﻿/-
+/-
 Sylva Formalization Project - Complete Test Suite
 Tests all SylvaFormalization modules for correctness
 -/\n\nimport Mathlib

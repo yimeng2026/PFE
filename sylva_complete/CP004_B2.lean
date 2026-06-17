@@ -1,4 +1,4 @@
-﻿/-
+/-
 CP004_B2.lean - Filled Version
 ===================================
 P≠NP ↔ Entropy Gap 等价性的形式化框架

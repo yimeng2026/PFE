@@ -1,4 +1,4 @@
-﻿/-
+/-
 Sylva Formalization Project
 Riemann Hypothesis - Step by Step Proof Attempt
 -/\n\nimport Mathlib

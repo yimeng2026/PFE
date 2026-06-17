@@ -1,4 +1,4 @@
-﻿/-
+/-
 # Sylva Formalization: Dynamical Systems for Factorization Detection
 # Based on Mathematician Solutions - Problem 3
 # 

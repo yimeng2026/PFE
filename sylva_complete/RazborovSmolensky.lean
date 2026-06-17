@@ -1,4 +1,4 @@
-﻿/-
+/-
 Razborov-Smolensky Theorem Formalization
 ======================================
 

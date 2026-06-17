@@ -1,4 +1,4 @@
-﻿/-
+/-
 SylvaFormalization Comprehensive Test Suite
 ================================================================================
 Complete test coverage for all computable definitions and key theorems.

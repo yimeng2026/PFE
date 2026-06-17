@@ -1,4 +1,4 @@
-﻿/-
+/-
 Sylva Formalization Project
 Numerical Verification of Riemann Zeros
 

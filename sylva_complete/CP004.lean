@@ -1,4 +1,4 @@
-﻿/-
+/-
 Sylva Formalization Project
 CP-004: Entropy Gap ↔ P≠NP Equivalence
 Complete Implementation with sInf/sSup

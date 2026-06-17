@@ -1,4 +1,4 @@
-﻿/-
+/-
 Sylva Formalization Project
 P vs NP: Entropy Gap Framework with Circuit Complexity
 Amputated version - 截肢降级保编译

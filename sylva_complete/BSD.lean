@@ -1,4 +1,4 @@
-﻿/-
+/-
 Sylva Formalization Project
 Birch and Swinnerton-Dyer Conjecture
 Comprehensive formalization with all BSD components

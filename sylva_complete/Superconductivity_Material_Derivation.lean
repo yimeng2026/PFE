@@ -1,4 +1,4 @@
-﻿/-
+/-
 # Superconductivity_Material_Derivation.lean
 # 超导材料族的表示论约束推导
 

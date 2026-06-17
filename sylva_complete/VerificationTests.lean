@@ -1,4 +1,4 @@
-﻿-- Lean楠岃瘉娴嬭瘯濂椾欢
+-- Lean楠岃瘉娴嬭瘯濂椾欢
 -- 鐢ㄤ簬楠岃瘉LocalGlobal鍜孨umericalZeros淇鏁堟灉
 
 namespace VerificationTests

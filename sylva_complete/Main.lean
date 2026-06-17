@@ -1,4 +1,4 @@
-﻿/-
+/-
 Sylva Consumer Project - Demonstrates Sylva as a Library
 This project imports and uses the SylvaFormalization library
 -/\n\nimport Mathlib
