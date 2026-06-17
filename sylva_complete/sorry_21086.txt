@@ -1,0 +1,11 @@
+= by
+  constructor
+  · -- Local regularity
+    sorry
+  constructor
+  · -- Global weak existence
+    sorry
+  · -- Strong solution uniqueness
+    intros
+    apply strong_solution_uniqueness
+    assumpti

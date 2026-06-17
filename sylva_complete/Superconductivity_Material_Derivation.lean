@@ -1,5 +1,6 @@
 /-
 # Superconductivity_Material_Derivation.lean
+# HISTORICAL ARCHIVE: 31 sorry placeholders, requires refactoring to comply with zero-sorry policy
 # 超导材料族的表示论约束推导
 
 ## 核心目标

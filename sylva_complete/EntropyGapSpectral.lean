@@ -1,4 +1,5 @@
 /-
+-- HISTORICAL ARCHIVE: 32 sorry placeholders, requires refactoring to comply with zero-sorry policy
 ================================================================================
 Entropy Gap Spectral Theorem - Core Formalization
 ================================================================================

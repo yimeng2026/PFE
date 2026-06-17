@@ -17,7 +17,7 @@ References:
 - Beigel (1993): The polynomial method in circuit complexity
 - Jukna (2012): Boolean Function Complexity, Chapter 12
 
-Author: Sylva Formalization Project
+Author: Sylva Formalization Project -- HISTORICAL ARCHIVE: 30 sorry placeholders, requires refactoring to comply with zero-sorry policy
 Version: 1.0
 -/\n\nimport Mathlib
 import Mathlib.FieldTheory.Finite.GaloisField
