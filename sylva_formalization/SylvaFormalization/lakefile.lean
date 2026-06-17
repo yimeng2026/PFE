@@ -7,8 +7,7 @@ package SylvaFormalization where
     ⟨`pp.proofs.withType, false⟩
   ]
 
-require mathlib from git
-  "https://github.com/leanprover-community/mathlib4.git"
+require mathlib from "lake/packages/mathlib"
 
 @[default_target]
 lean_lib SylvaFormalization where
@@ -33,8 +32,8 @@ lean_lib SylvaFormalization where
     `Hodge,
     `InformationGeometry,
     `LowDepthLowerBound,
-    `NumericalVerification,
     `NPClass,
+    `NumericalVerification,
     `QuantumGravity,
     `Renormalization,
     `RiemannHypothesis,
