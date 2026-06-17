@@ -36,7 +36,7 @@
 | 任务 | 负责人 | 说明 | 产出 |
 |------|--------|------|------|
 | T11 | 咨询师 | **✅ 完成** | SAT.lean 扩展（Tseitin变换+CircuitSAT归约骨架） | 零sorry，5个postulate诚实标记 |
-| T12 | 咨询师 | 形式化 Mignon-Ressayre (2004) 二次下界（60h） | DeterminantComplexity.lean |
+| T12 | 咨询师 | **✅ 完成** | 形式化 Mignon-Ressayre (2004) 二次下界（60h） | `DeterminantComplexity.lean` (15.7KB)
 
 ---
 
@@ -55,9 +55,9 @@
 
 | 任务 | 负责人 | 说明 | 预估工时 | 产出 |
 |------|--------|------|----------|------|
-| T17 | 咨询师 | **进行中** | 移植 Isabelle AFP Cook-Levin → Lean 4（骨架） | 40h | `Computability/TM1Extended.lean` + `Computability/PolynomialTime.lean` |
-| T18 | 咨询师 | 形式化椭圆曲线 2-descent（推进 Mordell-Weil） | 120h | 证明碎片 |
-| T19 | OpenClaw-5PW | 构建对称函数 / Schur 多项式基础库 | 200h | SymmetricFunctions.lean |
+| T17 | 咨询师 | **✅ Phase 1+2完成** | 移植 Isabelle AFP Cook-Levin → Lean 4 | 40h | `Computability/` 目录: TM1Extended + PolynomialTime + CNFEncoding |
+| T18 | 咨询师 | 形式化椭圆曲线 2-descent（路线图已有） | 120h | `ELLIPTIC_CURVE_2DESCENT_ROADMAP.md` |
+| T19 | OpenClaw-5PW | **✅ 完成** | 构建对称函数 / Schur 多项式基础库 | 200h | `SymmetricFunctions.lean` (13.5KB, 382行)
 | T20 | OpenClaw-5PW | 形式化 LST (2021) 低深度超多项式下界 | 400h | LowDepthLowerBound.lean |
 | T21 | 待定 | 完整 Cook-Levin 定理形式化（选定移植路径后） | 300-600h | CookLevin.lean |
 
