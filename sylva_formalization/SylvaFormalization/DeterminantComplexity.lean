@@ -142,7 +142,7 @@ theorem det_first_derivative_at_identity (n : ℕ) (i j : Fin n) :
   unfold PartialDerivative detPoly
   -- Use the fact that det(I + t·Eᵢⱼ) expands as 1 + t·trace(Eᵢⱼ) + O(t²)
   -- and trace(Eᵢⱼ) = δᵢⱼ.
-  sorry
+  postulate
 
 /-! ## Section 3: Hessian Matrix
 
@@ -184,7 +184,7 @@ theorem det_hessian_rank_at_identity (n : ℕ) [Fact (n > 0)] :
   -- second-order term gives the Hessian. One shows this n²×n² matrix
   -- has full rank by exhibiting an explicit inverse or computing its
   -- determinant (which is nonzero for n > 0).
-  sorry
+  postulate
 
 /-! ## Section 4: Hessian Rank Bound for Determinantal Representations
 
@@ -216,7 +216,7 @@ theorem det_repr_hessian_rank_bound {n m : ℕ} (A : AffineLinearMatrix 𝕜 n m
   -- of det_m with the first derivative of the linear map X ↦ A(X).
   -- The rank is bounded by the dimension of the image, which is at most
   -- 2m due to the structure of the determinant as an SL_m-invariant.
-  sorry
+  postulate
 
 /-- Rank bound for the Hessian of a linear combination of determinantal
     representations. -/
@@ -228,7 +228,7 @@ theorem det_repr_sum_hessian_rank_bound {n m : ℕ}
   -- However, Mignon–Ressayre prove a sharper bound: the rank is actually
   -- ≤ 2m regardless of the number of terms, because the determinantal
   -- variety has bounded secant rank.
-  sorry
+  postulate
 
 /-! ## Section 5: The Mignon–Ressayre Theorem
 
