@@ -55,7 +55,7 @@
 
 | 任务 | 负责人 | 说明 | 预估工时 | 产出 |
 |------|--------|------|----------|------|
-| T17 | 咨询师 | 移植 Isabelle AFP Cook-Levin → Lean 4（骨架） | 40h | SAT.lean + PolyReduction.lean |
+| T17 | 咨询师 | **进行中** | 移植 Isabelle AFP Cook-Levin → Lean 4（骨架） | 40h | `Computability/TM1Extended.lean` + `Computability/PolynomialTime.lean` |
 | T18 | 咨询师 | 形式化椭圆曲线 2-descent（推进 Mordell-Weil） | 120h | 证明碎片 |
 | T19 | OpenClaw-5PW | 构建对称函数 / Schur 多项式基础库 | 200h | SymmetricFunctions.lean |
 | T20 | OpenClaw-5PW | 形式化 LST (2021) 低深度超多项式下界 | 400h | LowDepthLowerBound.lean |
