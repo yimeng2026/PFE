@@ -7,8 +7,8 @@ Formalization skeleton for the Limaye–Srinivasan–Tavenas (2021) theorem:
 > {P_n} such that any depth-d algebraic circuit computing P_n requires
 > superpolynomial size n^{ω(1)}.
 
-More precisely, for depth Δ ≤ O(log n / log log n), the lower bound is
-n^{Ω(Δ)}. For constant depth, this yields n^{Ω(1)} — superpolynomial
+More precisely, for depth Δ �?O(log n / log log n), the lower bound is
+n^{Ω(Δ)}. For constant depth, this yields n^{Ω(1)} �?superpolynomial
 whenever the polynomial degree is poly(n).
 
 ## Proof Strategy (Partial Derivative Matrix Rank Method)
@@ -27,7 +27,7 @@ The LST proof combines three key ingredients:
 
 3. **Rank lower bound for explicit polynomials**: Construct an explicit
    polynomial (based on an NW-design or lifted inner product) such that
-   rank(M_f) is large — superpolynomial in n for the hard polynomial.
+   rank(M_f) is large �?superpolynomial in n for the hard polynomial.
 
 4. **Rank upper bound for low-depth circuits**: Prove that any depth-d
    set-multilinear circuit of size s computing f yields a partial
@@ -84,11 +84,11 @@ variable {𝕜 : Type u} [Field 𝕜] [DecidableEq 𝕜]
 /-- Type of gate in an algebraic circuit over field 𝕜.
 
 - `inputVar i`: the i-th input variable x_i
-- `inputConst c`: a constant scalar c ∈ 𝕜
+- `inputConst c`: a constant scalar c �?𝕜
 - `add`: binary addition gate
 - `mul`: binary multiplication gate -/
 inductive Gate (𝕜 : Type u) [Field 𝕜] where
-  | inputVar (i : ℕ)
+  | inputVar (i : �?
   | inputConst (c : 𝕜)
   | add
   | mul
@@ -102,19 +102,18 @@ inductive Gate (𝕜 : Type u) [Field 𝕜] where
     into the list of gates preceding it. This ensures acyclicity. -/
 structure AlgebraicCircuit where
   /-- Number of input variables. -/
-  numVars : ℕ
-  /-- Ordered list of gates. Gate i may only reference gates j < i. -/
+  numVars : �?  /-- Ordered list of gates. Gate i may only reference gates j < i. -/
   gates : List (Gate 𝕜)
   /-- Wiring: for each gate, the indices of its input gates (if any). -/
-  wiring : List (Option (ℕ × ℕ))
+  wiring : List (Option (�?× �?)
   /-- Consistency: each wire refers to strictly earlier gates. -/
   h_wiring : ∀ i < gates.length, ∀ j k,
-    wiring.getD i none = some (j, k) → j < i ∧ k < i
+    wiring.getD i none = some (j, k) �?j < i �?k < i
   /-- Consistency: add/mul gates have exactly two inputs,
        input gates have no inputs. -/
   h_gate : ∀ i < gates.length,
     match gates.getD i (Gate.inputConst 0) with
-    | Gate.add | Gate.mul => wiring.getD i none ≠ none
+    | Gate.add | Gate.mul => wiring.getD i none �?none
     | Gate.inputVar _ | Gate.inputConst _ => wiring.getD i none = none
 
 deriving Inhabited
@@ -125,7 +124,7 @@ namespace AlgebraicCircuit
     the output gate (the last gate in the list).
 
     We define this recursively by computing the depth of each gate. -/
-def gateDepth (C : AlgebraicCircuit) (i : ℕ) : ℕ :=
+def gateDepth (C : AlgebraicCircuit) (i : �? : �?:=
   if h : i < C.gates.length then
     match C.gates[i]'(by omega), C.wiring.getD i none with
     | Gate.inputVar _, _ => 0
@@ -137,16 +136,16 @@ def gateDepth (C : AlgebraicCircuit) (i : ℕ) : ℕ :=
     0
 
 /-- Depth of the entire circuit = depth of the output gate. -/
-def depth (C : AlgebraicCircuit) : ℕ :=
+def depth (C : AlgebraicCircuit) : �?:=
   gateDepth C C.gates.length.pred
 
 /-- Size of the circuit = number of non-input gates (add and mul).
     Equivalently, total number of gates minus input gates. -/
-def size (C : AlgebraicCircuit) : ℕ :=
-  C.gates.countP (λ g => g = Gate.add ∨ g = Gate.mul)
+def size (C : AlgebraicCircuit) : �?:=
+  C.gates.countP (λ g => g = Gate.add �?g = Gate.mul)
 
 /-- Total number of gates (including inputs). -/
-def totalGates (C : AlgebraicCircuit) : ℕ :=
+def totalGates (C : AlgebraicCircuit) : �?:=
   C.gates.length
 
 end AlgebraicCircuit
@@ -174,28 +173,28 @@ def circuitPolynomial (C : AlgebraicCircuit) :
 ---------------------------------------------------------------------/
 
 /-- A circuit is low-depth if its depth is at most logarithmic in the
-    number of variables, i.e., depth ≤ log₂(n). This captures the class
+    number of variables, i.e., depth �?log�?n). This captures the class
     of circuits for which LST proved superpolynomial lower bounds.
 
     The LST result actually handles depth up to O(log n / log log n),
     but for the skeleton we use the cleaner log(n) bound. -/
 def IsLowDepth (C : AlgebraicCircuit) : Prop :=
-  C.depth ≤ Nat.log 2 C.numVars
+  C.depth �?Nat.log 2 C.numVars
 
 /-- A circuit has constant depth if depth = O(1), i.e., bounded by some
     absolute constant independent of n. We parameterize by the constant. -/
-def IsConstantDepth (C : AlgebraicCircuit) (d : ℕ) : Prop :=
-  C.depth ≤ d
+def IsConstantDepth (C : AlgebraicCircuit) (d : �? : Prop :=
+  C.depth �?d
 
 /-- The class of circuits with depth at most d.
-    This is the algebraic analogue of AC⁰ in Boolean complexity. -/
-structure LowDepthCircuit (n d : ℕ) where
+    This is the algebraic analogue of AC�?in Boolean complexity. -/
+structure LowDepthCircuit (n d : �? where
   /-- Underlying circuit. -/
   circuit : AlgebraicCircuit
   /-- Number of variables is n. -/
   h_vars : circuit.numVars = n
   /-- Depth bound is d. -/
-  h_depth : circuit.depth ≤ d
+  h_depth : circuit.depth �?d
 
 deriving Inhabited
 
@@ -207,29 +206,27 @@ variable {R : Type u} [CommRing R]
 
 /-- A multivariate polynomial is homogeneous of degree d if every monomial
     with nonzero coefficient has total degree exactly d. -/
-def IsHomogeneous {n : ℕ} (f : MvPolynomial (Fin n) R) (d : ℕ) : Prop :=
-  ∀ (m : Finsupp (Fin n) ℕ), m ∈ f.support → m.sum (λ _ e => e) = d
+def IsHomogeneous {n : ℕ} (f : MvPolynomial (Fin n) R) (d : �? : Prop :=
+  ∀ (m : Finsupp (Fin n) �?, m �?f.support �?m.sum (λ _ e => e) = d
 
 /-- The space of homogeneous polynomials of degree d in n variables. -/
-def HomogeneousPolynomial (n d : ℕ) : Type u :=
+def HomogeneousPolynomial (n d : �? : Type u :=
   { f : MvPolynomial (Fin n) R // IsHomogeneous f d }
 
 namespace HomogeneousPolynomial
 
 /-- The zero polynomial is homogeneous of any degree. -/
-def zero (n d : ℕ) : HomogeneousPolynomial n d :=
-  ⟨0, by intro m hm; simp at hm⟩
-
-instance : Inhabited (HomogeneousPolynomial n d) := ⟨zero n d⟩
-
+def zero (n d : �? : HomogeneousPolynomial n d :=
+  �?, by intro m hm; simp at hm�?
+instance : Inhabited (HomogeneousPolynomial n d) := ⟨zero n d�?
 /-- Degree of a homogeneous polynomial. -/
-def degree {n d : ℕ} (_ : HomogeneousPolynomial n d) : ℕ := d
+def degree {n d : ℕ} (_ : HomogeneousPolynomial n d) : �?:= d
 
 /-- A polynomial is multilinear if each variable appears with degree at most 1
     in every monomial. This is the special case of set-multilinearity with
     one variable per set. -/
 def IsMultilinear {n : ℕ} (f : MvPolynomial (Fin n) R) : Prop :=
-  ∀ (m : Finsupp (Fin n) ℕ), m ∈ f.support → ∀ i, m i ≤ 1
+  ∀ (m : Finsupp (Fin n) �?, m �?f.support �?∀ i, m i �?1
 
 /-- Set-multilinear: the variables are partitioned into sets, and each
     monomial picks exactly one variable from each set.
@@ -237,9 +234,7 @@ def IsMultilinear {n : ℕ} (f : MvPolynomial (Fin n) R) : Prop :=
     This is the key structural property used in the LST proof. -/
 def IsSetMultilinear {n : ℕ} (f : MvPolynomial (Fin n) R)
     (sets : List (Finset (Fin n))) : Prop :=
-  ∀ (m : Finsupp (Fin n) ℕ), m ∈ f.support →
-    (∀ s ∈ sets, ∃! i ∈ s, m i = 1) ∧
-    (∀ i, m i > 0 → ∃ s ∈ sets, i ∈ s)
+  ∀ (m : Finsupp (Fin n) �?, m �?f.support �?    (∀ s �?sets, �? i �?s, m i = 1) �?    (∀ i, m i > 0 �?�?s �?sets, i �?s)
 
 end HomogeneousPolynomial
 
@@ -248,18 +243,18 @@ end HomogeneousPolynomial
 ---------------------------------------------------------------------/
 
 /-- Given a set-multilinear polynomial f in n variables partitioned into
-    d sets X₁, ..., X_d, and a subset S ⊆ {1, ..., d}, the partial
+    d sets X�? ..., X_d, and a subset S �?{1, ..., d}, the partial
     derivative matrix M_{f,S} is defined as follows:
 
-    - Rows are indexed by monomials in the sets {X_i : i ∈ S}
-    - Columns are indexed by monomials in the sets {X_i : i ∉ S}
-    - Entry (m₁, m₂) = coefficient of m₁·m₂ in f
+    - Rows are indexed by monomials in the sets {X_i : i �?S}
+    - Columns are indexed by monomials in the sets {X_i : i �?S}
+    - Entry (m�? m�? = coefficient of m₁·m�?in f
 
     This matrix captures the bilinear structure of f with respect to
     the partition S. Its rank is a powerful complexity measure. -/
 def PartialDerivativeMatrix {n d : ℕ}
     (f : MvPolynomial (Fin n) 𝕜)
-    (sets : Fin d → Finset (Fin n))
+    (sets : Fin d �?Finset (Fin n))
     (S : Finset (Fin d)) :
     Type u :=
   -- The matrix type: we represent it abstractly since the concrete
@@ -278,20 +273,20 @@ namespace PartialDerivativeMatrix
     variables from S and h uses only variables from its complement,
     then rank(M_{f,S}) = rank(M_{g,S}) · rank(M_{h,∅}) = 1. -/
 def rank {n d : ℕ} {f : MvPolynomial (Fin n) 𝕜}
-    {sets : Fin d → Finset (Fin n)} {S : Finset (Fin d)}
-    (M : @PartialDerivativeMatrix n d f sets S 𝕜 _) : ℕ :=
+    {sets : Fin d �?Finset (Fin n)} {S : Finset (Fin d)}
+    (M : @PartialDerivativeMatrix n d f sets S 𝕜 _) : �?:=
   Matrix.rank M
 
-/-- Subadditivity: rank(M_{f+g,S}) ≤ rank(M_{f,S}) + rank(M_{g,S}).
+/-- Subadditivity: rank(M_{f+g,S}) �?rank(M_{f,S}) + rank(M_{g,S}).
     This follows from the matrix rank inequality for sums. -/
 postulate theorem rank_subadditive {n d : ℕ}
     (f g : MvPolynomial (Fin n) 𝕜)
-    (sets : Fin d → Finset (Fin n)) (S : Finset (Fin d))
+    (sets : Fin d �?Finset (Fin n)) (S : Finset (Fin d))
     (Mf Mg Mfg : Type u)
     (hMf : Mf = @PartialDerivativeMatrix n d f sets S 𝕜 _)
     (hMg : Mg = @PartialDerivativeMatrix n d g sets S 𝕜 _)
     (hMfg : Mfg = @PartialDerivativeMatrix n d (f + g) sets S 𝕜 _) :
-    rank (hMfg ▸ Mfg) ≤ rank (hMf ▸ Mf) + rank (hMg ▸ Mg)
+    rank (hMfg �?Mfg) �?rank (hMf �?Mf) + rank (hMg �?Mg)
 
 /-- Product bound for multiplication gates: if f = g · h and the
     variable sets of g and h are disjoint, then the rank of the
@@ -302,14 +297,14 @@ postulate theorem rank_subadditive {n d : ℕ}
     of the ranks of its children. -/
 postulate theorem rank_mul_bound {n d : ℕ}
     (f g h : MvPolynomial (Fin n) 𝕜)
-    (sets : Fin d → Finset (Fin n)) (S : Finset (Fin d))
+    (sets : Fin d �?Finset (Fin n)) (S : Finset (Fin d))
     (hf : f = g * h)
     (Mf Mg Mh : Type u)
     (hMf : Mf = @PartialDerivativeMatrix n d f sets S 𝕜 _)
     (hMg : Mg = @PartialDerivativeMatrix n d g sets S 𝕜 _)
     (hMh : Mh = @PartialDerivativeMatrix n d h sets S 𝕜 _)
-    (h_disjoint : ∀ i j, i ∈ S → j ∉ S → sets i ∩ sets j = ∅) :
-    rank (hMf ▸ Mf) ≤ rank (hMg ▸ Mg) * rank (hMh ▸ Mh)
+    (h_disjoint : ∀ i j, i �?S �?j �?S �?sets i �?sets j = �? :
+    rank (hMf �?Mf) �?rank (hMg �?Mg) * rank (hMh �?Mh)
 
 /-- Rank lower bound: for the "hard" explicit polynomial (constructed
     via an NW-design), the partial derivative matrix has rank that is
@@ -318,13 +313,13 @@ postulate theorem rank_mul_bound {n d : ℕ}
     This is the main technical contribution of LST 2021: constructing
     an explicit polynomial with large partial derivative matrix rank. -/
 postulate theorem rank_lower_bound_hard_polynomial {n d : ℕ}
-    (sets : Fin d → Finset (Fin n))
+    (sets : Fin d �?Finset (Fin n))
     (S : Finset (Fin d))
-    (h_balanced : S.card ≥ d / 3 ∧ S.card ≤ 2 * d / 3)
+    (h_balanced : S.card �?d / 3 �?S.card �?2 * d / 3)
     (h_sets_size : ∀ i, (sets i).card = n / d)
     (M : Type u)
     (hM : M = @PartialDerivativeMatrix n d (hardPolynomial n d) sets S 𝕜 _) :
-    rank (hM ▸ M) ≥ n ^ (Ω d)
+    rank (hM �?M) �?n ^ (Ω d)
 
 /-- Explicit construction of the hard polynomial family.
 
@@ -335,13 +330,13 @@ postulate theorem rank_lower_bound_hard_polynomial {n d : ℕ}
 
     The polynomial is set-multilinear in d = Θ(log n) sets, each of
     size roughly n/d, and has degree d. -/
-postulate def hardPolynomial (n d : ℕ) : MvPolynomial (Fin n) 𝕜
+postulate def hardPolynomial (n d : �? : MvPolynomial (Fin n) 𝕜
 
 /-- The hard polynomial is set-multilinear. -/
-postulate theorem hardPolynomial_setMultilinear (n d : ℕ)
-    (sets : Fin d → Finset (Fin n))
+postulate theorem hardPolynomial_setMultilinear (n d : �?
+    (sets : Fin d �?Finset (Fin n))
     (h_sets_size : ∀ i, (sets i).card = n / d)
-    (h_disjoint : ∀ i j, i ≠ j → sets i ∩ sets j = ∅)
+    (h_disjoint : ∀ i j, i �?j �?sets i �?sets j = �?
     (h_cover : (Finset.univ : Finset (Fin d)).biUnion sets = Finset.univ) :
     HomogeneousPolynomial.IsSetMultilinear (hardPolynomial n d) (sets · |>.toList)
 
@@ -360,8 +355,8 @@ end PartialDerivativeMatrix
 
     The proof proceeds by induction on the circuit structure:
     - Input gates: rank = 1
-    - Addition gates: rank ≤ sum of children's ranks (subadditivity)
-    - Multiplication gates: rank ≤ product of children's ranks
+    - Addition gates: rank �?sum of children's ranks (subadditivity)
+    - Multiplication gates: rank �?product of children's ranks
 
     The key observation is that in a low-depth circuit, the parse trees
     (products along root-to-leaf paths) have bounded depth, limiting
@@ -369,14 +364,14 @@ end PartialDerivativeMatrix
 postulate theorem lowDepthCircuitRankBound {n d Δ s : ℕ}
     (C : AlgebraicCircuit)
     (h_vars : C.numVars = n)
-    (h_depth : C.depth ≤ Δ)
-    (h_size : C.size ≤ s)
-    (sets : Fin d → Finset (Fin n))
+    (h_depth : C.depth �?Δ)
+    (h_size : C.size �?s)
+    (sets : Fin d �?Finset (Fin n))
     (S : Finset (Fin d))
     (hC : circuitPolynomial C = hardPolynomial n d)
     (M : Type u)
     (hM : M = @PartialDerivativeMatrix n d (circuitPolynomial C) sets S 𝕜 _) :
-    PartialDerivativeMatrix.rank (hM ▸ M) ≤ s * n ^ (3 * Δ)
+    PartialDerivativeMatrix.rank (hM �?M) �?s * n ^ (3 * Δ)
 
 /-- Conversion lemma: any low-depth circuit can be converted to a
     set-multilinear circuit with at most polynomial blowup in size.
@@ -390,18 +385,15 @@ postulate theorem lowDepthCircuitRankBound {n d Δ s : ℕ}
 postulate theorem setMultilinearization {n Δ s : ℕ}
     (C : AlgebraicCircuit)
     (h_vars : C.numVars = n)
-    (h_depth : C.depth ≤ Δ)
-    (h_size : C.size ≤ s)
-    (h_n_large : n ≥ 2)
-    (d : ℕ) (hd : d ≤ 4 * Δ)
-    (sets : Fin d → Finset (Fin n))
+    (h_depth : C.depth �?Δ)
+    (h_size : C.size �?s)
+    (h_n_large : n �?2)
+    (d : �? (hd : d �?4 * Δ)
+    (sets : Fin d �?Finset (Fin n))
     (h_partition : ∀ i, (sets i).card = n / d)
-    (h_disjoint : ∀ i j, i ≠ j → sets i ∩ sets j = ∅) :
-    ∃ (C' : AlgebraicCircuit),
-      C'.numVars = n ∧
-      C'.depth ≤ 2 * Δ ∧
-      C'.size ≤ s * n ^ (2 * Δ) ∧
-      circuitPolynomial C' = hardPolynomial n d
+    (h_disjoint : ∀ i j, i �?j �?sets i �?sets j = �? :
+    �?(C' : AlgebraicCircuit),
+      C'.numVars = n �?      C'.depth �?2 * Δ �?      C'.size �?s * n ^ (2 * Δ) �?      circuitPolynomial C' = hardPolynomial n d
 
 /-! ------------------------------------------------------------------
   §6. The LST Lower Bound Theorem
@@ -420,7 +412,7 @@ postulate theorem setMultilinearization {n Δ s : ℕ}
 
     1. **Set-multilinearization**: Given a depth-Δ circuit C of size s
        computing some polynomial, convert it to a set-multilinear circuit
-       C' of depth ≤ 2Δ and size ≤ s · n^{O(Δ)} (Lemma `setMultilinearization`).
+       C' of depth �?2Δ and size �?s · n^{O(Δ)} (Lemma `setMultilinearization`).
 
     2. **Partial derivative matrix rank upper bound**: For the set-
        multilinear circuit C', the partial derivative matrix rank is
@@ -432,9 +424,9 @@ postulate theorem setMultilinearization {n Δ s : ℕ}
        at least n^{Ω(d)} = n^{Ω(Δ)} (Theorem `rank_lower_bound_hard_polynomial`).
 
     4. **Contradiction**: If a depth-Δ circuit of size s computes P_n,
-       then by steps 1–2, the partial derivative matrix rank is at most
+       then by steps 1�?, the partial derivative matrix rank is at most
        s · n^{O(Δ)}. But by step 3, it must be at least n^{Ω(Δ)}.
-       Therefore s ≥ n^{Ω(Δ)} / n^{O(Δ)} = n^{Ω(Δ)}.
+       Therefore s �?n^{Ω(Δ)} / n^{O(Δ)} = n^{Ω(Δ)}.
 
     5. **Conclusion**: For Δ = O(1), this gives s = n^{Ω(1)}, which is
        superpolynomial in n. For Δ = log n, it gives s = n^{Ω(log n)},
@@ -459,14 +451,10 @@ postulate theorem setMultilinearization {n Δ s : ℕ}
     - Forbes, Shpilka, Wigderson. Pseudorandomness for multilinear
       read-once algebraic branching programs.
 -/
-postulate LSTTheorem (Δ : ℕ) :
-  ∃ (P : ℕ → MvPolynomial (Fin (0 : ℕ)) 𝕜),
-    (∀ n, ∃ (Pn : MvPolynomial (Fin n) 𝕜), P n = Pn) ∧
-    (∀ n, ∀ (C : AlgebraicCircuit),
-      C.numVars = n →
-      C.depth ≤ Δ →
-      circuitPolynomial C = P n →
-      C.size ≥ n ^ (Δ / 10))
+postulate LSTTheorem (Δ : �? :
+  �?(P : �?�?MvPolynomial (Fin (0 : �?) 𝕜),
+    (∀ n, �?(Pn : MvPolynomial (Fin n) 𝕜), P n = Pn) �?    (∀ n, ∀ (C : AlgebraicCircuit),
+      C.numVars = n �?      C.depth �?Δ �?      circuitPolynomial C = P n �?      C.size �?n ^ (Δ / 10))
 
 /-- **Corollary: Superpolynomial lower bound for constant depth**
 
@@ -474,17 +462,12 @@ postulate LSTTheorem (Δ : ℕ) :
     requires superpolynomial circuit size.
 
     Formally: for any polynomial p(n), there exists N such that for all
-    n ≥ N, any depth-Δ circuit computing P_n has size > p(n). -/
-postulate LSTSuperpolynomial (Δ : ℕ) :
-  ∃ (P : ℕ → MvPolynomial (Fin (0 : ℕ)) 𝕜),
-    (∀ n, ∃ (Pn : MvPolynomial (Fin n) 𝕜), P n = Pn) ∧
-    (∀ p : Polynomial ℚ,
-      p ≠ 0 →
-      ∃ N, ∀ n ≥ N, ∀ (C : AlgebraicCircuit),
-        C.numVars = n →
-        C.depth ≤ Δ →
-        circuitPolynomial C = P n →
-        C.size > p.eval (n : ℚ).toFloat.toUInt64.toNat)
+    n �?N, any depth-Δ circuit computing P_n has size > p(n). -/
+postulate LSTSuperpolynomial (Δ : �? :
+  �?(P : �?�?MvPolynomial (Fin (0 : �?) 𝕜),
+    (∀ n, �?(Pn : MvPolynomial (Fin n) 𝕜), P n = Pn) �?    (∀ p : Polynomial �?
+      p �?0 �?      �?N, ∀ n �?N, ∀ (C : AlgebraicCircuit),
+        C.numVars = n �?        C.depth �?Δ �?        circuitPolynomial C = P n �?        C.size > p.eval (n : �?.toFloat.toUInt64.toNat)
 
 /-! ------------------------------------------------------------------
   §7. Connection to Symmetric Functions (Schur Polynomials)
@@ -496,7 +479,7 @@ postulate LSTSuperpolynomial (Δ : ℕ) :
 
     LST's lower bound applies to any polynomial with large partial
     derivative matrix rank. Schur polynomials indexed by "wide" partitions
-    (where λ₁ is large relative to ℓ(λ)) have been conjectured to have
+    (where λ�?is large relative to �?λ)) have been conjectured to have
     high complexity. -/
 
 namespace SchurComplexity
@@ -505,35 +488,33 @@ open Partition YoungDiagram
 
 /-- The complexity of computing the Schur polynomial s_λ in n variables.
     This is the minimum size of an algebraic circuit computing s_λ. -/
-def SchurComplexity (n : ℕ) (λ : Partition) : ℕ :=
+def SchurComplexity (n : �? (λ : Partition) : �?:=
   -- Minimum circuit size over all circuits computing s_λ
-  Nat.sInf {s | ∃ (C : AlgebraicCircuit),
-    C.numVars = n ∧
-    C.size ≤ s ∧
-    circuitPolynomial C = SchurPolynomial n λ}
+  Nat.sInf {s | �?(C : AlgebraicCircuit),
+    C.numVars = n �?    C.size �?s �?    circuitPolynomial C = SchurPolynomial n λ}
 
 /-- Lower bound on Schur complexity via partial derivative rank.
 
     If a Schur polynomial s_λ has large partial derivative matrix rank
     (with respect to an appropriate partition of variables into sets),
     then any low-depth circuit computing it must have large size. -/
-postulate theorem schur_complexity_lower_bound (n d : ℕ) (λ : Partition)
+postulate theorem schur_complexity_lower_bound (n d : �? (λ : Partition)
     (h_shape : λ.length = d)
     (h_degree : λ.size = d)
-    (sets : Fin d → Finset (Fin n))
+    (sets : Fin d �?Finset (Fin n))
     (S : Finset (Fin d))
     (M : Type u)
     (hM : M = @PartialDerivativeMatrix n d (SchurPolynomial n λ) sets S 𝕜 _) :
-    SchurComplexity n λ ≥ PartialDerivativeMatrix.rank (hM ▸ M) / n ^ (3 * d)
+    SchurComplexity n λ �?PartialDerivativeMatrix.rank (hM �?M) / n ^ (3 * d)
 
 /-- The hook-length partition (d, d, ..., d) with n/d rows has been
     conjectured to require superpolynomial size in low depth.
     This is related to the Kronecker coefficient complexity. -/
-postulate theorem hook_partition_hardness (n d : ℕ)
-    (h_dvd : d ∣ n)
+postulate theorem hook_partition_hardness (n d : �?
+    (h_dvd : d �?n)
     (λ : Partition)
     (h_λ : λ.parts = List.replicate (n / d) d) :
-    SchurComplexity n λ ≥ n ^ (d / 10)
+    SchurComplexity n λ �?n ^ (d / 10)
 
 end SchurComplexity
 
@@ -542,7 +523,7 @@ end SchurComplexity
 ---------------------------------------------------------------------/
 
 /-- The Kronecker coefficient g_{λ,μ,ν} measures the multiplicity of
-    the Specht module S^ν in the tensor product S^λ ⊗ S^μ. These
+    the Specht module S^ν in the tensor product S^λ �?S^μ. These
     coefficients appear naturally in the representation theory of S_n
     and in the study of symmetric function multiplication.
 
@@ -563,22 +544,19 @@ open Partition
     Kronecker coefficients (those corresponding to partitions with
     large partial derivative rank) require superpolynomial circuits. -/
 def HardKroneckerCoefficient (λ μ ν : Partition) : Prop :=
-  KroneckerCoefficient λ μ ν > 0 ∧
-  (∀ (C : AlgebraicCircuit),
-    C.numVars = λ.size + μ.size + ν.size →
-    C.depth ≤ 3 →
-    circuitPolynomial C = 0 →  -- placeholder: would need explicit poly encoding
-    C.size ≥ (λ.size + μ.size + ν.size) ^ 2)
+  KroneckerCoefficient λ μ ν > 0 �?  (∀ (C : AlgebraicCircuit),
+    C.numVars = λ.size + μ.size + ν.size �?    C.depth �?3 �?    circuitPolynomial C = 0 �? -- placeholder: would need explicit poly encoding
+    C.size �?(λ.size + μ.size + ν.size) ^ 2)
 
 /-- **Conjecture**: Kronecker coefficients for partitions with large
     Durfee square require superpolynomial circuits to compute.
 
-    The Durfee square size is the largest k such that λ_k ≥ k.
+    The Durfee square size is the largest k such that λ_k �?k.
     Partitions with large Durfee square (square-like shapes) are
     conjectured to be the hardest for symmetric function computation. -/
 postulate theorem kronecker_hardness_conjecture (λ μ ν : Partition)
     (h_pos : KroneckerCoefficient λ μ ν > 0)
-    (h_durfee : λ.parts.headD 0 ≥ 5 ∧ μ.parts.headD 0 ≥ 5 ∧ ν.parts.headD 0 ≥ 5) :
+    (h_durfee : λ.parts.headD 0 �?5 �?μ.parts.headD 0 �?5 �?ν.parts.headD 0 �?5) :
     HardKroneckerCoefficient λ μ ν
 
 /-- The LST lower bound implies that any polynomial family with
@@ -587,11 +565,11 @@ postulate theorem kronecker_hardness_conjecture (λ μ ν : Partition)
     (those related to hard Kronecker coefficients) are candidates. -/
 postulate theorem lst_implies_kronecker (λ μ ν : Partition)
     (h_pos : KroneckerCoefficient λ μ ν > 0)
-    (n : ℕ)
+    (n : �?
     (h_n : n = λ.size + μ.size + ν.size)
     (P : MvPolynomial (Fin n) 𝕜)
     (hP : P = SchurPolynomial n λ) :
-    ∃ (C : AlgebraicCircuit), circuitPolynomial C = P → C.size ≥ n ^ 2
+    �?(C : AlgebraicCircuit), circuitPolynomial C = P �?C.size �?n ^ 2
 
 end KroneckerConnection
 
@@ -602,16 +580,12 @@ end KroneckerConnection
 /-- **Open Problem 1**: Can the LST lower bound be extended to depth
     Δ = ω(1), e.g., Δ = log^ε n for some ε > 0?
 
-    Current status: The LST proof gives n^{Ω(Δ)} for Δ ≤ O(log n / log log n).
+    Current status: The LST proof gives n^{Ω(Δ)} for Δ �?O(log n / log log n).
     Extending to larger depths would require new techniques. -/
-postulate LSTDepthExtension (ε : ℝ) (hε : ε > 0) :
-  ∃ (P : ℕ → MvPolynomial (Fin (0 : ℕ)) 𝕜),
-    (∀ n, ∃ (Pn : MvPolynomial (Fin n) 𝕜), P n = Pn) ∧
-    (∀ n, ∀ (C : AlgebraicCircuit),
-      C.numVars = n →
-      C.depth ≤ Nat.log 2 n ^ ε.toUInt64.toNat →
-      circuitPolynomial C = P n →
-      C.size ≥ n ^ 2)
+postulate LSTDepthExtension (ε : �? (hε : ε > 0) :
+  �?(P : �?�?MvPolynomial (Fin (0 : �?) 𝕜),
+    (∀ n, �?(Pn : MvPolynomial (Fin n) 𝕜), P n = Pn) �?    (∀ n, ∀ (C : AlgebraicCircuit),
+      C.numVars = n �?      C.depth �?Nat.log 2 n ^ ε.toUInt64.toNat �?      circuitPolynomial C = P n �?      C.size �?n ^ 2)
 
 /-- **Open Problem 2**: Can the LST method prove lower bounds for
     the permanent polynomial per_n in low depth?
@@ -620,24 +594,17 @@ postulate LSTDepthExtension (ε : ℝ) (hε : ε > 0) :
     lower bounds for the permanent in low depth would be a major step
     toward separating VP from VNP. -/
 postulate PermanentLowerBound :
-  ∃ (c : ℕ), c > 0 ∧
-    ∀ n, ∀ (C : AlgebraicCircuit),
-      C.numVars = n ^ 2 →
-      C.depth ≤ 3 →
-      circuitPolynomial C = 0 →  -- placeholder: per_n
-      C.size ≥ n ^ c
+  �?(c : �?, c > 0 �?    ∀ n, ∀ (C : AlgebraicCircuit),
+      C.numVars = n ^ 2 �?      C.depth �?3 �?      circuitPolynomial C = 0 �? -- placeholder: per_n
+      C.size �?n ^ c
 
 /-- **Open Problem 3**: Lower bounds for non-commutative circuits.
     The LST proof relies heavily on commutativity (via the partial
     derivative matrix). Non-commutative circuit lower bounds remain
     wide open even for depth-3. -/
 postulate NoncommutativeLowerBound :
-  ∃ (P : ℕ → MvPolynomial (Fin (0 : ℕ)) 𝕜),
-    (∀ n, ∃ (Pn : MvPolynomial (Fin n) 𝕜), P n = Pn) ∧
-    (∀ n, ∀ (C : AlgebraicCircuit),
-      C.numVars = n →
-      C.depth ≤ 3 →
-      circuitPolynomial C = P n →
-      C.size ≥ n ^ 2)
+  �?(P : �?�?MvPolynomial (Fin (0 : �?) 𝕜),
+    (∀ n, �?(Pn : MvPolynomial (Fin n) 𝕜), P n = Pn) �?    (∀ n, ∀ (C : AlgebraicCircuit),
+      C.numVars = n �?      C.depth �?3 �?      circuitPolynomial C = P n �?      C.size �?n ^ 2)
 
 end SylvaFormalization

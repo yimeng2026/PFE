@@ -40,71 +40,66 @@ universe u
   §1. Integer Partitions
 ---------------------------------------------------------------------/
 
-/-- An integer partition λ = (λ₁ ≥ λ₂ ≥ ... ≥ λ_ℓ > 0).
+/-- An integer partition λ = (λ�?�?λ�?�?... �?λ_�?> 0).
     Stored as a sorted (non-increasing) list of positive naturals. -/
-def Partition := { l : List ℕ // l.Sorted (· ≥ ·) ∧ ∀ n ∈ l, n > 0 }
+def Partition := { l : List �?// l.Sorted (· �?·) �?∀ n �?l, n > 0 }
 
 namespace Partition
 
 /-- Convert a raw list into a partition by sorting and filtering zeros. -/
-def ofList (l : List ℕ) : Partition :=
-  let sorted := l.filter (· > 0) |>.mergeSort (· ≥ ·)
+def ofList (l : List �? : Partition :=
+  let sorted := l.filter (· > 0) |>.mergeSort (· �?·)
   ⟨sorted, by
     constructor
     · apply List.sorted_mergeSort
-      intro a b c h₁ h₂
-      exact Nat.le_trans h₂ h₁
-    · intro n hn
+      intro a b c h�?h�?      exact Nat.le_trans h�?h�?    · intro n hn
       simp at hn
-      exact hn.1,⟩
-
-/-- The empty partition ∅ = (). -/
-def empty : Partition := ⟨[], by simp⟩
-
-instance : Inhabited Partition := ⟨empty⟩
-
+      exact hn.1,�?
+/-- The empty partition �?= (). -/
+def empty : Partition := ⟨[], by simp�?
+instance : Inhabited Partition := ⟨empty�?
 /-- The underlying list of parts. -/
-def parts (λ : Partition) : List ℕ := λ.val
+def parts (λ : Partition) : List �?:= λ.val
 
-/-- Size (weight): |λ| = Σ λᵢ. -/
-def size (λ : Partition) : ℕ := λ.parts.sum
+/-- Size (weight): |λ| = Σ λ�? -/
+def size (λ : Partition) : �?:= λ.parts.sum
 
-/-- Length: ℓ(λ) = number of parts. -/
-def length (λ : Partition) : ℕ := λ.parts.length
+/-- Length: �?λ) = number of parts. -/
+def length (λ : Partition) : �?:= λ.parts.length
 
 /-- Conjugate partition λ': column lengths of the Ferrers diagram. -/
 def conjugate (λ : Partition) : Partition :=
   let rows := λ.parts
   let n := rows.headD 0
-  let cols := List.iota n |>.map (λ j => rows.count (· ≥ j))
+  let cols := List.iota n |>.map (λ j => rows.count (· �?j))
   ofList cols
 
-/-- Ferrers diagram: cells (i, j) with 0 ≤ i < ℓ(λ), 0 ≤ j < λᵢ. -/
-def ferrersCells (λ : Partition) : Finset (ℕ × ℕ) :=
+/-- Ferrers diagram: cells (i, j) with 0 �?i < �?λ), 0 �?j < λ�? -/
+def ferrersCells (λ : Partition) : Finset (�?× �? :=
   Finset.biUnion (Finset.range λ.length) (λ i =>
     Finset.image (λ j => (i, j)) (Finset.range (λ.parts.getD i 0)))
 
 /-- Content c(i, j) = j - i. -/
-def content (λ : Partition) (i j : ℕ) : ℤ :=
-  (j : ℤ) - (i : ℤ)
+def content (λ : Partition) (i j : �? : �?:=
+  (j : �? - (i : �?
 
-/-- Hook length h(i, j) = (λᵢ - j) + (λ'ⱼ - i) + 1. -/
-def hookLength (λ : Partition) (i j : ℕ) : ℕ :=
+/-- Hook length h(i, j) = (λ�?- j) + (λ'�?- i) + 1. -/
+def hookLength (λ : Partition) (i j : �? : �?:=
   let rowTail := λ.parts.getD i 0 - j
   let colTail := λ.conjugate.parts.getD j 0 - i
   rowTail + colTail + 1
 
-/-- Hook-length formula: f^λ = n! / ∏ h(i,j). -/
-def hookLengthFormula (λ : Partition) : ℚ :=
-  let nFact := (λ.size.factorial : ℚ)
-  let hookProd := λ.ferrersCells.prod (λ p => (λ.hookLength p.1 p.2 : ℚ))
+/-- Hook-length formula: f^λ = n! / �?h(i,j). -/
+def hookLengthFormula (λ : Partition) : �?:=
+  let nFact := (λ.size.factorial : �?
+  let hookProd := λ.ferrersCells.prod (λ p => (λ.hookLength p.1 p.2 : �?)
   nFact / hookProd
 
-/-- Dominance order: λ ⊵ μ iff for all k, Σ_{i≤k} λᵢ ≥ Σ_{i≤k} μᵢ. -/
+/-- Dominance order: λ �?μ iff for all k, Σ_{i≤k} λ�?�?Σ_{i≤k} μ�? -/
 def dominates (λ μ : Partition) : Prop :=
   let lλ := λ.parts
   let lμ := μ.parts
-  ∀ k : ℕ, (lλ.take k).sum ≥ (lμ.take k).sum
+  ∀ k : �? (lλ.take k).sum �?(lμ.take k).sum
 
 end Partition
 
@@ -117,7 +112,7 @@ structure YoungDiagram where
   /-- Underlying partition. -/
   shape : Partition
   /-- Cell coordinates (i,j). -/
-  cells : Finset (ℕ × ℕ)
+  cells : Finset (�?× �?
   /-- Cells are exactly the Ferrers diagram. -/
   h_cells : cells = shape.ferrersCells
 
@@ -132,26 +127,26 @@ def ofPartition (λ : Partition) : YoungDiagram where
   h_cells := rfl
 
 /-- Row length of i-th row. -/
-def rowLen (yd : YoungDiagram) (i : ℕ) : ℕ :=
+def rowLen (yd : YoungDiagram) (i : �? : �?:=
   yd.shape.parts.getD i 0
 
 /-- Column length of j-th column. -/
-def colLen (yd : YoungDiagram) (j : ℕ) : ℕ :=
+def colLen (yd : YoungDiagram) (j : �? : �?:=
   yd.shape.conjugate.parts.getD j 0
 
 /-- Number of cells = |shape|. -/
-def numCells (yd : YoungDiagram) : ℕ :=
+def numCells (yd : YoungDiagram) : �?:=
   yd.shape.size
 
 /-- A cell is in the diagram. -/
-def hasCell (yd : YoungDiagram) (i j : ℕ) : Prop :=
+def hasCell (yd : YoungDiagram) (i j : �? : Prop :=
   j < yd.rowLen i
 
 /-- Boundary (rim) cells. -/
-def rim (yd : YoungDiagram) : Finset (ℕ × ℕ) :=
+def rim (yd : YoungDiagram) : Finset (�?× �? :=
   yd.cells.filter (λ p =>
     let (i, j) := p
-    ¬(yd.hasCell (i + 1) j) ∨ ¬(yd.hasCell i (j + 1)))
+    ¬(yd.hasCell (i + 1) j) �?¬(yd.hasCell i (j + 1)))
 
 end YoungDiagram
 
@@ -161,26 +156,24 @@ end YoungDiagram
 
 /-- SSYT of shape λ with entries from {1, ..., n}.
     Rows weakly increase, columns strictly increase. -/
-structure SSYT (n : ℕ) (λ : Partition) where
+structure SSYT (n : �? (λ : Partition) where
   /-- Entry function. -/
-  entry : ℕ → ℕ → ℕ
-  /-- Entries are in valid range. -/
-  h_range : ∀ i j, (i, j) ∈ λ.ferrersCells → entry i j ∈ Finset.Icc 1 n
+  entry : �?�?�?�?�?  /-- Entries are in valid range. -/
+  h_range : ∀ i j, (i, j) �?λ.ferrersCells �?entry i j �?Finset.Icc 1 n
   /-- Rows weakly increase. -/
-  h_row_weak : ∀ i j₁ j₂, j₁ < j₂ → j₂ < λ.parts.getD i 0 → entry i j₁ ≤ entry i j₂
-  /-- Columns strictly increase. -/
-  h_col_strict : ∀ j i₁ i₂, i₁ < i₂ → i₂ < λ.conjugate.parts.getD j 0 → entry i₁ j < entry i₂ j
+  h_row_weak : ∀ i j�?j�? j�?< j�?�?j�?< λ.parts.getD i 0 �?entry i j�?�?entry i j�?  /-- Columns strictly increase. -/
+  h_col_strict : ∀ j i�?i�? i�?< i�?�?i�?< λ.conjugate.parts.getD j 0 �?entry i�?j < entry i�?j
 
 deriving Inhabited
 
 namespace SSYT
 
 /-- Weight μ_k = # of entries equal to k. -/
-def weight {n : ℕ} {λ : Partition} (T : SSYT n λ) (k : ℕ) : ℕ :=
+def weight {n : ℕ} {λ : Partition} (T : SSYT n λ) (k : �? : �?:=
   λ.ferrersCells.sum (λ p => if T.entry p.1 p.2 = k then 1 else 0)
 
 /-- Type of T: the weight sequence. -/
-def type {n : ℕ} {λ : Partition} (T : SSYT n λ) : List ℕ :=
+def type {n : ℕ} {λ : Partition} (T : SSYT n λ) : List �?:=
   List.iota n |>.map (λ k => T.weight k)
 
 end SSYT
@@ -191,40 +184,40 @@ end SSYT
 
 variable {R : Type u} [CommRing R]
 
-/-- Schur polynomial s_λ(x₁,...,xₙ) via SSYT sum.
+/-- Schur polynomial s_λ(x�?...,x�? via SSYT sum.
     s_λ = Σ_T x^T over all SSYTs T of shape λ. -/
-def SchurPolynomial (n : ℕ) (λ : Partition) : MvPolynomial (Fin n) R :=
+def SchurPolynomial (n : �? (λ : Partition) : MvPolynomial (Fin n) R :=
   0  -- TODO: sum over all SSYTs
 
 /-- Schur polynomial via Jacobi-Trudi formula.
-    s_λ = det[ h_{λᵢ - i + j} ]_{i,j=1}^{ℓ(λ)}. -/
-def SchurPolynomialJacobiTrudi (n : ℕ) (λ : Partition) : MvPolynomial (Fin n) R :=
+    s_λ = det[ h_{λ�?- i + j} ]_{i,j=1}^{�?λ)}. -/
+def SchurPolynomialJacobiTrudi (n : �? (λ : Partition) : MvPolynomial (Fin n) R :=
   0  -- TODO: determinant of matrix of complete homogeneous polynomials
 
 /-- The two definitions coincide. -/
-postulate theorem SchurPolynomial_eq_JacobiTrudi (n : ℕ) (λ : Partition) :
+postulate theorem SchurPolynomial_eq_JacobiTrudi (n : �? (λ : Partition) :
   SchurPolynomial n λ = SchurPolynomialJacobiTrudi n λ
 
 namespace SchurPolynomial
 
 /-- s_λ is a symmetric polynomial. -/
-postulate theorem isSymmetric (n : ℕ) (λ : Partition) :
-  True  -- ∀ σ ∈ S_n, σ · s_λ = s_λ
+postulate theorem isSymmetric (n : �? (λ : Partition) :
+  True  -- ∀ σ �?S_n, σ · s_λ = s_λ
 
 /-- Degree of s_λ equals |λ|. -/
-postulate theorem degree_eq (n : ℕ) (λ : Partition) :
+postulate theorem degree_eq (n : �? (λ : Partition) :
   True  -- total_degree (s_λ) = λ.size
 
 /-- Evaluation at all ones: s_λ(1,...,1) = #SSYT(λ, n). -/
-postulate theorem eval_at_ones (n : ℕ) (λ : Partition) :
+postulate theorem eval_at_ones (n : �? (λ : Partition) :
   True
 
 /-- Schur polynomials form a basis of Λ_n (symmetric polynomials in n variables). -/
-postulate theorem isBasis (n d : ℕ) :
-  True  -- {s_λ : λ.size = d, λ.length ≤ n} is a basis of Λ_n^d
+postulate theorem isBasis (n d : �? :
+  True  -- {s_λ : λ.size = d, λ.length �?n} is a basis of Λ_n^d
 
 /-- Cauchy identity: Π_{i,j} 1/(1-x_i y_j) = Σ_λ s_λ(x) s_λ(y). -/
-postulate theorem cauchy_identity (n m : ℕ) :
+postulate theorem cauchy_identity (n m : �? :
   True
 
 end SchurPolynomial
@@ -234,31 +227,30 @@ end SchurPolynomial
 ---------------------------------------------------------------------/
 
 /-- Power sum: p_k = x₁^k + ... + xₙ^k. -/
-def PowerSumSymmetric (n k : ℕ) : MvPolynomial (Fin n) R :=
-  ∑ i : Fin n, (X i) ^ k
+def PowerSumSymmetric (n k : �? : MvPolynomial (Fin n) R :=
+  �?i : Fin n, (X i) ^ k
 
 /-- p_λ = p_{λ₁} p_{λ₂} ... p_{λ_ℓ}. -/
-def PowerSumSymmetricPartition (n : ℕ) (λ : Partition) : MvPolynomial (Fin n) R :=
+def PowerSumSymmetricPartition (n : �? (λ : Partition) : MvPolynomial (Fin n) R :=
   λ.parts.foldl (λ acc part => acc * PowerSumSymmetric n part) 1
 
 namespace PowerSumSymmetric
 
 /-- Newton identity (elementary version):
     k · e_k = Σ_{i=1}^k (-1)^{i-1} e_{k-i} · p_i. -/
-postulate theorem newton_elementary (n k : ℕ) (hk : k > 0) :
+postulate theorem newton_elementary (n k : �? (hk : k > 0) :
   True
 
 /-- Newton identity (homogeneous version):
     k · h_k = Σ_{i=1}^k h_{k-i} · p_i. -/
-postulate theorem newton_homogeneous (n k : ℕ) (hk : k > 0) :
+postulate theorem newton_homogeneous (n k : �? (hk : k > 0) :
   True
 
-/-- Power sums form a ℚ-basis when char = 0. -/
-postulate theorem isBasis (n : ℕ) :
-  True  -- {p_λ} is a basis of Λ ⊗ ℚ
-
-/-- Generating function: Σ_{k≥1} p_k t^k/k = -ln Π_i (1 - x_i t). -/
-postulate theorem generating_log (n : ℕ) :
+/-- Power sums form a �?basis when char = 0. -/
+postulate theorem isBasis (n : �? :
+  True  -- {p_λ} is a basis of Λ �?�?
+/-- Generating function: Σ_{k�?} p_k t^k/k = -ln Π_i (1 - x_i t). -/
+postulate theorem generating_log (n : �? :
   True
 
 end PowerSumSymmetric
@@ -267,27 +259,27 @@ end PowerSumSymmetric
   §6. Elementary and Complete Homogeneous Symmetric Polynomials
 ---------------------------------------------------------------------/
 
-/-- Elementary symmetric: e_k = Σ_{i₁<...<i_k} x_{i₁}...x_{i_k}. -/
-def ElementarySymmetric (n k : ℕ) : MvPolynomial (Fin n) R :=
+/-- Elementary symmetric: e_k = Σ_{i�?...<i_k} x_{i₁}...x_{i_k}. -/
+def ElementarySymmetric (n k : �? : MvPolynomial (Fin n) R :=
   if k = 0 then 1
   else if k > n then 0
   else 0  -- TODO: sum over k-subsets
 
 /-- Complete homogeneous: h_k = Σ_{i₁≤...≤i_k} x_{i₁}...x_{i_k}. -/
-def CompleteHomogeneous (n k : ℕ) : MvPolynomial (Fin n) R :=
+def CompleteHomogeneous (n k : �? : MvPolynomial (Fin n) R :=
   if k = 0 then 1
   else 0  -- TODO: sum over k-multisets
 
 /-- Duality: Σ_{i=0}^k (-1)^i e_i h_{k-i} = δ_{k,0}. -/
-postulate theorem e_h_duality (n k : ℕ) (hk : k > 0) :
+postulate theorem e_h_duality (n k : �? (hk : k > 0) :
   True  -- Σ_{i=0}^k (-1)^i e_i h_{k-i} = 0
 
 /-- Generating function for e_k. -/
-postulate theorem e_generating (n : ℕ) :
+postulate theorem e_generating (n : �? :
   True  -- Σ e_k t^k = Π_i (1 + x_i t)
 
 /-- Generating function for h_k. -/
-postulate theorem h_generating (n : ℕ) :
+postulate theorem h_generating (n : �? :
   True  -- Σ h_k t^k = Π_i 1/(1 - x_i t)
 
 /-! ------------------------------------------------------------------
@@ -296,13 +288,13 @@ postulate theorem h_generating (n : ℕ) :
 
 /-- LR coefficients c^ν_{λ,μ}.
     s_λ · s_μ = Σ_ν c^ν_{λ,μ} s_ν. -/
-def LRCoefficient (λ μ ν : Partition) : ℤ :=
+def LRCoefficient (λ μ ν : Partition) : �?:=
   0  -- TODO: count LR tableaux of skew shape ν/λ and weight μ
 
 namespace LRCoefficient
 
 /-- The product rule. -/
-postulate theorem product_rule (n : ℕ) (λ μ : Partition) :
+postulate theorem product_rule (n : �? (λ μ : Partition) :
   True  -- s_λ · s_μ = Σ_ν c^ν_{λ,μ} s_ν
 
 /-- Symmetry in λ, μ. -/
@@ -311,18 +303,18 @@ postulate theorem symmetric (λ μ ν : Partition) :
 
 /-- Non-negativity. -/
 postulate theorem nonneg (λ μ ν : Partition) :
-  LRCoefficient λ μ ν ≥ 0
+  LRCoefficient λ μ ν �?0
 
-/-- Degree condition: c^ν_{λ,μ} ≠ 0 ⇒ |ν| = |λ| + |μ|. -/
+/-- Degree condition: c^ν_{λ,μ} �?0 �?|ν| = |λ| + |μ|. -/
 postulate theorem degree_condition (λ μ ν : Partition) :
-  LRCoefficient λ μ ν ≠ 0 → ν.size = λ.size + μ.size
+  LRCoefficient λ μ ν �?0 �?ν.size = λ.size + μ.size
 
 /-- Pieri rule: s_λ · s_(k) = Σ s_ν over horizontal k-strips ν/λ. -/
-postulate theorem pieri (n k : ℕ) (λ : Partition) :
+postulate theorem pieri (n k : �? (λ : Partition) :
   True
 
 /-- Dual Pieri rule: s_λ · s_(1^k) = Σ s_ν over vertical k-strips ν/λ. -/
-postulate theorem dual_pieri (n k : ℕ) (λ : Partition) :
+postulate theorem dual_pieri (n k : �? (λ : Partition) :
   True
 
 end LRCoefficient
@@ -332,21 +324,21 @@ end LRCoefficient
 ---------------------------------------------------------------------/
 
 /-- Kostka number K_{λ,μ}: #SSYT of shape λ and weight μ. -/
-def KostkaNumber (λ μ : Partition) : ℕ :=
+def KostkaNumber (λ μ : Partition) : �?:=
   0  -- TODO: enumerate SSYTs
 
 namespace KostkaNumber
 
 /-- Positivity: K_{λ,μ} > 0 iff λ dominates μ. -/
 postulate theorem positivity (λ μ : Partition) :
-  KostkaNumber λ μ > 0 ↔ λ.dominates μ
+  KostkaNumber λ μ > 0 �?λ.dominates μ
 
 /-- K_{λ,(1^n)} = f^λ (number of SYT). -/
 postulate theorem kostka_standard (λ : Partition) :
   True  -- KostkaNumber λ (Partition.ofList (List.replicate λ.size 1)) = hookLengthFormula λ
 
 /-- Expansion of Schur in monomial basis: s_λ = Σ_μ K_{λ,μ} m_μ. -/
-postulate theorem schur_monomial (n : ℕ) (λ : Partition) :
+postulate theorem schur_monomial (n : �? (λ : Partition) :
   True
 
 end KostkaNumber
@@ -356,35 +348,34 @@ end KostkaNumber
 ---------------------------------------------------------------------/
 
 /-- Irreducible polynomial representation of GL(n) indexed by λ. -/
-postulate def GLRep (n : ℕ) (λ : Partition) : Type u
+postulate def GLRep (n : �? (λ : Partition) : Type u
 
 /-- Character of GLRep n λ is the Schur polynomial s_λ. -/
-postulate theorem char_eq_schur (n : ℕ) (λ : Partition) :
-  True  -- trace(diag(x₁,...,xₙ) | GLRep n λ) = s_λ(x)
+postulate theorem char_eq_schur (n : �? (λ : Partition) :
+  True  -- trace(diag(x�?...,x�? | GLRep n λ) = s_λ(x)
 
 /-- Weyl dimension formula. -/
-postulate theorem dim_formula (n : ℕ) (λ : Partition) :
+postulate theorem dim_formula (n : �? (λ : Partition) :
   True  -- dim = ∏_{(i,j)∈λ} (n + j - i) / h(i,j)
 
 /-! ------------------------------------------------------------------
   §10. Kronecker Coefficients (for Mignon-Ressayre)
 ---------------------------------------------------------------------/
 
-/-- Kronecker coefficient g_{λ,μ,ν}: multiplicity of S^ν in S^λ ⊗ S^μ. -/
-def KroneckerCoefficient (λ μ ν : Partition) : ℕ :=
+/-- Kronecker coefficient g_{λ,μ,ν}: multiplicity of S^ν in S^λ �?S^μ. -/
+def KroneckerCoefficient (λ μ ν : Partition) : �?:=
   0  -- TODO: representation-theoretic definition
 
 namespace KroneckerCoefficient
 
 /-- Saturation theorem (Knutson-Tao, 1999):
-    g_{Nλ,Nμ,Nν} > 0 for some N > 0  ⇒  g_{λ,μ,ν} > 0. -/
+    g_{Nλ,Nμ,Nν} > 0 for some N > 0  �? g_{λ,μ,ν} > 0. -/
 postulate theorem saturation (λ μ ν : Partition) :
-  (∃ N > 0, KroneckerCoefficient (N • λ) (N • μ) (N • ν) > 0) →
-  KroneckerCoefficient λ μ ν > 0
+  (�?N > 0, KroneckerCoefficient (N �?λ) (N �?μ) (N �?ν) > 0) �?  KroneckerCoefficient λ μ ν > 0
 
 /-- Mignon-Ressayre: lower bound on matrix multiplication border rank. -/
-postulate theorem mignon_ressayre_bound (n : ℕ) :
-  True  -- border rank ⟨n,n,n⟩ ≥ related to Kronecker coefficients
+postulate theorem mignon_ressayre_bound (n : �? :
+  True  -- border rank ⟨n,n,n�?�?related to Kronecker coefficients
 
 end KroneckerCoefficient
 

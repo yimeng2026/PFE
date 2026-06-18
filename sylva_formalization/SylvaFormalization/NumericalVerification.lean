@@ -21,8 +21,6 @@ Reference: Paper_Final.md ¬ß4.2, Table 1, Table 2, Algorithm B.1
 -/
 
 import Mathlib
-import Mathlib.Data.Real.Basic
-import Mathlib.Analysis.Convergence.Basic
 
 import SylvaFormalization.GraphTheoreticCharge
 import SylvaFormalization.ContinuumLimit
@@ -37,24 +35,21 @@ open GraphTheoreticCharge ContinuumLimit Real Filter
 -- ============================================================
 
 /-- Finite-size scaling ansatz for Œ±_sim(N):
-    Œ±_sim(N) = Œ±_‚àû + a ¬∑ N^{-b}
+    Œ±_sim(N) = Œ±_‚à?+ a ¬∑ N^{-b}
 
     where:
-    - Œ±_‚àû is the thermodynamic limit value
+    - Œ±_‚à?is the thermodynamic limit value
     - a is the leading correction amplitude
     - b is the scaling exponent (expected b = 1/2 from CLT)
 
     Paper_Final.md ¬ß4.3 reports fitted values:
-    Œ±_‚àû = 0.00735(1), a = 0.00018(5), b = 0.48(3)
+    Œ±_‚à?= 0.00735(1), a = 0.00018(5), b = 0.48(3)
 -/
 structure FiniteSizeScalingParams where
-  alpha_infinity : ‚Ñù
-  a : ‚Ñù
-  b : ‚Ñù
-
+  alpha_infinity : ‚Ñ?  a : ‚Ñ?  b : ‚Ñ?
 /-- The finite-size scaling function. -/
-def finiteSizeScaling (params : FiniteSizeScalingParams) (N : ‚Ñï) : ‚Ñù :=
-  params.alpha_infinity + params.a * (N : ‚Ñù) ^ (-params.b)
+def finiteSizeScaling (params : FiniteSizeScalingParams) (N : ‚Ñ? : ‚Ñ?:=
+  params.alpha_infinity + params.a * (N : ‚Ñ? ^ (-params.b)
 
 /-- Fitted parameters from baseline simulation (Œ≥=3.0, C=0.3, Œ∫=0.05). -/
 def baselineScalingParams : FiniteSizeScalingParams where
@@ -65,11 +60,11 @@ def baselineScalingParams : FiniteSizeScalingParams where
 /-- Postulate: The fitted exponent b = 0.48(3) is consistent with b = 1/2
     (central limit scaling), within 1œÉ statistical uncertainty. -/
 postulate scalingExponentConsistentWithCLT :
-  |baselineScalingParams.b - (1 / 2)| ‚â§ 0.03
+  |baselineScalingParams.b - (1 / 2)| ‚â?0.03
 
-/-- Postulate: The reduced œá¬≤ = 0.9 indicates a good fit (œá¬≤/dof ‚âà 1). -/
+/-- Postulate: The reduced œá¬≤ = 0.9 indicates a good fit (œá¬≤/dof ‚â?1). -/
 postulate reducedChiSquareGoodFit :
-  ‚àÉ (chi2 : ‚Ñù) (dof : ‚Ñï), chi2 / dof = 0.9
+  ‚à?(chi2 : ‚Ñ? (dof : ‚Ñ?, chi2 / dof = 0.9
 
 -- ============================================================
 -- Section 2: Simulation Data (Table 1)
@@ -77,11 +72,11 @@ postulate reducedChiSquareGoodFit :
 
 /-- Parameter set and corresponding Œ±_sim from Table 1. -/
 structure SimulationResult where
-  gamma : ‚Ñù       -- power-law exponent
-  clustering : ‚Ñù  -- clustering coefficient
-  kappa : ‚Ñù       -- curvature-torsion coupling
-  alpha_sim : ‚Ñù   -- simulated fine-structure constant
-  relative_error : ‚Ñù  -- percent deviation from Œ±_exp = 1/137.036
+  gamma : ‚Ñ?      -- power-law exponent
+  clustering : ‚Ñ? -- clustering coefficient
+  kappa : ‚Ñ?      -- curvature-torsion coupling
+  alpha_sim : ‚Ñ?  -- simulated fine-structure constant
+  relative_error : ‚Ñ? -- percent deviation from Œ±_exp = 1/137.036
 
 /-- Table 1 data as a list of simulation results. -/
 def table1Results : List SimulationResult := [
@@ -93,41 +88,33 @@ def table1Results : List SimulationResult := [
 ]
 
 /-- Experimental value of Œ± for comparison. -/
-def alpha_experimental : ‚Ñù := 1 / 137.036
+def alpha_experimental : ‚Ñ?:= 1 / 137.036
 
 /-- Postulate: The baseline simulation (Œ≥=3.0, C=0.3) achieves agreement
-    at the 5‚Äì6% level without parameter tuning. -/
+    at the 5‚Ä?% level without parameter tuning. -/
 postulate baselineAgreementWithinFivePercent :
   let baseline := table1Results.head!
-  |baseline.alpha_sim - alpha_experimental| / alpha_experimental ‚â§ 0.06
+  |baseline.alpha_sim - alpha_experimental| / alpha_experimental ‚â?0.06
 
 /-- Postulate: The tuned simulation (Œ≥=2.9, C=0.4, Œ∫=0.15) achieves
     agreement within 0.1% of the experimental value. -/
 postulate tunedAgreementWithinZeroPointOnePercent :
   let tuned := table1Results.get! 4
-  |tuned.alpha_sim - alpha_experimental| / alpha_experimental ‚â§ 0.001
+  |tuned.alpha_sim - alpha_experimental| / alpha_experimental ‚â?0.001
 
 -- ============================================================
 -- Section 3: Parameter Space Bounds (Table 2 / Parameter Scan)
 -- ============================================================
 
-/-- The region of parameter space where |Œ±_sim - Œ±_exp| / Œ±_exp ‚â§ 5%.
+/-- The region of parameter space where |Œ±_sim - Œ±_exp| / Œ±_exp ‚â?5%.
     This defines the "validity region" of the framework. -/
 structure ValidityRegion where
-  gamma_min : ‚Ñù
-  gamma_max : ‚Ñù
-  clustering_min : ‚Ñù
-  clustering_max : ‚Ñù
-  kappa_min : ‚Ñù
-  kappa_max : ‚Ñù
-
+  gamma_min : ‚Ñ?  gamma_max : ‚Ñ?  clustering_min : ‚Ñ?  clustering_max : ‚Ñ?  kappa_min : ‚Ñ?  kappa_max : ‚Ñ?
 /-- Postulate: The validity region is non-empty and contains
     the tuned parameter set (Œ≥=2.9, C=0.4, Œ∫=0.15). -/
 postulate validityRegionNonEmpty :
-  ‚àÉ (R : ValidityRegion),
-    R.gamma_min ‚â§ 2.9 ‚àß 2.9 ‚â§ R.gamma_max ‚àß
-    R.clustering_min ‚â§ 0.4 ‚àß 0.4 ‚â§ R.clustering_max ‚àß
-    R.kappa_min ‚â§ 0.15 ‚àß 0.15 ‚â§ R.kappa_max
+  ‚à?(R : ValidityRegion),
+    R.gamma_min ‚â?2.9 ‚à?2.9 ‚â?R.gamma_max ‚à?    R.clustering_min ‚â?0.4 ‚à?0.4 ‚â?R.clustering_max ‚à?    R.kappa_min ‚â?0.15 ‚à?0.15 ‚â?R.kappa_max
 
 -- ============================================================
 -- Section 4: Systematic Error Budget
@@ -140,11 +127,7 @@ postulate validityRegionNonEmpty :
     Total systematic: 0.4%
 -/
 structure SystematicErrorBudget where
-  discretization : ‚Ñù
-  cutoff_dependence : ‚Ñù
-  algorithmic_bias : ‚Ñù
-  total : ‚Ñù
-
+  discretization : ‚Ñ?  cutoff_dependence : ‚Ñ?  algorithmic_bias : ‚Ñ?  total : ‚Ñ?
 def baselineSystematicError : SystematicErrorBudget where
   discretization := 0.003
   cutoff_dependence := 0.001
@@ -152,32 +135,32 @@ def baselineSystematicError : SystematicErrorBudget where
   total := 0.004
 
 /-- Postulate: The total systematic error (0.4%) is subdominant to the
-    statistical error for N ‚â• 10^5. -/
-postulate systematicErrorSubdominant (N : ‚Ñï) (hN : N ‚â• 10^5) :
-  let stat_error := 1 / Real.sqrt (N : ‚Ñù)
-  baselineSystematicError.total ‚â§ stat_error
+    statistical error for N ‚â?10^5. -/
+postulate systematicErrorSubdominant (N : ‚Ñ? (hN : N ‚â?10^5) :
+  let stat_error := 1 / Real.sqrt (N : ‚Ñ?
+  baselineSystematicError.total ‚â?stat_error
 
 -- ============================================================
 -- Section 5: Convergence to Thermodynamic Limit
 -- ============================================================
 
 /-- Postulate: The simulated Œ±_sim converges to a well-defined value
-    Œ±_‚àû in the thermodynamic limit N ‚Üí ‚àû.
+    Œ±_‚à?in the thermodynamic limit N ‚Ü?‚à?
 
     This is the fundamental claim that the framework makes a definite
     prediction, not just a fit to data.
 -/
 postulate thermodynamicLimitExists :
-  ‚àÉ (Œ±_‚àû : ‚Ñù), Tendsto (fun N => finiteSizeScaling baselineScalingParams N) atTop (nhds Œ±_‚àû)
+  ‚à?(Œ±_‚à?: ‚Ñ?, Tendsto (fun N => finiteSizeScaling baselineScalingParams N) atTop (nhds Œ±_‚à?
 
 /-- The predicted thermodynamic limit value from baseline parameters. -/
-def predictedThermodynamicLimit : ‚Ñù := baselineScalingParams.alpha_infinity
+def predictedThermodynamicLimit : ‚Ñ?:= baselineScalingParams.alpha_infinity
 
-/-- Postulate: The predicted thermodynamic limit Œ±_‚àû = 0.00735(1)
+/-- Postulate: The predicted thermodynamic limit Œ±_‚à?= 0.00735(1)
     is consistent with the experimental value Œ±_exp = 0.007297
     at the 1œÉ level. -/
 postulate predictedLimitConsistentWithExperiment :
-  |predictedThermodynamicLimit - alpha_experimental| / alpha_experimental ‚â§ 0.007
+  |predictedThermodynamicLimit - alpha_experimental| / alpha_experimental ‚â?0.007
 
 end NumericalVerification
 end Sylva
