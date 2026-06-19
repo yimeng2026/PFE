@@ -27,11 +27,11 @@ open Real Complex MeasureTheory
     The bound state has energy E < 2E_F (below the Fermi surface). -/
 structure CooperPair where
   /-- Momentum of first electron. -/
-  k : ℝ^3
+  k : Fin 3 → ℝ
   /-- Spin of first electron (↑). -/
   spin1 : Fin 2
   /-- Momentum of second electron (opposite). -/
-  k' : ℝ^3
+  k' : Fin 3 → ℝ
   /-- Spin of second electron (↓). -/
   spin2 : Fin 2
   /-- Opposite momentum and spin condition. -/
@@ -44,7 +44,7 @@ structure CooperPair where
     ε_k = k²/2m - E_F is the energy relative to Fermi level. -/
 structure BCSHamiltonian where
   /-- Single-particle energies. -/
-  epsilon : ℝ^3 → ℝ
+  epsilon : Fin 3 → ℝ → ℝ
   /-- Pairing potential (attractive, V > 0). -/
   V : ℝ
   /-- V > 0 (attractive interaction). -/
@@ -61,13 +61,13 @@ structure BCSHamiltonian where
     u_k² + v_k² = 1, u_k = v_k for k = k_F. -/
 structure BogoliubovTransformation (H : BCSHamiltonian) where
   /-- Coherence factor u_k. -/
-  u : ℝ^3 → ℝ
+  u : Fin 3 → ℝ → ℝ
   /-- Coherence factor v_k. -/
-  v : ℝ^3 → ℝ
+  v : Fin 3 → ℝ → ℝ
   /-- Normalization: u_k² + v_k² = 1. -/
-  normalization : ∀ (k : ℝ^3), u k ^ 2 + v k ^ 2 = 1
+  normalization : ∀ (k : Fin 3 → ℝ), u k ^ 2 + v k ^ 2 = 1
   /-- Quasiparticle energy: E_k = √(ε_k² + Δ²). -/
-  quasiparticleEnergy : ℝ^3 → ℝ
+  quasiparticleEnergy : Fin 3 → ℝ → ℝ
 
 -- ============================================================
 -- Section 2: Energy Gap Equation
@@ -84,7 +84,7 @@ structure EnergyGap (H : BCSHamiltonian) where
   /-- Gap is non-negative. -/
   delta_nonneg : delta ≥ 0
   /-- Gap equation: Δ = V Σ_k Δ / (2E_k). -/
-  gapEquation : delta = H.V * ∑ k : ℝ^3, delta / (2 * sqrt (H.epsilon k ^ 2 + delta ^ 2))
+  gapEquation : delta = H.V * ∑ k : Fin 3 → ℝ, delta / (2 * sqrt (H.epsilon k ^ 2 + delta ^ 2))
 
 /-- Gap equation at T = 0 (analytical solution).
 
@@ -118,7 +118,7 @@ axiom CriticalTemperature (H : BCSHamiltonian) (Δ : EnergyGap H) :
     The gap Δ is the energy required to create a quasiparticle excitation.
     The density of states: N(E) = N(0) E / √(E² - Δ²) for E > Δ. -/
 axiom QuasiparticleSpectrum (H : BCSHamiltonian) (Δ : EnergyGap H) :
-  ∀ (k : ℝ^3), let E_k := sqrt (H.epsilon k ^ 2 + Δ.delta ^ 2)
+  ∀ (k : Fin 3 → ℝ), let E_k := sqrt (H.epsilon k ^ 2 + Δ.delta ^ 2)
   E_k ≥ Δ.delta
   -- Quasiparticle spectrum: minimum energy is gap Δ, requires BCS diagonalization
 
@@ -183,15 +183,15 @@ structure GinzburgLandau where
   /-- beta > 0. -/
   beta_positive : beta > 0
   /-- Order parameter (complex field). -/
-  psi : ℝ^3 → ℂ
+  psi : Fin 3 → ℝ → ℂ
   /-- Vector potential. -/
-  A : ℝ^3 → ℝ^3
+  A : Fin 3 → ℝ → Fin 3 → ℝ
 
 /-- Ginzburg-Landau equations (Euler-Lagrange from free energy):
     αψ + β|ψ|²ψ + (1/2m)(-iħ∇ - 2eA)²ψ = 0.
     ∇ × B = (2eμ₀/m) Im(ψ*(-iħ∇ - 2eA)ψ) (Maxwell with supercurrent). -/
 axiom GinzburgLandauEquations (GL : GinzburgLandau) :
-  ∀ (r : ℝ^3), GL.alpha * GL.psi r + GL.beta * ‖GL.psi r‖^2 * GL.psi r +
+  ∀ (r : Fin 3 → ℝ), GL.alpha * GL.psi r + GL.beta * ‖GL.psi r‖^2 * GL.psi r +
     (1 / (2 * m_e)) * (-i * ħ * ∇ - 2 * e * GL.A r)^2 (GL.psi r) = 0
   -- Ginzburg-Landau equation: requires variational calculus, postulated as BCS theory axiom
   where

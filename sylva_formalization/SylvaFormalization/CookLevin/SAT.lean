@@ -122,7 +122,7 @@ def Unsatisfiable (φ : CNF) : Prop :=
 def numVars (φ : CNF) : Nat :=
   match φ.flatMap (λ c => c.map Literal.var) with
   | [] => 0
-  | vars => Nat.succ (vars.maxBy id)
+  | vars => Nat.succ (vars.foldl max 0)
 
 /-- Number of clauses in a CNF formula. -/
 def numClauses (φ : CNF) : Nat := φ.length

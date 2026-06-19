@@ -23,6 +23,16 @@ open Real
 
     Slow-roll conditions: ε << 1, |η| << 1 where
     ε = (M_Pl²/2)(V'/V)², η = M_Pl² V''/V. -/
+def M_Pl : ℝ := 2.435e18  -- Planck mass in GeV
+
+/-- Inflaton field φ: scalar field driving inflation.
+
+    Action: S = ∫ d⁴x √(-g) [½ ∂_μ φ ∂^μ φ - V(φ)].
+    Energy density: ρ = ½ φ̇² + V(φ).
+    Pressure: p = ½ φ̇² - V(φ).
+
+    Slow-roll conditions: ε << 1, |η| << 1 where
+    ε = (M_Pl²/2)(V'/V)², η = M_Pl² V''/V. -/
 structure Inflaton where
   /-- Inflaton field φ(t). -/
   phi : ℝ → ℝ
@@ -35,7 +45,6 @@ structure Inflaton where
   /-- Slow-roll parameter η. -/
   eta : ℝ → ℝ
   eta_def : ∀ (t : ℝ), eta t = M_Pl^2 * deriv (deriv V) (phi t) / V (phi t)
-  where M_Pl : ℝ := 2.435e18  -- Planck mass in GeV
 
 /-- Slow-roll inflation: ε < 1 and |η| < 1.
 

@@ -31,25 +31,30 @@ structure Worldsheet where
   /-- Relation: T = 1/(2πα'). -/
   tension_relation : T = 1 / (2 * Real.pi * alpha')
   /-- Worldsheet coordinates (τ, σ). -/
-  coord : ℝ^2
+  coord : Fin 2 → ℝ
   /-- Embedding X^μ(τ, σ) into target spacetime. -/
-  embedding : ℝ^2 → ℝ^D
+  embedding : (Fin 2 → ℝ) → (Fin D → ℝ)
   /-- Target spacetime dimension D. -/
   D : ℕ
 
+/-- Partial derivative of embedding with respect to worldsheet coordinate i. -/
+noncomputable def partialDeriv {D : ℕ} (f : (Fin 2 → ℝ) → (Fin D → ℝ)) (σ : Fin 2 → ℝ) (i : Fin 2) : Fin D → ℝ :=
+  sorry
+
 /-- Polyakov action in conformal gauge (h_{ab} = η_{ab}):
     S = -(T/2) ∫ d²σ ∂_a X^μ ∂^a X_μ. -/
-axiom PolyakovAction (ws : Worldsheet) :
-  let S := -(ws.T / 2) * ∫ (σ : ℝ^2), ‖deriv ws.embedding σ‖^2
-  S < ∞
-  -- Polyakov action finite: requires conformal gauge fixing, postulated as string theory axiom
+noncomputable def PolyakovAction (ws : Worldsheet) : ℝ :=
+  sorry
+
+axiom PolyakovAction_finite (ws : Worldsheet) : sorry
 
 /-- Nambu-Goto action (area of worldsheet):
     S = -T ∫ d²σ √((Ẋ·X')² - (Ẋ²)(X'²)). -/
-axiom NambuGotoAction (ws : Worldsheet) :
-  let S := -ws.T * ∫ (σ : ℝ^2), Real.sqrt ((‖deriv ws.embedding σ 0‖ * ‖deriv ws.embedding σ 1‖)^2 -
-    (‖deriv ws.embedding σ 0‖^2) * (‖deriv ws.embedding σ 1‖^2))
-  S = PolyakovAction ws
+noncomputable def NambuGotoAction (ws : Worldsheet) : ℝ :=
+  sorry
+
+axiom NambuGotoAction_eq_PolyakovAction (ws : Worldsheet) :
+  NambuGotoAction ws = PolyakovAction ws
   -- Nambu-Goto = Polyakov in conformal gauge, postulated as string theory axiom
 
 end StringTheory

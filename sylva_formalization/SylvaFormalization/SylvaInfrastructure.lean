@@ -1,9 +1,6 @@
 import Mathlib
-import Basic
 
 namespace SylvaFormalization
-
-open Sylva
 
 /- ================================================
    SylvaInfrastructure.lean - Simplified Version
@@ -61,8 +58,6 @@ theorem kolmogorov_upper_bound (x : List Bool) :
 -- ============================================
 -- Section 3: Complexity Classes (from Basic.lean)
 -- ============================================
-
-open Sylva
 
 -- ============================================
 -- Section 4: Asymptotic Notations

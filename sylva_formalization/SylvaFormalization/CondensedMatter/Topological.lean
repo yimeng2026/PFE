@@ -20,7 +20,7 @@ open Real Complex
     Quasiparticles have fractional charge e* = e/m and fractional statistics θ = π/m.
     The ground state is topologically ordered (degenerate on torus). -/
 axiom LaughlinWavefunction (m : ℕ) :
-  m > 0 → ∃ (Ψ_L : ℂ^3 → ℂ), Ψ_L ≠ 0
+  m > 0 → ∃ (Ψ_L : Fin 3 → ℂ → ℂ), Ψ_L ≠ 0
   -- Laughlin wavefunction: exists for m > 0, postulated as FQHE axiom
 
 /-- Anyon statistics: fractional statistics intermediate between bosons and fermions.

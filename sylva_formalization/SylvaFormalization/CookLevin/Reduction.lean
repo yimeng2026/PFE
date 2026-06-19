@@ -102,7 +102,6 @@ notation L₁ " ≤ₚ " L₂ => leq_p L₁ L₂
     L ≤ₚ L via the identity function. -/
 theorem leq_p_refl {α : Type*} [Inhabited α] (L : Language α) : L ≤ₚ L := by
   use { reduce := id, isPolyTime := ⟨id, { degree := 1, coeff := 1, constant := 0 }⟩, preserves := λ _ => Iff.rfl }
-  trivial
 
 /-- Polynomial-time reduction is transitive.
     If L₁ ≤ₚ L₂ and L₂ ≤ₚ L₃, then L₁ ≤ₚ L₃.
@@ -116,7 +115,6 @@ theorem leq_p_trans {α β γ : Type*} [Inhabited α] [Inhabited β] [Inhabited 
   rcases h₂₃ with ⟨⟨r₂₃, _, p₂₃⟩, _⟩
   use { reduce := r₂₃ ∘ r₁₂, isPolyTime := ⟨r₂₃ ∘ r₁₂, { degree := 2, coeff := 1, constant := 0 }⟩, preserves := λ x =>
     Iff.trans (p₁₂ x) (p₂₃ (r₁₂ x)) }
-  trivial
 
 /-! ## NP-Completeness Framework -/
 

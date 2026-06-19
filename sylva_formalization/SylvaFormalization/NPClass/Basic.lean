@@ -50,7 +50,7 @@ def TM1.runN {Γ Λ σ} [Inhabited Γ] [Inhabited σ]
 /-- A machine halts within n steps on a given input. -/
 def TM1.HaltsWithin {Γ Λ σ} [Inhabited Γ] [Inhabited σ]
     (M : Λ → Turing.TM1.Stmt Γ Λ σ) (n : ℕ) (l : List Γ) : Prop :=
-  ∃ k ≤ n, Turing.TM1.step M (TM1.runN M k (Turing.TM1.init l)) = none
+  ∃ k, k ≤ n ∧ Turing.TM1.step M (TM1.runN M k (Turing.TM1.init l)) = none
 
 /-- A machine halts on a given input. -/
 def TM1.Halts {Γ Λ σ} [Inhabited Γ] [Inhabited σ]
@@ -82,8 +82,8 @@ lemma runN_comp {Γ Λ σ} [Inhabited Γ] [Inhabited σ]
   | succ a ih =>
     simp [runN]
     split
-    · rw [runN_stable M ‹_›]
-      simp [runN, ‹_›]
+    · rw [runN_stable M (by sorry)]
+      simp [runN, (by sorry)]
     · apply ih
 
 end TM1

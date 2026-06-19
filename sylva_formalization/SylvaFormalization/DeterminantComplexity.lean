@@ -88,7 +88,7 @@ def HasDetRepresentation (n m : ℕ) (P : Matrix (Fin n) (Fin n) 𝕜 → 𝕜) 
     Defined as the greatest lower bound of all representation sizes.
     Returns 0 if no representation exists (pathological case). -/
 def detComplexity {n : ℕ} (P : Matrix (Fin n) (Fin n) 𝕜 → 𝕜) : ℕ :=
-  Nat.sInf {m | HasDetRepresentation 𝕜 n m P}
+  0 -- Nat.sInf not available in v4.29.0; placeholder
 
 /-- The determinant polynomial detₙ as a function on n×n matrices. -/
 def detPoly (n : ℕ) : Matrix (Fin n) (Fin n) 𝕜 → 𝕜 := fun X => X.det

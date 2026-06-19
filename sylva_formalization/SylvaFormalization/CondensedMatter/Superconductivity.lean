@@ -21,7 +21,7 @@ open Real
     Nodes at k_x = ±k_y (gapless excitations along diagonals).
     Phase sensitive experiments (Josephson junctions, SQUID) confirm d-wave. -/
 axiom DWavePairing (TJ : TJModel) :
-  ∀ (k : ℝ^2), let Delta_k := (Real.cos k.1 - Real.cos k.2) / 2
+  ∀ (k : Fin 2 → ℝ), let Delta_k := (Real.cos (k 0) - Real.cos (k 1)) / 2
     ‖Delta_k‖ ≥ 0
   -- d-wave pairing: nodes along diagonals, postulated as cuprate superconductivity axiom
 

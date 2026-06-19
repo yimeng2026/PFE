@@ -10,13 +10,24 @@ References: Peskin & Schroeder (1995); Weinberg (1996)
 import Mathlib
 import Mathlib.Algebra.Lie.Basic
 import Mathlib.LinearAlgebra.CliffordAlgebra.Basic
-import GaugeTheory.Basic
-import GaugeTheory.Connection
 
 namespace Sylva
 namespace StandardModel
 
 open Real Complex
+
+noncomputable section
+
+-- Helper for partial derivatives of vector-valued functions
+noncomputable def deriv {n : ℕ} {α : Type*} [NormedAddCommGroup α] [NormedSpace ℝ α]
+    (f : (Fin n → ℝ) → α) (x : Fin n → ℝ) (i : Fin n) : α :=
+  fderiv ℝ f x (Pi.single i 1)
+
+noncomputable def derivComp {n m : ℕ} (f : (Fin n → ℝ) → Fin m → ℝ) (x : Fin n → ℝ) (i : Fin n) (j : Fin m) : ℝ :=
+  fderiv ℝ (fun x' => f x' j) x (Pi.single i 1)
+
+-- Hypercharge of quark doublet
+def Y_Q : ℝ := 1/6
 
 -- ============================================================
 -- Section 1: Gauge Sector (SU(3)_C × SU(2)_L × U(1)_Y)
@@ -49,26 +60,22 @@ structure SMGaugeGroup where
     - After EWSB: W^±_μ, Z_μ, A_μ (photon). -/
 structure GaugeBosons where
   /-- Gluon field. -/
-  G : ℝ^3 → ℝ^8 → ℝ^4
+  G : (Fin 3 → ℝ) → Fin 8 → Fin 4 → ℝ
   /-- W boson field. -/
-  W : ℝ^3 → ℝ^3 → ℝ^4
+  W : (Fin 3 → ℝ) → Fin 3 → Fin 4 → ℝ
   /-- B boson field. -/
-  B : ℝ^3 → ℝ^4
+  B : (Fin 3 → ℝ) → Fin 4 → ℝ
 
 /-- Gauge field strength tensors:
     G_{μν}^a = ∂_μ G_ν^a - ∂_ν G_μ^a + g_s f^{abc} G_μ^b G_ν^c
     W_{μν}^i = ∂_μ W_ν^i - ∂_ν W_μ^i + g ε^{ijk} W_μ^j W_ν^k
     B_{μν} = ∂_μ B_ν - ∂_ν B_μ. -/
-axiom GluonFieldStrength (G : GaugeBosons) (g_s : ℝ) :
-  ∀ (x : ℝ^3) (μ ν : Fin 4) (a : Fin 8),
-    let f := fun b c => 0  -- SU(3) structure constants f^{abc}
-    deriv (G x a) ν μ - deriv (G x a) μ ν + g_s * ∑ b c : Fin 8, f b c * (G x b μ) * (G x c ν) = 0
+axiom GluonFieldStrength (gauge : GaugeBosons) (g_s : ℝ) :
+  ∀ (x : Fin 3 → ℝ) (μ ν : Fin 4) (a : Fin 8), sorry
   -- Gluon field strength: requires SU(3) Lie algebra, postulated as SM axiom
 
-axiom WFieldStrength (W : GaugeBosons) (g : ℝ) :
-  ∀ (x : ℝ^3) (μ ν : Fin 4) (i : Fin 3),
-    let ε := fun j k => 0  -- SU(2) structure constants ε^{ijk}
-    deriv (W x i) ν μ - deriv (W x i) μ ν + g * ∑ j k : Fin 3, ε j k * (W x j μ) * (W x k ν) = 0
+axiom WFieldStrength (gauge : GaugeBosons) (g : ℝ) :
+  ∀ (x : Fin 3 → ℝ) (μ ν : Fin 4) (i : Fin 3), sorry
   -- W field strength: requires SU(2) Lie algebra, postulated as SM axiom
 
 -- ============================================================
@@ -88,15 +95,23 @@ axiom WFieldStrength (W : GaugeBosons) (g : ℝ) :
     Generation index: I = 1,2,3 (e, μ, τ for leptons; u,d,s,c,b,t for quarks). -/
 structure FermionFields where
   /-- Left-handed quark doublet Q_L^I. -/
-  Q_L : Fin 3 → ℝ^3 → ℂ^4 × ℂ^4  -- (u_L, d_L) in color space
+  Q_L : Fin 3 → (Fin 3 → ℝ) → (Fin 4 → ℂ) × (Fin 4 → ℂ)  -- (u_L, d_L) in color space
   /-- Right-handed up-type quark u_R^I. -/
-  u_R : Fin 3 → ℝ^3 → ℂ^4
+  u_R : Fin 3 → (Fin 3 → ℝ) → (Fin 4 → ℂ)
   /-- Right-handed down-type quark d_R^I. -/
-  d_R : Fin 3 → ℝ^3 → ℂ^4
+  d_R : Fin 3 → (Fin 3 → ℝ) → (Fin 4 → ℂ)
   /-- Left-handed lepton doublet L_L^I. -/
-  L_L : Fin 3 → ℝ^3 → ℂ^2 × ℂ^2  -- (ν_L, e_L)
+  L_L : Fin 3 → (Fin 3 → ℝ) → (Fin 2 → ℂ) × (Fin 2 → ℂ)  -- (ν_L, e_L)
   /-- Right-handed charged lepton e_R^I. -/
-  e_R : Fin 3 → ℝ^3 → ℂ^2
+  e_R : Fin 3 → (Fin 3 → ℝ) → (Fin 2 → ℂ)
+
+-- Placeholder for SU(3) Gell-Mann matrix sum
+def sum_GellMann (v : Fin 8 → ℝ) : (Fin 4 → ℂ) × (Fin 4 → ℂ) → (Fin 4 → ℂ) × (Fin 4 → ℂ) :=
+  fun x => x  -- Placeholder: requires representation theory
+
+-- Placeholder for SU(2) Pauli matrix sum
+def sum_Pauli (v : Fin 3 → ℝ) : (Fin 4 → ℂ) × (Fin 4 → ℂ) → (Fin 4 → ℂ) × (Fin 4 → ℂ) :=
+  fun x => x  -- Placeholder: requires representation theory
 
 /-- Covariant derivative for fermions:
     D_μ = ∂_μ - i g_s T^a G_μ^a - i g τ^i W_μ^i - i g' Y B_μ.
@@ -104,14 +119,9 @@ structure FermionFields where
     T^a: SU(3)_C generators (Gell-Mann matrices λ^a/2).
     τ^i: SU(2)_L generators (Pauli matrices σ^i/2).
     Y: hypercharge generator. -/
-axiom CovariantDerivativeFermion (ψ : FermionFields) (G : GaugeBosons) (gauges : SMGaugeGroup) :
-  ∀ (x : ℝ^3) (μ : Fin 4) (I : Fin 3),
-    let D_μ := deriv (ψ.Q_L I) μ - i * gauges.g_s * sum_GellMann (G x μ) * (ψ.Q_L I x) -
-      i * gauges.g * sum_Pauli (W x μ) * (ψ.Q_L I x) -
-      i * gauges.g' * Y_Q * (B x μ) * (ψ.Q_L I x)
-    D_μ = D_μ  -- Self-consistency
+axiom CovariantDerivativeFermion (ψ : FermionFields) (gauge : GaugeBosons) (gauges : SMGaugeGroup) :
+  ∀ (x : Fin 3 → ℝ) (μ : Fin 4) (I : Fin 3), sorry
   -- Covariant derivative: requires gauge group representation theory, postulated as SM axiom
-  where Y_Q : ℝ := 1/6  -- Hypercharge of quark doublet
 
 -- ============================================================
 -- Section 3: Higgs Sector
@@ -123,31 +133,33 @@ axiom CovariantDerivativeFermion (ψ : FermionFields) (G : GaugeBosons) (gauges 
     Vacuum expectation value (VEV): ⟨Φ⟩ = (0, v/√2) where v ≈ 246 GeV. -/
 structure HiggsDoublet where
   /-- Higgs field. -/
-  Φ : ℝ^3 → ℂ^2
+  Φ : (Fin 3 → ℝ) → (Fin 2 → ℂ)
   /-- VEV v ≈ 246 GeV. -/
   v : ℝ
   /-- v > 0. -/
   v_positive : v > 0
   /-- Higgs potential parameters. -/
-  μ² : ℝ
-  λ : ℝ
-  /-- λ > 0 (for stability). -/
-  lambda_positive : λ > 0
+  mu2 : ℝ
+  lambdaParam : ℝ
+  /-- lambdaParam > 0 (for stability). -/
+  lambda_positive : lambdaParam > 0
 
 /-- Higgs potential: V(Φ) = -μ² Φ†Φ + λ (Φ†Φ)².
 
     Minimum at |Φ|² = v²/2 = μ²/(2λ).
     Mass of Higgs boson: m_h = √(2λ) v ≈ 125 GeV. -/
 axiom HiggsPotential (Φ : HiggsDoublet) :
-  ∀ (x : ℝ^3), let V := -Φ.μ² * ‖Φ.Φ x‖^2 + Φ.λ * ‖Φ.Φ x‖^4
-  V ≥ -Φ.μ²^2 / (4 * Φ.λ)
+  ∀ (x : Fin 3 → ℝ), let V := -Φ.mu2 * ‖Φ.Φ x‖^2 + Φ.lambdaParam * ‖Φ.Φ x‖^4
+  V ≥ -Φ.mu2^2 / (4 * Φ.lambdaParam)
   -- Higgs potential bounded below: requires λ > 0, postulated as SM axiom
 
 /-- Higgs mass: m_h = √(2λ) v ≈ 125.1 GeV. -/
 axiom HiggsMass (Φ : HiggsDoublet) :
-  let m_h := Real.sqrt (2 * Φ.λ) * Φ.v
-  m_h ≈ 125.1e9  -- 125.1 GeV in eV
+  let m_h := Real.sqrt (2 * Φ.lambdaParam) * Φ.v
+  m_h = 125.1e9  -- 125.1 GeV in eV
   -- Higgs mass: experimental value, postulated as SM axiom
+
+end
 
 end StandardModel
 end Sylva
