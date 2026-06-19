@@ -536,7 +536,44 @@ QED running could be tested at FCC-ee or CLIC energies.
 that the quantized Hall conductance $\sigma_{xy} = \nu e^{2}/h$ is a direct
 probe of the network's topological phase. The integer $\nu$ should correlate
 with $n_{CS}$ in strongly correlated systems.
-\end{enumerate}
+
+\textbf{TKNN microscopic derivation.} Within the causal network framework,
+the TKNN formula (Thouless--Kohmoto--Nightingale--Nijs, 1982) emerges as a
+direct consequence of the $U(1)$ Berry curvature on the Brillouin torus
+$\mathbb{T}^{2}$. Starting from the Bloch Hamiltonian
+$H(k)=-\nabla^{2}+V(\mathbf{r})$ with periodic potential $V$, the Berry
+connection
+\begin{equation}
+\mathcal{A}_{n,\mu}(k)=\langle u_{nk}|\,i\partial_{\mu}\,|u_{nk}\rangle,
+\qquad \mu=x,y,
+\end{equation}
+defines a $U(1)$ principal bundle over $\mathbb{T}^{2}$. The Berry curvature
+$\Omega_{xy}=\partial_{x}\mathcal{A}_{y}-\partial_{y}\mathcal{A}_{x}$ is gauge
+invariant, and its integral yields the first Chern number
+\begin{equation}
+C_{n}=\frac{1}{2\pi}\int_{\mathbb{T}^{2}}\Omega_{xy}\,d^{2}k\in\mathbb{Z},
+\end{equation}
+which is quantized by the Dirac monopole condition. The Kubo formula for the
+Hall conductivity then reduces to
+\begin{equation}
+\sigma_{xy}=\frac{e^{2}}{h}\,C_{n},
+\end{equation}
+providing a first-principles link between the network's topological phase and
+measurable transport. Our Lean 4 formalization (modules
+\texttt{BlochTheorem}, \texttt{BerryConnection}, \texttt{BerryCurvature},
+\texttt{ChernNumber}) verifies each step of this derivation up to the
+quantization theorem.
+
+\item \textbf{Topological superconductivity:} The same $U(1)$ bundle structure,
+when augmented with particle-hole symmetry, predicts topological
+superconducting phases characterized by a $\mathbb{Z}_{2}$ invariant
+$\nu_{\text{SC}}\in\{0,1\}$. A non-trivial invariant ($\nu_{\text{SC}}=1$)
+implies the existence of Majorana zero modes at the boundaries of the
+superconductor, detectable via zero-bias conductance peaks in scanning
+tunneling spectroscopy. The causal network framework predicts that
+$\nu_{\text{SC}}$ is determined by the parity of the total Chern number of
+the occupied bands, offering a direct test in proximitized semiconductor
+nanowires (e.g., InAs/Al or InSb/Al heterostructures).
 
 \subsection{Cosmological Implications}\label{subsec:cosmology}
 
