@@ -13,20 +13,30 @@ require mathlib from git
 @[default_target]
 lean_lib «SylvaFormalization» where
   roots := #[
+    `BCSTherory,
     `BerryConnection,
     `BerryCurvature,
     `BlochTheorem,
     `ChernNumber,
     `ChernSimons,
+    `CondensedMatter.Superconductivity,
+    `ContinuumLimit,
     `CookLevin.SAT,
     `Cosmology.DarkEnergy,
     `Cosmology.Inflation,
+    `DeterminantComplexity,
+    `EinsteinCartan,
     `FifteenConstants,
+    `GraphTheoreticCharge,
     `Hodge,
+    `InformationGeometry,
     `NPClass.PolynomialTime,
+    `Renormalization,
     `RiemannHypothesis,
     `SAT,
     `StandardModel.Basic,
     `StringTheory.Basic,
-    `SylvaInfrastructure
+    `SylvaInfrastructure,
+    `TopologicalInsulator,
+    `ZetaVerifier_backup
   ]

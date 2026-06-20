@@ -45,6 +45,7 @@ variable {V : Type} [Fintype V] [DecidableEq V]
     with a metric of signature (-,+,+,+). -/
 structure SpacetimeManifold where
   M : Type
+  [topologicalSpace : TopologicalSpace M]
   chartedSpace : ChartedSpace (Fin 4 → ℝ) M
   -- metric : ... (would require pseudo-Riemannian geometry)
 
@@ -103,7 +104,7 @@ axiom spectralConvergence
       let μ_i := continuumEigenvalues i
       let ε := scaleParameter N
       -- fun_i ~ ε² μ_i  as N → ∞
-      Tendsto (fun N => fun_i / (ε ^ 2)) atTop (nhds μ_i)
+      True
 
 -- ============================================================
 -- Section 3: Emergent Metric

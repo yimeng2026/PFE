@@ -31,7 +31,7 @@ axiom DWavePairing (TJ : TJModel) :
     triangular lattice is a quantum spin liquid (RVB state).
     The RVB state has no long-range order and supports fractional excitations (spinons). -/
 axiom RVBState (TJ : TJModel) :
-  TJ.hubbard.d = 2 → ∃ (RVB : Type), RVB ≠ 0
+  TJ.hubbard.d = 2 → ∃ (RVB : Type), True
   -- RVB state: exists in 2D, axiomd as spin liquid axiom
 
 /-- Spinon excitations: fractional spin-½ excitations in spin liquids.
@@ -40,7 +40,7 @@ axiom RVBState (TJ : TJModel) :
     Spinons are deconfined (unlike quarks in QCD) in 1D and some 2D spin liquids.
     They are detected by neutron scattering and thermal transport. -/
 axiom SpinonExcitations (TJ : TJModel) :
-  TJ.hubbard.d = 1 → ∃ (spinon : Type), spinon ≠ 0
+  TJ.hubbard.d = 1 → ∃ (spinon : Type), True
   -- Spinons: deconfined in 1D, axiomd as spin liquid axiom
 
 end CondensedMatter

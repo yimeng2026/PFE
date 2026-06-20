@@ -70,11 +70,11 @@ structure Counterterms where
   Z_g : ℝ
   /-- Vertex renormalization Z_1. -/
   Z_1 : ℝ
-  /-- Z ≈ 1 + O(α) at one-loop. -/
-  Z_2_approx : Z_2 ≈ 1
-  Z_m_approx : Z_m ≈ 1
-  Z_g_approx : Z_g ≈ 1
-  Z_1_approx : Z_1 ≈ 1
+  /-- Z = 1 + O(α) at one-loop. -/
+  Z_2_approx : Z_2 = 1
+  Z_m_approx : Z_m = 1
+  Z_g_approx : Z_g = 1
+  Z_1_approx : Z_1 = 1
 
 /-- Renormalization conditions: fixing the counterterms by physical observables.
 
