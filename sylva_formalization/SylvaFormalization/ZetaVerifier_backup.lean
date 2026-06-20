@@ -1,7 +1,5 @@
 import Mathlib
 import Mathlib.Analysis.SpecialFunctions.Gamma.Basic
-import Basic
-import NumericalZeros
 
 namespace SylvaFormalization
 
@@ -45,7 +43,7 @@ structure Interval (伪 : Type) [LinearOrderedField 伪] where
   lower : 伪
   upper : 伪
   valid : lower 鈮?upper
-deriving Repr
+deriving Inhabited
 
 namespace Interval
 

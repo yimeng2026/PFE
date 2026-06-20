@@ -1,5 +1,5 @@
 /-
-Topological Insulator Formalization — Band Topology and K-Theory Classification
+Topological Insulator Formalization -- Band Topology and K-Theory Classification
 ================================================================================
 
 This module formalizes the topological classification of insulating phases:
@@ -37,7 +37,7 @@ open Real Complex MeasureTheory Topology
 
 /-- A periodic crystal lattice in d dimensions with reciprocal lattice vectors.
 
-    The Brillouin zone (BZ) is the torus T^d = ℝ^d / Γ* where Γ* is the reciprocal lattice.
+    The Brillouin zone (BZ) is the torus T^d = ℝ ^d / Γ* where Γ* is the reciprocal lattice.
     Momentum k ∈ BZ is defined modulo reciprocal lattice vectors. -/
 structure CrystalLattice (d : ℕ) where
   /-- Direct lattice vectors (real space). -/
@@ -63,7 +63,7 @@ structure BlochHamiltonian (d : ℕ) where
   dimHilbert : ℕ
   /-- Hamiltonian matrix H(k) for each k ∈ BZ. -/
   H : BrillouinZone d → Matrix (Fin dimHilbert) (Fin dimHilbert) ℂ
-  /-- Hermiticity: H(k)† = H(k). -/
+  /-- Hermiticity: H(k)dagger = H(k). -/
   hermitian : ∀ (k : BrillouinZone d), H k = star (H k)
   /-- Periodicity: H(k + G) = H(k) for G ∈ reciprocal lattice. -/
   periodic : ∀ (k : BrillouinZone d) (G : Fin d → ℤ), H k = H (fun i => k i + G i)
@@ -79,7 +79,7 @@ structure BandStructure (d : ℕ) (H : BlochHamiltonian d) where
   eigenvector : Fin H.dimHilbert → BrillouinZone d → (Fin H.dimHilbert → ℂ)
   /-- Schrödinger equation: H(k)|u_{n,k}⟩ = E_n(k)|u_{n,k}⟩. -/
   schrodinger : ∀ (n : Fin H.dimHilbert) (k : BrillouinZone d),
-    H.H k *ᵥ (eigenvector n k) = energy n k • (eigenvector n k)
+    H.H k *ᵥ (eigenvector n k) = energy n k * (eigenvector n k)
   /-- Orthonormality: ⟨u_{m,k}|u_{n,k}⟩ = δ_{mn}. -/
   orthonormal : ∀ (m n : Fin H.dimHilbert) (k : BrillouinZone d),
     inner (eigenvector m k) (eigenvector n k) = if m = n then 1 else 0

@@ -18,7 +18,7 @@ Physical meaning: The geometry of spacetime (metric + torsion) emerges from
 the causal network's connectivity structure; matter (electromagnetism) is
 not fundamental but emergent from the network's topological phase.
 
-Status: Framework with postulates. Full formalization requires:
+Status: Framework with axioms. Full formalization requires:
 - Pseudo-Riemannian geometry (metric, connection, curvature tensors)
 - Einstein-Cartan theory (torsion, spin connection, contortion)
 - Variational calculus (Einstein-Hilbert action + matter action)
@@ -62,7 +62,7 @@ structure MetricTensor (M : Spacetime) where
     In our framework, T is sourced by the graph connection. -/
 structure TorsionTensor (M : Spacetime) where
   components : M → (Fin 4 → Fin 4 → Fin 4 → ℝ)
-  antisymmetric : ∀ (x : M) (λ μ ν : Fin 4), components x λ μ ν = -components x λ ν μ
+  antisymmetric : ∀ (x : M) (fun μ ν : Fin 4), components x fun μ ν = -components x fun ν μ
 
 /-- Affine connection with torsion:
     Γ^λ_{μν} = {^λ_{μν}} + K^λ_{μν}
@@ -127,7 +127,7 @@ structure EmergentCurrent (M : Spacetime) where
 -- ============================================================
 
 /-- Emergent stress tensor (Paper_Final.md §3.2):
-    T^{(emergent)}_{μν} = (1/4π) (F_{μλ} F_ν^λ - 1/4 g_{μν} F_{λσ} F^{λσ})
+    T^{(emergent)}_{μν} = (1/4π) (F_{μλ} F_ν^fun - 1/4 g_{μν} F_{λσ} F^{λσ})
                            + (κ²/16πG) (T_{μλσ} T_ν^{λσ} - 1/2 g_{μν} T_{λσρ} T^{λσρ})
 
     First term: standard electromagnetic stress tensor
@@ -169,8 +169,8 @@ axiom einsteinEquation {M : Spacetime} (g : MetricTensor M)
 -/
 axiom cartanTorsionEquation {M : Spacetime} (T : TorsionTensor M)
     (A : EmergentGaugePotential M) (κ : ℝ) :
-    ∀ (x : M) (λ μ ν : Fin 4),
-      T.components x λ μ ν = κ * (A.components x ν - A.components x μ) / 2
+    ∀ (x : M) (fun μ ν : Fin 4),
+      T.components x fun μ ν = κ * (A.components x ν - A.components x μ) / 2
 
 /-- Emergent Maxwell equations with torsion (Paper_Final.md Eq. 3.3):
     ∇_μ F^{μν} = J^ν_{(emergent)}
@@ -264,7 +264,7 @@ structure NumericalSolution where
   alpha_sim : ℝ
   relative_error : ℝ
 
-/-- The baseline solution (no tuning): α_sim ≈ 0.00735, error +0.7% -/
+/-- The baseline solution (no tuning): α_sim = 0.00735, error +0.7% -/
 def baselineSolution : NumericalSolution where
   gamma := 3.0
   clustering := 0.3

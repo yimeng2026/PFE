@@ -1,11 +1,11 @@
 /-
-# SAT.lean — Extended SAT Framework: Tseitin Transformation & CircuitSAT
+# SAT.lean -- Extended SAT Framework: Tseitin Transformation & CircuitSAT
 
 This module extends the Cook-Levin SAT foundation with:
 1. **Tseitin Transformation**: linear-time encoding of arbitrary Boolean formulas into CNF
 2. **CircuitSAT**: Boolean circuits and reduction from CircuitSAT to SAT
 
-All unproven assertions are marked as `postulate` with honest comments explaining
+All unproven assertions are marked as `axiom` with honest comments explaining
 why they are currently beyond formalization reach in Lean 4 / Mathlib.
 
 ## References
@@ -42,7 +42,7 @@ inductive BoolFormula
   | or (f₁ f₂ : BoolFormula)    -- f₁ ∨ f₂
   | implies (f₁ f₂ : BoolFormula) -- f₁ → f₂
   | xor (f₁ f₂ : BoolFormula)   -- f₁ ⊕ f₂
-  deriving Repr, DecidableEq
+  deriving Inhabited, DecidableEq
 
 namespace BoolFormula
 
@@ -54,7 +54,7 @@ def eval (assign : Var → Bool) : BoolFormula → Bool
   | and f₁ f₂   => eval assign f₁ && eval assign f₂
   | or f₁ f₂    => eval assign f₁ || eval assign f₂
   | implies f₁ f₂ => !(eval assign f₁) || eval assign f₂
-  | xor f₁ f₂   => xor (eval assign f₁) (eval assign f₂)
+  | xor f₁ f₂   => (eval assign f₁) != (eval assign f₂)
 
 /-- Size of a BoolFormula (number of AST nodes, connectives + variables). -/
 def size : BoolFormula → Nat
@@ -152,7 +152,7 @@ axiom tseitinTransform (f : BoolFormula) : TseitinResult
   -- (fresh variable generation + CNF accumulation) which is implementable
   -- but would be ~100 lines of monadic code. The correctness proofs
   -- (equisatisfiability, linear size) are the main challenge and are
-  -- postulated separately as TseitinResult.equisatisfiable and
+  -- axiomd separately as TseitinResult.equisatisfiable and
   -- TseitinResult.linearSize.
   --
   -- Why not fully formalized:
@@ -185,7 +185,7 @@ inductive CircuitGate
   | or (g₁ g₂ : CircuitGate)    -- OR gate
   | xor (g₁ g₂ : CircuitGate)   -- XOR gate
   | nand (g₁ g₂ : CircuitGate)  -- NAND gate (functionally complete)
-  deriving Repr, DecidableEq
+  deriving Inhabited, DecidableEq
 
 namespace CircuitGate
 
@@ -196,7 +196,7 @@ def eval (assign : Var → Bool) : CircuitGate → Bool
   | not g        => !(eval assign g)
   | and g₁ g₂    => eval assign g₁ && eval assign g₂
   | or g₁ g₂     => eval assign g₁ || eval assign g₂
-  | xor g₁ g₂    => xor (eval assign g₁) (eval assign g₂)
+  | xor g₁ g₂    => (eval assign g₁) != (eval assign g₂)
   | nand g₁ g₂   => !(eval assign g₁ && eval assign g₂)
 
 /-- Size of a circuit gate (number of gates in the subcircuit). -/
@@ -285,7 +285,7 @@ axiom circuitToSAT (c : Circuit) : CircuitSATResult
   -- Postulated as the definition requires a DAG traversal with stateful
   -- variable generation and CNF accumulation. The implementation is
   -- routine but the correctness proofs (equisatisfiability, linear size)
-  -- are the main challenge and are postulated separately as
+  -- are the main challenge and are axiomd separately as
   -- CircuitSATResult.equisatisfiable and CircuitSATResult.linearSize.
   --
   -- Why not fully formalized:
@@ -299,7 +299,7 @@ axiom circuitToSAT (c : Circuit) : CircuitSATResult
 /-! ## SAT Variants and Complexity Results
 
     Standard complexity-theoretic results about SAT and its variants.
-    All marked as postulate because they depend on the full Cook-Levin
+    All marked as axiom because they depend on the full Cook-Levin
     theorem and complexity class machinery (NP, P, polynomial-time
     reductions) which is not yet formalized in Mathlib. -/
 
@@ -311,7 +311,7 @@ axiom SAT_is_NPComplete :
   -- (2) any language in NP reduces to SAT via tableau encoding.
   -- Postulated because the full Cook-Levin theorem requires formalization
   -- of Turing machines, polynomial-time reductions, and NP-completeness
-  -- proofs — a major project (~300h) in progress (T17, T21).
+  -- proofs -- a major project (~300h) in progress (T17, T21).
   True
 
 /-- 3-SAT (each clause has at most 3 literals) is NP-complete.

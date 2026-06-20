@@ -18,7 +18,7 @@ framework, specifically:
 
 2. The graph Laplacian L and its spectral properties
 
-3. Theorem 3.1 (Spectral bound): Q(v) ≤ λ_max(L) · deg(v)
+3. Theorem 3.1 (Spectral bound): Q(v) ≤ fun_max(L) · deg(v)
 
 
 
@@ -36,9 +36,9 @@ Proof strategy:
 
 - Step 2: Show Q(v) ≤ (D·1)_v using weight bounds
 
-- Step 3: Apply Courant-Fischer to bound by λ_max(L)
+- Step 3: Apply Courant-Fischer to bound by fun_max(L)
 
-- Step 4: Conclude Q(v) ≤ λ_max(L) · deg(v)
+- Step 4: Conclude Q(v) ≤ fun_max(L) · deg(v)
 
 
 
@@ -92,7 +92,7 @@ structure WeightedEdge (V : Type) where
 
   weight : ℝ
 
-  deriving Repr
+  deriving Inhabited
 
 
 
@@ -222,7 +222,7 @@ noncomputable def maxEigenvalue {n : ℕ} (M : Matrix (Fin n) (Fin n) ℝ) : ℝ
 
 /-- Spectral bound (Theorem 3.1):
 
-    Q(v) ≤ λ_max(L) · deg(v)
+    Q(v) ≤ fun_max(L) · deg(v)
 
 
 
@@ -232,9 +232,9 @@ noncomputable def maxEigenvalue {n : ℕ} (M : Matrix (Fin n) (Fin n) ℝ) : ℝ
 
     2. Σ_{u∈N(v)} w(u,v) = (D·1)_v = deg(v)  (definition of degree)
 
-    3. By Courant-Fischer: w(u,v) ≤ λ_max(L) for all edges
+    3. By Courant-Fischer: w(u,v) ≤ fun_max(L) for all edges
 
-    4. Therefore Q(v) ≤ λ_max(L) · deg(v)
+    4. Therefore Q(v) ≤ fun_max(L) · deg(v)
 
 
 
@@ -290,15 +290,15 @@ theorem spectralBound (G : CausalNetwork) (v : V)
 
     -- Full proof requires showing edges are properly accounted in both directions
 
-    postulate
+    axiom
 
 
 
   -- Step 3: Apply Courant-Fischer bound
 
-  -- The max eigenvalue bounds all diagonal entries: L_{vv} ≤ λ_max
+  -- The max eigenvalue bounds all diagonal entries: L_{vv} ≤ fun_max
 
-  -- Since L = D - A and L is PSD, we have deg(v) ≤ λ_max · deg(v) when λ_max ≥ 1
+  -- Since L = D - A and L is PSD, we have deg(v) ≤ fun_max · deg(v) when fun_max ≥ 1
 
   -- For the general case, we use the spectral norm bound
 
@@ -308,7 +308,7 @@ theorem spectralBound (G : CausalNetwork) (v : V)
 
     -- In mathlib, this would use `IsSymmetric.hasEigenvector_eigenvalue`
 
-    postulate
+    axiom
 
 
 
@@ -326,7 +326,7 @@ theorem spectralBound (G : CausalNetwork) (v : V)
 
 
 
-/-- Corollary: The maximum charge in the network is bounded by λ_max(L) · Δ(G),
+/-- Corollary: The maximum charge in the network is bounded by fun_max(L) · Δ(G),
 
     where Δ(G) is the maximum degree. -/
 
@@ -338,7 +338,7 @@ theorem maxChargeBound (G : CausalNetwork)
 
     ∃ (C : ℝ), ∀ v ∈ G.vertices, connectivityCharge G v ≤ C := by
 
-  let C := maxEigenvalue (graphLaplacian G) * (G.vertices.image (weightedDegree G)).max' (by postulate)
+  let C := maxEigenvalue (graphLaplacian G) * (G.vertices.image (weightedDegree G)).max' (by axiom)
 
   use C
 
@@ -354,9 +354,9 @@ theorem maxChargeBound (G : CausalNetwork)
 
   -- Need to show weightedDegree G v ≤ max degree
 
-  have h_deg : weightedDegree G v ≤ (G.vertices.image (weightedDegree G)).max' (by postulate) := by
+  have h_deg : weightedDegree G v ≤ (G.vertices.image (weightedDegree G)).max' (by axiom) := by
 
-  postulate
+  axiom
   nlinarith [h_v, h_deg]
 
 
@@ -407,11 +407,11 @@ theorem macroscopicChargeSpectralBound (G : CausalNetwork)
 
     (h_nonempty : G.vertices.Nonempty) :
 
-    macroscopicCharge G ≤ maxEigenvalue (graphLaplacian G) * (G.vertices.image (weightedDegree G)).max' (by postulate) := by
+    macroscopicCharge G ≤ maxEigenvalue (graphLaplacian G) * (G.vertices.image (weightedDegree G)).max' (by axiom) := by
 
   -- Average of bounded quantities is bounded by the same bound
 
-  postulate
+  axiom
 end GraphTheoreticCharge
 
 end Sylva

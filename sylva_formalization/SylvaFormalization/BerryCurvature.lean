@@ -29,6 +29,8 @@ import Mathlib
 import BlochTheorem
 import BerryConnection
 
+namespace BerryCurvature
+
 open Real Complex Set MeasureTheory intervalIntegral
 
 -- ============================================
@@ -112,7 +114,7 @@ axiom BerryCurvature_GaugeInvariance
     Ω_{xy}(k) = i Σ_{m≠n} [⟨u_nk| ∂_x |u_mk⟩ ⟨u_mk| ∂_y |u_nk⟩ - (x ↔ y)] / (E_n - E_m)²
     
     这个表达式直接显示了 Berry 曲率的共振结构：
-    - 当 E_n ≈ E_m 时，分母 (E_n - E_m)² → 0，曲率发散
+    - 当 E_n = E_m 时，分母 (E_n - E_m)² → 0，曲率发散
     - 这就是能带交叉（band crossing）处的狄拉克锥（Dirac cone）
     - 在拓扑绝缘体中，狄拉克锥是 Berry 曲率 "单极子" 的来源
     

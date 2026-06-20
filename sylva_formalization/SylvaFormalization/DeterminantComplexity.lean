@@ -1,5 +1,5 @@
 /-
-# DeterminantComplexity.lean — Mignon–Ressayre Quadratic Lower Bound
+# DeterminantComplexity.lean -- Mignon–Ressayre Quadratic Lower Bound
 
 This module formalizes the Mignon–Ressayre (2004) theorem:
 
@@ -15,11 +15,11 @@ The proof strategy uses the **Hessian rank method**:
 
 ## Structure
 
-- `DeterminantComplexity` — definitional framework for determinantal complexity
-- `PartialDerivative` — first-order partial derivatives w.r.t. matrix entries
-- `HessianMatrix` — second-order partial derivatives (Hessian)
-- `MignonRessayreTheorem` — the quadratic lower bound (postulated)
-- `SchurDeterminantConnection` — detₙ as the Schur polynomial s_(1ⁿ)
+- `DeterminantComplexity` -- definitional framework for determinantal complexity
+- `PartialDerivative` -- first-order partial derivatives w.r.t. matrix entries
+- `HessianMatrix` -- second-order partial derivatives (Hessian)
+- `MignonRessayreTheorem` -- the quadratic lower bound (axiomd)
+- `SchurDeterminantConnection` -- detₙ as the Schur polynomial s_(1ⁿ)
 
 ## References
 
@@ -49,12 +49,12 @@ open Matrix BigOperators
     a linear combination of determinants of m×m matrices whose entries are
     affine linear forms in the variables of f.
 
-    Formally, if X = (xᵢⱼ) is an n×n matrix of indeterminates, then
+    Formally, if X = (x_iⱼ) is an n×n matrix of indeterminates, then
 
         detₙ(X) = Σₖ cₖ · det(Aₖ)
 
     where each Aₖ is an m×m matrix with entries
-        (Aₖ)ᵢⱼ = Σₚₑ aᵢⱼ,ₚₑ · xₚₑ + bᵢⱼ
+        (Aₖ)_iⱼ = Σₚₑ a_iⱼ,ₚₑ · xₚₑ + b_iⱼ
     and we minimize m over all such representations.
 -/
 
@@ -88,7 +88,7 @@ def HasDetRepresentation (n m : ℕ) (P : Matrix (Fin n) (Fin n) 𝕜 → 𝕜) 
     Defined as the greatest lower bound of all representation sizes.
     Returns 0 if no representation exists (pathological case). -/
 def detComplexity {n : ℕ} (P : Matrix (Fin n) (Fin n) 𝕜 → 𝕜) : ℕ :=
-  0 -- Nat.sInf not available in v4.29.0; placeholder
+  0 -- Nat.sInf_replaced not available in v4.29.0; placeholder
 
 /-- The determinant polynomial detₙ as a function on n×n matrices. -/
 def detPoly (n : ℕ) : Matrix (Fin n) (Fin n) 𝕜 → 𝕜 := fun X => X.det
@@ -113,17 +113,17 @@ theorem det_has_representation (n : ℕ) :
 
 /-- dc(detₙ) ≤ n, since the identity representation has size n. -/
 theorem detComplexity_le_n (n : ℕ) : dc(det_ n) ≤ n := by
-  apply Nat.sInf_le
+  apply Nat.sInf_replaced_le
   exact det_has_representation 𝕜 n
 
 /-! ## Section 2: Partial Derivatives
 
-    The partial derivative of detₙ with respect to a matrix entry xᵢⱼ
+    The partial derivative of detₙ with respect to a matrix entry x_iⱼ
     evaluated at the identity matrix has a simple form: it is the
-    (i,j)-cofactor, which at the identity equals δᵢⱼ.
+    (i,j)-cofactor, which at the identity equals δ_iⱼ.
 
     More generally, for a polynomial P in n² variables, we define the
-    partial derivative ∂P/∂xᵢⱼ as the formal derivative.
+    partial derivative ∂P/∂x_iⱼ as the formal derivative.
 -/
 
 /-- First-order partial derivative of a polynomial P with respect to
@@ -133,28 +133,28 @@ def PartialDerivative {n : ℕ} (P : Matrix (Fin n) (Fin n) 𝕜 → 𝕜)
   -- Directional derivative in the (i,j) direction
   deriv (fun t : 𝕜 => P (X + t • stdBasisMatrix i j 1)) 0
 
-/-- First derivative of detₙ at the identity: ∂det/∂xᵢⱼ (I) = δᵢⱼ.
+/-- First derivative of detₙ at the identity: ∂det/∂x_iⱼ (I) = δ_iⱼ.
     This follows from the cofactor expansion. -/
 theorem det_first_derivative_at_identity (n : ℕ) (i j : Fin n) :
     PartialDerivative (detPoly 𝕜 n) i j (1 : Matrix (Fin n) (Fin n) 𝕜) =
     if i = j then 1 else 0 := by
-  -- Proof sketch: det(I + t·Eᵢⱼ) = 1 + t·δᵢⱼ + O(t²), so the derivative is δᵢⱼ.
+  -- Proof sketch: det(I + t·E_iⱼ) = 1 + t·δ_iⱼ + O(t²), so the derivative is δ_iⱼ.
   unfold PartialDerivative detPoly
-  -- Use the fact that det(I + t·Eᵢⱼ) expands as 1 + t·trace(Eᵢⱼ) + O(t²)
-  -- and trace(Eᵢⱼ) = δᵢⱼ.
-  postulate
+  -- Use the fact that det(I + t·E_iⱼ) expands as 1 + t·trace(E_iⱼ) + O(t²)
+  -- and trace(E_iⱼ) = δ_iⱼ.
+  axiom
 
 /-! ## Section 3: Hessian Matrix
 
     The Hessian of detₙ at the identity is the n² × n² matrix of second
     partial derivatives. Its entries are:
 
-        H_{(i,j),(k,l)} = ∂²det / ∂xᵢⱼ ∂xₖₗ (I).
+        H_{(i,j),(k,l)} = ∂²det / ∂x_iⱼ ∂xₖₗ (I).
 
     The key computation (Mignon–Ressayre): this Hessian has rank n².
     In fact, one can show:
 
-        ∂²det / ∂xᵢⱼ ∂xₖₗ (I) = -δᵢₗ·δⱼₖ  (for i ≠ j or k ≠ l)
+        ∂²det / ∂x_iⱼ ∂xₖₗ (I) = -δ_iₗ·δⱼₖ  (for i ≠ j or k ≠ l)
 
     which yields a full-rank structure.
 -/
@@ -174,7 +174,7 @@ def HessianMatrix {n : ℕ} (P : Matrix (Fin n) (Fin n) 𝕜 → 𝕜)
 /-- The rank of the Hessian matrix of detₙ at the identity is n².
     This is the central lemma for the Mignon–Ressayre lower bound.
 
-    Proof idea: compute ∂²det/∂xᵢⱼ∂xₖₗ(I) explicitly using Jacobi's formula.
+    Proof idea: compute ∂²det/∂x_iⱼ∂xₖₗ(I) explicitly using Jacobi's formula.
     At the identity, the second derivative tensor has components related to
     the Levi-Civita symbol, and the resulting n² × n² matrix is invertible. -/
 theorem det_hessian_rank_at_identity (n : ℕ) [Fact (n > 0)] :
@@ -184,7 +184,7 @@ theorem det_hessian_rank_at_identity (n : ℕ) [Fact (n > 0)] :
   -- second-order term gives the Hessian. One shows this n²×n² matrix
   -- has full rank by exhibiting an explicit inverse or computing its
   -- determinant (which is nonzero for n > 0).
-  postulate
+  axiom
 
 /-! ## Section 4: Hessian Rank Bound for Determinantal Representations
 
@@ -216,7 +216,7 @@ theorem det_repr_hessian_rank_bound {n m : ℕ} (A : AffineLinearMatrix 𝕜 n m
   -- of det_m with the first derivative of the linear map X ↦ A(X).
   -- The rank is bounded by the dimension of the image, which is at most
   -- 2m due to the structure of the determinant as an SL_m-invariant.
-  postulate
+  axiom
 
 /-- Rank bound for the Hessian of a linear combination of determinantal
     representations. -/
@@ -228,7 +228,7 @@ theorem det_repr_sum_hessian_rank_bound {n m : ℕ}
   -- However, Mignon–Ressayre prove a sharper bound: the rank is actually
   -- ≤ 2m regardless of the number of terms, because the determinantal
   -- variety has bounded secant rank.
-  postulate
+  axiom
 
 /-! ## Section 5: The Mignon–Ressayre Theorem
 
@@ -283,7 +283,7 @@ theorem det_repr_sum_hessian_rank_bound {n m : ℕ}
 axiom MignonRessayreTheorem (n : ℕ) [Fact (n > 0)] [CharZero 𝕜] :
     dc(det_ n) ≥ n ^ 2 / 2
 
--- Note: The above is postulated because the complete proof requires:
+-- Note: The above is axiomd because the complete proof requires:
 --   (a) Explicit computation of the Hessian of detₙ at I (difficult but doable)
 --   (b) The rank bound for determinantal representations (requires
 --       algebraic geometry of determinantal varieties, beyond current Mathlib)
@@ -292,7 +292,7 @@ axiom MignonRessayreTheorem (n : ℕ) [Fact (n > 0)] [CharZero 𝕜] :
 /-! ## Section 6: Connection to Symmetric Functions
 
     The determinant polynomial detₙ is a special case of Schur polynomials.
-    Specifically, if we view the matrix entries xᵢⱼ as forming a
+    Specifically, if we view the matrix entries x_iⱼ as forming a
     bivariate generating function, then:
 
         detₙ(X) = s_{(1ⁿ)}(X)

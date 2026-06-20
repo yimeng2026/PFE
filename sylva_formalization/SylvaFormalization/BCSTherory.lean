@@ -1,5 +1,5 @@
 /-
-BCS Theory — Superconductivity Pairing and Energy Gap
+BCS Theory -- Superconductivity Pairing and Energy Gap
 ======================================================
 
 Formalizes the Bardeen-Cooper-Schrieffer (BCS) theory of superconductivity:
@@ -88,25 +88,25 @@ structure EnergyGap (H : BCSHamiltonian) where
 
 /-- Gap equation at T = 0 (analytical solution).
 
-    Δ(0) ≈ 2ħω_D exp(-1/N(0)V) for weak coupling (N(0)V << 1).
+    Δ(0) = 2ħω_D exp(-1/N(0)V) for weak coupling (N(0)V << 1).
     N(0) is the density of states at Fermi level. -/
 axiom GapEquationZeroT (H : BCSHamiltonian) (Δ : EnergyGap H) :
   Δ.delta = 2 * ħ * ω_D * Real.exp (-1 / (N_0 * H.V))
-  -- BCS gap at T=0: requires weak coupling approximation, postulated as BCS theory axiom
+  -- BCS gap at T=0: requires weak coupling approximation, axiomd as BCS theory axiom
   where
     ħ : ℝ := 1.0545718e-34  -- Reduced Planck constant
     ω_D : ℝ := 1e13  -- Debye frequency (typical value)
     N_0 : ℝ := 1e28  -- Density of states at Fermi level (typical value)
 
-/-- Critical temperature: k_B T_c = (e^γ / π) Δ(0) ≈ 0.567 Δ(0).
+/-- Critical temperature: k_B T_c = (e^γ / π) Δ(0) = 0.567 Δ(0).
 
-    The ratio 2Δ(0)/k_B T_c ≈ 3.52 is a universal constant (weak coupling).
-    Strong coupling corrections: 2Δ/k_B T_c ≈ 4-5. -/
+    The ratio 2Δ(0)/k_B T_c = 3.52 is a universal constant (weak coupling).
+    Strong coupling corrections: 2Δ/k_B T_c = 4-5. -/
 axiom CriticalTemperature (H : BCSHamiltonian) (Δ : EnergyGap H) :
   let k_B := 1.380649e-23  -- Boltzmann constant
   let T_c := (Real.exp (Real.eulerGamma) / Real.pi) * Δ.delta / k_B
-  2 * Δ.delta / (k_B * T_c) ≈ 3.52
-  -- BCS critical temperature: universal ratio 2Δ/k_B T_c ≈ 3.52, postulated as BCS theory axiom
+  2 * Δ.delta / (k_B * T_c) = 3.52
+  -- BCS critical temperature: universal ratio 2Δ/k_B T_c = 3.52, axiomd as BCS theory axiom
 
 -- ============================================================
 -- Section 3: Quasiparticle Spectrum
@@ -130,7 +130,7 @@ axiom DensityOfStatesSuperconductor (H : BCSHamiltonian) (Δ : EnergyGap H) :
   ∀ (E : ℝ), E > Δ.delta →
     let N_s := N_0 * E / sqrt (E ^ 2 - Δ.delta ^ 2)
     N_s > 0
-  -- Density of states: square-root singularity at gap edge, postulated as BCS theory axiom
+  -- Density of states: square-root singularity at gap edge, axiomd as BCS theory axiom
   where N_0 : ℝ := 1e28
 
 -- ============================================================
@@ -146,7 +146,7 @@ axiom JosephsonCurrent (H : BCSHamiltonian) (Δ : EnergyGap H) (φ : ℝ) :
   let I_c := (Real.pi * Δ.delta / (2 * e * R_N)) * Real.tanh (Δ.delta / (2 * k_B * T))
   let I := I_c * Real.sin φ
   |I| ≤ I_c
-  -- Josephson current: bounded by critical current, postulated as BCS theory axiom
+  -- Josephson current: bounded by critical current, axiomd as BCS theory axiom
   where
     e : ℝ := 1.6021766e-19  -- Electron charge
     R_N : ℝ := 1  -- Normal resistance (normalized)
@@ -157,11 +157,11 @@ axiom JosephsonCurrent (H : BCSHamiltonian) (Δ : EnergyGap H) (φ : ℝ) :
 
     When V ≠ 0, the phase evolves as φ(t) = φ_0 + (2eV/ħ) t.
     The current oscillates: I(t) = I_c sin(φ_0 + 2eVt/ħ).
-    Frequency: ν = 2eV/h (Josephson constant K_J = 2e/h ≈ 483.6 GHz/mV). -/
+    Frequency: ν = 2eV/h (Josephson constant K_J = 2e/h = 483.6 GHz/mV). -/
 axiom ACJosephsonEffect (H : BCSHamiltonian) (Δ : EnergyGap H) (V : ℝ) :
   let ν := 2 * e * V / h
   ν > 0 ↔ V > 0
-  -- AC Josephson frequency: proportional to voltage, postulated as BCS theory axiom
+  -- AC Josephson frequency: proportional to voltage, axiomd as BCS theory axiom
   where
     e : ℝ := 1.6021766e-19
     h : ℝ := 6.62607015e-34
@@ -193,7 +193,7 @@ structure GinzburgLandau where
 axiom GinzburgLandauEquations (GL : GinzburgLandau) :
   ∀ (r : Fin 3 → ℝ), GL.alpha * GL.psi r + GL.beta * ‖GL.psi r‖^2 * GL.psi r +
     (1 / (2 * m_e)) * (-i * ħ * ∇ - 2 * e * GL.A r)^2 (GL.psi r) = 0
-  -- Ginzburg-Landau equation: requires variational calculus, postulated as BCS theory axiom
+  -- Ginzburg-Landau equation: requires variational calculus, axiomd as BCS theory axiom
   where
     m_e : ℝ := 9.1093837e-31  -- Electron mass
     ħ : ℝ := 1.0545718e-34
@@ -210,20 +210,20 @@ axiom CoherenceLength (GL : GinzburgLandau) :
   where ħ : ℝ := 1.0545718e-34
   where m_e : ℝ := 9.1093837e-31
 
-/-- Penetration depth: λ = √(m / (2e²μ₀|ψ|²)).
+/-- Penetration depth: fun = √(m / (2e²μ₀|ψ|²)).
 
     Characteristic depth of magnetic field penetration.
-    λ ~ 50-500 nm for typical superconductors. -/
+    fun ~ 50-500 nm for typical superconductors. -/
 axiom PenetrationDepth (GL : GinzburgLandau) :
-  let λ := sqrt (m_e / (2 * e^2 * μ₀ * ‖GL.psi 0‖^2))
-  λ > 0
+  let fun := sqrt (m_e / (2 * e^2 * μ₀ * ‖GL.psi 0‖^2))
+  fun > 0
   -- Penetration depth: positive, requires Ginzburg-Landau parameters
   where
     m_e : ℝ := 9.1093837e-31
     e : ℝ := 1.6021766e-19
     μ₀ : ℝ := 4 * Real.pi * 1e-7  -- Vacuum permeability
 
-/-- Type I vs Type II superconductors: κ = λ/ξ.
+/-- Type I vs Type II superconductors: κ = fun/ξ.
 
     κ < 1/√2: Type I (first-order transition, Meissner effect).
     κ > 1/√2: Type II (second-order transition, vortex lattice, mixed state). -/
@@ -231,14 +231,14 @@ axiom GinzburgLandauParameter (GL : GinzburgLandau) :
   let κ := PenetrationDepth GL / CoherenceLength GL
   κ < 1 / sqrt 2 → TypeI GL
   κ > 1 / sqrt 2 → TypeII GL
-  -- Type I/II classification: requires Ginzburg-Landau theory, postulated as BCS theory axiom
+  -- Type I/II classification: requires Ginzburg-Landau theory, axiomd as BCS theory axiom
 
 inductive SuperconductorType
   | TypeI
   | TypeII
 
-axiom TypeI (GL : GinzburgLandau) : SuperconductorType.TypeI
-axiom TypeII (GL : GinzburgLandau) : SuperconductorType.TypeII
+axiom TypeI_axiom (GL : GinzburgLandau) : SuperconductorType.TypeI
+axiom TypeII_axiom (GL : GinzburgLandau) : SuperconductorType.TypeII
 
 end BCSTherory
 end Sylva

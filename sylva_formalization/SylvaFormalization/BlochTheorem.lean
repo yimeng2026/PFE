@@ -23,6 +23,8 @@ import Mathlib
 
 open Real Complex Set MeasureTheory
 
+namespace BlochTheorem
+
 -- ============================================
 -- Section 1: 晶格与周期性结构
 -- ============================================
@@ -219,7 +221,7 @@ structure BrillouinZone2D (L : Lattice2D) where
 
 /-- 布里渊区中的动量属于集合：
     k ∈ [-π/a, π/a] × [-π/a, π/a] -/
-def inBrillouinZone (BZ : BrillouinZone2D) (k : CrystalMomentum2D) : Prop :=
+def inBrillouinZone (L : Lattice2D) (BZ : BrillouinZone2D L) (k : CrystalMomentum2D) : Prop :=
   k.1 ∈ BZ.kxRange ∧ k.2 ∈ BZ.kyRange
 
 /-- 布里渊区作为环面 T² 的拓扑结构：

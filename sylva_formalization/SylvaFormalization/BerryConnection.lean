@@ -27,6 +27,8 @@ Berry 联络（Berry Connection）是 TKNN 公式推导的 L2 层。
 import Mathlib
 import BlochTheorem
 
+namespace BerryConnection
+
 open Real Complex Set MeasureTheory
 
 -- ============================================
@@ -107,7 +109,7 @@ structure BerryConnection (L : BlochTheorem.Lattice2D) where
 /-- 规范变换（Gauge Transformation）：
     |u_nk⟩ → |u'_nk⟩ = e^{iθ(k)} |u_nk⟩，其中 θ : BZ → ℝ 是光滑函数。
     
-    物理意义：本征态 |u_nk⟩ 的相位是任意的——薛定谔方程只确定
+    物理意义：本征态 |u_nk⟩ 的相位是任意的----薛定谔方程只确定
     到整体相位。因此存在一个规范自由度：可以任意选择每个 k 点
     的相位。
     

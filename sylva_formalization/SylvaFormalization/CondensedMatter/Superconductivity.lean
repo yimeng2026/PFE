@@ -1,5 +1,5 @@
 /-
-Condensed Matter — High-Tc Superconductivity Mechanisms
+Condensed Matter -- High-Tc Superconductivity Mechanisms
 ========================================================
 
 d-wave pairing, RVB state, and spinon excitations.
@@ -23,7 +23,7 @@ open Real
 axiom DWavePairing (TJ : TJModel) :
   ∀ (k : Fin 2 → ℝ), let Delta_k := (Real.cos (k 0) - Real.cos (k 1)) / 2
     ‖Delta_k‖ ≥ 0
-  -- d-wave pairing: nodes along diagonals, postulated as cuprate superconductivity axiom
+  -- d-wave pairing: nodes along diagonals, axiomd as cuprate superconductivity axiom
 
 /-- Resonating Valence Bond (RVB) state: spin singlet pairs on neighboring sites.
 
@@ -32,7 +32,7 @@ axiom DWavePairing (TJ : TJModel) :
     The RVB state has no long-range order and supports fractional excitations (spinons). -/
 axiom RVBState (TJ : TJModel) :
   TJ.hubbard.d = 2 → ∃ (RVB : Type), RVB ≠ 0
-  -- RVB state: exists in 2D, postulated as spin liquid axiom
+  -- RVB state: exists in 2D, axiomd as spin liquid axiom
 
 /-- Spinon excitations: fractional spin-½ excitations in spin liquids.
 
@@ -41,7 +41,7 @@ axiom RVBState (TJ : TJModel) :
     They are detected by neutron scattering and thermal transport. -/
 axiom SpinonExcitations (TJ : TJModel) :
   TJ.hubbard.d = 1 → ∃ (spinon : Type), spinon ≠ 0
-  -- Spinons: deconfined in 1D, postulated as spin liquid axiom
+  -- Spinons: deconfined in 1D, axiomd as spin liquid axiom
 
 end CondensedMatter
 end Sylva

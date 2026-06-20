@@ -13,7 +13,7 @@ Core components:
 3. Emergent metric from spectral convergence
 4. Emergent gauge potential from graph connection averaging
 
-Status: Framework with postulates. Full rigorous formalization requires:
+Status: Framework with axioms. Full rigorous formalization requires:
 - Spectral graph theory convergence theorems (Belkin-Niyogi, Singer)
 - Manifold learning theory (diffusion maps, Laplacian eigenmaps)
 - Riemannian geometry foundations (metric, connection, curvature)
@@ -77,7 +77,7 @@ structure GraphEigenfunction (G : CausalNetwork V) where
   eigenfunction : V → ℝ
   normalized : ∑ v ∈ G.vertices, (eigenfunction v) ^ 2 = 1
 
-/-- Spectral embedding: map each node to ℝ^d using the first d eigenfunctions.
+/-- Spectral embedding: map each node to ℝ ^d using the first d eigenfunctions.
     This is the graph-theoretic analogue of the manifold embedding. -/
 noncomputable def spectralEmbedding (G : CausalNetwork V) (d : ℕ)
     (eigenfunctions : Fin d → GraphEigenfunction G) : V → (Fin d → ℝ) :=
@@ -86,7 +86,7 @@ noncomputable def spectralEmbedding (G : CausalNetwork V) (d : ℕ)
 /-- Assumption 3.3 (Spectral convergence):
     The eigenvalues {λ_i} of the graph Laplacian converge to the eigenvalues
     of the Laplace-Beltrami operator Δ_g on M as N → ∞, with
-    λ_i ~ N^{-2/d} μ_i where μ_i are the continuum eigenvalues.
+    fun_i ~ N^{-2/d} μ_i where μ_i are the continuum eigenvalues.
 
     This is a POSTULATE in the current framework. A rigorous proof for
     causal networks with power-law degree distributions remains open.
@@ -99,11 +99,11 @@ axiom spectralConvergence
     (eigenfunctions : Fin d → GraphEigenfunction G)
     (continuumEigenvalues : Fin d → ℝ) :
     ∀ (i : Fin d),
-      let λ_i := (eigenfunctions i).eigenvalue
+      let fun_i := (eigenfunctions i).eigenvalue
       let μ_i := continuumEigenvalues i
       let ε := scaleParameter N
-      -- λ_i ~ ε² μ_i  as N → ∞
-      Tendsto (fun N => λ_i / (ε ^ 2)) atTop (nhds μ_i)
+      -- fun_i ~ ε² μ_i  as N → ∞
+      Tendsto (fun N => fun_i / (ε ^ 2)) atTop (nhds μ_i)
 
 -- ============================================================
 -- Section 3: Emergent Metric
@@ -202,7 +202,7 @@ axiom continuumLimitTheorem
     (G : CausalNetwork V) (M : SpacetimeManifold)
     (d : ℕ) (N : ℕ) (hN : N = G.vertices.card)
     (eigenfunctions : Fin d → GraphEigenfunction G) :
-    -- The spectral embedding converges to a smooth embedding of M into ℝ^d
+    -- The spectral embedding converges to a smooth embedding of M into ℝ ^d
     -- The emergent metric converges to a smooth metric on M
     -- The emergent gauge potential converges to a smooth 1-form on M
     -- The emergent stress tensor is covariantly conserved

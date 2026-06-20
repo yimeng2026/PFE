@@ -13,6 +13,9 @@ require mathlib from git
 @[default_target]
 lean_lib «SylvaFormalization» where
   roots := #[
+    `BerryConnection,
+    `BerryCurvature,
+    `BlochTheorem,
     `ChernNumber,
     `ChernSimons,
     `CookLevin.SAT,
@@ -22,6 +25,7 @@ lean_lib «SylvaFormalization» where
     `Hodge,
     `NPClass.PolynomialTime,
     `RiemannHypothesis,
+    `SAT,
     `StandardModel.Basic,
     `StringTheory.Basic,
     `SylvaInfrastructure

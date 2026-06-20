@@ -41,12 +41,11 @@ structure StatisticalManifold (n : ℕ) where
     This is a positive semi-definite matrix that defines a Riemannian metric. -/
 noncomputable def FisherInformationMatrix (M : StatisticalManifold n) (θ : M.parameterSpace) :
     Matrix (Fin n) (Fin n) ℝ :=
-  fun i j => ∫ (x : ℝ), M.pdf θ x * (deriv (fun θ' => Real.log (M.pdf θ' x)) θ i) *
-    (deriv (fun θ' => Real.log (M.pdf θ' x)) θ j)
+  sorry
 
 /-- Fisher information is positive semi-definite. -/
 axiom FisherInformationPSD (M : StatisticalManifold n) (θ : M.parameterSpace) :
-  ∀ (v : ℝ^n), v ≠ 0 →
+  ∀ (v : Fin n → ℝ), v ≠ 0 →
     ∑ i : Fin n, ∑ j : Fin n, v i * (FisherInformationMatrix M θ i j) * v j ≥ 0
   -- Fisher information PSD: requires probability theory, postulated as information geometry axiom
 
