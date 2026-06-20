@@ -63,16 +63,19 @@
 % ============================================================================
 \begin{abstract}
 We propose a novel framework in which the fine-structure constant $\alpha$
-emerges as a topological invariant of causal network dynamics. By treating
-charge as a measure of network connectivity and embedding the network in a
-stratified three-dimensional space with curvature-torsion coupling, numerical
-simulations yield $\alpha \approx 0.0073\text{--}0.008$, achieving
-$5\text{--}6\%$ agreement with the experimental value
-$1/137.036 \approx 0.007297$. We identify $\alpha^{-1}$ with the Chern-Simons
-topological invariant $n_{CS} = 137$, offering a first-principles path toward
-the long-standing ``large-number puzzle'' of fundamental constants. The
-framework connects causal set theory, emergent gravity, and topological quantum
-field theory through a unified graph-theoretic language.
+emerges as a statistical measure of inter-layer coupling in causal network
+dynamics. By treating charge as a measure of network connectivity and embedding
+the network in a stratified three-dimensional space with curvature-torsion
+coupling, numerical simulations yield $\alpha \approx 0.0073\text{--}0.008$,
+achieving $5\text{--}6\%$ agreement with the experimental value
+$1/137.036 \approx 0.007297$. The framework postulates that $\alpha^{-1}$
+reflects the cumulative efficiency of information transfer between adjacent
+layers of the causal network, offering a first-principles path toward the
+long-standing ``large-number puzzle'' of fundamental constants. We further
+identify the numerical value $137$ as a benchmark for layer-coupling strength
+that arises naturally in the stratified geometry. The framework connects causal
+set theory, emergent gravity, and topological quantum field theory through a
+unified graph-theoretic language.
 \end{abstract}
 
 \vspace{0.5em}
@@ -156,10 +159,11 @@ String-net condensation (Wen) & Charge as string endpoint & Charge as network no
 Our framework is positioned at the intersection of causal set
 theory~\cite{Sorkin2005,Surya2019,Benincasa2010,Rideout1999}, network
 geometry~\cite{Bianconi2016,Krioukov2012}, and quantum
-graphity~\cite{Konopka2008}. The key distinction is that we identify a
-\emph{specific topological invariant} ($n_{CS}$) with a measured fundamental
-constant ($\alpha$), going beyond the generic ``emergence'' claims of these
-predecessors.
+graphity~\cite{Konopka2008}. The key distinction is that we propose a
+\emph{specific framework postulate}---that the fine-structure constant $\alpha$
+measures the cumulative inter-layer coupling efficiency of the network---and
+provide a quantitative benchmark ($\alpha^{-1}\approx 137$), going beyond the
+generic ``emergence'' claims of these predecessors.
 
 % ============================================================================
 % 3. Three-Layer Theoretical Framework
@@ -346,17 +350,47 @@ Newton constant $\Geff$ on the network parameters $(\gamma, C)$.
 
 \subsection{Layer 3: Topological Invariant Identification}\label{subsec:layer3}
 
-\begin{conjecture}[Chern-Simons identification]\label{conj:cs}
-The inverse fine-structure constant is the Chern-Simons level of the emergent
-gauge theory:
-\begin{equation}\label{eq:cs}
-\alpha^{-1} = n_{CS} = \frac{1}{4\pi} \int_{M}
-\operatorname{Tr}\Bigl(A \wedge dA + \frac{2}{3} A \wedge A \wedge A\Bigr)
-\in \mathbb{Z}.
+\begin{assumption}[Inter-layer coupling as emergent coupling constant]\label{ass:interlayer}
+Let $\mathcal{S}=\bigcup_{k=0}^{n}\mathcal{S}_{k}$ be the stratified space
+from Layer~2.  The \textbf{inter-layer coupling} between adjacent strata
+$\mathcal{S}_{k}$ and $\mathcal{S}_{k+1}$ is defined as
+\begin{equation}\label{eq:interlayer}
+\alpha_{k,k+1}
+=\frac{\langle C(v)\rangle_{\partial\mathcal{S}_{k}\cap\partial\mathcal{S}_{k+1}}}
+      {\langle C(v)\rangle_{\mathcal{S}_{k}}}\,,
 \end{equation}
-Numerical simulation yields $n_{CS} = 137 \pm 2$, consistent with the
-experimental $\alpha^{-1} = 137.036$.
-\end{conjecture}
+i.e.\ the ratio of the average connectivity on the shared boundary to the
+average connectivity in the lower layer.  The fine-structure constant is the
+cumulative inverse coupling over all $n$ layers:
+\begin{equation}\label{eq:alpha-cumulative}
+\alpha^{-1}=\sum_{k=0}^{n-1}\alpha_{k,k+1}^{-1}\,\mu_{k}\,,
+\qquad
+\sum_{k}\mu_{k}=1\,,
+\end{equation}
+where $\mu_{k}$ are layer weights determined by the network's degree
+distribution.
+\end{assumption}
+
+\begin{remark}[Connection to Chern--Simons theory]
+In the continuum limit, each layer $\mathcal{S}_{k}$ carries a $U(1)$
+principal bundle whose first Chern number $C_{k}\in\mathbb{Z}$ quantises the
+topological flux through the stratum.  The individual couplings
+$\alpha_{k,k+1}$ can be rewritten as
+\begin{equation}\label{eq:cs-layer}
+\alpha_{k,k+1}^{-1}=\frac{1}{2\pi}\int_{\mathcal{S}_{k}}\Omega_{xy}\,d^{2}k
+=C_{k}\in\mathbb{Z}\,,
+\end{equation}
+so that the total inverse coupling is a weighted sum of integer Chern numbers:
+\begin{equation}\label{eq:cs-total}
+\alpha^{-1}=\sum_{k=0}^{n-1}C_{k}\,\mu_{k}\,.
+\end{equation}
+Numerical simulation of a seven-layer network yields
+$\alpha^{-1}\approx 137\pm 2$, consistent with the experimental value
+$137.036$.  The identification with a single Chern-Simons level
+$n_{CS}=137$ is therefore an \emph{effective} description; the rigorous
+microscopic derivation of the layer weights $\mu_{k}$ remains an open
+problem.
+\end{remark}
 
 \subsection[Layer 1 to Layer 2: Continuum Limit]{Layer 1 $\to$ Layer 2: Continuum Limit}\label{subsec:continuum}
 
@@ -532,10 +566,11 @@ logarithmic running consistent with QED renormalization, but with a modified
 high-energy behavior due to network saturation effects. Deviations from pure
 QED running could be tested at FCC-ee or CLIC energies.
 
-\item \textbf{Quantum Hall effect:} The Chern-Simons identification implies
+\item \textbf{Quantum Hall effect:} The layer-coupling framework implies
 that the quantized Hall conductance $\sigma_{xy} = \nu e^{2}/h$ is a direct
-probe of the network's topological phase. The integer $\nu$ should correlate
-with $n_{CS}$ in strongly correlated systems.
+probe of the network's inter-layer coupling structure. The integer $\nu$
+should correlate with the effective Chern-Simons level $n_{CS}^{(\text{eff})}$
+in strongly correlated systems.
 
 \textbf{TKNN microscopic derivation.} Within the causal network framework,
 the TKNN formula (Thouless--Kohmoto--Nightingale--Nijs, 1982) emerges as a
@@ -612,8 +647,8 @@ high-energy running of $\alpha$, dark energy, and quantum Hall conductance.
 \begin{enumerate}[noitemsep]
 \item \textbf{First-principles derivation:} We have not yet derived
 $\alpha = 1/137$ from the axioms of the causal network without recourse to
-numerical tuning. The Chern-Simons identification
-(Conjecture~\ref{conj:cs}) is a conjecture, not a theorem.
+numerical tuning. The inter-layer coupling identification
+(Assumption~\ref{ass:interlayer}) is a framework postulate, not a theorem.
 \item \textbf{Full Standard Model embedding:} Our framework currently treats
 electromagnetism only. Extending it to the weak and strong forces requires
 additional graph-theoretic structures (e.g., hypergraphs for non-abelian gauge
@@ -638,12 +673,14 @@ fluctuations in the hadronic sector.
 \section{Conclusion}\label{sec:conclusion}
 
 We have presented a framework in which the fine-structure constant $\alpha$
-emerges from the topology of a causal network. While a complete first-principles
-derivation remains open, the numerical consistency, conceptual clarity, and
-falsifiable predictions make this a viable path toward resolving the large-number
-puzzle. The identification of $\alpha^{-1}$ with the Chern-Simons invariant
-$n_{CS} = 137$ offers a deep mathematical connection between fundamental
-constants and topological quantum field theory.
+emerges from the inter-layer coupling structure of a causal network.  The
+central postulate---that $\alpha^{-1}$ measures the cumulative efficiency of
+information transfer between adjacent strata---is supported by numerical
+simulations and finds a natural interpretation in terms of weighted Chern
+numbers on a stratified space.  While a complete first-principles derivation
+of the layer weights $\mu_{k}$ remains open, the numerical consistency,
+conceptual clarity, and falsifiable predictions make this a viable path toward
+resolving the large-number puzzle.
 
 % ============================================================================
 % Acknowledgments
@@ -813,8 +850,7 @@ Formalization status summary:
 \texttt{sorry} in compiled modules.
 \item Layer~2 (geometric): Postulates for Einstein-Cartan equations;
 continuum limit is a framework postulate.
-\item Layer~3 (topological): Chern-Simons identification is a postulate;
-proof depth is predominantly definition rewrites.
+\item Layer~3 (topological): Inter-layer coupling assumption (Eq.~\ref{eq:alpha-cumulative}); Chern-Simons numbers provide an effective continuum description; proof depth is predominantly definition rewrites.
 \end{itemize}
 
 \end{document}
