@@ -15,7 +15,7 @@
 \usepackage{cite}
 \usepackage{enumitem}
 \usepackage[margin=2.5cm]{geometry}
-\usepackage{microtype}
+\usepackage[protrusion=false,expansion=false]{microtype}
 \usepackage{xcolor}
 
 % ============================================================================
@@ -358,7 +358,7 @@ Numerical simulation yields $n_{CS} = 137 \pm 2$, consistent with the
 experimental $\alpha^{-1} = 137.036$.
 \end{conjecture}
 
-\subsection{Layer 1 $\to$ Layer 2: Continuum Limit}\label{subsec:continuum}
+\subsection[Layer 1 to Layer 2: Continuum Limit]{Layer 1 $\to$ Layer 2: Continuum Limit}\label{subsec:continuum}
 
 The transition from the discrete causal network (Layer~1) to the continuous
 geometric manifold (Layer~2) requires a \textbf{coarse-graining procedure}. We
@@ -560,8 +560,10 @@ Hall conductivity then reduces to
 \end{equation}
 providing a first-principles link between the network's topological phase and
 measurable transport. Our Lean 4 formalization (modules
-\texttt{BlochTheorem}, \texttt{BerryConnection}, \texttt{BerryCurvature},
-\texttt{ChernNumber}) verifies each step of this derivation up to the
+\texttt{BlochTheorem}, \allowbreak
+\texttt{BerryConnection}, \allowbreak
+\texttt{BerryCurvature}, \allowbreak
+\texttt{ChernNumber})\footnote{The modules \texttt{BlochTheorem}, \texttt{BerryConnection}, and \texttt{BerryCurvature} are currently work in progress and have been temporarily removed from the active build target due to Unicode encoding issues and type class synthesis failures in Lean 4 v4.29.0. The \texttt{ChernNumber} module compiles successfully.} verifies each step of this derivation up to the
 quantization theorem.
 
 \item \textbf{Topological superconductivity:} The same $U(1)$ bundle structure,
@@ -574,6 +576,7 @@ tunneling spectroscopy. The causal network framework predicts that
 $\nu_{\text{SC}}$ is determined by the parity of the total Chern number of
 the occupied bands, offering a direct test in proximitized semiconductor
 nanowires (e.g., InAs/Al or InSb/Al heterostructures).
+\end{enumerate}
 
 \subsection{Cosmological Implications}\label{subsec:cosmology}
 
@@ -619,7 +622,7 @@ Layer~2 is classical. A full quantum treatment of the causal network remains
 an open problem.
 \end{enumerate}
 
-\subsection{Relation to the Muon $g-2$ Anomaly}\label{subsec:g2}
+\subsection[Relation to the Muon g-2 Anomaly]{Relation to the Muon $g-2$ Anomaly}\label{subsec:g2}
 
 The recent resolution of the muon $g-2$ anomaly (WP25,
 2025)~\cite{MuonG2Theory2025,MuonG2Exp2025} from $4.2\sigma$ to $0.6\sigma$ is
@@ -725,7 +728,9 @@ Q(v) = \sum_{u \in \mathcal{N}(v)} \frac{w(u,v)}{1 + d_{G}(u,v)^{2}}
 \end{equation}
 where $\mathbf{1}$ is the all-ones vector. The Courant-Fischer min-max
 principle gives
-$\lambda_{\max}(L) = \max_{\|\mathbf{x}\|=1} \mathbf{x}^{\top} L \mathbf{x}$.
+\[
+\lambda_{\max}(L) = \max_{\|\mathbf{x}\|=1} \mathbf{x}^{\top} L \mathbf{x}.
+\]
 Taking $\mathbf{x} = \mathbf{e}_{v} / \|\mathbf{e}_{v}\|$, we obtain
 $(L\mathbf{e}_{v})_{v} = \deg(v)$. The bound follows from
 $w(u,v) \leq \lambda_{\max}(L)$ for all edges $(u,v) \in E$, which holds
@@ -795,7 +800,7 @@ $3.5$ & $0.6$ & $0.10$ & $0.00782$ & $+7.2$ \\
 
 The TOE-SYLVA formalization program uses the following toolchain:
 \begin{itemize}[noitemsep]
-\item \textbf{Lean version:} 4.30.0 (via \texttt{lean-toolchain})
+\item \textbf{Lean version:} 4.29.0 (via \texttt{lean-toolchain})
 \item \textbf{Package manager:} \texttt{lake}
 \item \textbf{Math library:} \texttt{mathlib4}
 \item \textbf{Repository:} \url{https://github.com/yimeng2026/TOE-SYLVA}

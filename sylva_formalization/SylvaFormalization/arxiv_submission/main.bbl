@@ -1,0 +1,105 @@
+\begin{thebibliography}{10}
+
+\bibitem{Sorkin2005}
+R.~D. Sorkin.
+\newblock {\em Causal Sets: Discrete Gravity}.
+\newblock Springer, 2005.
+
+\bibitem{Bianconi2016}
+G.~Bianconi and C.~Rahmede.
+\newblock Network geometry with flavor: From complexity to quantum geometry.
+\newblock {\em Phys. Rev. E}, 93:032315, 2016.
+
+\bibitem{Konopka2008}
+T.~Konopka, F.~Markopoulou, and S.~Severini.
+\newblock Quantum graphity: A model of emergent locality.
+\newblock {\em Phys. Rev. D}, 77:104029, 2008.
+
+\bibitem{Surya2019}
+S.~Surya.
+\newblock The causal set approach to quantum gravity.
+\newblock {\em Living Rev. Relativ.}, 22:5, 2019.
+
+\bibitem{Benincasa2010}
+D.~M.~T. Benincasa and F.~Dowker.
+\newblock The scalar curvature of a causal set.
+\newblock {\em Phys. Rev. Lett.}, 104:181301, 2010.
+
+\bibitem{Rideout1999}
+D.~P. Rideout and R.~D. Sorkin.
+\newblock A classical sequential growth dynamics for causal sets.
+\newblock {\em Phys. Rev. D}, 61:024002, 1999.
+
+\bibitem{Krioukov2012}
+D.~Krioukov et~al.
+\newblock Network cosmology.
+\newblock {\em Sci. Rep.}, 2:793, 2012.
+
+\bibitem{Hehl1976}
+F.~W. Hehl, P.~Von Der~Heyde, G.~D. Kerlick, and J.~M. Nester.
+\newblock General relativity with spin and torsion: Foundations and prospects.
+\newblock {\em Rev. Mod. Phys.}, 48:393--416, 1976.
+
+\bibitem{Chomiuk2026}
+J.~Chomiuk.
+\newblock Twisted graph laplacians: Spectral band bounds, moduli geometry, and
+  spectral-action gravity.
+\newblock {\em arXiv preprint}, 2026.
+\newblock \textbf{PLACEHOLDER:} arXiv identifier not yet assigned. Update
+  before publication.
+
+\bibitem{Connes1996}
+A.~Connes.
+\newblock Gravity coupled with matter and the foundation of noncommutative
+  geometry.
+\newblock {\em Commun. Math. Phys.}, 182:155--176, 1996.
+
+\bibitem{Chamseddine1997}
+A.~H. Chamseddine and A.~Connes.
+\newblock The spectral action principle.
+\newblock {\em Commun. Math. Phys.}, 186:731--750, 1997.
+
+\bibitem{Regge1961}
+T.~Regge.
+\newblock General relativity without coordinates.
+\newblock {\em Nuovo Cimento}, 19:558--571, 1961.
+
+\bibitem{Ambjorn2020}
+J.~Ambj{\o}rn, J.~Jurkiewicz, and R.~Loll.
+\newblock Causal dynamical triangulations and the search for a theory of
+  quantum gravity.
+\newblock {\em arXiv preprint}, 2020.
+
+\bibitem{Oriti2014}
+D.~Oriti.
+\newblock The group field theory approach to quantum gravity.
+\newblock {\em arXiv preprint}, 2014.
+
+\bibitem{Belkin2006}
+M.~Belkin and P.~Niyogi.
+\newblock Convergence of laplacian eigenmaps.
+\newblock In {\em Advances in Neural Information Processing Systems (NeurIPS)},
+  volume~19, pages 129--136, 2006.
+
+\bibitem{Singer2006}
+A.~Singer.
+\newblock From graph to manifold laplacian: The convergence rate.
+\newblock {\em Appl. Comput. Harmon. Anal.}, 21:128--134, 2006.
+
+\bibitem{Coifman2006}
+R.~R. Coifman and S.~Lafon.
+\newblock Diffusion maps.
+\newblock {\em Appl. Comput. Harmon. Anal.}, 21:5--30, 2006.
+
+\bibitem{MuonG2Theory2025}
+M.~Aliberti et~al.
+\newblock The muon $g-2$ theory white paper 2025.
+\newblock {\em arXiv preprint}, 2025.
+
+\bibitem{MuonG2Exp2025}
+{Muon $g-2$ Collaboration}.
+\newblock Final measurement of the positive-muon anomalous magnetic moment to
+  0.20 ppm precision.
+\newblock {\em Phys. Rev. D}, 111:052007, 2025.
+
+\end{thebibliography}
