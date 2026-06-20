@@ -15,7 +15,7 @@
 \contentsline {paragraph}{Variational Definition of the Emergent Stress Tensor.}{6}{section*.8}%
 \contentsline {paragraph}{Connection to Discrete Approaches.}{6}{section*.9}%
 \contentsline {subsection}{\numberline {3.3}Layer 3: Topological Invariant Identification}{6}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Layer 1 $\to $ Layer 2: Continuum Limit}{6}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.4}Layer 1 to Layer 2: Continuum Limit}{6}{subsection.3.4}%
 \contentsline {paragraph}{Coarse-Graining Map.}{6}{section*.10}%
 \contentsline {paragraph}{Emergent Metric.}{7}{section*.11}%
 \contentsline {paragraph}{Emergent Gauge Potential.}{7}{section*.12}%
@@ -30,7 +30,7 @@
 \contentsline {section}{\numberline {6}Discussion and Limitations}{9}{section.6}%
 \contentsline {subsection}{\numberline {6.1}What Has Been Achieved}{9}{subsection.6.1}%
 \contentsline {subsection}{\numberline {6.2}What Remains Open}{9}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Relation to the Muon $g-2$ Anomaly}{10}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.3}Relation to the Muon g-2 Anomaly}{10}{subsection.6.3}%
 \contentsline {section}{\numberline {7}Conclusion}{10}{section.7}%
 \contentsline {section}{\numberline {A}Graph Laplacian Spectral Bound}{12}{appendix.A}%
 \contentsline {section}{\numberline {B}Numerical Simulation Algorithm}{12}{appendix.B}%
