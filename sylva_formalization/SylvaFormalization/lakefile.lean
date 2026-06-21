@@ -38,5 +38,6 @@ lean_lib «SylvaFormalization» where
     `StringTheory.Basic,
     `SylvaInfrastructure,
     `TopologicalInsulator,
+    `NavierStokes,
     `ZetaVerifier_backup
   ]
