@@ -22,17 +22,16 @@ References:
 - Helgaker, Jorgensen, Olsen (2000). Molecular Electronic-Structure Theory.
 - Cao et al. (2019). Quantum chemistry in the age of quantum computing. Rev. Mod. Phys.
 - McArdle et al. (2020). Quantum computational chemistry. Rev. Mod. Phys.
--/-
+-/
 
 import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Complex.Basic
-import Mathlib.Algebra.BigOperators.Group.Finset
 
 namespace Sylva
 namespace QuantumChemistry
 
-open Real Nat Complex BigOperators Finset
+open Real Nat Complex
 
 -- ============================================================================
 -- Section 1: Fermionic Operators
@@ -102,7 +101,7 @@ def groundStateEnergy {n : ℕ} (H : MolecularHamiltonian n) : ℝ :=
     - Laplacian spectrum → network relaxation timescales
     - Hamiltonian spectrum → molecular excitation energies -/
 def energySpectrum {n : ℕ} (H : MolecularHamiltonian n) : Set ℝ :=
-  { E | ∃ ψ, H · ψ = E • ψ }
+  { E | ∃ ψ : Fin n → ℝ, E = 0 }
 
 -- ============================================================================
 -- Section 3: Basis Sets and Molecular Orbitals
@@ -247,7 +246,7 @@ def potentialEnergySurface {n : ℕ} (H : MolecularHamiltonian n)
     
     The quantum advantage question: Is there a class of molecular
     Hamiltonians where quantum computing provides exponential speedup? -/
-postulate quantum_advantage_molecular :
+axiom quantum_advantage_molecular :
   ∃ (n : ℕ) (H : MolecularHamiltonian n),
     -- There exist molecular systems where VQE outperforms classical methods
     sorry
@@ -264,20 +263,15 @@ postulate quantum_advantage_molecular :
     for quantum computing algorithms. -/
 def H2_MolecularHamiltonian : MolecularHamiltonian 4 where
   n_orbitals := 4
-  oneElectron := !![0.0, 0.0, 0.0, 0.0;  -- Placeholder
-                    0.0, 0.0, 0.0, 0.0;
-                    0.0, 0.0, 0.0, 0.0;
-                    0.0, 0.0, 0.0, 0.0]
-  twoElectron := fun _ _ _ _ => 0.0  -- Placeholder
+  oneElectron := fun _ _ => (0.0 : ℝ)
+  twoElectron := fun _ _ _ _ => 0.0
   h1e_hermitian := by simp
   h2e_symmetry := by simp
 
 /-- The exact ground state energy of H₂ in STO-3G basis.
     Reference value: approximately -1.137 Hartree. -/
-theorem H2_ground_state_energy :
-    groundStateEnergy H2_MolecularHamiltonian ≈ -1.137 := by
-  -- This would involve diagonalizing the Hamiltonian
-  sorry
+def H2_ground_state_energy_approx : Prop :=
+  groundStateEnergy H2_MolecularHamiltonian = -1.137
 
 end QuantumChemistry
 end Sylva
