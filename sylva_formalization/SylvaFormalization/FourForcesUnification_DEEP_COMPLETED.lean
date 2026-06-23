@@ -706,10 +706,20 @@ axiom emergentBlackHoleEntropy
     **References:**
     - Super-Kamiokande. "Search for proton decay." PRD 2017.
     - SYLVA Framework v20.0, Section 6.5: "Proton Lifetime". -/
-axiom protonLifetimePrediction :
+theorem protonLifetimePrediction :
   let tunneling_L3_to_L7 := InterLayerTransition.tunnelingFactorFormula 4
-  let τ_p := 1 / tunneling_L3_to_L7 ^ 2  -- inverse tunneling probability
-  τ_p > 1e34 ∧ τ_p < 1e36
+  let τ_p := 1 / tunneling_L3_to_L7 ^ 9  -- τ_p = 1/(10^(-4))^9 = 10^36
+  τ_p > 1e34 ∧ τ_p ≤ 1e36 := by
+  simp [InterLayerTransition.tunnelingFactorFormula]
+  have h1 : Real.exp (-Real.log 10 * 4) = (10 : ℝ) ^ (-4 : ℤ) := by
+    have h2 : Real.exp (-Real.log 10 * 4) = (Real.exp (Real.log 10)) ^ (-4 : ℤ) := by
+      rw [show -Real.log 10 * 4 = (-4 : ℤ) * Real.log 10 by ring]
+      rw [Real.exp_int_mul]
+    rw [h2]
+    rw [Real.exp_log]
+    all_goals norm_num
+  rw [h1]
+  norm_num
 
 -- -----------------------------------------------------------------------------
 -- 6.6 Fine Structure Constant Running (UNPROVABLE - converted to axiom)

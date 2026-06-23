@@ -14,25 +14,47 @@
 \contentsline {paragraph}{Extraction of the Einstein-Hilbert Term.}{5}{section*.7}%
 \contentsline {paragraph}{Variational Definition of the Emergent Stress Tensor.}{6}{section*.8}%
 \contentsline {paragraph}{Connection to Discrete Approaches.}{6}{section*.9}%
-\contentsline {subsection}{\numberline {3.3}Layer 3: Topological Invariant Identification}{6}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Layer 1 to Layer 2: Continuum Limit}{6}{subsection.3.4}%
-\contentsline {paragraph}{Coarse-Graining Map.}{6}{section*.10}%
-\contentsline {paragraph}{Emergent Metric.}{7}{section*.11}%
-\contentsline {paragraph}{Emergent Gauge Potential.}{7}{section*.12}%
-\contentsline {paragraph}{Emergent Stress Tensor.}{7}{section*.13}%
-\contentsline {section}{\numberline {4}Numerical Results}{7}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Simulation Protocol}{7}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Results}{7}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Finite-Size Scaling}{8}{subsection.4.3}%
-\contentsline {section}{\numberline {5}Testable Predictions}{8}{section.5}%
-\contentsline {subsection}{\numberline {5.1}Direct Experimental Tests}{8}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}Cosmological Implications}{9}{subsection.5.2}%
-\contentsline {section}{\numberline {6}Discussion and Limitations}{9}{section.6}%
-\contentsline {subsection}{\numberline {6.1}What Has Been Achieved}{9}{subsection.6.1}%
-\contentsline {subsection}{\numberline {6.2}What Remains Open}{9}{subsection.6.2}%
-\contentsline {subsection}{\numberline {6.3}Relation to the Muon g-2 Anomaly}{10}{subsection.6.3}%
-\contentsline {section}{\numberline {7}Conclusion}{10}{section.7}%
-\contentsline {section}{\numberline {A}Graph Laplacian Spectral Bound}{12}{appendix.A}%
-\contentsline {section}{\numberline {B}Numerical Simulation Algorithm}{12}{appendix.B}%
-\contentsline {section}{\numberline {C}Parameter Scan Data}{13}{appendix.C}%
-\contentsline {section}{\numberline {D}Toolchain Specification}{13}{appendix.D}%
+\contentsline {subsubsection}{\numberline {3.2.2}From Connectivity to Curvature: A 2D Toy Model}{6}{subsubsection.3.2.2}%
+\contentsline {paragraph}{Setup.}{6}{section*.10}%
+\contentsline {paragraph}{Heat-kernel matching.}{7}{section*.11}%
+\contentsline {paragraph}{Consistency checks.}{7}{section*.12}%
+\contentsline {paragraph}{Relation to Benincasa--Dowker.}{7}{section*.13}%
+\contentsline {subsection}{\numberline {3.3}Layer 3: Topological Invariant Identification}{7}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Layer 1 to Layer 2: Continuum Limit}{8}{subsection.3.4}%
+\contentsline {paragraph}{Coarse-Graining Map.}{8}{section*.14}%
+\contentsline {paragraph}{Emergent Metric.}{8}{section*.15}%
+\contentsline {paragraph}{Emergent Gauge Potential.}{9}{section*.16}%
+\contentsline {paragraph}{Emergent Stress Tensor.}{9}{section*.17}%
+\contentsline {section}{\numberline {4}Numerical Results}{9}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Simulation Protocol}{9}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Results}{9}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Finite-Size Scaling}{10}{subsection.4.3}%
+\contentsline {section}{\numberline {5}Testable Predictions}{10}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Direct Experimental Tests}{10}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Cosmological Implications}{11}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}Unique Predictions}{11}{subsection.5.3}%
+\contentsline {subsubsection}{\numberline {5.3.1}Prediction 1: Discrete jumps in the running of $\alpha $ at layer-transition energies}{11}{subsubsection.5.3.1}%
+\contentsline {paragraph}{Standard QED expectation.}{11}{section*.18}%
+\contentsline {paragraph}{Sylva prediction.}{12}{section*.19}%
+\contentsline {paragraph}{Experimental test at FCC-ee.}{12}{section*.20}%
+\contentsline {subsubsection}{\numberline {5.3.2}Prediction 2: Numerical constraint from layer-count universality}{12}{subsubsection.5.3.2}%
+\contentsline {paragraph}{The decomposition.}{12}{section*.21}%
+\contentsline {paragraph}{The universality test.}{13}{section*.22}%
+\contentsline {paragraph}{Toy-model illustration.}{13}{section*.23}%
+\contentsline {paragraph}{Physical interpretation.}{13}{section*.24}%
+\contentsline {paragraph}{How to test.}{13}{section*.25}%
+\contentsline {subsubsection}{\numberline {5.3.3}Explicit toy model: geometrically decreasing layer weights}{13}{subsubsection.5.3.3}%
+\contentsline {section}{\numberline {6}Discussion and Limitations}{14}{section.6}%
+\contentsline {subsection}{\numberline {6.1}What Has Been Achieved}{14}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}Relation to Other Approaches}{14}{subsection.6.2}%
+\contentsline {paragraph}{String theory and the Landscape.}{14}{section*.26}%
+\contentsline {paragraph}{Loop quantum gravity (LQG).}{15}{section*.27}%
+\contentsline {paragraph}{Causal set theory.}{15}{section*.28}%
+\contentsline {paragraph}{Summary.}{15}{section*.29}%
+\contentsline {subsection}{\numberline {6.3}What Remains Open}{15}{subsection.6.3}%
+\contentsline {subsection}{\numberline {6.4}Relation to the Muon g-2 Anomaly}{15}{subsection.6.4}%
+\contentsline {section}{\numberline {7}Conclusion}{16}{section.7}%
+\contentsline {section}{\numberline {A}Graph Laplacian Spectral Bound}{18}{appendix.A}%
+\contentsline {section}{\numberline {B}Numerical Simulation Algorithm}{19}{appendix.B}%
+\contentsline {section}{\numberline {C}Parameter Scan Data}{19}{appendix.C}%
+\contentsline {section}{\numberline {D}Toolchain Specification}{19}{appendix.D}%

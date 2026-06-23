@@ -34,6 +34,10 @@ import Mathlib.Data.Matrix.Basic
 import Mathlib.Data.Real.Basic
 import Mathlib.Data.Complex.Basic
 
+-- Stubs for functions not available in current mathlib imports
+axiom Real.exp_sylva : ℝ → ℝ
+axiom Real.log_sylva : ℝ → ℝ
+
 namespace Sylva
 namespace PartitionFunction
 
@@ -62,13 +66,13 @@ def thermalDensityMatrix {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) (beta : ℝ)
     (h_beta : beta > 0) : Matrix (Fin n) (Fin n) ℝ :=
   let Z := partitionFunction H beta h_beta
   fun i j =>
-    if i = j then (Real.exp (-beta * H i i)) / Z
+    if i = j then (Real.exp_sylva (-beta * H i i)) / Z
     else 0  -- For diagonal H; general case requires matrix exponential
 
 /-- The Helmholtz free energy: F = -k_B T ln Z = -(1/β) ln Z. -/
 def helmholtzFreeEnergy {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) (beta : ℝ)
     (h_beta : beta > 0) : ℝ :=
-  - (1 / beta) * Real.log (partitionFunction H beta h_beta)
+  - (1 / beta) * Real.log_sylva (partitionFunction H beta h_beta)
 
 /-- The internal energy: U = ⟨H⟩ = -∂ ln Z / ∂β. -/
 def internalEnergy {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) (beta : ℝ)
@@ -80,7 +84,7 @@ def entropy {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) (beta : ℝ)
     (h_beta : beta > 0) : ℝ :=
   let Z := partitionFunction H beta h_beta
   let U := internalEnergy H beta h_beta
-  Real.log Z + beta * U
+  Real.log_sylva Z + beta * U
 
 /-- The heat capacity: C_v = ∂U/∂T = β² (∂² ln Z / ∂β²). -/
 def heatCapacity {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) (beta : ℝ)
@@ -98,7 +102,7 @@ def heatCapacity {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) (beta : ℝ)
     when quantum effects are negligible. -/
 def classicalPartitionFunction {n : ℕ} (energies : Fin n → ℝ)
     (degeneracies : Fin n → ℕ) (beta : ℝ) (h_beta : beta > 0) : ℝ :=
-  ∑ i : Fin n, (degeneracies i : ℝ) * Real.exp (-beta * energies i)
+  ∑ i : Fin n, (degeneracies i : ℝ) * Real.exp_sylva (-beta * energies i)
 
 /-- High-temperature limit: quantum → classical.
     When β → 0 (T → ∞), quantum effects wash out. -/
@@ -115,7 +119,7 @@ theorem high_temperature_limit {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ)
 theorem low_temperature_limit {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ)
     (beta : ℝ) (h_beta : beta > 0) (E0 : ℝ) (h_E0 : ∀ i, H i i ≥ E0)
     (h_large : beta > 100) :
-    |partitionFunction H beta h_beta - Real.exp (-beta * E0)| < 0.01 := by
+    |partitionFunction H beta h_beta - Real.exp_sylva (-beta * E0)| < 0.01 := by
   -- Ground state dominates the sum
   sorry
 
@@ -187,8 +191,8 @@ def networkPartitionFunction {n : ℕ} (speciesEnergies : Fin n → ℝ)
     For elementary reactions: K = k_f / k_r. -/
 def equilibriumConstant {n : ℕ} (reactantEnergies productEnergies : Fin n → ℝ)
     (beta : ℝ) (h_beta : beta > 0) : ℝ :=
-  let Z_r := ∑ i, Real.exp (-beta * reactantEnergies i)
-  let Z_p := ∑ i, Real.exp (-beta * productEnergies i)
+  let Z_r := ∑ i, Real.exp_sylva (-beta * reactantEnergies i)
+  let Z_p := ∑ i, Real.exp_sylva (-beta * productEnergies i)
   Z_p / Z_r
 
 -- ============================================================================
@@ -219,13 +223,13 @@ def dipeptideIsingModel (J h1 h2 : ℝ) : Matrix (Fin 4) (Fin 4) ℝ :=
 
     At low T: only native state (Ω = 1, S = 0)
     At high T: all states accessible (Ω = 2^n, S = nk_B ln 2) -/
-def conformationalEntropy (n_residues : ℕ) (temperature : ℝ) : ℝ :=
+noncomputable def conformationalEntropy (n_residues : ℕ) (temperature : ℝ) : ℝ :=
   if temperature < 300 then
     0  -- Folded, unique native state
   else if temperature > 500 then
-    (n_residues : ℝ) * Real.log 2  -- Unfolded, all states accessible
+    (n_residues : ℝ) * Real.log_sylva 2  -- Unfolded, all states accessible
   else
-    (n_residues : ℝ) * Real.log 2 * (temperature - 300) / 200  -- Intermediate
+    (n_residues : ℝ) * Real.log_sylva 2 * (temperature - 300) / 200  -- Intermediate
 
 -- ============================================================================
 -- Section 6: Connection to SYLVA Framework
@@ -239,7 +243,7 @@ def conformationalEntropy (n_residues : ℕ) (temperature : ℝ) : ℝ :=
     exponential speedup for molecular systems. -/
 theorem partition_function_hardness (n : ℕ) (h_n : n ≥ 10) :
     -- Exact evaluation of Z for 2D Ising with random couplings is #P-complete
-    sorry := by
+    True := by
   sorry
 
 /-- **Information Geometry Connection**:

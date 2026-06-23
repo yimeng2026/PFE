@@ -59,6 +59,33 @@ A.~H. Chamseddine and A.~Connes.
 \newblock The spectral action principle.
 \newblock {\em Commun. Math. Phys.}, 186:731--750, 1997.
 
+\bibitem{Connes1994}
+Alain Connes.
+\newblock {\em Noncommutative Geometry}.
+\newblock Academic Press, 1994.
+
+\bibitem{ChamseddineConnes1996}
+Ali~H. Chamseddine and Alain Connes.
+\newblock Universal formula for noncommutative geometry actions: Unification of
+  gravity and the standard model.
+\newblock {\em Phys. Rev. Lett.}, 77:4868--4871, 1996.
+
+\bibitem{ArkaniHamed2014}
+Nima Arkani-Hamed and Jaroslav Trnka.
+\newblock The amplituhedron.
+\newblock {\em J. High Energy Phys.}, 2014:30, 2014.
+
+\bibitem{ArkaniHamed2023}
+Nima Arkani-Hamed, Daniel Baumann, Aaron Hillman, Austin Joyce, Hayden Lee, and
+  Guilherme~L. Pimentel.
+\newblock All loop scattering for all multiplicity.
+\newblock {\em Phys. Rev. Lett.}, 135:031602, 2025.
+
+\bibitem{ArkaniHamed2024Cosmohedra}
+Nima Arkani-Hamed, Carolina Figueiredo, and Francisco Vaz\~{a}o.
+\newblock Cosmohedra.
+\newblock {\em J. High Energy Phys.}, 2025:029, 2025.
+
 \bibitem{Regge1961}
 T.~Regge.
 \newblock General relativity without coordinates.
@@ -74,6 +101,11 @@ J.~Ambj{\o}rn, J.~Jurkiewicz, and R.~Loll.
 D.~Oriti.
 \newblock The group field theory approach to quantum gravity.
 \newblock {\em arXiv preprint}, 2014.
+
+\bibitem{Dabrowski2023}
+Ludwik D\c{a}browski, Andrzej Sitarz, and Paw\l Zalecki.
+\newblock Spectral metric and einstein functionals.
+\newblock {\em Adv. Math.}, 427:109128, 2023.
 
 \bibitem{Belkin2006}
 M.~Belkin and P.~Niyogi.
@@ -101,5 +133,72 @@ M.~Aliberti et~al.
 \newblock Final measurement of the positive-muon anomalous magnetic moment to
   0.20 ppm precision.
 \newblock {\em Phys. Rev. D}, 111:052007, 2025.
+
+\bibitem{Cheng2019}
+Miranda C.~N. Cheng, Sungbong Chun, Francesca Ferrari, Sergei Gukov, and
+  Sarah~M. Harrison.
+\newblock 3d modularity.
+\newblock {\em J. High Energy Phys.}, 2019:010, 2019.
+
+\bibitem{Gukov2017}
+Sergei Gukov, Du~Pei, Pavel Putrov, and Cumrun Vafa.
+\newblock Bps spectra and 3-manifold invariants.
+\newblock 2017.
+
+\bibitem{Bringmann2020}
+Kathrin Bringmann, Karl Mahlburg, and Antun Milas.
+\newblock Quantum modular forms and plumbing graphs of 3-manifolds.
+\newblock {\em J. Combin. Theory Ser. A}, 170:105145, 2020.
+
+\bibitem{Akhmechet2021}
+Rostislav Akhmechet, Peter Johnson, and Vyacheslav Krushkal.
+\newblock Lattice cohomology and q-series invariants of 3-manifolds.
+\newblock 2021.
+
+\bibitem{Riembau2025}
+M.~Riembau.
+\newblock A novel statistical method for z-pole measurements at future lepton
+  colliders.
+\newblock {\em arXiv preprint}, 2025.
+\newblock Proposes forward-backward asymmetry method reaching
+  $\delta\alpha_{\text{had}}^{(5)}\sim 1\times 10^{-5}$.
+
+\bibitem{Cheng2002}
+H.-C. Cheng, K.~T. Matchev, and M.~Schmaltz.
+\newblock Radiative corrections in universal extra dimensions.
+\newblock {\em Phys. Rev. D}, 66:036005, 2002.
+
+\bibitem{Muck2002}
+A.~Muck, A.~Pilaftsis, and R.~Ruckl.
+\newblock Electroweak observables in universal extra dimensions.
+\newblock {\em Phys. Rev. D}, 65:085037, 2002.
+
+\bibitem{Damour2002}
+T.~Damour.
+\newblock String theory, cosmology and varying constants.
+\newblock {\em Astrophys. Space Sci.}, 283:445--450, 2003.
+\newblock Updated version of 2002 lectures.
+
+\bibitem{Susskind2003}
+L.~Susskind.
+\newblock {\em The Cosmic Landscape: String Theory and the Illusion of
+  Intelligent Design}.
+\newblock Little, Brown, 2005.
+\newblock Introduces the String Landscape and the $10^{500}$ vacua estimate.
+
+\bibitem{Rovelli2004}
+C.~Rovelli.
+\newblock {\em Quantum Gravity}.
+\newblock Cambridge University Press, 2004.
+
+\bibitem{Palti2019}
+Eran Palti.
+\newblock The swampland: Introduction and review.
+\newblock {\em Fortschr. Phys.}, 67:1900037, 2019.
+
+\bibitem{MaldacenaSusskind2013}
+Juan Maldacena and Leonard Susskind.
+\newblock Cool horizons for entangled black holes.
+\newblock {\em Fortschr. Phys.}, 61:781--811, 2013.
 
 \end{thebibliography}

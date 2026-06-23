@@ -202,9 +202,22 @@ theorem phi_gt_one : phi > 1 := by
   linarith
 
 -- 性质3：黄金比例是无理数（基于sqrt 5的无理性）
-axiom phi_irrational : Irrational phi
-  -- 黄金比例 phi = (1 + sqrt 5)/2 的无理性可由 mathlib 的 Irrational 引理组合证明，
-  -- 但涉及 sqrt 5 无理性、加法/除法封闭性，此处作为基础公理声明
+theorem phi_irrational : Irrational phi := by
+  rw [phiDef]
+  -- Step 1: sqrt(5) is irrational because 5 is not a perfect square
+  have h_sqrt5 : Irrational (Real.sqrt 5) := by
+    apply irrational_sqrt_natCast_iff.mpr
+    -- 5 is not a perfect square
+    native_decide
+  -- Step 2: 1 + sqrt(5) is irrational (rational + irrational)
+  have h2 : Irrational (1 + Real.sqrt 5) := by
+    rw [add_comm]
+    exact Irrational.rat_add 1 h_sqrt5
+  -- Step 3: (1 + sqrt(5)) / 2 is irrational (irrational / non-zero rational)
+  have h3 : Irrational ((1 + Real.sqrt 5) / 2) := by
+    rw [show (1 + Real.sqrt 5) / 2 = (1 + Real.sqrt 5) * (1 / 2 : ℚ) by simp]
+    exact Irrational.mul_rat h2 (by norm_num)
+  exact h3
 
 /- ============================
    物质密度参数 Omega_m
@@ -1006,7 +1019,9 @@ theorem SolarMass_positive : SolarMass > 0 := by
   norm_num
 
 -- 性质2：SolarMass远大于地球质量
-axiom SolarMass_gt_EarthMass : SolarMass > 3e5 * EarthMass
+theorem SolarMass_gt_EarthMass : SolarMass > 3e5 * EarthMass := by
+  rw [SolarMassDef, EarthMassDef]
+  norm_num
   -- 数值验证：SolarMass = 1.98847e30，EarthMass = 5.9722e24，3e5 * EarthMass = 1.79166e30 < 1.98847e30
 
 /- ============================
@@ -1055,7 +1070,9 @@ theorem SunRadius_positive : SunRadius > 0 := by
   norm_num
 
 -- 性质2：SunRadius远大于地球半径
-axiom SunRadius_gt_EarthRadius : SunRadius > 100 * EarthRadius
+theorem SunRadius_gt_EarthRadius : SunRadius > 100 * EarthRadius := by
+  rw [SunRadiusDef, EarthRadiusDef]
+  norm_num
   -- 数值验证：SunRadius = 6.957e8，EarthRadius = 6.3781e6，100 * EarthRadius = 6.3781e8 < 6.957e8
 
 /- ============================
@@ -1079,7 +1096,9 @@ theorem EarthRadius_positive : EarthRadius > 0 := by
   norm_num
 
 -- 性质2：与天文单位的比例
-axiom EarthRadius_AU_ratio : EarthRadius / AU < 5e-5
+theorem EarthRadius_AU_ratio : EarthRadius / AU < 5e-5 := by
+  rw [EarthRadiusDef, AUDef]
+  norm_num
   -- 数值验证：EarthRadius = 6.3781e6，AU = 1.495978707e11，EarthRadius/AU ≈ 4.26e-5 < 5e-5
 
 /- ============================
