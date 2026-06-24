@@ -1668,8 +1668,35 @@ end CircuitSATResult
     theorem and complexity class machinery (NP, P, polynomial-time
     reductions) which is not yet formalized in Mathlib. -/
 
-/-- SAT (CNF satisfiability) is NP-complete.
-    This is the Cook-Levin theorem (1971). -/
+/-- **Cook-Levin Theorem: SAT is NP-complete.**
+
+    **Standard name:** Cook-Levin Theorem (Cook 1971, Levin 1973).
+
+    **Proof path:**
+    1. SAT ∈ NP: a satisfying assignment is a polynomial-time verifiable certificate.
+    2. SAT is NP-hard: any language L ∈ NP reduces to SAT via a polynomial-time
+       tableau encoding of a non-deterministic Turing machine computation.
+    See Sipser (2006) Chapter 7, Theorem 7.37; Arora & Barak (2009) Chapter 2, Theorem 2.10.
+
+    **Mathlib status:** Not formalized. Mathlib 4 does not yet have a theory of
+    Turing machines, NP-completeness, or polynomial-time reductions. The `CookLevin`
+    project (T17, T21) is an active effort toward this goal.
+
+    **Why axiom is reasonable:** Requires the entire complexity theory toolchain:
+    - Formal model of computation (Turing machines or equivalent)
+    - Polynomial-time complexity class definitions
+    - Polynomial-time reduction composition
+    - Tableau construction for NP-hardness
+    Each of these is a substantial independent formalization project.
+
+    **References:**
+    - Cook, S. A. (1971). "The complexity of theorem-proving procedures." STOC.
+    - Levin, L. A. (1973). "Universal search problems." Probl. Peredachi Inf.
+    - Sipser, M. (2006). *Introduction to the Theory of Computation*, 2nd ed., §7.4.
+    - Arora, S. & Barak, B. (2009). *Computational Complexity: A Modern Approach*, §2.3.
+
+    **Difficulty to theorem:** Research (requires ~300h formalization project).
+    -/
 axiom SAT_is_NPComplete :
   -- SAT is NP-complete by the Cook-Levin theorem.
   -- Proof sketch: (1) SAT is in NP (certificate = satisfying assignment),
@@ -1679,8 +1706,33 @@ axiom SAT_is_NPComplete :
   -- proofs -- a major project (~300h) in progress (T17, T21).
   True
 
-/-- 3-SAT (each clause has at most 3 literals) is NP-complete.
-    Reduction from SAT by expanding long clauses with auxiliary variables. -/
+/-- **Karp's Theorem: 3-SAT is NP-complete.**
+
+    **Standard name:** Karp's 21 NP-complete problems (Karp 1972), Problem 1: SAT → 3-SAT.
+
+    **Proof path:**
+    1. Start from SAT_is_NPComplete (Cook-Levin theorem).
+    2. Reduce SAT to 3-SAT by clause expansion: each clause of length k > 3 is
+       replaced by k-2 clauses of length 3 using Tseitin-style auxiliary variables.
+    3. The reduction is polynomial-time (linear in total clause length).
+    See Garey & Johnson (1979) §3.1.2; Sipser (2006) §7.5, Problem 7.48.
+
+    **Mathlib status:** Not formalized. Requires SAT_is_NPComplete as prerequisite.
+    The Tseitin clause expansion itself is purely combinatorial and could be formalized
+    independently (~50h), but the NP-completeness wrapper requires the full complexity theory.
+
+    **Why axiom is reasonable:** The reduction is purely syntactic, but the NP-completeness
+    conclusion requires the Cook-Levin theorem as a black box. Without formal complexity classes,
+    the statement "3-SAT is NP-complete" cannot be given a type in Lean.
+
+    **References:**
+    - Karp, R. M. (1972). "Reducibility among combinatorial problems." In *Complexity of
+      Computer Computations* (Miller & Thatcher, eds.), Plenum Press.
+    - Garey, M. R. & Johnson, D. S. (1979). *Computers and Intractability*, §3.1.
+    - Sipser, M. (2006). *Introduction to the Theory of Computation*, §7.5.
+
+    **Difficulty to theorem:** Research (requires SAT_is_NPComplete theorem + ~50h reduction).
+    -/
 axiom ThreeSAT_is_NPComplete :
   -- 3-SAT is NP-complete by reduction from SAT:
   -- each clause of length k > 3 is replaced by k-2 clauses of length 3
@@ -1690,9 +1742,40 @@ axiom ThreeSAT_is_NPComplete :
   -- full Cook-Levin theorem (SAT_is_NPComplete) as a prerequisite.
   True
 
-/-- 2-SAT (each clause has at most 2 literals) is in P.
-    Solvable in O(n+m) time via strongly connected components in the
-    implication graph (Aspvall, Plass, Tarjan 1979). -/
+/-- **Even-Itai-Shamir Theorem: 2-SAT is in P.**
+
+    **Standard name:** 2-SAT ∈ P (Even, Itai, Shamir 1976; Aspvall, Plass, Tarjan 1979).
+
+    **Proof path:**
+    1. Construct the implication graph G_φ: 2n vertices (literal nodes x_i, ¬x_i),
+       2m directed edges (implication edges: (a ∨ b) → ¬a ⇒ b, ¬b ⇒ a).
+    2. A 2-CNF formula φ is satisfiable iff no variable x_i and its negation ¬x_i
+       belong to the same strongly connected component (SCC) of G_φ.
+    3. SCCs can be found in O(n+m) time by Kosaraju's or Tarjan's algorithm.
+    See Even et al. (1976); Aspvall et al. (1979); Papadimitriou (1994) §4.2.
+
+    **Mathlib status:** Partially feasible. Mathlib has:
+    - `SimpleGraph` and directed graph reachability
+    - But no formalization of implication graph construction from 2-CNF.
+    The graph-theoretic core is within reach (~100h); the P-membership wrapper requires
+    complexity theory (polynomial-time algorithms).
+
+    **Why axiom is reasonable:** The algorithmic content (SCC + implication graph) is
+    standard graph theory but requires formalizing:
+    - The implication graph construction from CNF syntax
+    - SCC correctness proof (reachable from DFS-based algorithms)
+    - The equivalence proof (SCC-free ↔ satisfiable) via logical deduction
+    The P-complexity wrapper requires the missing complexity class machinery.
+
+    **References:**
+    - Even, S., Itai, A., & Shamir, A. (1976). "On the complexity of timetable and
+      multicommodity flow problems." *SIAM J. Comput.* 5(4), 691–703.
+    - Aspvall, B., Plass, M. F., & Tarjan, R. E. (1979). "A linear-time algorithm for
+      testing the truth of certain quantified Boolean formulas." *IPL* 8(3), 121–123.
+    - Papadimitriou, C. H. (1994). *Computational Complexity*, §4.2.
+
+    **Difficulty to theorem:** Hard (algorithm ~100h, but P-wrapper requires complexity theory).
+    -/
 axiom TwoSAT_in_P :
   -- 2-SAT is in P: the implication graph has 2n vertices (literal nodes)
   -- and 2m edges (implication edges). A formula is satisfiable iff no
@@ -1703,8 +1786,42 @@ axiom TwoSAT_in_P :
   -- Mathlib has graph libraries but not the specific 2-SAT algorithm.
   True
 
-/-- Horn-SAT (each clause has at most one positive literal) is in P.
-    Solvable in linear time via unit propagation (forward chaining). -/
+/-- **Dowling-Gallier Theorem: Horn-SAT is in P.**
+
+    **Standard name:** Horn-SAT ∈ P (Dowling & Gallier 1984; unit propagation / forward chaining).
+
+    **Proof path:**
+    1. Unit propagation: repeatedly set any variable that appears as a unit clause
+       (single-literal clause) to true. Derive all forced assignments.
+    2. If the empty clause is derived, the formula is unsatisfiable.
+    3. If no empty clause and all unit clauses are exhausted, set all remaining
+       variables to false. This yields a satisfying assignment.
+    4. The algorithm runs in linear time O(n + m) where n = number of variables,
+       m = number of clauses.
+    See Dowling & Gallier (1984); Schöning (2013) §2.2.
+
+    **Mathlib status:** Not formalized. The algorithm is a fixpoint computation on
+    the set of variables that must be true. Mathlib has general fixpoint theory
+    (`CompleteLattice`, `CompletePartialOrder`) but not the specific SAT application.
+    The unit propagation algorithm could be formalized as a monotone function on
+    `Finset Var` and its least fixpoint computed via Kleene iteration.
+
+    **Why axiom is reasonable:** Requires formalizing:
+    - Unit propagation as a monotone operator on variable assignments
+    - Fixpoint iteration (Kleene) and termination proof (finite lattice)
+    - Correctness: the fixpoint characterizes satisfiability
+    - Completeness: if fixpoint does not derive empty clause, the assignment is a model
+    The SAT-specific content is not in Mathlib but uses standard order theory.
+
+    **References:**
+    - Dowling, W. F. & Gallier, J. H. (1984). "Linear-time algorithms for testing the
+      satisfiability of propositional Horn formulae." *J. Logic Programming* 1(3), 267–284.
+    - Schöning, U. (2013). *Logic for Computer Scientists*, §2.2.
+    - Cook, S. A. (1971). "The complexity of theorem-proving procedures." STOC.
+
+    **Difficulty to theorem:** Medium (~50–80h). The fixpoint theory is available in Mathlib;
+    the SAT-specific application requires custom definitions.
+    -/
 axiom HornSAT_in_P :
   -- Horn-SAT is in P: the unit propagation algorithm runs in linear time.
   -- A Horn formula is satisfiable iff unit propagation does not derive
@@ -1715,9 +1832,36 @@ axiom HornSAT_in_P :
   -- standard SAT theory result but not yet in Mathlib.
   True
 
-/-- CircuitSAT is NP-complete.
-    By composition: (1) SAT is NP-complete, (2) SAT → CircuitSAT is trivial
-    (CNF is a circuit), (3) CircuitSAT → SAT is linear (Tseitin). -/
+/-- **CircuitSAT is NP-complete (Cook 1971 composition).**
+
+    **Standard name:** CircuitSAT ∈ NP-complete (implicit in Cook 1971; explicit composition).
+
+    **Proof path:**
+    1. SAT is NP-complete (Cook-Levin theorem, SAT_is_NPComplete).
+    2. SAT → CircuitSAT is trivial: a CNF formula is a depth-2 Boolean circuit (AND of ORs).
+    3. CircuitSAT → SAT is linear-time: the Tseitin transformation (circuitToSAT in this module)
+       converts any Boolean circuit to an equisatisfiable CNF formula in O(|circuit|) time.
+    4. By composition, CircuitSAT is NP-complete.
+    See Arora & Barak (2009) Chapter 6, Theorem 6.7; Sipser (2006) §9.3.
+
+    **Mathlib status:** Not formalized. The Tseitin transformation (circuitToSAT) is partially
+    formalized in this module (structural induction, gate correctness lemmas), but the full
+    equisatisfiability proof is incomplete (assignment extension steps marked with `sorry`).
+    The NP-completeness wrapper requires the full Cook-Levin theorem.
+
+    **Why axiom is reasonable:** The reduction is purely structural (Tseitin on circuits),
+    but the NP-completeness conclusion requires the Cook-Levin theorem as a black box.
+    The Tseitin equisatisfiability proof (~200 lines of assignment construction) is
+    mechanizable but not yet complete in this module.
+
+    **References:**
+    - Cook, S. A. (1971). "The complexity of theorem-proving procedures." STOC.
+    - Arora, S. & Barak, B. (2009). *Computational Complexity: A Modern Approach*, §6.1.
+    - Sipser, M. (2006). *Introduction to the Theory of Computation*, §9.3.
+    - Tseitin, G. S. (1968). "On the complexity of derivation in propositional calculus."
+
+    **Difficulty to theorem:** Research (requires SAT_is_NPComplete + Tseitin proof completion ~100h).
+    -/
 axiom CircuitSAT_is_NPComplete :
   -- CircuitSAT is NP-complete by composition:
   -- 1. SAT is NP-complete (Cook-Levin theorem, SAT_is_NPComplete)
@@ -1729,8 +1873,32 @@ axiom CircuitSAT_is_NPComplete :
   -- and the circuitToSAT reduction correctness.
   True
 
-/-- Equivalence of SAT and CircuitSAT complexity.
-    Both are NP-complete; they are polynomial-time equivalent. -/
+/-- **SAT-CircuitSAT Polynomial Equivalence.**
+
+    **Standard name:** SAT ≡ₚ CircuitSAT (polynomial-time equivalence).
+
+    **Proof path:**
+    1. SAT ≤ₚ CircuitSAT: trivial (CNF is a depth-2 circuit, AND-of-ORs).
+    2. CircuitSAT ≤ₚ SAT: Tseitin transformation (linear time, circuitToSAT).
+    3. Both reductions are polynomial-time (in fact linear-time).
+    4. Therefore SAT and CircuitSAT are polynomial-time equivalent.
+    See Arora & Barak (2009) Chapter 6; Sipser (2006) §9.3.
+
+    **Mathlib status:** Not formalized. Requires both SAT_is_NPComplete and
+    CircuitSAT_is_NPComplete as prerequisites. The Tseitin reduction direction
+    is partially formalized in this module (circuitToSAT, structural lemmas).
+
+    **Why axiom is reasonable:** This is a direct corollary of the two NP-completeness
+    results above. Without formal complexity classes, the statement "SAT and CircuitSAT
+    are polynomial-time equivalent" has no formal type in Lean.
+
+    **References:**
+    - Arora, S. & Barak, B. (2009). *Computational Complexity: A Modern Approach*, §6.1.
+    - Sipser, M. (2006). *Introduction to the Theory of Computation*, §9.3.
+    - Tseitin, G. S. (1968). "On the complexity of derivation in propositional calculus."
+
+    **Difficulty to theorem:** Research (requires both NP-completeness theorems + Tseitin proof).
+    -/
 axiom SAT_CircuitSAT_equivalent :
   -- SAT and CircuitSAT are polynomial-time equivalent:
   -- SAT ≤ₚ CircuitSAT (trivial, CNF is a circuit)

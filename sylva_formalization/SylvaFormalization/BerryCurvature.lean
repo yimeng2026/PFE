@@ -82,22 +82,45 @@ structure BerryCurvature (L : BlochTheorem.Lattice2D) where
 -- Section 2: Berry 曲率的规范不变性
 -- ============================================
 
-/-- Berry 曲率的规范不变性定理：
-    在规范变换 |u_nk⟩ → e^{iθ(k)} |u_nk⟩ 下，
-    A_μ → A_μ + ∂_μ θ，因此：
-    
-    Ω'_{xy} = ∂_x(A_y + ∂_y θ) - ∂_y(A_x + ∂_x θ)
-            = ∂_x A_y + ∂_x ∂_y θ - ∂_y A_x - ∂_y ∂_x θ
-            = ∂_x A_y - ∂_y A_x + (∂_x ∂_y θ - ∂_y ∂_x θ)
-            = Ω_{xy} + 0
-            = Ω_{xy}
-    
-    其中 ∂_x ∂_y θ = ∂_y ∂_x θ 由 Schwarz 定理（Clairaut 定理）保证。
-    
-    这是 Berry 曲率作为物理可观测量的根本保证：
-    - A_μ 不是可观测的（依赖于相位选择）
-    - Ω_{xy} 是可观测的（规范不变）
-    - Hall 电导 σ_xy 正比于 Ω_{xy} 的积分，因此也是规范不变的。 -/
+/-- **Berry Curvature Gauge Invariance (Schwarz Theorem / d² = 0).**
+
+    **Standard name:** Berry curvature is gauge invariant: Ω' = Ω under |u'⟩ = e^{iθ}|u⟩.
+
+    **Physical statement:** Under a gauge transformation A → A' = A + ∇θ, the Berry curvature
+    is invariant: Ω'_{xy} = ∂_x(A_y + ∂_y θ) - ∂_y(A_x + ∂_x θ) = Ω_{xy} + (∂_x ∂_y θ - ∂_y ∂_x θ) = Ω_{xy}.
+    The mixed partial derivatives cancel by Schwarz's theorem (Clairaut's theorem): ∂_x ∂_y θ = ∂_y ∂_x θ.
+
+    **Proof path:**
+    1. Ω_{xy} = ∂_x A_y - ∂_y A_x (definition of Berry curvature).
+    2. Under gauge transformation: A'_x = A_x + ∂_x θ, A'_y = A_y + ∂_y θ.
+    3. Ω'_{xy} = ∂_x(A_y + ∂_y θ) - ∂_y(A_x + ∂_x θ) = (∂_x A_y - ∂_y A_x) + (∂_x ∂_y θ - ∂_y ∂_x θ).
+    4. By Schwarz's theorem (Clairaut's theorem): ∂_x ∂_y θ = ∂_y ∂_x θ for smooth θ.
+    5. Therefore Ω'_{xy} = Ω_{xy}.
+    See Berry (1984); Xiao et al. (2010) §II.B; Nakahara (2003) Ch. 5.
+
+    **Mathlib status:** Provable in principle. The proof requires:
+    - Equality of mixed partial derivatives for smooth functions (Clairaut's theorem / Schwarz theorem)
+    - Mathlib has `deriv` and `fderiv` but the equality of mixed partials is a standard result
+      in multivariable calculus that could be formalized.
+    The proof is elementary calculus and should be formalizable in ~20–30h.
+
+    **Why axiom is reasonable:** The gauge invariance of the Berry curvature is a direct
+    consequence of the equality of mixed partial derivatives (Schwarz theorem). This is
+    elementary calculus but the formal statement is `True` (placeholder) because the full
+    differential form calculus is not in Mathlib. However, the specific equality of mixed
+    partials could be formalized independently.
+
+    **References:**
+    - Berry, M. V. (1984). "Quantal phase factors accompanying adiabatic changes."
+      *Proc. R. Soc. Lond. A* 392(1802), 45–57.
+    - Xiao, D., Chang, M.-C., & Niu, Q. (2010). "Berry phase effects on electronic properties."
+      *Rev. Mod. Phys.* 82(3), 1959.
+    - Nakahara, M. (2003). *Geometry, Topology and Physics*, 2nd ed., Ch. 5.
+    - Clairaut, A. C. (1740). "Sur l'integration ou la construction des equations differentielles
+      du premier ordre." *Mém. Acad. Sci. Paris*.
+
+    **Difficulty to theorem:** Easy (~20–30h, Schwarz theorem for mixed partials).
+    -/
 axiom BerryCurvature_GaugeInvariance
     (L : BlochTheorem.Lattice2D) (Ω : BerryCurvature L)
     (gauge : BerryConnection.GaugeTransformation L) :
@@ -108,21 +131,48 @@ axiom BerryCurvature_GaugeInvariance
 -- Section 3: Berry 曲率的替代表达式
 -- ============================================
 
-/-- Berry 曲率的 Kubo 公式形式：
-    在微扰理论中，Berry 曲率可以写成：
-    
-    Ω_{xy}(k) = i Σ_{m≠n} [⟨u_nk| ∂_x |u_mk⟩ ⟨u_mk| ∂_y |u_nk⟩ - (x ↔ y)] / (E_n - E_m)²
-    
-    这个表达式直接显示了 Berry 曲率的共振结构：
-    - 当 E_n = E_m 时，分母 (E_n - E_m)² → 0，曲率发散
-    - 这就是能带交叉（band crossing）处的狄拉克锥（Dirac cone）
-    - 在拓扑绝缘体中，狄拉克锥是 Berry 曲率 "单极子" 的来源
-    
-    推导思路：从 A_μ = ⟨u_n| i ∂_μ |u_n⟩ 出发，对 ∂_μ A_ν 展开：
-    ∂_x A_y = ∂_x ⟨u_n| i ∂_y |u_n⟩ + ⟨u_n| i ∂_x ∂_y |u_n⟩
-    插入完备性关系 I = Σ_m |u_m⟩⟨u_m|，利用 ⟨u_n|u_m⟩ = δ_{nm}。
-    
-    开放问题：需要在 Lean 中形式化插入完备性的代数操作。 -/
+/-- **Berry Curvature Kubo Formula (Perturbation Theory Expression).**
+
+    **Standard name:** Kubo formula for Berry curvature: Ω_{xy} = i Σ_{m≠n} [⟨u_n|∂_x|u_m⟩⟨u_m|∂_y|u_n⟩ - (x↔y)] / (E_n - E_m)².
+
+    **Physical statement:** The Berry curvature can be expressed in terms of interband matrix elements
+    of the momentum operator (velocity operator) via perturbation theory. This form displays the
+    resonance structure: when E_n = E_m (band crossing), the denominator vanishes and the curvature
+    diverges (Dirac cone singularity in topological insulators).
+
+    **Proof path:**
+    1. Start from A_μ = ⟨u_n| i∂_μ |u_n⟩ (Berry connection definition).
+    2. Compute ∂_x A_y = ∂_x ⟨u_n| i∂_y |u_n⟩ = ⟨∂_x u_n| i∂_y |u_n⟩ + ⟨u_n| i∂_x ∂_y |u_n⟩.
+    3. Insert the completeness relation I = Σ_m |u_m⟩⟨u_m| into the first term:
+       ⟨∂_x u_n| i∂_y |u_n⟩ = Σ_m ⟨∂_x u_n|u_m⟩ ⟨u_m| i∂_y |u_n⟩.
+    4. Use perturbation theory: ⟨u_m|∂_x|u_n⟩ = ⟨u_m| ∂_x H |u_n⟩ / (E_n - E_m) for m ≠ n.
+    5. The diagonal term m = n vanishes because ⟨u_n|∂_x|u_n⟩ is purely imaginary and the
+       product with ⟨u_n|∂_y|u_n⟩ is antisymmetric under x ↔ y.
+    6. Combining terms gives the Kubo formula.
+    See Kohmoto (1985); Xiao et al. (2010) §II.C; Resta (1994).
+
+    **Mathlib status:** Not formalized. The proof requires:
+    - Perturbation theory for eigenstates (first-order perturbation theory)
+    - Completeness relation insertion in Hilbert spaces
+    - Off-diagonal matrix elements of the Hamiltonian derivative ∂_x H
+    - Resonant denominators (E_n - E_m)⁻²
+    Mathlib has Hilbert space theory (partially) but not perturbation theory for eigenstates.
+
+    **Why axiom is reasonable:** The Kubo formula is derived from perturbation theory and
+    completeness relation insertion. These are standard quantum mechanics techniques but require
+    formal operator algebra and spectral theory. The formal statement is `True` (placeholder).
+
+    **References:**
+    - Kohmoto, M. (1985). "Topological invariant and the quantization of the Hall conductance."
+      *Ann. Phys.* 160(2), 343–354.
+    - Xiao, D., Chang, M.-C., & Niu, Q. (2010). "Berry phase effects on electronic properties."
+      *Rev. Mod. Phys.* 82(3), 1959.
+    - Resta, R. (1994). "Macroscopic polarization in crystalline dielectrics: the geometric phase approach."
+      *Rev. Mod. Phys.* 66(3), 899.
+    - Thouless, D. J. (1984). "Quantization of particle transport." *PRB* 27(10), 6083.
+
+    **Difficulty to theorem:** Medium (~100–200h, perturbation theory + spectral theory).
+    -/
 axiom BerryCurvature_KuboFormula
     (L : BlochTheorem.Lattice2D) (Ω : BerryCurvature L)
     (E : BlochTheorem.BandEnergy L) (states : BlochTheorem.BandEigenstate L) :
@@ -186,54 +236,106 @@ structure FirstChernNumber (L : BlochTheorem.Lattice2D) where
 -- Section 5: 陈数的整数性定理
 -- ============================================
 
-/-- 第一陈数的整数性定理：
-    C_n ∈ ℤ（对任意能带 n 和任意光滑周期势）。
-    
-    这是整数量子霍尔效应（IQHE）的拓扑根源：
-    σ_xy = (e²/h) C_n，其中 C_n ∈ ℤ，因此 σ_xy = n e²/h。
-    
-    证明思路（多途径）：
-    
-    途径 1（Stokes 定理 + Dirac 量子化）：
-    1. 将 BZ 分成两个开集 U_α 和 U_β，使得 A 在每个开集上全局定义
-    2. 在交叠区 U_α ∩ U_β 上，A_α - A_β = dθ（规范变换）
-    3. C_n = (1/2π) ∫_{BZ} Ω = (1/2π) (∫_{U_α} dA_α + ∫_{U_β} dA_β)
-    4. 由 Stokes 定理：∫_{U_α} dA_α = ∮_{∂U_α} A_α（边界项）
-    5. 在交叠区上，∮_{∂U_α} A_α - ∮_{∂U_β} A_β = ∮_{交叠区} dθ = 2πn
-    6. 因此 C_n = n ∈ ℤ
-    
-    途径 2（U(1) 主丛的分类）：
-    1. 对能带 n，|u_nk⟩ 在 BZ 上定义 U(1) 主丛 P_n → T²
-    2. U(1) 主丛在 T² 上的分类由 H²(T², ℤ) = ℤ 给出
-    3. 第一陈类 c₁(P_n) ∈ H²(T², ℤ) 就是这个分类
-    4. C_n = ⟨c₁(P_n), [T²]⟩（ pairing 上同调类与基本类）
-    5. 因为 [T²] ∈ H₂(T², ℤ) 是整数生成的，c₁(P_n) 是整数，
-       所以 C_n ∈ ℤ
-    
-    途径 3（Nakahara 的显式推导）：
-    使用离散化格点上的差分近似，证明在精细极限下
-    C_n = 整数（通过环绕数的论证）。
-    
-    开放问题：需要在 Lean 中形式化完整的证明。
-    目前 Mathlib 中缺乏主丛分类的完整形式化，
-    但可以使用 `ZMod` 或 `Int` 的离散性来构造证明框架。 -/
+/-- **First Chern Number Integrality Theorem (Topological Quantization of Hall Conductance).**
+
+    **Standard name:** TKNN integer Chern number: C_n = (1/2π) ∫_{BZ} Ω_{xy} d²k ∈ ℤ.
+
+    **Physical statement:** The first Chern number C_n = (1/2π) ∫_{BZ} Ω_{xy} d²k is always an integer.
+    This is the topological root of the integer quantum Hall effect (IQHE):
+    σ_xy = (e²/h) C_n, where C_n ∈ ℤ implies σ_xy = n e²/h (n = integer).
+
+    **Proof path (multiple approaches):**
+
+    **Approach 1: Stokes' theorem + Dirac quantization.**
+    1. Cover the Brillouin zone BZ (T²) with two overlapping patches U_α and U_β.
+    2. In each patch, choose a gauge where the Berry connection A is smooth.
+    3. On the overlap U_α ∩ U_β, the connections differ by a gauge transformation: A_α - A_β = dθ.
+    4. C_n = (1/2π) (∫_{U_α} dA_α + ∫_{U_β} dA_β) = (1/2π) (∮_{∂U_α} A_α + ∮_{∂U_β} A_β).
+    5. The boundary terms differ by ∮ dθ = 2πn (winding number of the gauge transformation).
+    6. Therefore C_n = n ∈ ℤ.
+
+    **Approach 2: U(1) principal bundle classification.**
+    1. For band n, the Bloch states |u_nk⟩ define a U(1) principal bundle P_n over BZ ≅ T².
+    2. U(1) bundles over T² are classified by the first Chern class c_1(P_n) ∈ H²(T², ℤ) = ℤ.
+    3. C_n = ⟨c_1(P_n), [T²]⟩ (pairing of Chern class with fundamental class) is an integer.
+
+    **Approach 3: Nakahara's discrete lattice argument.**
+    1. Discretize the Brillouin zone into a lattice of k-points.
+    2. Approximate the Berry connection by discrete parallel transport.
+    3. The curvature is the holonomy around plaquettes (discrete Berry phase).
+    4. The total Chern number is the sum of plaquette holonomies, which is 2π × integer.
+    See TKNN (1982); Kohmoto (1985); Nakahara (2003) Ch. 10; Thouless (1984).
+
+    **Mathlib status:** Not formalized. The Chern number integrality is a deep theorem from
+    algebraic topology (characteristic classes). The proof requires:
+    - U(1) principal bundle classification over T² (H²(T², ℤ) = ℤ)
+    - de Rham cohomology and integration on manifolds
+    - Chern-Weil theory (characteristic classes from curvature)
+    - Stokes' theorem for manifolds with boundary
+    - Gauge patching and transition functions (Čech cohomology)
+    None of these are in Mathlib.
+
+    **Why axiom is reasonable:** The Chern number integrality is a deep theorem from algebraic
+    topology. It is the mathematical foundation of the integer quantum Hall effect. The proof
+    requires characteristic class theory (Chern classes) which is not in Mathlib. The formal
+    statement is `True` (placeholder), indicating that the proof is deferred.
+
+    **References:**
+    - Thouless, D. J., Kohmoto, M., Nightingale, M. P., & den Nijs, M. (1982).
+      "Quantized Hall conductance in a two-dimensional periodic potential." *PRL* 49(6), 405.
+    - Kohmoto, M. (1985). "Topological invariant and the quantization of the Hall conductance."
+      *Ann. Phys.* 160(2), 343–354.
+    - Nakahara, M. (2003). *Geometry, Topology and Physics*, 2nd ed., Ch. 10.
+    - Thouless, D. J. (1984). "Quantization of particle transport." *PRB* 27(10), 6083.
+    - Niu, Q. & Thouless, D. J. (1984). "Quantized adiabatic charge transport in the presence of
+      disorder." *J. Phys. A* 17(12), 2453.
+
+    **Difficulty to theorem:** Hard (requires characteristic class theory in Mathlib, ~500h).
+    -/
 axiom FirstChernNumber_Integrality
     (L : BlochTheorem.Lattice2D) (C : FirstChernNumber L) :
     -- C_n ∈ ℤ。这是定义的一部分，但需要证明它对任意能带成立。
     True
 
-/-- 陈数的拓扑不变性：
-    在哈密顿量的连续形变下（不关闭能隙），C_n 保持不变。
-    
-    证明：如果 H(k; t) 是参数 t ∈ [0,1] 的连续形变，
-    且对所有 t 和 k 都有能隙（不关闭），则：
-    Ω_{xy}(k; t) 作为 t 的函数是连续的，
-    C_n(t) = (1/2π) ∫ Ω_{xy}(k; t) d²k 也是 t 的连续函数。
-    但 C_n(t) ∈ ℤ（整数性），所以 C_n(t) 必须是常数！
-    
-    这是拓扑保护的精髓：只要能隙不关闭，拓扑不变量就不变。
-    在 IQHE 中，即使存在杂质和相互作用，只要体态是绝缘的，
-    σ_xy 的量子化就保持精确。 -/
+/-- **First Chern Number Topological Invariance (Gap-Preserving Deformation).**
+
+    **Standard name:** Chern number is invariant under continuous deformations that preserve the energy gap.
+
+    **Physical statement:** If the Hamiltonian H(k; t) is continuously deformed as a function of
+    parameter t ∈ [0,1], and the energy gap never closes (E_n(k;t) - E_m(k;t) ≠ 0 for all k, t),
+    then the Chern number C_n(t) remains constant: C_n(0) = C_n(1).
+
+    **Proof path:**
+    1. Under a continuous deformation H(k;t) that preserves the gap, the Berry curvature
+       Ω_{xy}(k;t) is a continuous function of t.
+    2. The Chern number C_n(t) = (1/2π) ∫_{BZ} Ω_{xy}(k;t) d²k is also a continuous function of t.
+    3. By the integrality theorem (FirstChernNumber_Integrality), C_n(t) ∈ ℤ for all t.
+    4. A continuous function from a connected domain [0,1] to the discrete set ℤ must be constant.
+    5. Therefore C_n(0) = C_n(1).
+    See Kohmoto (1985); Xiao et al. (2010) §II.D; Nakahara (2003) Ch. 10.
+
+    **Mathlib status:** Not formalized. The proof requires:
+    - Continuity of Berry curvature under gap-preserving deformations (perturbation theory)
+    - Integrality of Chern number (FirstChernNumber_Integrality)
+    - Intermediate value theorem argument: continuous function to discrete set is constant
+    - Connectedness of the parameter space [0,1]
+    The core argument is topological (continuous map to discrete set) and could be formalized
+    in ~50–100h once the integrality theorem is available.
+
+    **Why axiom is reasonable:** The topological invariance is a direct consequence of the
+    integrality of the Chern number combined with continuity. The proof is conceptually simple
+    but requires the integrality theorem as a prerequisite. The formal statement is `True` (placeholder).
+
+    **References:**
+    - Kohmoto, M. (1985). "Topological invariant and the quantization of the Hall conductance."
+      *Ann. Phys.* 160(2), 343–354.
+    - Xiao, D., Chang, M.-C., & Niu, Q. (2010). "Berry phase effects on electronic properties."
+      *Rev. Mod. Phys.* 82(3), 1959.
+    - Nakahara, M. (2003). *Geometry, Topology and Physics*, 2nd ed., Ch. 10.
+    - Thouless, D. J. (1984). "Quantization of particle transport." *PRB* 27(10), 6083.
+
+    **Difficulty to theorem:** Medium (~50–100h, requires integrality theorem + continuity).
+    -/
 axiom FirstChernNumber_TopologicalInvariance
     (L : BlochTheorem.Lattice2D) (C : FirstChernNumber L) :
     -- 在能隙不关闭的连续形变下，C_n 不变
@@ -286,14 +388,46 @@ structure TotalChernNumber (L : BlochTheorem.Lattice2D) (N : ℕ) where
   /-- 定义：C_total = Σ C_n -/
   definition : Prop
 
-/-- 满带定理：如果所有能带都被占据，总陈数 = 0。
-    
-    证明：所有能带的 Berry 曲率之和 = 0。
-    这是因为所有态的完备性关系：
-    Σ_n |u_nk⟩⟨u_nk| = I，
-    因此 Σ_n Ω_n(k) = 0（通过直接计算）。
-    
-    物理意义：满带是 "原子" 绝缘体，没有拓扑性质。 -/
+/-- **Total Chern Number Vanishing for Full Band Occupation.**
+
+    **Standard name:** Full-band Chern number vanishing: Σ_{n=1}^{N} C_n = 0 when all N bands are filled.
+
+    **Physical statement:** If all bands of a system are completely filled (full band occupation,
+    "atomic insulator"), the total Chern number C_total = Σ_n C_n = 0. This is because the full
+    band set is topologically trivial (equivalent to a set of isolated atoms).
+
+    **Proof path:**
+    1. The completeness relation for Bloch states: Σ_n |u_nk⟩⟨u_nk| = I (identity operator).
+    2. The total Berry curvature is Σ_n Ω_n(k) = Σ_n (∂_x A_{n,y} - ∂_y A_{n,x}).
+    3. From the definition A_{n,μ} = ⟨u_n| i∂_μ |u_n⟩, the sum over all bands gives:
+       Σ_n ∂_x A_{n,y} = ∂_x Σ_n ⟨u_n| i∂_y |u_n⟩ = ∂_x Tr(i∂_y) = 0 (trace of derivative of identity).
+    4. Similarly, Σ_n ∂_y A_{n,x} = 0.
+    5. Therefore Σ_n Ω_n(k) = 0, and C_total = (1/2π) ∫ Σ_n Ω_n d²k = 0.
+    See Kohmoto (1985); Xiao et al. (2010) §II.D; Resta (1994).
+
+    **Mathlib status:** Not formalized. The proof requires:
+    - Completeness relation for Bloch states (Σ_n |u_n⟩⟨u_n| = I)
+    - Trace of operators in Hilbert spaces
+    - Cyclicity of trace: Tr(AB) = Tr(BA)
+    - Derivative of the identity operator is zero
+    The argument is algebraic (trace identities) and could be formalized in ~50–100h once
+    the Hilbert space operator formalism is available.
+
+    **Why axiom is reasonable:** The vanishing of the total Chern number for full bands is a
+    consequence of the completeness relation and trace identities. The proof is algebraic
+    but requires the operator formalism (Hilbert space, trace, completeness) which is not
+    in Mathlib. The formal statement is `True` (placeholder).
+
+    **References:**
+    - Kohmoto, M. (1985). "Topological invariant and the quantization of the Hall conductance."
+      *Ann. Phys.* 160(2), 343–354.
+    - Xiao, D., Chang, M.-C., & Niu, Q. (2010). "Berry phase effects on electronic properties."
+      *Rev. Mod. Phys.* 82(3), 1959.
+    - Resta, R. (1994). "Macroscopic polarization in crystalline dielectrics: the geometric phase approach."
+      *Rev. Mod. Phys.* 66(3), 899.
+
+    **Difficulty to theorem:** Medium (~50–100h, requires trace formalism + completeness).
+    -/
 axiom TotalChernNumber_FullBandVanishing
     (L : BlochTheorem.Lattice2D) (N : ℕ)
     (total : TotalChernNumber L N) :

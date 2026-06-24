@@ -448,28 +448,29 @@ theorem MM_stoichiometric_rank (k1 k_neg1 k2 : ℝ)
       ∧
       (r2 = fun i => if i.val = 0 then (1 : ℤ) else if i.val = 1 then (0 : ℤ) else if i.val = 2 then (-1 : ℤ) else (1 : ℤ))
       ∧
-      (∀ r : Fin 4 → ℤ,
-        (∃ c1 c2 : ℤ, r = fun i => c1 * r1 i + c2 * r2 i) ↔
-        ∃ i : Fin 3, r = MM_stoichiometricMatrix k1 k_neg1 k2 hk1 hk_neg1 hk2 i) := by
-  -- **MEDIUM**: Explicit construction of the two independent rows.
-  -- The stoichiometric matrix rows are:
-  -- Row 0: (-1, -1, 1, 0) = r1
-  -- Row 1: (1, 1, -1, 0) = -r1
-  -- Row 2: (1, 0, -1, 1) = r2
-  --
-  -- Proof sketch:
-  -- 1. Take r1 = Row 0 and r2 = Row 2 as the basis
-  -- 2. Show Row 1 = -r1 (integer coefficients c1=-1, c2=0)
-  -- 3. For (→): if r = c1*r1 + c2*r2, show r is one of the three rows
-  --    -- NOTE: This direction is problematic because the span contains infinitely many vectors
-  --    -- (e.g., 2*r1 = (-2,-2,2,0) is in the span but not a row).
-  --    -- The theorem statement may need to be weakened to:
-  --    -- "the row space equals span{r1,r2}" or "every row is in span{r1,r2}".
-  -- 4. For (←): if r = Row i, then r is in the span (Row 0 = r1, Row 1 = -r1, Row 2 = r2)
-  --
-  -- To complete the proof, one should use `fin_cases` on the indices and `norm_num`
-  -- to verify the explicit matrix entries. The `↔` direction may need theorem revision.
-  sorry
+      (∀ i : Fin 3,
+        ∃ c1 c2 : ℤ,
+          MM_stoichiometricMatrix k1 k_neg1 k2 hk1 hk_neg1 hk2 i = fun j => c1 * r1 j + c2 * r2 j) := by
+  use fun i => if i.val = 0 then (-1 : ℤ) else if i.val = 1 then (-1 : ℤ) else if i.val = 2 then (1 : ℤ) else (0 : ℤ)
+  use fun i => if i.val = 0 then (1 : ℤ) else if i.val = 1 then (0 : ℤ) else if i.val = 2 then (-1 : ℤ) else (1 : ℤ)
+  constructor
+  · rfl
+  constructor
+  · rfl
+  intro i
+  fin_cases i
+  · -- Row 0: (-1, -1, 1, 0) = 1·r1 + 0·r2
+    use 1, 0
+    funext j
+    fin_cases j <;> simp [MM_stoichiometricMatrix, stoichiometricMatrix, MichaelisMentenNetwork] <;> norm_num
+  · -- Row 1: (1, 1, -1, 0) = -1·r1 + 0·r2
+    use -1, 0
+    funext j
+    fin_cases j <;> simp [MM_stoichiometricMatrix, stoichiometricMatrix, MichaelisMentenNetwork] <;> norm_num
+  · -- Row 2: (1, 0, -1, 1) = 0·r1 + 1·r2
+    use 0, 1
+    funext j
+    fin_cases j <;> simp [MM_stoichiometricMatrix, stoichiometricMatrix, MichaelisMentenNetwork] <;> norm_num
 
 /-- Michaelis-Menten network has deficiency zero.
     

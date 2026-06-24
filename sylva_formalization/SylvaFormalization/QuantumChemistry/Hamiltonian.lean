@@ -52,8 +52,23 @@ structure AnnihilationOperator (n_orbitals : ℕ) where
     {a_p, a_q†} = δ_{pq}
     {a_p, a_q} = {a_p†, a_q†} = 0 -/
 def anticommute {n : ℕ} (a : AnnihilationOperator n) (b : AnnihilationOperator n) : Prop :=
-  -- In the full formalization, this would be an operator equation
-  -- For now, we capture the algebraic structure
+  -- **HARD**: The canonical anticommutation relations (CAR) for fermionic operators
+  -- require formalizing the operator algebra on the Fock space.
+  --
+  -- In second quantization, creation/annihilation operators act on the Fock space
+  -- (exterior algebra of the one-particle Hilbert space). The CAR are:
+  -- {a_p, a_q†} = δ_{pq}·I, {a_p, a_q} = 0, {a_p†, a_q†} = 0
+  --
+  -- Formalizing this requires:
+  -- 1. Defining the Fock space as a direct sum of exterior powers
+  -- 2. Defining creation/annihilation operators as linear operators on the Fock space
+  -- 3. Proving the anticommutation relations using exterior algebra properties
+  --
+  -- Implementation path:
+  -- - Use Mathlib's ExteriorAlgebra or CliffordAlgebra
+  -- - Or define the Fock space recursively and prove CAR by induction on particle number
+  --
+  -- Reference: Bratteli & Robinson (1987), Operator Algebras and Quantum Statistical Mechanics.
   sorry
 
 -- ============================================================================
@@ -69,7 +84,23 @@ def oneElectronIntegral {n : ℕ} (h : Matrix (Fin n) (Fin n) ℝ) : Prop :=
 /-- Two-electron integrals h_{pqrs} = ⟨pq|1/r_12|rs⟩ (in physicist's notation)
     These represent electron-electron Coulomb repulsion. -/
 def twoElectronIntegral {n : ℕ} (h : Matrix (Fin n) (Fin n × Fin n) (Matrix (Fin n) (Fin n) ℝ)) : Prop :=
-  -- Permutation symmetry: h_{pqrs} = h_{qpsr} = h_{rspq} = h_{srqp}
+  -- **HARD**: Two-electron integrals h_{pqrs} = ⟨pq|1/r_12|rs⟩ satisfy permutation
+  -- symmetries: h_{pqrs} = h_{qpsr} = h_{rspq} = h_{srqp}.
+  --
+  -- These integrals represent electron-electron Coulomb repulsion in the MO basis.
+  -- The symmetry arises from the indistinguishability of electrons and the Hermitian
+  -- nature of the Coulomb operator.
+  --
+  -- Formal proof requires:
+  -- 1. Defining the two-electron integral as an expectation value of 1/r_12
+  -- 2. Using the symmetry of the Coulomb operator under particle exchange
+  -- 3. Proving the permutation symmetries via integration by parts or symmetry arguments
+  --
+  -- Implementation path:
+  -- - Define the integral explicitly using Lebesgue integration (MeasureTheory)
+  -- - Or axiomatize the symmetries as properties of the integral tensor
+  --
+  -- Reference: Helgaker, Jorgensen, Olsen (2000), Molecular Electronic-Structure Theory, Ch. 9.
   sorry
 
 /-- The electronic Hamiltonian in second quantization:
@@ -93,7 +124,24 @@ structure MolecularHamiltonian (n : ℕ) where
 /-- The ground state energy E_0 = min_{|ψ⟩} ⟨ψ|H|ψ⟩ / ⟨ψ|ψ⟩.
     This is the variational principle. -/
 def groundStateEnergy {n : ℕ} (H : MolecularHamiltonian n) : ℝ :=
-  -- In practice, computed via Hartree-Fock, DFT, or VQE
+  -- **HARD**: The ground state energy E_0 = min_{|ψ⟩} ⟨ψ|H|ψ⟩ / ⟨ψ|ψ⟩ is the variational
+  -- minimum of the Rayleigh quotient. For a MolecularHamiltonian, this requires:
+  -- 1. Defining the trial wavefunction space (Slater determinants for fermions)
+  -- 2. Computing the expectation value ⟨ψ|H|ψ⟩ using the Hamiltonian matrix elements
+  -- 3. Minimizing over all normalized wavefunctions (infinite-dimensional optimization)
+  --
+  -- In practice, this is computed via:
+  -- - Hartree-Fock: self-consistent field method (nonlinear optimization)
+  -- - DFT: density functional theory (Kohn-Sham equations)
+  -- - VQE: variational quantum eigensolver (parameterized quantum circuits)
+  --
+  -- Implementation path in Mathlib:
+  -- - Define the set of normalized wavefunctions {ψ | ⟨ψ|ψ⟩ = 1}
+  -- - Define the Rayleigh quotient R(ψ) = ⟨ψ|H|ψ⟩
+  -- - Use IsLeast or sInf to define the minimum
+  -- - Prove existence using compactness (finite-dimensional: continuous on compact sphere)
+  --
+  -- Reference: Helgaker, Jorgensen, Olsen (2000), Ch. 3-5; Szabo & Ostlund (1996).
   sorry
 
 /-- The energy spectrum of the Hamiltonian: {E_0, E_1, E_2, ...}.
@@ -125,12 +173,45 @@ structure BasisFunction where
     The coefficient matrix C is obtained from Hartree-Fock or DFT. -/
 def molecularOrbital (n_basis : ℕ) (n_mo : ℕ) (C : Matrix (Fin n_basis) (Fin n_mo) ℝ)
     (basis : Fin n_basis → BasisFunction) (i : Fin n_mo) : BasisFunction :=
-  -- Linear combination: φ_i = Σ_μ C_{μi} χ_μ
+  -- **HARD**: A molecular orbital (MO) is a linear combination of basis functions (LCAO):
+  -- |φ_i⟩ = Σ_{μ=1}^{n_basis} C_{μi} |χ_μ⟩
+  --
+  -- Formalizing this requires defining the linear combination of BasisFunction objects.
+  -- A BasisFunction contains: center (ℝ³), angular momentum (l,m), exponent (α), coefficient (c).
+  -- The LCAO combines basis functions with the same angular type but different exponents/centers.
+  --
+  -- Implementation path:
+  -- 1. Define addition of BasisFunctions (requires matching angular momentum and center)
+  -- 2. Define scalar multiplication of BasisFunction by real coefficient
+  -- 3. Compute the linear combination: φ_i = Σ_μ C_{μi} · χ_μ
+  -- 4. Return a new BasisFunction or a representation of the MO as a structure
+  --
+  -- Note: In practice, MOs are not simple BasisFunctions but linear combinations stored
+  -- as coefficient vectors. The return type might need to be a vector of coefficients
+  -- rather than a single BasisFunction.
+  --
+  -- Reference: Szabo & Ostlund (1996), Modern Quantum Chemistry, Ch. 3.
   sorry
 
 /-- The overlap matrix S_{μν} = ⟨χ_μ|χ_ν⟩.
     For orthonormal basis sets, S = I. -/
 def overlapMatrix (n : ℕ) (basis : Fin n → BasisFunction) : Matrix (Fin n) (Fin n) ℝ :=
+  -- **HARD**: The overlap matrix S_{μν} = ⟨χ_μ|χ_ν⟩ = ∫ χ_μ*(r) χ_ν(r) d³r
+  -- requires evaluating the overlap integral of two Gaussian-type orbitals (GTOs).
+  --
+  -- For two primitive GTOs centered at R_μ and R_ν with exponents α_μ, α_ν:
+  -- S_{μν} = (π/(α_μ+α_ν))^{3/2} exp(-α_μ α_ν/(α_μ+α_ν) |R_μ - R_ν|²)
+  --
+  -- For contracted GTOs (linear combinations of primitives with coefficients c_μ,p):
+  -- S_{μν} = Σ_p Σ_q c_μ,p c_ν,q S_{μ,p;ν,q}
+  --
+  -- Implementation path:
+  -- 1. Define primitive GTO overlap using the Gaussian product theorem
+  -- 2. For contracted GTOs, sum over primitive overlaps weighted by contraction coefficients
+  -- 3. For general angular momentum (s, p, d, ...), use recurrence relations (Obara-Saika)
+  -- 4. In Mathlib, requires defining the integral over ℝ³ using MeasureTheory
+  --
+  -- Reference: Szabo & Ostlund (1996), Ch. 3; Helgaker et al. (2000), Ch. 9.
   sorry
 
 /-- The Fock matrix F = H_core + G where:
@@ -141,7 +222,27 @@ def overlapMatrix (n : ℕ) (basis : Fin n → BasisFunction) : Matrix (Fin n) (
     where ε is the diagonal matrix of orbital energies. -/
 def fockMatrix {n : ℕ} (H : MolecularHamiltonian n) (D : Matrix (Fin n) (Fin n) ℝ)
     : Matrix (Fin n) (Fin n) ℝ :=
-  -- D is the density matrix: D_{μν} = Σ_i C_{μi} C_{νi} (occupied orbitals)
+  -- **HARD**: The Fock matrix F = H_core + G where G = J - K (Coulomb + exchange).
+  --
+  -- Core Hamiltonian: H_core = T + V_ne (kinetic + nuclear attraction)
+  -- Coulomb matrix: J_{μν} = Σ_{λσ} D_{λσ} (μν|λσ) (mean-field electron repulsion)
+  -- Exchange matrix: K_{μν} = Σ_{λσ} D_{λσ} (μλ|νσ) (Fermi hole exchange)
+  --
+  -- The Fock matrix depends on the density matrix D, which depends on the MO coefficients C,
+  -- which are obtained by diagonalizing the Fock matrix. This is a self-consistent field (SCF)
+  -- iteration: F[D] → C → D → F[D] → ... until convergence.
+  --
+  -- Implementation path:
+  -- 1. Compute H_core from one-electron integrals (T, V_ne) in H.oneElectron
+  -- 2. Compute two-electron integrals (μν|λσ) = H.twoElectron μ ν λ σ
+  -- 3. Compute J and K using the density matrix D
+  -- 4. Return F = H_core + J - K
+  --
+  -- Note: This requires the two-electron integrals from H.twoElectron, which have
+  -- permutation symmetry (H.h2e_symmetry). The current stub needs access to the full
+  -- integral tensor to build J and K.
+  --
+  -- Reference: Szabo & Ostlund (1996), Ch. 3; Helgaker et al. (2000), Ch. 10.
   sorry
 
 -- ============================================================================
@@ -179,7 +280,23 @@ def vqeEnergy {n n_qubits : ℕ} (H : MolecularHamiltonian n)
     T_1 = Σ_{ia} t_i^a a_a† a_i (singles)
     T_2 = Σ_{ijab} t_{ij}^{ab} a_a† a_b† a_j a_i (doubles) -/
 def uccsdAnsatz (n_orbitals n_electrons : ℕ) : VQEAnsatz n_orbitals :=
-  -- Number of amplitudes: O(N^2) singles + O(N^4) doubles
+  -- **HARD**: The UCCSD ansatz |ψ⟩ = e^{T - T†} |HF⟩ is the gold standard for quantum
+  -- chemistry on quantum computers. T = T_1 + T_2 where:
+  -- T_1 = Σ_{ia} t_i^a a_a† a_i (singles, O(N²) amplitudes)
+  -- T_2 = Σ_{ijab} t_{ij}^{ab} a_a† a_b† a_j a_i (doubles, O(N⁴) amplitudes)
+  --
+  -- The unitary e^{T - T†} is not directly implementable on a quantum computer
+  -- because T and T† do not commute. Instead, Trotter-Suzuki decomposition is used:
+  -- e^{T - T†} ≈ Π_{ia} e^{t_i^a (a_a† a_i - a_i† a_a)} Π_{ijab} e^{t_{ij}^{ab} (a_a† a_b† a_j a_i - h.c.)}
+  --
+  -- Implementation path:
+  -- 1. Define the number of parameters: n_params = n_occ · n_virt + (n_occ² · n_virt²)/4
+  -- 2. Construct the excitation operators using Jordan-Wigner or Bravyi-Kitaev encoding
+  -- 3. Build the parameterized circuit as a product of exponentiated Pauli strings
+  -- 4. Map the VQEAnsatz.unitary to a function from parameter vector to circuit matrix
+  --
+  -- Reference: Romero et al. (2018), Strategies for quantum computing molecular energies
+  -- using the unitary coupled cluster ansatz, Quantum Sci. Technol. 4, 014008.
   sorry
 
 -- ============================================================================
@@ -203,10 +320,12 @@ theorem hamiltonian_spectral_geometry {n : ℕ} (H : MolecularHamiltonian n) :
     ∃ (L : Matrix (Fin n) (Fin n) ℝ),
       (∀ i, L i i = H.oneElectron i i) ∧
       (∀ i j, i ≠ j → L i j = -H.oneElectron i j) := by
-  -- Construct graph Laplacian from Hamiltonian
-  -- Diagonal: on-site energies
-  -- Off-diagonal: hopping integrals (with sign flip)
-  sorry
+  use fun i j => if i = j then H.oneElectron i i else -H.oneElectron i j
+  constructor
+  · intro i
+    simp
+  · intro i j hne
+    simp [hne]
 
 /-- **Topological Quantum Chemistry**:
     
@@ -232,7 +351,25 @@ def berryCurvature {n : ℕ} (H : MolecularHamiltonian n) (k : ℝ × ℝ × ℝ
     Reference: ReactionNetwork.lean for kinetics integration. -/
 def potentialEnergySurface {n : ℕ} (H : MolecularHamiltonian n)
     (R : Fin n → ℝ × ℝ × ℝ) : ℝ :=
-  -- Born-Oppenheimer approximation: electronic energy at fixed nuclear geometry
+  -- **HARD**: The potential energy surface (PES) E(R) = ⟨ψ(R)|H(R)|ψ(R)⟩ gives the
+  -- electronic energy as a function of nuclear coordinates R under the Born-Oppenheimer
+  -- approximation (nuclei are fixed, electrons relax instantaneously).
+  --
+  -- For each nuclear geometry R, one must:
+  -- 1. Compute the one-electron integrals T(R) and V_ne(R) at the new geometry
+  -- 2. Compute the two-electron integrals (μν|λσ) at the new geometry (basis function overlap changes)
+  -- 3. Solve the Hartree-Fock or full CI equations to get the ground state energy
+  -- 4. Return the energy as a function of R
+  --
+  -- The PES is a high-dimensional hypersurface (3N-6 dimensions for N atoms, excluding translations/rotations).
+  -- Critical points on the PES (minima, transition states, saddle points) determine reaction pathways.
+  --
+  -- Implementation path:
+  -- - Define the geometry-dependent Hamiltonian H(R)
+  -- - Use the groundStateEnergy function (or HF/DFT approximation) to compute E(R)
+  -- - For gradient-based optimization (geometry optimization), also compute ∂E/∂R
+  --
+  -- Reference: Helgaker et al. (2000), Ch. 1; Jensen (2007), Introduction to Computational Chemistry.
   sorry
 
 /-- **Complexity Theory Connection**:

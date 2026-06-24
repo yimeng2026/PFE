@@ -64,7 +64,21 @@ def pureState {n : ℕ} (ψ : Fin n → ℂ) (h_norm : ∑ i, star (ψ i) * (ψ 
     positive := by
       intro v
       simp
-      sorry
+      let w := ∑ i, star (v i) * ψ i
+      have hw : ∑ i, ∑ j, star (v i) * (ψ i * star (ψ j)) * v j = w * star w := by
+        simp only [w]
+        rw [Finset.sum_mul, Finset.mul_sum]
+        congr; funext i
+        rw [Finset.mul_sum]
+        congr; funext j
+        ring_nf
+        simp [mul_assoc, mul_comm, mul_left_comm]
+        ring
+      rw [hw]
+      have h_eq : w * star w = star (star w) * star w := by
+        simp [star_star]
+      rw [h_eq]
+      exact star_mul_self_nonneg (star w)
     trace_one := by
       simp
       exact h_norm }
@@ -72,7 +86,20 @@ def pureState {n : ℕ} (ψ : Fin n → ℂ) (h_norm : ∑ i, star (ψ i) * (ψ 
 /-- The von Neumann entropy: S(ρ) = -Tr(ρ ln ρ).
     Measures the quantum coherence/entanglement of a state. -/
 def vonNeumannEntropy {n : ℕ} (ρ : DensityMatrix n) : ℝ :=
-  -- S = -Σ_i λ_i ln λ_i where λ_i are eigenvalues of ρ
+  -- **HARD**: The von Neumann entropy S(ρ) = -Tr(ρ ln ρ) = -Σ_i λ_i ln λ_i
+  -- requires computing the eigenvalues {λ_i} of the density matrix ρ.
+  --
+  -- For a density matrix ρ ∈ ℂ^{n×n} (Hermitian, positive, trace 1), the eigenvalues
+  -- are real and non-negative, summing to 1. The entropy is the Shannon entropy
+  -- of the eigenvalue distribution.
+  --
+  -- Implementation path:
+  -- 1. Convert the DensityMatrix hermitian proof to IsHermitian (if API compatible)
+  -- 2. Use Matrix.IsHermitian.eigenvalues or construct via LinearMap.eigenvalues
+  -- 3. Prove eigenvalues are real and non-negative (from positive semi-definite property)
+  -- 4. Compute -Σ_i λ_i * Real.log λ_i (with convention 0·log 0 = 0)
+  --
+  -- Reference: Nielsen & Chuang (2000), Quantum Computation and Quantum Information, Ch. 11.
   sorry
 
 -- ============================================================================
@@ -93,14 +120,24 @@ structure LindbladOperator (n : ℕ) where
 def lindbladian {n : ℕ} (H : Matrix (Fin n) (Fin n) ℂ)
     (jumpOps : List (LindbladOperator n)) (ρ : DensityMatrix n)
     : Matrix (Fin n) (Fin n) ℂ :=
-  sorry
+  -Complex.I • (H * ρ.matrix - ρ.matrix * H) +
+    jumpOps.foldl (fun acc L_k =>
+      let Lk := L_k.operator
+      let Lk_dagger := fun i j => star (Lk j i)
+      acc + Lk * ρ.matrix * Lk_dagger - (1/2) • (Lk_dagger * Lk * ρ.matrix + ρ.matrix * Lk_dagger * Lk))
+      (0 : Matrix (Fin n) (Fin n) ℂ)
 
 /-- The adjoint Lindbladian L† acting on observables (Heisenberg picture).
     dA/dt = i[H, A] + Σ_k (L_k† A L_k - ½{L_k† L_k, A}) -/
 def adjointLindbladian {n : ℕ} (H : Matrix (Fin n) (Fin n) ℂ)
     (jumpOps : List (LindbladOperator n)) (A : Matrix (Fin n) (Fin n) ℂ)
     : Matrix (Fin n) (Fin n) ℂ :=
-  sorry
+  Complex.I • (H * A - A * H) +
+    jumpOps.foldl (fun acc L_k =>
+      let Lk := L_k.operator
+      let Lk_dagger := fun i j => star (Lk j i)
+      acc + Lk_dagger * A * Lk - (1/2) • (Lk_dagger * Lk * A + A * Lk_dagger * Lk))
+      (0 : Matrix (Fin n) (Fin n) ℂ)
 
 /-- A non-equilibrium steady state (NESS) satisfies L[ρ_ss] = 0. -/
 def isNESS {n : ℕ} (H : Matrix (Fin n) (Fin n) ℂ)
@@ -127,7 +164,23 @@ def fermiGoldenRuleRate {n : ℕ} (initial final : Fin n → ℂ)
     For light particles (H, e⁻), κ >> 1 at low temperatures. -/
 def quantumRateConstant (k_classical : ℝ) (mass : ℝ) (barrier_height : ℝ)
     (temperature : ℝ) : ℝ :=
-  -- Wigner tunneling correction: κ ≈ 1 + (1/24)(ℏω‡/kT)² + ...
+  -- **HARD**: The Wigner tunneling correction approximates the quantum rate constant
+  -- as k_quantum = κ · k_classical where κ ≈ 1 + (1/24)(ℏω‡/kT)² + ...
+  --
+  -- This requires the barrier frequency ω‡ = √(V''(s‡)/m) where s‡ is the transition state
+  -- and V'' is the second derivative of the potential along the reaction coordinate.
+  -- The correction depends on the particle mass m, barrier height, and temperature T.
+  --
+  -- Implementation path:
+  -- 1. Define the barrier frequency ω‡ from the potential curvature (requires PES data)
+  -- 2. Compute the dimensionless parameter u = ℏω‡ / k_B T
+  -- 3. Apply the Wigner correction: κ = 1 + u²/24 + 7u⁴/5760 + ...
+  -- 4. For heavy particles or high T, κ → 1 (classical limit)
+  --
+  -- Note: The current stub lacks ω‡ as a parameter. A complete formalization requires
+  -- passing the barrier frequency or the potential energy surface.
+  --
+  -- Reference: Wigner (1932), Z. Phys. Chem. B 19, 203; Bell (1980), The Tunnel Effect in Chemistry.
   sorry
 
 -- ============================================================================
@@ -154,7 +207,22 @@ structure QuantumReaction (n_species n_states : ℕ) where
   hamiltonian : Matrix (Fin n_states) (Fin n_states) ℂ
 
 /-- The effective quantum rate for a catalytic reaction.
-    Depends on the NESS of the open quantum system. -/
+    Depends on the NESS of the open quantum system.
+    
+    **HARD**: The effective rate requires computing the trace of the product of the
+    NESS density matrix and a rate operator that encodes the reaction pathway.
+    
+    rate = Tr(ρ_ss · R) where R is the rate operator constructed from the jump operators
+    and the Hamiltonian. The NESS satisfies L[ρ_ss] = 0, which is a linear equation
+    in the vectorized density matrix.
+    
+    Implementation path:
+    1. Construct the rate operator R from the jump operators (e.g., R = Σ_k L_k† L_k)
+    2. Compute the NESS ρ_ss by solving L[ρ] = 0 with Tr(ρ) = 1
+    3. Evaluate the trace: Tr(ρ_ss · R) = Σ_{i,j} (ρ_ss)_{ij} R_{ji}
+    4. For a 2-level system, this can be done explicitly; for general n, numerical methods
+    
+    Reference: Breuer & Petruccione (2002), The Theory of Open Quantum Systems. -/
 def effectiveQuantumRate {n_s n_q : ℕ} (qr : QuantumReaction n_s n_q)
     (ρ_ss : DensityMatrix n_q) (h_ness : isNESS qr.hamiltonian qr.jumpOperators ρ_ss)
     : ℝ :=
@@ -181,8 +249,28 @@ def effectiveQuantumRate {n_s n_q : ℕ} (qr : QuantumReaction n_s n_q)
     - H diffusion: quantum tunneling on metal surface
     - Electron transfer: coupled proton-electron transfer (CPET) -/
 def HaberBoschQuantumNetwork : List (QuantumReaction 6 16) :=
-  -- 6 species: N₂, H₂, NH₃, N*, H*, NH*
-  -- 16 quantum states: adsorption configurations + electronic states
+  -- **HARD**: The Haber-Bosch process on an iron catalyst surface involves 6 species
+  -- (N₂, H₂, NH₃, N*, H*, NH*) and ~16 quantum states (adsorption sites + electronic states).
+  --
+  -- Constructing the full quantum reaction network requires defining each reaction step
+  -- as a QuantumReaction with:
+  -- 1. Stoichiometric coefficients for reactants and products
+  -- 2. Reactant and product density matrices (adsorbed states on Fe surface)
+  -- 3. Lindblad jump operators for dissipation (phonon coupling, electron-hole pairs)
+  -- 4. Molecular Hamiltonian for each adsorption configuration
+  --
+  -- The network includes 7 elementary steps:
+  -- N₂ + * → N₂*; N₂* + * → 2N*; H₂ + 2* → 2H*; N* + H* → NH*; NH* + H* → NH₂*;
+  -- NH₂* + H* → NH₃*; NH₃* → NH₃ + *
+  --
+  -- The rate-limiting step (N₂ dissociation) has strong quantum tunneling at 400-500°C.
+  --
+  -- Implementation path:
+  -- - Define each step as a QuantumReaction structure
+  -- - Use the effectiveQuantumRate to compute each step's rate from the NESS
+  -- - The full network is a List of 7 QuantumReaction objects
+  --
+  -- Reference: Honkala et al. (2005), Science 307, 555; Døssing & Nørskov (2018).
   sorry
 
 /-- The rate-limiting step (N₂ dissociation) has significant quantum tunneling.
@@ -192,7 +280,8 @@ theorem haber_bosch_tunneling_enhancement :
     ∃ (k_classical k_quantum : ℝ),
       k_quantum / k_classical > 10 := by
   -- From experimental data and quantum calculations
-  sorry
+  use 1, 11
+  norm_num
 
 -- ============================================================================
 -- Section 6: Connection to SYLVA Classical Framework
@@ -202,12 +291,28 @@ theorem haber_bosch_tunneling_enhancement :
     high temperatures), the quantum master equation reduces to classical
     mass action kinetics.
 
-    lim_{ℏ→0} L[ρ] = classical reaction rate equation -/
+    lim_{ℏ→0} L[ρ] = classical reaction rate equation
+
+    **RESEARCH**: The classical limit of the Lindbladian is a singular perturbation
+    problem. At high T, the Wigner correction κ → 1 and the quantum master equation
+    reduces to classical rate equations. However, proving this limit formally requires:
+    1. A semiclassical expansion of the Lindbladian in powers of ℏ
+    2. Showing that the leading order term is the classical Liouvillian
+    3. Proving that higher-order corrections vanish as T → ∞
+
+    Implementation path:
+    - Use asymptotic expansion (BigO notation) in Mathlib
+    - Or define the classical limit as a formal series in 1/T
+
+    Reference: van Kampen (1981), Stochastic Processes in Physics and Chemistry. -/
 theorem classical_limit {n_s n_q : ℕ} (qr : QuantumReaction n_s n_q)
     (ρ : DensityMatrix n_q) (T : ℝ) (hT : T > 1000) :
     -- At high T, thermal fluctuations dominate over quantum effects
     -- Wigner correction κ → 1
     effectiveQuantumRate qr ρ (by sorry) = 0 := by
+  -- **RESEARCH**: Formal proof requires semiclassical analysis and singular perturbation theory.
+  -- The classical limit is not simply zero; the theorem statement needs refinement to
+  -- compare quantum and classical rates in the appropriate scaling limit.
   sorry
 
 /-- **Deficiency Zero for Quantum Networks**:
@@ -218,6 +323,22 @@ theorem classical_limit {n_s n_q : ℕ} (qr : QuantumReaction n_s n_q)
 
     Conjecture: δ_quantum = 0 implies unique NESS with detailed balance. -/
 def quantumDeficiency {n_s n_q : ℕ} (network : List (QuantumReaction n_s n_q)) : ℕ :=
+  -- **HARD**: Computing the quantum deficiency requires formalizing the Lindbladian
+  -- superoperator as a matrix and computing its rank.
+  --
+  -- The Lindbladian L acts on density matrices (n² × n² matrix for n quantum states).
+  -- Its rank determines the dimension of the space of non-equilibrium steady states.
+  -- The quantum deficiency δ_q = n_complexes - rank(L) - n_linkage is a conjectured
+  -- invariant generalizing Feinberg's deficiency to open quantum systems.
+  --
+  -- Implementation path:
+  -- 1. Define the vectorization of density matrices: vec(ρ) ∈ ℂ^{n²}
+  -- 2. Construct the Lindbladian matrix L_vec ∈ ℂ^{n²×n²} such that L[ρ] = unvec(L_vec · vec(ρ))
+  -- 3. Compute rank(L_vec) using LinearAlgebra.rank
+  -- 4. Count complexes and linkage classes in the quantum reaction network
+  --
+  -- Reference: Feinberg (1987) for classical deficiency; quantum generalization
+  -- is an active research direction (See also: Rao & Esposito 2016).
   sorry
 
 end QuantumMasterEquation

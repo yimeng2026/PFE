@@ -586,40 +586,43 @@ end UnifiedField
 -- 6.1 Coupling Constant Hierarchy (AXIOM - physical postulate)
 -- -----------------------------------------------------------------------------
 
-/-- **Coupling Constant Hierarchy**
+/-- **Coupling Constant Hierarchy (SYLVA Emergence Postulate).**
 
-    Mathematical statement: The four coupling constants satisfy a logarithmic
+    **Standard name:** SYLVA coupling hierarchy (GUT/TOE phenomenological postulate).
+    Not a standard theorem in the literature; this is a framework-specific claim.
+
+    **Physical statement:** The four fundamental coupling constants satisfy a logarithmic
     hierarchy: log α_G : log α_W : log α_E : log α_S ≈ -39 : -5 : -2 : 0,
-    emerging from dimensional projection of the same tunneling factor.
+    emerging from dimensional projection of the same inter-layer tunneling factor ℱ_tunnel.
 
-    **Why this is a postulate, not a theorem:**
-    This statement connects four independently-defined coupling constants through
-    a claimed logarithmic ratio. The proof would require:
-    1. Rigorous derivation of each coupling from first principles (not just
-       dimensional analysis)
-    2. Error bounds on each approximation to confirm the ratio
-    3. A unified framework proving all four emergent formulas are consistent
+    **Proof path (conjectural):**
+    1. Derive each coupling constant from causal network statistics at its respective layer.
+    2. Gravity (L7→L1): G = ℓ_P² / λ_C² × f_G, giving α_G ~ 10⁻³⁹.
+    3. Weak (L1→L2): G_F/ℏc ~ ℱ_tunnel² / E_char², giving α_W ~ 10⁻⁵.
+    4. Electromagnetic (L1): α = C² / (4π N_eff) × f_topo, giving α_E ~ 10⁻².
+    5. Strong (L3): α_s ~ (3/4π) × ℱ_tunnel⁻¹, giving α_S ~ 10⁰.
+    6. The ratio follows from the layer distances: Δz = 6 (L7→L1), 1 (L1→L2), 0 (L1).
 
-    The current definitions of emergentG, emergentAlpha, emergentFermiConstant,
-    and emergentStrongCoupling are phenomenological formulas, not theorems derived
-    from causal network axioms. Their numerical agreement with experiment is
+    **Mathlib status:** Not formalized. The individual formulas (emergentG, emergentAlpha,
+    emergentFermiConstant, emergentStrongCoupling) are defined as noncomputable `def`s but
+    not derived from causal network axioms. Their numerical agreement with experiment is
     suggestive but not rigorous.
 
-    **Required tool chain (conjectural):**
-    1. Rigorous derivation of coupling constants from causal network statistics
+    **Why axiom is reasonable:** This is a phenomenological claim, not a theorem. The proof would require:
+    1. Rigorous derivation of coupling constants from causal network statistics (not just
+       dimensional analysis)
     2. Renormalization group equations from network coarse-graining
-    3. Error analysis for all approximation steps
-
-    **Known partial results:**
-    - The hierarchy pattern is observed experimentally
-    - Grand Unification Theories predict partial unification at ~10¹⁴ GeV
-    - SYLVA provides a network-level heuristic for the pattern
-
-    **Status:** Phenomenological claim. The numerical formulas are not theorems.
+    3. Error bounds on each approximation to confirm the ratio
+    None of these steps are formalized. The current definitions are heuristic formulas.
 
     **References:**
-    - SYLVA Framework v20.0, Section 4: "Emergent Coupling Constants"
-    - Georgi, Glashow. "Unity of All Elementary-Particle Forces." PRL 1974. -/
+    - Georgi, H. & Glashow, S. L. (1974). "Unity of all elementary-particle forces." *PRL* 32(8), 438.
+    - SYLVA Framework v20.0, Section 4: "Emergent Coupling Constants".
+    - Langacker, P. (1981). "Grand unified theories and proton decay." *Phys. Rep.* 72(4), 185–385.
+    - Weinberg, S. (1996). *The Quantum Theory of Fields*, Vol. 2, Ch. 18.
+
+    **Difficulty to theorem:** Research (requires full causal network → field theory derivation).
+    -/
 axiom couplingHierarchy :
   let α_G := emergentG * (1.67e-27 : ℝ) ^ 2 / (1.054e-34 * 2.998e8)  -- G·m_p²/ℏc
   let α_W := emergentFermiConstant * (1.67e-27 : ℝ) ^ 2 / Real.sqrt 2
@@ -632,50 +635,53 @@ axiom couplingHierarchy :
 -- 6.2 Emergent Einstein Equation (AXIOM - central open problem of quantum gravity)
 -- -----------------------------------------------------------------------------
 
-/-- **Emergent Einstein Equation**
+/-- **Emergent Einstein Equation (Quantum Gravity Postulate).**
 
-    Mathematical statement: In the coarse-graining limit, network connectivity
-    fluctuations converge to the Einstein field equation:
-    G_μν + Λg_μν = 8πG T_μν.
+    **Standard name:** Discrete-to-continuum Einstein equation emergence.
+    This is a central open problem of quantum gravity, not a standard theorem.
 
-    **Why this is a postulate, not a theorem:**
-    This is the deepest claim of the SYLVA framework. The proof would require:
-    1. A rigorous definition of coarse-graining from discrete causal networks
-       to continuum spacetime
-    2. Proof that the connectivity measure C(v) converges to a metric tensor
-       g_μν under appropriate scaling limits
-    3. Derivation of the Einstein tensor from second-order variations of
-       network connectivity
-    4. Identification of the stress-energy tensor with matter distribution
-       in the network
+    **Physical statement:** In the coarse-graining limit, causal network connectivity
+    fluctuations converge to the Einstein field equation: G_μν + Λg_μν = 8πG T_μν.
 
-    None of these steps are formalized. The current code provides only a
-    structural analogy between connectivity and metric components.
+    **Proof path (conjectural):**
+    1. Define a rigorous coarse-graining map from discrete causal networks to continuum
+       spacetime manifolds (Regge calculus or causal set approach).
+    2. Prove that the connectivity measure C(v) converges to a metric tensor g_μν under
+       appropriate scaling limits (central limit / law of large numbers on random graphs).
+    3. Derive the Einstein tensor G_μν from second-order variations of network connectivity
+       (combinatorial curvature → continuum curvature).
+    4. Identify the stress-energy tensor T_μν with matter distribution in the network.
 
-    **Required tool chain (conjectural):**
-    1. Discrete-to-continuum limit theorems for random graphs
+    **Mathlib status:** Not formalized. The current code provides only a structural analogy
+    between connectivity and metric components. None of the steps above are formalized in
+    Mathlib or in this module. The metric components are defined as noncomputable `def`s
+    but not derived from network axioms.
+
+    **Why axiom is reasonable:** This is the deepest claim of the SYLVA framework and a
+    central open problem of quantum gravity. The proof would require:
+    1. Discrete-to-continuum limit theorems for random graphs (not in Mathlib)
     2. Regge calculus formalization (piecewise-flat spacetime from simplices)
     3. Convergence of combinatorial Laplacians to continuum Laplacians
     4. Identification of network curvature with Einstein tensor
+    None of these steps are formalized. The current code provides only a structural analogy.
 
     **Known partial results:**
-    - Bombelli et al. (1987): Causal sets → Lorentzian manifolds
-    - Rideout, Sorkin (1999): Classical sequential growth dynamics
+    - Bombelli et al. (1987): Causal sets → Lorentzian manifolds (continuum approximation)
+    - Rideout, Sorkin (1999): Classical sequential growth dynamics (causal set dynamics)
     - Dowker, Glaser (2013): Causal set d'Alembertian → continuum d'Alembertian
-    - Belenchia et al. (2016): Causal set action → Einstein-Hilbert action
-
-    **Status:** Central open problem of quantum gravity. SYLVA provides a
-    framework but not a rigorous derivation.
+    - Belenchia et al. (2016): Causal set action → Einstein-Hilbert action (numerical)
 
     **References:**
-    - Bombelli, Lee, Meyer, Sorkin. "Space-time as a causal set." PRL 1987.
-    - Dowker, Glaser. "Causal set d'Alembertian." 2013.
+    - Bombelli, L., Lee, J., Meyer, D., & Sorkin, R. D. (1987). "Space-time as a causal set."
+      *PRL* 59(5), 521.
+    - Dowker, F. & Glaser, L. (2013). "Causal set d'Alembertian operators." *J. Phys. A* 46(30), 305305.
+    - Belenchia, A. et al. (2016). "Quantum field theory on causal sets and the entanglement entropy."
+      *PRD* 93(4), 045017.
     - SYLVA Framework v20.0, Section 5: "Emergent Gravity".
+    - Wald, R. M. (1984). *General Relativity*, Ch. 4 (Einstein equation).
 
-    -- FIXED (Error #8): degree is a function CausalNode → Nat, so the
-       hypothesis must quantify over all nodes: ∀ v ∈ G_net.nodes, degree v = 12.
-    -- FIXED (Error #12): hnodes type changed to Finset.Nonempty G_net.nodes
-       so that G_net.nodes.choose hnodes works correctly. -/
+    **Difficulty to theorem:** Research (central open problem of quantum gravity).
+    -/
 axiom emergentEinsteinEquation
   (G_net : CausalNetwork)
   (hnodes : Finset.Nonempty G_net.nodes)  -- FIXED: explicit Finset.Nonempty
@@ -726,30 +732,59 @@ theorem chargeQuantization (G : CausalNetwork) :
 -- 6.4 Black Hole Entropy (AXIOM - network-counting derivation heuristic)
 -- -----------------------------------------------------------------------------
 
-/-- **Emergent Black Hole Entropy**
+/-- **Emergent Black Hole Entropy (Bekenstein-Hawking from Network Counting).**
 
-    Mathematical statement: Black hole entropy S_BH = A / (4Gℏ) emerges
-    from counting surface nodes of the causal network.
+    **Standard name:** Bekenstein-Hawking entropy formula S_BH = A / (4Gℏ).
+    Derived by Bekenstein (1973) and Hawking (1974) from black hole thermodynamics.
+    The network-counting derivation is a SYLVA-specific heuristic.
 
-    **Why this is a postulate, not a theorem:**
-    This requires relating the causal network node count on a boundary
-    to the Bekenstein-Hawking entropy formula. The proof would need:
-    1. Definition of "horizon" in the causal network context
-    2. Proof that horizon area A corresponds to a specific node count
-    3. Derivation of the 1/(4Gℏ) factor from network combinatorics
-    4. Connection between node entropy (ln 2 per node) and Bekenstein-Hawking
+    **Physical statement:** Black hole entropy S_BH = A / (4Gℏ) emerges from counting
+    surface nodes of the causal network at the Planck layer (L7).
+
+    **Proof path (standard):**
+    1. Bekenstein (1973): Black hole entropy is proportional to horizon area (analogous to
+       thermodynamic entropy).
+    2. Hawking (1974): Black hole radiation temperature T = ℏκ / (2πk_B), where κ = surface gravity.
+    3. First law of black hole thermodynamics: dM = T dS + Ω dJ + Φ dQ.
+    4. Integrating: S_BH = A / (4Gℏ) (in natural units c = k_B = 1).
+    See Wald (1984) Chapter 12; Carroll (2004) Chapter 11.
+
+    **Proof path (network heuristic, SYLVA):**
+    1. Define a "horizon" in the causal network as a boundary separating nodes that can
+       causally influence a given region from those that cannot.
+    2. Count surface nodes at layer L7 (Planck scale): N_surface = |{n ∈ G.nodes : n.layer = L7}|.
+    3. Assign entropy ln(2) per node (bit counting): S_BH = N_surface × ln(2).
+    4. Postulate that N_surface × ln(2) = A / (4Gℏ) where A is the continuum horizon area.
+
+    **Mathlib status:** The Bekenstein-Hawking formula itself is a physical law, not a
+    mathematical theorem. The network-counting derivation is heuristic and not formalized.
+    Mathlib has the mathematical tools (Real.log, measure theory) but not the physical
+    framework (black hole geometry, causal network → spacetime map).
+
+    **Why axiom is reasonable:** The standard Bekenstein-Hawking formula is derived from
+    black hole thermodynamics, not from causal network axioms. The SYLVA network derivation
+    requires:
+    1. Definition of "horizon" in a causal network (no standard definition)
+    2. Proof that horizon area A corresponds to a specific node count (no formal map)
+    3. Derivation of the 1/(4Gℏ) factor from network combinatorics (not available)
+    4. Connection between node entropy (ln 2 per node) and Bekenstein-Hawking (no derivation)
 
     **Known partial results:**
-    - Bombelli et al. (1986): Entanglement entropy ∝ boundary area
-    - Srednicki (1993): Entanglement entropy area law
-    - Jacobson (1995): Einstein equation from thermodynamics of local Rindler horizons
+    - Bombelli et al. (1986): Entanglement entropy of quantum fields ∝ boundary area (first area law).
+    - Srednicki (1993): Entanglement entropy of a free scalar field ∝ boundary area.
+    - Jacobson (1995): Einstein equation from thermodynamics of local Rindler horizons (entropic gravity).
+    - Ryu & Takayanagi (2006): Holographic entanglement entropy ∝ minimal surface area (AdS/CFT).
 
-    **Status:** The Bekenstein-Hawking formula is well-established. The
-    network derivation remains heuristic.
+    **References:**
+    - Bekenstein, J. D. (1973). "Black holes and entropy." *PRD* 7(8), 2333.
+    - Hawking, S. W. (1974). "Black hole explosions?" *Nature* 248, 30.
+    - Wald, R. M. (1984). *General Relativity*, §12.5.
+    - Jacobson, T. (1995). "Thermodynamics of spacetime: the Einstein equation of state." *PRL* 75(7), 1260.
+    - Srednicki, M. (1993). "Entropy and area." *PRL* 71(5), 666.
+    - SYLVA Framework v20.0, Section 5: "Emergent Gravity".
 
-    -- FIXED (Error #10): Use Finset.filter and Finset.card instead of
-       Set.ncard which requires explicit Finite proof:
-       {n ∈ G.nodes | n.layer = .L7}.ncard → (G.nodes.filter (...)).card -/
+    **Difficulty to theorem:** Research (requires causal network → spacetime formalization).
+    -/
 axiom emergentBlackHoleEntropy
   (G : CausalNetwork) (A : ℝ)  -- horizon area
   (hA : A > 0) :

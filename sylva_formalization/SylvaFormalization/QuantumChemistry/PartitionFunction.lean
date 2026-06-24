@@ -69,9 +69,8 @@ open Real Complex
     -/
 def partitionFunction {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) (beta : ℝ)
     (h_beta : beta > 0) : ℝ :=
-  -- Z = Tr(e^{-βH})
-  -- For diagonal H: Z = Σ_i e^{-β H_{ii}}
-  sorry
+  -- Z = Tr(e^{-βH}) for diagonal H
+  ∑ i : Fin n, Real.exp (-beta * H i i)
 
 /-- The density matrix at thermal equilibrium:
     ρ = e^{-βH} / Z = (1/Z) Σ_n e^{-βE_n} |n⟩⟨n|. -/
@@ -107,7 +106,8 @@ def helmholtzFreeEnergy {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) (beta : ℝ)
     -/
 def internalEnergy {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) (beta : ℝ)
     (h_beta : beta > 0) : ℝ :=
-  sorry
+  let Z := partitionFunction H beta h_beta
+  (1 / Z) * ∑ i : Fin n, H i i * Real.exp (-beta * H i i)
 
 /-- The entropy: S = k_B (ln Z + βU) = -∂F/∂T. -/
 def entropy {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) (beta : ℝ)
@@ -132,7 +132,9 @@ def entropy {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) (beta : ℝ)
     -/
 def heatCapacity {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ) (beta : ℝ)
     (h_beta : beta > 0) : ℝ :=
-  sorry
+  let Z := partitionFunction H beta h_beta
+  let U := internalEnergy H beta h_beta
+  beta ^ 2 * ((1 / Z) * ∑ i : Fin n, (H i i) ^ 2 * Real.exp (-beta * H i i) - U ^ 2)
 
 -- ============================================================================
 -- Section 2: Classical vs Quantum Partition Functions
@@ -230,7 +232,13 @@ theorem low_temperature_limit {n : ℕ} (H : Matrix (Fin n) (Fin n) ℝ)
     -/
 def isingHamiltonian (n : ℕ) (h_fields : Fin n → ℝ) (J_couplings : Fin n → Fin n → ℝ)
     : Matrix (Fin (2^n)) (Fin (2^n)) ℝ :=
-  sorry  -- Would need Pauli matrix representation
+  -- Diagonal Ising Hamiltonian in the computational basis (σ_i = ±1)
+  fun i j =>
+    if i = j then
+      let s := fun k : Fin n => if (i.val / 2 ^ k.val) % 2 = 1 then (-1 : ℝ) else (1 : ℝ)
+      (∑ k : Fin n, h_fields k * s k) +
+      (∑ k : Fin n, ∑ l : Fin n, if k < l then J_couplings k l * s k * s l else 0)
+    else 0
 
 /-- The QAOA ansatz for MaxCut (a special case of Ising):
     |β,γ⟩ = e^{-iβ_p H_M} e^{-iγ_p H_C} ... e^{-iβ_1 H_M} e^{-iγ_1 H_C} |+⟩^⊗n

@@ -139,15 +139,44 @@ noncomputable def gaugeTransformedWavefunction
     (r : BlochTheorem.Position2D) : ℂ :=
   exp (I * gauge.theta k) * state.wavefunction k r
 
-/-- Berry 联络的规范变换律：
-    A'_{n,μ}(k) = A_{n,μ}(k) - ∂_μ θ(k)
-    
-    证明路径：见上方推导。在 Lean 中需要：
-    1. 定义规范变换后的波函数
-    2. 计算 A' 的定义
-    3. 使用乘积法则和 ⟨u|u⟩ = 1 化简
-    
-    开放问题：需要形式化 ∂_μ θ(k) 作为导数。 -/
+/-- **Berry Connection Gauge Transformation Law.**
+
+    **Standard name:** Gauge transformation of Berry connection: A'_μ = A_μ + ∂_μ θ.
+
+    **Physical statement:** Under a gauge transformation |u_nk⟩ → e^{iθ(k)} |u_nk⟩,
+    the Berry connection transforms as A'_μ(k) = A_μ(k) - ∂_μ θ(k).
+    This is the standard U(1) gauge transformation law for a connection 1-form.
+
+    **Proof path:**
+    1. A_μ(k) = ⟨u_nk| i ∂_μ |u_nk⟩ (definition of Berry connection).
+    2. Under |u'_nk⟩ = e^{iθ(k)} |u_nk⟩, the derivative is:
+       ∂_μ |u'_nk⟩ = i (∂_μ θ) e^{iθ} |u_nk⟩ + e^{iθ} ∂_μ |u_nk⟩.
+    3. The inner product gives: A'_μ = ⟨u_nk| e^{-iθ} · i · [i (∂_μ θ) e^{iθ} |u_nk⟩ + e^{iθ} ∂_μ |u_nk⟩].
+    4. Simplifying: A'_μ = -∂_μ θ + ⟨u_nk| i ∂_μ |u_nk⟩ = -∂_μ θ + A_μ.
+    5. In differential form notation: A' = A + dθ (standard U(1) gauge transformation).
+    See Berry (1984); Xiao et al. (2010) §II.A; Nakahara (2003) Ch. 10.
+
+    **Mathlib status:** Not formalized. The proof requires:
+    - Fréchet derivatives in Hilbert spaces (partially available in Mathlib as `fderiv`)
+    - Complex inner products and bra-ket notation (not formalized)
+    - Product rule for derivatives of products of functions (available in Mathlib)
+    - Normalization condition ⟨u|u⟩ = 1 and its derivative (0 = ∂_μ ⟨u|u⟩ = ⟨∂_μ u|u⟩ + ⟨u|∂_μ u⟩)
+    The calculation is elementary but the bra-ket notation and Hilbert space structure are missing.
+
+    **Why axiom is reasonable:** The gauge transformation law is an elementary consequence of the
+    product rule and normalization. The proof is straightforward but requires the bra-ket formalism
+    (Hilbert space inner products, adjoint operators) which is not in Mathlib. The formal statement
+    is `True` (placeholder), indicating the proof is deferred.
+
+    **References:**
+    - Berry, M. V. (1984). "Quantal phase factors accompanying adiabatic changes."
+      *Proc. R. Soc. Lond. A* 392(1802), 45–57.
+    - Xiao, D., Chang, M.-C., & Niu, Q. (2010). "Berry phase effects on electronic properties."
+      *Rev. Mod. Phys.* 82(3), 1959.
+    - Nakahara, M. (2003). *Geometry, Topology and Physics*, 2nd ed., Ch. 10.
+
+    **Difficulty to theorem:** Easy (~20–30h, elementary product rule + normalization).
+    -/
 axiom BerryConnection_GaugeTransformationLaw
     (L : BlochTheorem.Lattice2D) (A : BerryConnection L)
     (gauge : GaugeTransformation L) (k : BlochTheorem.CrystalMomentum2D)
@@ -181,16 +210,41 @@ structure BerryConnection1Form (L : BlochTheorem.Lattice2D) where
   correspondenceX : Prop
   correspondenceY : Prop
 
-/-- 外微分（d）在 Berry 联络上的作用：
-    dA_n = (∂_x A_y - ∂_y A_x) dk_x ∧ dk_y
-    
-    在 2D 中，2-形式只有一个独立分量：
-    Ω_{xy} = ∂_x A_y - ∂_y A_x。
-    
-    这就是 Berry 曲率！
-    
-    开放问题：需要形式化外微分和外积 ∧。
-    Mathlib 中有 `ExteriorAlgebra` 和微分形式的相关定义。 -/
+/-- **Berry Curvature as Exterior Derivative of Berry Connection.**
+
+    **Standard name:** Berry curvature Ω = dA (exterior derivative of Berry connection).
+    In 2D: Ω_{xy} = ∂_x A_y - ∂_y A_x.
+
+    **Physical statement:** The Berry curvature is the exterior derivative of the Berry connection:
+    Ω = dA = (∂_x A_y - ∂_y A_x) dk_x ∧ dk_y. In 2D momentum space, there is only one
+    independent component: Ω_{xy} = ∂_x A_y - ∂_y A_x.
+
+    **Proof path:** This is a definition, not a theorem. The Berry curvature is defined as the
+    exterior derivative of the Berry connection 1-form. In 2D, the exterior derivative of
+    A = A_x dk_x + A_y dk_y is dA = (∂_x A_y - ∂_y A_x) dk_x ∧ dk_y. The antisymmetry of the
+    wedge product (dk_x ∧ dk_y = -dk_y ∧ dk_x) and the definition of exterior derivative
+    (d = dx^μ ∂_μ) give the formula directly.
+    See Nakahara (2003) Ch. 5; Xiao et al. (2010) §II.B.
+
+    **Mathlib status:** Not formalized. The exterior derivative and wedge product are
+    mathematical operations on differential forms. Mathlib has `ExteriorAlgebra` but not
+    the full differential form calculus (exterior derivative, Hodge star, integration of forms).
+
+    **Why axiom is reasonable:** The exterior derivative is a definition in differential geometry.
+    The formal statement is `True` (placeholder) because the full differential form calculus
+    is not in Mathlib. However, the formula Ω_{xy} = ∂_x A_y - ∂_y A_x is purely definitional
+    and could be formalized as a `def` rather than an `axiom` once the exterior derivative
+    is available.
+
+    **References:**
+    - Nakahara, M. (2003). *Geometry, Topology and Physics*, 2nd ed., Ch. 5.
+    - Xiao, D., Chang, M.-C., & Niu, Q. (2010). "Berry phase effects on electronic properties."
+      *Rev. Mod. Phys.* 82(3), 1959.
+    - Frankel, T. (2012). *The Geometry of Physics*, 3rd ed., Ch. 4.
+
+    **Difficulty to theorem:** N/A (definition, not theorem).
+    Formalizing differential forms requires ~100–200h in Mathlib.
+    -/
 axiom exteriorDerivativeOfBerryConnection
     (L : BlochTheorem.Lattice2D) (A : BerryConnection1Form L) :
     -- dA = Ω_{xy} dk_x ∧ dk_y
@@ -226,14 +280,43 @@ structure BerryPhase (L : BlochTheorem.Lattice2D) where
   /-- 定义：γ_n = ∮_C ⟨u|i∇|u⟩ · dk -/
   definition : Prop
 
-/-- Berry 相位的规范不变性：
-    在单值规范变换下（θ 在 BZ 上全局定义），Berry 相位不变。
-    
-    证明：γ' = ∮_C (A + dθ) = ∮_C A + ∮_C dθ = γ + 0 = γ。
-    因为 θ 单值，∮_C dθ = θ(C(1)) - θ(C(0)) = 0。
-    
-    但如果 θ 有分支切割（例如在 Dirac 弦上），则 ∮_C dθ 可能
-    非零（等于 2π × 环绕数）。这对应于磁单极子的 Dirac 量子化。 -/
+/-- **Berry Phase Gauge Invariance (Single-Valued Gauge Transformations).**
+
+    **Standard name:** Berry phase γ_n(C) = ∮_C A · dk is gauge invariant (mod 2π).
+
+    **Physical statement:** Under a single-valued gauge transformation |u'_nk⟩ = e^{iθ(k)} |u_nk⟩
+    where θ is globally defined on the Brillouin zone (no branch cuts), the Berry phase is invariant:
+    γ'_n(C) = γ_n(C). If θ has branch cuts, γ_n(C) may change by 2πm (integer multiple of 2π).
+
+    **Proof path:**
+    1. γ_n(C) = ∮_C A · dk = ∮_C ⟨u_nk| i∇_k |u_nk⟩ · dk (definition of Berry phase).
+    2. Under gauge transformation A' = A + ∇_k θ (BerryConnection_GaugeTransformationLaw).
+    3. γ'_n(C) = ∮_C (A + ∇_k θ) · dk = ∮_C A · dk + ∮_C ∇_k θ · dk.
+    4. By Stokes' theorem: ∮_C ∇_k θ · dk = θ(C(1)) - θ(C(0)) = 0 (since C is closed and θ is single-valued).
+    5. Therefore γ'_n(C) = γ_n(C).
+    If θ has a branch cut, θ(C(1)) - θ(C(0)) = 2πm (m = winding number around the branch cut).
+    See Berry (1984); Xiao et al. (2010) §II.A; Nakahara (2003) Ch. 10.
+
+    **Mathlib status:** Not formalized. The proof requires:
+    - Line integrals of 1-forms on closed curves (Stokes' theorem in 1D, i.e., fundamental theorem of calculus for line integrals)
+    - Single-valuedness of gauge transformation function θ
+    - The fundamental theorem for line integrals: ∮_C ∇θ · dr = 0 for single-valued θ
+    Mathlib has `intervalIntegral` and `MeasureTheory` but not the general line integral formalism.
+
+    **Why axiom is reasonable:** The gauge invariance of the Berry phase is a direct consequence of
+    the fundamental theorem of calculus for line integrals. The proof is elementary but requires
+    line integral formalism (integration of 1-forms along curves) which is not fully in Mathlib.
+    The formal statement is `True` (placeholder).
+
+    **References:**
+    - Berry, M. V. (1984). "Quantal phase factors accompanying adiabatic changes."
+      *Proc. R. Soc. Lond. A* 392(1802), 45–57.
+    - Xiao, D., Chang, M.-C., & Niu, Q. (2010). "Berry phase effects on electronic properties."
+      *Rev. Mod. Phys.* 82(3), 1959.
+    - Nakahara, M. (2003). *Geometry, Topology and Physics*, 2nd ed., Ch. 10.
+
+    **Difficulty to theorem:** Easy (~20–30h, line integral + fundamental theorem).
+    -/
 axiom BerryPhase_GaugeInvariance
     (L : BlochTheorem.Lattice2D) (γ : BerryPhase L) :
     -- 在单值规范变换下，Berry 相位不变
@@ -243,20 +326,45 @@ axiom BerryPhase_GaugeInvariance
 -- Section 6: Berry 联络的数学抽象
 -- ============================================
 
-/-- 从抽象联络论角度：Berry 联络是 U(1) 主丛上的 Ehresmann 联络。
-    
-    结构：
-    - 总空间 P = {(k, [u_nk])}，其中 [u_nk] 是相位等价类
-    - 底空间 M = BZ（环面 T²）
-    - 结构群 G = U(1)
-    - 联络 ω = A_{n,μ} dk^μ（在局部截面下）
-    
-    曲率 Ω = dω + ω ∧ ω = dA（因为 U(1) 是 Abel 的，ω ∧ ω = 0）。
-    
-    第一陈数 C_1 = (1/2π) ∫_M Ω。
-    
-    开放问题：需要在 Lean 中形式化主丛的完整理论。
-    Mathlib 的 `FiberBundle` 和 `VectorBundle` 提供了基础。 -/
+/-- **Berry Connection as U(1) Principal Bundle Connection (Ehresmann Connection).**
+
+    **Standard name:** Berry connection is an Ehresmann connection on the U(1) principal bundle
+    P_n → BZ (BZ = Brillouin zone, topologically T²).
+
+    **Physical statement:** The Berry connection A_n(k) = ⟨u_nk| i∇_k |u_nk⟩ defines a connection
+    on the principal U(1)-bundle P_n over the Brillouin zone. The total space is
+    P_n = {(k, [u_nk]) : k ∈ BZ, [u_nk] ∈ Hilbert / U(1)} (phase equivalence classes).
+
+    **Proof path:** This is a structural identification, not a theorem to prove. The Berry connection
+    satisfies all the properties of a principal bundle connection:
+    1. It is a Lie algebra-valued 1-form (u(1) ≅ ℝ, so A is a real 1-form).
+    2. It transforms as A' = A + dθ under gauge transformation (U(1) gauge transformation).
+    3. It satisfies the verticality condition: A(X^#) = X for vertical vector fields.
+    4. It satisfies the equivariance condition: R_g^* A = Ad_{g⁻¹} A.
+    See Nakahara (2003) Ch. 10; Frankel (2012) Ch. 16; Kobayashi & Nomizu (1963) Ch. 2.
+
+    **Mathlib status:** Not formalized. The principal bundle connection formalism requires:
+    - Principal bundles with structure group action (partially available in Mathlib)
+    - Ehresmann connections (connection 1-forms on principal bundles)
+    - Lie algebra-valued differential forms
+    - Vertical/horizontal decomposition of tangent spaces
+    Mathlib has `FiberBundle` and `VectorBundle` but not the full principal bundle theory.
+
+    **Why axiom is reasonable:** This is a structural identification (the Berry connection "is"
+    a principal bundle connection). The formal statement is `True` (placeholder) because the full
+    principal bundle formalism is not in Mathlib. The identification is standard in mathematical
+    physics but requires differential geometry machinery not yet available.
+
+    **References:**
+    - Nakahara, M. (2003). *Geometry, Topology and Physics*, 2nd ed., Ch. 10.
+    - Frankel, T. (2012). *The Geometry of Physics*, 3rd ed., Ch. 16.
+    - Kobayashi, S. & Nomizu, K. (1963). *Foundations of Differential Geometry*, Vol. 1, Ch. 2.
+    - Berry, M. V. (1984). "Quantal phase factors accompanying adiabatic changes."
+      *Proc. R. Soc. Lond. A* 392(1802), 45–57.
+
+    **Difficulty to theorem:** N/A (structural identification, not theorem).
+    Formalizing principal bundles requires ~200–300h in Mathlib.
+    -/
 axiom BerryConnection_AsPrincipalBundleConnection
     (L : BlochTheorem.Lattice2D) (A : BerryConnection L) :
     -- Berry 联络是 U(1) 主丛上的联络
@@ -286,8 +394,39 @@ structure NonAbelBerryConnection (L : BlochTheorem.Lattice2D) (N : ℕ) where
   /-- 定义：A_{μ}^{mn} = ⟨u_m| i ∂_μ |u_n⟩ -/
   definition : Prop
 
-/-- Abel 极限：当 N = 1 时，非 Abel Berry 联络退化为单带 Berry 联络。
-    A_μ^{00} = ⟨u_0| i ∂_μ |u_0⟩ = A_μ。 -/
+/-- **Non-Abelian Berry Connection — Abelian Limit (N = 1).**
+
+    **Standard name:** Abelian limit of non-Abelian Berry connection (single-band limit).
+
+    **Physical statement:** When only one band is occupied (N = 1), the non-Abelian Berry
+    connection matrix A_μ^{mn}(k) = ⟨u_mk| i∂_μ |u_nk⟩ (m,n ∈ {1}) reduces to a single
+    complex number: A_μ^{00}(k) = ⟨u_0k| i∂_μ |u_0k⟩, which is the Abelian Berry connection.
+
+    **Proof path:** This is a definitional limit. For N = 1, the matrix indices m,n only take
+    the value 0, so the matrix is 1×1. The definition of the non-Abelian Berry connection
+    A_μ^{mn} = ⟨u_m| i∂_μ |u_n⟩ reduces to A_μ^{00} = ⟨u_0| i∂_μ |u_0⟩, which is exactly the
+    Abelian Berry connection definition. The non-Abelian curvature extra term [A_μ, A_ν] vanishes
+    for a 1×1 matrix (commutator of numbers is zero).
+    See Wilczek & Zee (1984); Xiao et al. (2010) §VII; Nakahara (2003) Ch. 10.
+
+    **Mathlib status:** Not formalized. The limit is a triviality of matrix algebra:
+    a 1×1 matrix is just a number. The commutator of 1×1 matrices is zero. This is purely
+    definitional and could be proven trivially once the matrix-valued connection is defined.
+
+    **Why axiom is reasonable:** This is a definitional limit (N = 1 reduces to the Abelian case).
+    The formal statement is `True` (placeholder) because the non-Abelian Berry connection is
+    not fully defined (it is a structure with a `definition : Prop` field). The statement is
+    trivially true by definition and should not be an axiom.
+
+    **References:**
+    - Wilczek, F. & Zee, A. (1984). "Appearance of gauge structure in simple dynamical systems."
+      *PRL* 52(24), 2111.
+    - Xiao, D., Chang, M.-C., & Niu, Q. (2010). "Berry phase effects on electronic properties."
+      *Rev. Mod. Phys.* 82(3), 1959.
+    - Nakahara, M. (2003). *Geometry, Topology and Physics*, 2nd ed., Ch. 10.
+
+    **Difficulty to theorem:** Trivial (~5h, 1×1 matrix algebra).
+    -/
 axiom NonAbelBerryConnection_AbelLimit
     (L : BlochTheorem.Lattice2D) (A_abel : BerryConnection L) :
     -- 当 N = 1 时，非 Abel 联络退化为 Abel 联络
