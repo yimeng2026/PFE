@@ -62,6 +62,13 @@ def size : BoolFormula → Nat
   | not f => 1 + f.size
   | and f₁ f₂ | or f₁ f₂ | implies f₁ f₂ | xor f₁ f₂ => 1 + f₁.size + f₂.size
 
+/-- Maximum variable index appearing in the formula. -/
+def maxVar : BoolFormula → Var
+  | var v => v
+  | const _ => 0
+  | not f => f.maxVar
+  | and f₁ f₂ | or f₁ f₂ | implies f₁ f₂ | xor f₁ f₂ => Nat.max f₁.maxVar f₂.maxVar
+
 end BoolFormula
 
 /-! ## Tseitin Transformation
@@ -83,6 +90,37 @@ end BoolFormula
     Complexity: O(|formula|) auxiliary variables and O(|formula|) clauses.
     Each gate type contributes ≤ 4 clauses. -/
 
+/-- Tseitin constraint encoding: y ↔ (x₁ → x₂) as CNF clauses.
+    This introduces an auxiliary variable y representing the IMPLIES gate. -/
+def tseitinImplies (y x₁ x₂ : Var) : CNF :=
+  [ [Literal.neg y, Literal.neg x₁, Literal.pos x₂]
+  , [Literal.pos x₁, Literal.pos y]
+  , [Literal.neg x₂, Literal.pos y]
+  ]
+
+/-- Verify that Tseitin IMPLIES encoding is correct. -/
+theorem tseitinImplies_correct (y x₁ x₂ : Var) (assign : Var → Bool) :
+    (tseitinImplies y x₁ x₂).eval assign = true ↔
+    (assign y = (!(assign x₁) || assign x₂)) := by
+  simp [tseitinImplies, CNF.eval, Clause.eval, Literal.eval]
+  cases assign x₁ <;> cases assign x₂ <;> cases assign y <;> simp
+
+/-- Tseitin constraint encoding: y ↔ (x₁ ⊕ x₂) as CNF clauses.
+    This introduces an auxiliary variable y representing the XOR gate. -/
+def tseitinXor (y x₁ x₂ : Var) : CNF :=
+  [ [Literal.neg y, Literal.neg x₁, Literal.neg x₂]
+  , [Literal.neg y, Literal.pos x₁, Literal.pos x₂]
+  , [Literal.pos y, Literal.neg x₁, Literal.pos x₂]
+  , [Literal.pos y, Literal.pos x₁, Literal.neg x₂]
+  ]
+
+/-- Verify that Tseitin XOR encoding is correct. -/
+theorem tseitinXor_correct (y x₁ x₂ : Var) (assign : Var → Bool) :
+    (tseitinXor y x₁ x₂).eval assign = true ↔
+    (assign y = ((assign x₁) != (assign x₂))) := by
+  simp [tseitinXor, CNF.eval, Clause.eval, Literal.eval]
+  cases assign x₁ <;> cases assign x₂ <;> cases assign y <;> simp
+
 /-- Result of the Tseitin transformation.
     - `cnf`: the resulting CNF formula (conjunction of all gate constraints)
     - `outputVar`: the variable representing the root of the formula
@@ -98,55 +136,42 @@ structure TseitinResult where
   -- All auxiliary variables are ≥ maxOriginalVar, ensuring no collision
   -- with original formula variables.
 
-namespace TseitinResult
-
-/-- The Tseitin CNF is satisfiable iff the original formula is satisfiable.
-    This is the core correctness property of the Tseitin transformation. -/
-axiom equisatisfiable (f : BoolFormula) (result : TseitinResult) :
-  (∃ (assign : Var → Bool), f.eval assign = true) ↔
-  (∃ (assign : Var → Bool), result.cnf.eval assign = true)
-  -- Equisatisfiability: the CNF preserves the satisfiability status of
-  -- the original formula. The forward direction (→) is proven by induction
-  -- on the formula structure, using the gate semantics encoded in each
-  -- Tseitin clause. The backward direction (←) is proven by restricting
-  -- the satisfying assignment to the original variables.
-  -- Postulated because the full structural induction over all 5 gate types
-  -- with exhaustive assignment case analysis is ~400 lines of routine
-  -- but tedious proof. The correctness is standard (Tseitin 1968; Arora
-  -- & Barak 2009, Theorem 2.13).
-
-/-- Tseitin transformation preserves unsatisfiability.
-    If the original formula is UNSAT, so is the CNF.
-    Proven as a corollary of equisatisfiability (contrapositive). -/
-theorem unsatPreserved (f : BoolFormula) (result : TseitinResult) :
-  (∀ (assign : Var → Bool), f.eval assign = false) →
-  (∀ (assign : Var → Bool), result.cnf.eval assign = false) := by
-  intro h_unsat assign
-  by_contra h
-  -- h : ¬(result.cnf.eval assign = false), so result.cnf.eval assign = true
-  have h_cnf : result.cnf.eval assign = true := by
-    simp at h
-    exact h
-  -- CNF is satisfiable, so by equisatisfiable (backward direction), original formula is satisfiable
-  have h_f_sat : ∃ (a : Var → Bool), f.eval a = true :=
-    (equisatisfiable f result).mpr ⟨assign, h_cnf⟩
-  obtain ⟨a', ha'⟩ := h_f_sat
-  -- But h_unsat says formula is unsatisfiable: contradiction
-  have h_false := h_unsat a'
-  rw [ha'] at h_false
-  all_goals contradiction
-
-/-- Tseitin transformation produces a linear-size CNF.
-    The number of auxiliary variables and clauses is O(|f|). -/
-axiom linearSize (f : BoolFormula) (result : TseitinResult) :
-  result.numAuxVars ≤ f.size + 1 ∧ result.numClauses ≤ 4 * f.size + 1
-  -- Linear bound: each subformula node introduces at most 1 new variable
-  -- and at most 4 clauses. The total is linear in formula size.
-  -- Postulated as the proof is a straightforward structural induction
-  -- counting nodes and clauses. The bound 4|f| + 1 is loose but safe;
-  -- tighter bounds exist for specific gate mixes.
-
-end TseitinResult
+/-- Bottom-up Tseitin transformation helper.
+    Returns (CNF, outputVar, numAuxVars, numClauses).
+    Auxiliary variables are allocated starting from `nextVar`. -/
+def tseitinTransformGo (f : BoolFormula) (nextVar : Var) : (CNF × Var × Nat × Nat) :=
+  match f with
+  | BoolFormula.var v => ([], v, 0, 0)
+  | BoolFormula.const true => ([[Literal.pos nextVar]], nextVar, 1, 1)
+  | BoolFormula.const false => ([[Literal.neg nextVar]], nextVar, 1, 1)
+  | BoolFormula.not f =>
+    let (cnf, out, aux, cl) := tseitinTransformGo f nextVar
+    let y := nextVar + aux
+    (cnf ++ tseitinNot y out, y, aux + 1, cl + 2)
+  | BoolFormula.and f₁ f₂ =>
+    let (cnf₁, out₁, aux₁, cl₁) := tseitinTransformGo f₁ nextVar
+    let nextVar₂ := nextVar + aux₁
+    let (cnf₂, out₂, aux₂, cl₂) := tseitinTransformGo f₂ nextVar₂
+    let y := nextVar₂ + aux₂
+    (cnf₁ ++ cnf₂ ++ tseitinAnd y out₁ out₂, y, aux₁ + aux₂ + 1, cl₁ + cl₂ + 3)
+  | BoolFormula.or f₁ f₂ =>
+    let (cnf₁, out₁, aux₁, cl₁) := tseitinTransformGo f₁ nextVar
+    let nextVar₂ := nextVar + aux₁
+    let (cnf₂, out₂, aux₂, cl₂) := tseitinTransformGo f₂ nextVar₂
+    let y := nextVar₂ + aux₂
+    (cnf₁ ++ cnf₂ ++ tseitinOr y out₁ out₂, y, aux₁ + aux₂ + 1, cl₁ + cl₂ + 3)
+  | BoolFormula.implies f₁ f₂ =>
+    let (cnf₁, out₁, aux₁, cl₁) := tseitinTransformGo f₁ nextVar
+    let nextVar₂ := nextVar + aux₁
+    let (cnf₂, out₂, aux₂, cl₂) := tseitinTransformGo f₂ nextVar₂
+    let y := nextVar₂ + aux₂
+    (cnf₁ ++ cnf₂ ++ tseitinImplies y out₁ out₂, y, aux₁ + aux₂ + 1, cl₁ + cl₂ + 3)
+  | BoolFormula.xor f₁ f₂ =>
+    let (cnf₁, out₁, aux₁, cl₁) := tseitinTransformGo f₁ nextVar
+    let nextVar₂ := nextVar + aux₁
+    let (cnf₂, out₂, aux₂, cl₂) := tseitinTransformGo f₂ nextVar₂
+    let y := nextVar₂ + aux₂
+    (cnf₁ ++ cnf₂ ++ tseitinXor y out₁ out₂, y, aux₁ + aux₂ + 1, cl₁ + cl₂ + 4)
 
 /-- Tseitin transformation: convert an arbitrary Boolean formula to an
     equisatisfiable CNF formula in linear time.
@@ -155,25 +180,164 @@ end TseitinResult
     For each subformula node, it introduces a fresh auxiliary variable and
     appends the corresponding gate-encoding clauses to the CNF.
 
+    Finally, a unit clause asserts that the root output variable is true.
+
     Reference: Tseitin, G. S. (1968). "On the complexity of derivation in
     propositional calculus". Studies in Constructive Mathematics and
     Mathematical Logic, Part II.
 
     Complexity: O(|f|) time, O(|f|) space (variables + clauses). -/
-axiom tseitinTransform (f : BoolFormula) : TseitinResult
-  -- Postulated as the full definition requires a stateful traversal
-  -- (fresh variable generation + CNF accumulation) which is implementable
-  -- but would be ~100 lines of monadic code. The correctness proofs
-  -- (equisatisfiability, linear size) are the main challenge and are
-  -- axiomd separately as TseitinResult.equisatisfiable and
-  -- TseitinResult.linearSize.
-  --
-  -- Why not fully formalized:
-  -- 1. The definition is routine but lengthy (stateful AST traversal).
-  -- 2. The correctness proofs require structural induction over 5 gate
-  --    types with exhaustive case analysis (2^arity assignments per gate).
-  -- 3. Mathlib does not yet have a SAT theory library; these results
-  --    would be foundational contributions (~2 weeks of focused work).
+def tseitinTransform (f : BoolFormula) : TseitinResult :=
+  let maxOrig := f.maxVar + 1
+  let (cnf, outVar, nAux, nCl) := tseitinTransformGo f maxOrig
+  { cnf := cnf ++ [[Literal.pos outVar]]
+    outputVar := outVar
+    numAuxVars := nAux
+    numClauses := nCl + 1
+    maxOriginalVar := maxOrig
+  }
+
+namespace TseitinResult
+
+/-- Linear size bound for the bottom-up helper.
+    Proven by structural induction on the formula. -/
+theorem tseitinTransformGo_linearSize (f : BoolFormula) (nextVar : Var) :
+  let (cnf, outVar, nAux, nCl) := tseitinTransformGo f nextVar
+  nAux ≤ f.size ∧ nCl ≤ 4 * f.size - 3 := by
+  induction f generalizing nextVar with
+  | var v => simp [tseitinTransformGo]; constructor <;> omega
+  | const b => cases b <;> simp [tseitinTransformGo]; constructor <;> omega
+  | not f ih =>
+    simp [tseitinTransformGo]
+    rcases ih nextVar with ⟨h₁, h₂⟩
+    constructor <;> omega
+  | and f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    rcases ih₁ nextVar with ⟨h₁₁, h₁₂⟩
+    rcases ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) with ⟨h₂₁, h₂₂⟩
+    constructor <;> omega
+  | or f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    rcases ih₁ nextVar with ⟨h₁₁, h₁₂⟩
+    rcases ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) with ⟨h₂₁, h₂₂⟩
+    constructor <;> omega
+  | implies f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    rcases ih₁ nextVar with ⟨h₁₁, h₁₂⟩
+    rcases ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) with ⟨h₂₁, h₂₂⟩
+    constructor <;> omega
+  | xor f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    rcases ih₁ nextVar with ⟨h₁₁, h₁₂⟩
+    rcases ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) with ⟨h₂₁, h₂₂⟩
+    constructor <;> omega
+
+/-- Tseitin transformation produces a linear-size CNF.
+    The number of auxiliary variables and clauses is O(|f|). -/
+theorem linearSize (f : BoolFormula) :
+  (tseitinTransform f).numAuxVars ≤ f.size + 1 ∧ (tseitinTransform f).numClauses ≤ 4 * f.size + 1 := by
+  simp [tseitinTransform]
+  have h := tseitinTransformGo_linearSize f (f.maxVar + 1)
+  simp at h
+  constructor <;> omega
+
+/-- Core equisatisfiability lemma for the bottom-up helper.
+    Proven by structural induction on the formula.
+
+    Forward direction (→): given a satisfying assignment for the original formula,
+    extend it to a satisfying assignment for the CNF by setting each auxiliary
+    variable to the truth value of its subformula.
+
+    Backward direction (←): given a satisfying assignment for the CNF with the
+    output variable asserted true, restrict it to the original variables.
+
+    The full proof requires ~200-300 lines of careful assignment construction
+    and case analysis per gate type. The framework below establishes the
+    structural induction and applies the gate correctness lemmas.
+    The remaining assignment-extension steps are marked with `sorry`. -/
+theorem tseitinTransformGo_equisat (f : BoolFormula) (nextVar : Var) :
+  let (cnf, outVar, nAux, nCl) := tseitinTransformGo f nextVar
+  (∃ (assign : Var → Bool), f.eval assign = true) ↔
+  (∃ (assign : Var → Bool), cnf.eval assign = true ∧ assign outVar = true) := by
+  induction f generalizing nextVar with
+  | var v =>
+    simp [tseitinTransformGo, CNF.eval]
+    tauto
+  | const b =>
+    cases b <;> simp [tseitinTransformGo, CNF.eval, Clause.eval, Literal.eval]
+    · tauto
+    · tauto
+  | not f ih =>
+    simp [tseitinTransformGo]
+    rw [ih nextVar]
+    simp [tseitinNot_correct]
+    -- Core: using tseitinNot_correct, the CNF for NOT is satisfiable with
+    -- outVar = true iff the subformula evaluates to false.
+    -- The assignment extension step requires ~100 lines of routine construction.
+    sorry
+  | and f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    rw [ih₁ nextVar]
+    rw [ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)]
+    simp [tseitinAnd_correct]
+    -- Core: merge two satisfying assignments for the subformulas using the
+    -- tseitinAnd_correct lemma to guarantee the AND gate variable equals
+    -- the conjunction of the two subformula outputs.
+    -- The assignment merge step requires ~100 lines of routine construction.
+    sorry
+  | or f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    rw [ih₁ nextVar]
+    rw [ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)]
+    simp [tseitinOr_correct]
+    -- Core: merge two satisfying assignments using tseitinOr_correct.
+    sorry
+  | implies f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    rw [ih₁ nextVar]
+    rw [ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)]
+    simp [tseitinImplies_correct]
+    -- Core: merge two satisfying assignments using tseitinImplies_correct.
+    sorry
+  | xor f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    rw [ih₁ nextVar]
+    rw [ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)]
+    simp [tseitinXor_correct]
+    -- Core: merge two satisfying assignments using tseitinXor_correct.
+    sorry
+
+/-- The Tseitin CNF is satisfiable iff the original formula is satisfiable.
+    This is the core correctness property of the Tseitin transformation. -/
+theorem equisatisfiable (f : BoolFormula) :
+  (∃ (assign : Var → Bool), f.eval assign = true) ↔
+  (∃ (assign : Var → Bool), (tseitinTransform f).cnf.eval assign = true) := by
+  simp [tseitinTransform, CNF.eval]
+  rw [tseitinTransformGo_equisat f (f.maxVar + 1)]
+  simp
+
+/-- Tseitin transformation preserves unsatisfiability.
+    If the original formula is UNSAT, so is the CNF.
+    Proven as a corollary of equisatisfiability (contrapositive). -/
+theorem unsatPreserved (f : BoolFormula) :
+  (∀ (assign : Var → Bool), f.eval assign = false) →
+  (∀ (assign : Var → Bool), (tseitinTransform f).cnf.eval assign = false) := by
+  intro h_unsat assign
+  by_contra h
+  -- h : ¬(result.cnf.eval assign = false), so result.cnf.eval assign = true
+  have h_cnf : (tseitinTransform f).cnf.eval assign = true := by
+    simp at h
+    exact h
+  -- CNF is satisfiable, so by equisatisfiable (backward direction), original formula is satisfiable
+  have h_f_sat : ∃ (a : Var → Bool), f.eval a = true :=
+    (equisatisfiable f).mpr ⟨assign, h_cnf⟩
+  obtain ⟨a', ha'⟩ := h_f_sat
+  -- But h_unsat says formula is unsatisfiable: contradiction
+  have h_false := h_unsat a'
+  rw [ha'] at h_false
+  all_goals contradiction
+
+end TseitinResult
 
 /-! ## Boolean Circuits and CircuitSAT
 

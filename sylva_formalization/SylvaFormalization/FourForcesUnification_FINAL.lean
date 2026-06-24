@@ -692,40 +692,35 @@ axiom emergentEinsteinEquation
   G_μν + 0.7 * g_00 = 8 * π * emergentG * T_μν
 
 -- -----------------------------------------------------------------------------
--- 6.3 Charge Quantization (AXIOM - requires cohomology theory for causal nets)
+-- 6.3 Charge Quantization (THEOREM - trivially provable, physically vacuous)
 -- -----------------------------------------------------------------------------
 
-/-- **Charge Quantization**
+/-- **Charge Quantization (THEOREM - formal statement is trivial)**
 
-    Mathematical statement: In the SYLVA framework, electric charge is
-    automatically quantized because it corresponds to a cohomology class
-    of the causal network.
+    The original axiom stated that electric charge corresponds to a cohomology
+    class of the causal network, requiring discrete cohomology theory for causal
+    networks which does not yet exist in Mathlib.
 
-    **Why this is a postulate, not a theorem:**
-    This claim requires a fully-developed cohomology theory for causal
-    networks, which does not yet exist. The proof would need:
-    1. Definition of cohomology groups Hⁿ(G, ℤ) for causal networks G
-    2. Interpretation of charge as a cohomology class [Q] ∈ H²(G, ℤ)
-    3. Proof that H²(G, ℤ) is discrete (finitely generated abelian group)
-    4. Connection between cohomology class and physical charge measurement
+    The current formalization (after Error #9 fix) states merely that there
+    exists a finite subset of nodes. This is a trivial theorem because the
+    empty set is a finite subset of any set.
 
-    **Required tool chain (conjectural):**
-    1. Simplicial/cell cohomology for directed graphs
-    2. Proof that network cohomology is finitely generated
+    **Why the formal statement is trivial:** After fixing the type error
+    (G.nodes is Finset CausalNode, not a Type), the statement became
+    ∃ (Q : Finset CausalNode), Q ⊆ G.nodes. Taking Q = ∅ proves it immediately.
+
+    **Physical status:** The formal statement does not capture the physical
+    intent of charge quantization. A proper formalization would require:
+    1. Cohomology theory for directed graphs
+    2. Proof that H²(G, ℤ) is finitely generated
     3. Dirac quantization condition from cohomology pairing
-    4. Experimental verification (|q_e + q_p|/e < 10⁻²¹)
 
-    **Known partial results:**
-    - Dirac (1931): Charge quantization from magnetic monopole consistency
-    - Yang (1970): Fiber bundle formulation of charge
-
-    **Status:** Charge quantization is experimentally verified. The SYLVA
-    cohomology explanation is a conceptual framework, not a rigorous proof.
-
-    -- FIXED (Error #9): G.nodes is Finset CausalNode, not a Type.
-       Changed ∃ (Q : Set G.nodes), Q.Finite to ∃ (Q : Finset CausalNode), Q ⊆ G.nodes. -/
-axiom chargeQuantization (G : CausalNetwork) :
-  ∃ (Q : Finset CausalNode), Q ⊆ G.nodes
+    **AUDIT NOTE:** Converted from axiom to theorem.
+    The formal statement is trivially true, but the physical claim remains
+    unproven. -/
+theorem chargeQuantization (G : CausalNetwork) :
+  ∃ (Q : Finset CausalNode), Q ⊆ G.nodes :=
+  ⟨∅, Finset.empty_subset G.nodes⟩
 
 -- -----------------------------------------------------------------------------
 -- 6.4 Black Hole Entropy (AXIOM - network-counting derivation heuristic)
@@ -829,31 +824,50 @@ theorem protonLifetimePrediction :
     norm_num
 
 -- -----------------------------------------------------------------------------
--- 6.6 Fine Structure Constant Running (AXIOM - requires QED on causal networks)
+-- 6.6 Fine Structure Constant Running (THEOREM - rigorously provable)
 -- -----------------------------------------------------------------------------
 
-/-- **Fine Structure Constant Running**
+/-- **Fine Structure Constant Running (THEOREM - rigorously provable)**
 
-    Mathematical statement: The fine structure constant α deviates from
-    standard QED running above 10²⁰ eV due to network discreteness.
+    The fine structure constant α deviates from standard QED running above
+    10²⁰ eV due to network discreteness. The correction factor suppresses
+    the coupling at high energies.
 
-    **Why this is a postulate, not a theorem:**
-    This claim requires a complete theory of quantum electrodynamics on
-    a causal network, which does not exist. The proof would need:
-    1. Formulation of QED on a causal network (discrete spacetime)
-    2. Calculation of the photon propagator with network-induced modifications
-    3. Vacuum polarization from network structure (not just fermion loops)
-    4. Comparison with standard QED running (Euler-Heisenberg effective Lagrangian)
+    **Proof strategy:** The inequality reduces to elementary algebra:
+    - α_network = α_standard × (1 - x) where x = planckLength² / (3e8/E)²
+    - x > 0 for all E > 0 (planckLength > 0, denominator positive)
+    - α_standard > 0 (proven by emergentAlpha_pos)
+    - Therefore α_network - α_standard = -α_standard × x < 0
 
-    **Physical justification:** At energies E ≫ E_Planck ~ 10¹⁹ eV, the
-    discrete structure of the causal network modifies the photon propagator.
-    The correction factor (1 - ℓ_P²/(c/E)²) < 1 suppresses the coupling.
+    **Why the original was an axiom:** The physical interpretation (discrete
+    network modifying QED running) was considered conjectural. However, the
+    mathematical inequality itself is a rigorous consequence of the definitions.
 
-    **Status:** The claimed deviation at 10²⁰ eV is currently untestable
-    experimentally. The formula is speculative. -/
-axiom alphaRunningDeviation (E : ℝ) (hE : E > 1e20) :
+    **AUDIT NOTE:** Converted from axiom to theorem with proof.
+    The hypothesis weakened from E > 1e20 to E > 0 (proof holds for all
+    positive energies). The physical interpretation remains conjectural. -/
+theorem alphaRunningDeviation (E : ℝ) (hE : E > 0) :
   let α_standard := emergentAlpha
   let α_network := α_standard * (1 - planckLength ^ 2 / (3e8 / E) ^ 2)
-  α_network < α_standard
+  α_network < α_standard := by
+  have hx : planckLength ^ 2 / (3e8 / E) ^ 2 > 0 := by
+    have hp : planckLength > 0 := by simp [planckLength]; norm_num
+    have he : (3e8 / E : ℝ) > 0 := by
+      apply div_pos
+      · norm_num
+      · linarith
+    have hsq : (3e8 / E : ℝ) ^ 2 > 0 := by positivity
+    apply div_pos
+    · positivity
+    · exact hsq
+  have hα : emergentAlpha > 0 := emergentAlpha_pos
+  -- Show the difference is negative
+  have hdiff : emergentAlpha * (1 - planckLength ^ 2 / (3e8 / E) ^ 2) - emergentAlpha < 0 := by
+    have : emergentAlpha * (1 - planckLength ^ 2 / (3e8 / E) ^ 2) - emergentAlpha
+        = - (emergentAlpha * (planckLength ^ 2 / (3e8 / E) ^ 2)) := by ring
+    rw [this]
+    have : emergentAlpha * (planckLength ^ 2 / (3e8 / E) ^ 2) > 0 := by positivity
+    linarith
+  linarith
 
 end Sylva
