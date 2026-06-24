@@ -270,7 +270,269 @@ theorem linearSize (f : BoolFormula) :
     and case analysis per gate type. The framework below establishes the
     structural induction and applies the gate correctness lemmas.
     The remaining assignment-extension steps are marked with `sorry`. -/
-theorem tseitinTransformGo_equisat (f : BoolFormula) (nextVar : Var) :
+
+/-- Variable locality for Literal evaluation: if two assignments agree on the variable, the literal evaluates the same. -/
+lemma Literal.eval_eq_of_agree (lit : Literal) (a₁ a₂ : Var → Bool) (h : a₁ lit.var = a₂ lit.var) :
+  lit.eval a₁ = lit.eval a₂ := by
+  cases lit with
+  | pos v =>
+    simp [Literal.eval, h]
+  | neg v =>
+    simp [Literal.eval, h]
+
+/-- Variable locality for Clause evaluation: if two assignments agree on all variables in the clause, the clause evaluates the same. -/
+lemma Clause.eval_eq_of_agree (c : Clause) (a₁ a₂ : Var → Bool) (h : ∀ lit ∈ c, a₁ lit.var = a₂ lit.var) :
+  c.eval a₁ = c.eval a₂ := by
+  induction c with
+  | nil => simp [Clause.eval]
+  | cons lit c ih =>
+    simp [Clause.eval]
+    have h1 : a₁ lit.var = a₂ lit.var := h lit (by simp)
+    have h2 : ∀ lit ∈ c, a₁ lit.var = a₂ lit.var := by
+      intro lit h_lit
+      apply h
+      simp [h_lit]
+    have eq1 : lit.eval a₁ = lit.eval a₂ := Literal.eval_eq_of_agree lit a₁ a₂ h1
+    have eq2 : c.eval a₁ = c.eval a₂ := ih h2
+    rw [eq1, eq2]
+
+/-- Variable locality for CNF evaluation: if two assignments agree on all variables in the CNF, the CNF evaluates the same. -/
+lemma CNF.eval_eq_of_agree (cnf : CNF) (a₁ a₂ : Var → Bool) (h : ∀ lit, lit ∈ cnf.join → a₁ lit.var = a₂ lit.var) :
+  cnf.eval a₁ = cnf.eval a₂ := by
+  induction cnf with
+  | nil => simp [CNF.eval]
+  | cons c cs ih =>
+    simp [CNF.eval]
+    have h1 : ∀ lit ∈ c, a₁ lit.var = a₂ lit.var := by
+      intro lit h_lit
+      apply h
+      simp [h_lit]
+    have h2 : ∀ lit ∈ cs.join, a₁ lit.var = a₂ lit.var := by
+      intro lit h_lit
+      apply h
+      simp [h_lit]
+    have eq1 : c.eval a₁ = c.eval a₂ := Clause.eval_eq_of_agree c a₁ a₂ h1
+    have eq2 : cs.eval a₁ = cs.eval a₂ := ih h2
+    rw [eq1, eq2]
+
+/-- The output variable of tseitinTransformGo is strictly less than nextVar + nAux. -/
+lemma tseitinTransformGo_outVar_lt (f : BoolFormula) (nextVar : Var) (h_nextVar : nextVar > f.maxVar) :
+  let (cnf, outVar, nAux, nCl) := tseitinTransformGo f nextVar
+  outVar < nextVar + nAux := by
+  induction f generalizing nextVar with
+  | var v => simp [tseitinTransformGo]; omega
+  | const b => cases b <;> simp [tseitinTransformGo]; omega
+  | not f ih =>
+    simp [tseitinTransformGo]
+    have h := ih nextVar (by omega)
+    omega
+  | and f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    have h₁ := ih₁ nextVar (by omega)
+    have h₂ := ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega)
+    omega
+  | or f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    have h₁ := ih₁ nextVar (by omega)
+    have h₂ := ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega)
+    omega
+  | implies f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    have h₁ := ih₁ nextVar (by omega)
+    have h₂ := ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega)
+    omega
+  | xor f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    have h₁ := ih₁ nextVar (by omega)
+    have h₂ := ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega)
+    omega
+
+/-- All variables appearing in the CNF produced by tseitinTransformGo are < nextVar + nAux. -/
+lemma tseitinTransformGo_vars_lt (f : BoolFormula) (nextVar : Var) (h_nextVar : nextVar > f.maxVar) :
+  let (cnf, outVar, nAux, nCl) := tseitinTransformGo f nextVar
+  ∀ lit, lit ∈ cnf.join → lit.var < nextVar + nAux := by
+  induction f generalizing nextVar with
+  | var v =>
+    simp [tseitinTransformGo]
+    tauto
+  | const b =>
+    cases b <;> simp [tseitinTransformGo, Literal.var] <;> tauto
+  | not f ih =>
+    simp [tseitinTransformGo]
+    intro lit h_lit
+    simp at h_lit
+    rcases h_lit with h_lit | h_lit
+    · -- lit ∈ cnf'
+      apply ih nextVar (by omega) lit h_lit
+      omega
+    · -- lit ∈ (tseitinNot y out).join
+      simp [tseitinNot] at h_lit
+      rcases h_lit with h_lit | h_lit <;> simp at h_lit
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := tseitinTransformGo_outVar_lt f nextVar (by omega)
+        omega
+  | and f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    intro lit h_lit
+    simp at h_lit
+    rcases h_lit with h_lit | h_lit | h_lit
+    · -- lit ∈ cnf₁
+      apply ih₁ nextVar (by omega) lit h_lit
+      omega
+    · -- lit ∈ cnf₂
+      apply ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) lit h_lit
+      omega
+    · -- lit ∈ (tseitinAnd y out₁ out₂).join
+      simp [tseitinAnd] at h_lit
+      rcases h_lit with h_lit | h_lit | h_lit <;> simp at h_lit
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := tseitinTransformGo_outVar_lt f₁ nextVar (by omega)
+        omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := tseitinTransformGo_outVar_lt f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega)
+        omega
+  | or f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    intro lit h_lit
+    simp at h_lit
+    rcases h_lit with h_lit | h_lit | h_lit
+    · -- lit ∈ cnf₁
+      apply ih₁ nextVar (by omega) lit h_lit
+      omega
+    · -- lit ∈ cnf₂
+      apply ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) lit h_lit
+      omega
+    · -- lit ∈ (tseitinOr y out₁ out₂).join
+      simp [tseitinOr] at h_lit
+      rcases h_lit with h_lit | h_lit | h_lit <;> simp at h_lit
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := tseitinTransformGo_outVar_lt f₁ nextVar (by omega)
+        omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := tseitinTransformGo_outVar_lt f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega)
+        omega
+  | implies f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    intro lit h_lit
+    simp at h_lit
+    rcases h_lit with h_lit | h_lit | h_lit
+    · -- lit ∈ cnf₁
+      apply ih₁ nextVar (by omega) lit h_lit
+      omega
+    · -- lit ∈ cnf₂
+      apply ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) lit h_lit
+      omega
+    · -- lit ∈ (tseitinImplies y out₁ out₂).join
+      simp [tseitinImplies] at h_lit
+      rcases h_lit with h_lit | h_lit | h_lit <;> simp at h_lit
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := tseitinTransformGo_outVar_lt f₁ nextVar (by omega)
+        omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := tseitinTransformGo_outVar_lt f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega)
+        omega
+  | xor f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo]
+    intro lit h_lit
+    simp at h_lit
+    rcases h_lit with h_lit | h_lit | h_lit
+    · -- lit ∈ cnf₁
+      apply ih₁ nextVar (by omega) lit h_lit
+      omega
+    · -- lit ∈ cnf₂
+      apply ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) lit h_lit
+      omega
+    · -- lit ∈ (tseitinXor y out₁ out₂).join
+      simp [tseitinXor] at h_lit
+      rcases h_lit with h_lit | h_lit | h_lit | h_lit <;> simp at h_lit
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> omega
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> omega
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := tseitinTransformGo_outVar_lt f₁ nextVar (by omega)
+        omega
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := tseitinTransformGo_outVar_lt f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega)
+        omega
+
+
+/-- For any assignment satisfying the CNF, the output variable equals the formula evaluation. -/
+lemma tseitinTransformGo_eval_eq (f : BoolFormula) (nextVar : Var) (h_nextVar : nextVar > f.maxVar) (a : Var → Bool) :
+  let (cnf, outVar, nAux, nCl) := tseitinTransformGo f nextVar
+  cnf.eval a = true → a outVar = f.eval a := by
+  induction f generalizing nextVar with
+  | var v =>
+    simp [tseitinTransformGo]
+  | const b =>
+    cases b <;> simp [tseitinTransformGo, CNF.eval, Clause.eval, Literal.eval]
+  | not f ih =>
+    simp [tseitinTransformGo, CNF.eval]
+    intro h_cnf
+    have h_cnf₁ : (tseitinTransformGo f nextVar).1.eval a = true := by
+      simp [h_cnf]
+    have h_out : a (tseitinTransformGo f nextVar).2.1 = f.eval a := ih nextVar (by omega) a h_cnf₁
+    have h_tseitin : (tseitinNot (nextVar + (tseitinTransformGo f nextVar).2.2.1) (tseitinTransformGo f nextVar).2.1).eval a = true := by
+      simp [h_cnf]
+    have h_y := (tseitinNot_correct (nextVar + (tseitinTransformGo f nextVar).2.2.1) (tseitinTransformGo f nextVar).2.1 a).mp h_tseitin
+    simp [h_y, h_out]
+  | and f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo, CNF.eval]
+    intro h_cnf
+    have h_cnf₁ : (tseitinTransformGo f₁ nextVar).1.eval a = true := by
+      simp [h_cnf]
+    have h_cnf₂ : (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1.eval a = true := by
+      simp [h_cnf]
+    have h_out₁ : a (tseitinTransformGo f₁ nextVar).2.1 = f₁.eval a := ih₁ nextVar (by omega) a h_cnf₁
+    have h_out₂ : a (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 = f₂.eval a := ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) a h_cnf₂
+    have h_tseitin : (tseitinAnd (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1).eval a = true := by
+      simp [h_cnf]
+    have h_y := (tseitinAnd_correct (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+    simp [h_y, h_out₁, h_out₂]
+  | or f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo, CNF.eval]
+    intro h_cnf
+    have h_cnf₁ : (tseitinTransformGo f₁ nextVar).1.eval a = true := by
+      simp [h_cnf]
+    have h_cnf₂ : (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1.eval a = true := by
+      simp [h_cnf]
+    have h_out₁ : a (tseitinTransformGo f₁ nextVar).2.1 = f₁.eval a := ih₁ nextVar (by omega) a h_cnf₁
+    have h_out₂ : a (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 = f₂.eval a := ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) a h_cnf₂
+    have h_tseitin : (tseitinOr (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1).eval a = true := by
+      simp [h_cnf]
+    have h_y := (tseitinOr_correct (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+    simp [h_y, h_out₁, h_out₂]
+  | implies f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo, CNF.eval]
+    intro h_cnf
+    have h_cnf₁ : (tseitinTransformGo f₁ nextVar).1.eval a = true := by
+      simp [h_cnf]
+    have h_cnf₂ : (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1.eval a = true := by
+      simp [h_cnf]
+    have h_out₁ : a (tseitinTransformGo f₁ nextVar).2.1 = f₁.eval a := ih₁ nextVar (by omega) a h_cnf₁
+    have h_out₂ : a (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 = f₂.eval a := ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) a h_cnf₂
+    have h_tseitin : (tseitinImplies (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1).eval a = true := by
+      simp [h_cnf]
+    have h_y := (tseitinImplies_correct (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+    simp [h_y, h_out₁, h_out₂]
+  | xor f₁ f₂ ih₁ ih₂ =>
+    simp [tseitinTransformGo, CNF.eval]
+    intro h_cnf
+    have h_cnf₁ : (tseitinTransformGo f₁ nextVar).1.eval a = true := by
+      simp [h_cnf]
+    have h_cnf₂ : (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1.eval a = true := by
+      simp [h_cnf]
+    have h_out₁ : a (tseitinTransformGo f₁ nextVar).2.1 = f₁.eval a := ih₁ nextVar (by omega) a h_cnf₁
+    have h_out₂ : a (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 = f₂.eval a := ih₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) a h_cnf₂
+    have h_tseitin : (tseitinXor (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1).eval a = true := by
+      simp [h_cnf]
+    have h_y := (tseitinXor_correct (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+    simp [h_y, h_out₁, h_out₂]
+
+
+theorem tseitinTransformGo_equisat (f : BoolFormula) (nextVar : Var) (h_nextVar : nextVar > f.maxVar) :
   let (cnf, outVar, nAux, nCl) := tseitinTransformGo f nextVar
   (∃ (assign : Var → Bool), f.eval assign = true) ↔
   (∃ (assign : Var → Bool), cnf.eval assign = true ∧ assign outVar = true) := by
@@ -297,22 +559,41 @@ theorem tseitinTransformGo_equisat (f : BoolFormula) (nextVar : Var) :
       simp [CNF.eval]
       constructor
       · -- cnf' is satisfied because y is fresh and does not appear in cnf'
-        try { tauto }
-        sorry
+        have h_agree : ∀ lit, lit ∈ (tseitinTransformGo f nextVar).1.join → (fun v => if v = nextVar + (tseitinTransformGo f nextVar).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (tseitinTransformGo f nextVar).2.2.1 := by
+            have h_bound := tseitinTransformGo_vars_lt f nextVar (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (tseitinTransformGo f nextVar).1 (fun v => if v = nextVar + (tseitinTransformGo f nextVar).2.2.1 then true else a v) a h_agree]
+        exact ha.1
       constructor
       · -- out' = false: follows from the Tseitin NOT encoding and f.eval a = false
+        have h_ne : (tseitinTransformGo f nextVar).2.1 ≠ nextVar + (tseitinTransformGo f nextVar).2.2.1 := by
+          have h_out := tseitinTransformGo_outVar_lt f nextVar (by omega)
+          omega
+        simp [h_ne]
         try { tauto }
-        sorry
       · -- y = true by construction
         simp
     · -- Backward: given a satisfying assignment for the CNF, restrict to original variables
       intro ⟨a, ha⟩
-      -- The assignment a satisfies cnf' with out' = false and y = true.
-      -- By the Tseitin NOT encoding, out' = false implies f.eval = false.
       use a
-      simp at ha ⊢
+      have h_cnf : (tseitinTransformGo f nextVar).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_out := tseitinTransformGo_eval_eq f nextVar (by omega) a h_cnf
+      have h_tseitin : (tseitinNot (nextVar + (tseitinTransformGo f nextVar).2.2.1) (tseitinTransformGo f nextVar).2.1).eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_y := (tseitinNot_correct (nextVar + (tseitinTransformGo f nextVar).2.2.1) (tseitinTransformGo f nextVar).2.1 a).mp h_tseitin
+      simp at h_y
+      have h_a_y : a (nextVar + (tseitinTransformGo f nextVar).2.2.1) = true := by
+        simp at ha
+        simp [ha]
+      rw [h_a_y] at h_y
+      simp [h_out] at h_y ⊢
       try { tauto }
-      sorry
   | and f₁ f₂ ih₁ ih₂ =>
     simp [tseitinTransformGo]
     rw [ih₁ nextVar]
@@ -332,28 +613,61 @@ theorem tseitinTransformGo_equisat (f : BoolFormula) (nextVar : Var) :
       simp [CNF.eval]
       constructor
       · -- cnf₁ is satisfied because y is fresh and does not appear in cnf₁
-        try { tauto }
-        sorry
+        have h_agree₁ : ∀ lit, lit ∈ (tseitinTransformGo f₁ nextVar).1.join → (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := tseitinTransformGo_vars_lt f₁ nextVar (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (tseitinTransformGo f₁ nextVar).1 (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₁]
+        exact ha.1.1
       constructor
       · -- cnf₂ is satisfied because y is fresh and does not appear in cnf₂
-        try { tauto }
-        sorry
+        have h_agree₂ : ∀ lit, lit ∈ (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1.join → (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := tseitinTransformGo_vars_lt f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1 (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₂]
+        exact ha.2.1
       constructor
       · -- out₁ = true
+        have h_ne₁ : (tseitinTransformGo f₁ nextVar).2.1 ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := tseitinTransformGo_outVar_lt f₁ nextVar (by omega)
+          omega
+        simp [h_ne₁]
         try { tauto }
-        sorry
       constructor
       · -- out₂ = true
+        have h_ne₂ : (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := tseitinTransformGo_outVar_lt f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega)
+          omega
+        simp [h_ne₂]
         try { tauto }
-        sorry
       · -- y = true by construction
         simp
     · -- Backward: given a satisfying assignment for the CNF, restrict to original variables
       intro ⟨a, ha⟩
       use a
-      simp at ha ⊢
+      have h_cnf₁ : (tseitinTransformGo f₁ nextVar).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_cnf₂ : (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_out₁ := tseitinTransformGo_eval_eq f₁ nextVar (by omega) a h_cnf₁
+      have h_out₂ := tseitinTransformGo_eval_eq f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) a h_cnf₂
+      have h_tseitin : (tseitinAnd (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1).eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_y := (tseitinAnd_correct (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+      have h_a_y : a (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) = true := by
+        simp at ha
+        simp [ha]
+      simp [h_a_y] at h_y
+      simp [h_out₁, h_out₂] at h_y ⊢
       try { tauto }
-      sorry
   | or f₁ f₂ ih₁ ih₂ =>
     simp [tseitinTransformGo]
     rw [ih₁ nextVar]
@@ -370,28 +684,61 @@ theorem tseitinTransformGo_equisat (f : BoolFormula) (nextVar : Var) :
       simp [CNF.eval]
       constructor
       · -- cnf₁ is satisfied because y is fresh and does not appear in cnf₁
-        try { tauto }
-        sorry
+        have h_agree₁ : ∀ lit, lit ∈ (tseitinTransformGo f₁ nextVar).1.join → (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := tseitinTransformGo_vars_lt f₁ nextVar (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (tseitinTransformGo f₁ nextVar).1 (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₁]
+        exact ha.1.1
       constructor
       · -- cnf₂ is satisfied because y is fresh and does not appear in cnf₂
-        try { tauto }
-        sorry
+        have h_agree₂ : ∀ lit, lit ∈ (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1.join → (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := tseitinTransformGo_vars_lt f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1 (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₂]
+        exact ha.2.1
       constructor
       · -- out₁ = true
+        have h_ne₁ : (tseitinTransformGo f₁ nextVar).2.1 ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := tseitinTransformGo_outVar_lt f₁ nextVar (by omega)
+          omega
+        simp [h_ne₁]
         try { tauto }
-        sorry
       constructor
       · -- out₂ = true
+        have h_ne₂ : (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := tseitinTransformGo_outVar_lt f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega)
+          omega
+        simp [h_ne₂]
         try { tauto }
-        sorry
       · -- y = true by construction
         simp
     · -- Backward: given a satisfying assignment for the CNF, restrict to original variables
       intro ⟨a, ha⟩
       use a
-      simp at ha ⊢
+      have h_cnf₁ : (tseitinTransformGo f₁ nextVar).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_cnf₂ : (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_out₁ := tseitinTransformGo_eval_eq f₁ nextVar (by omega) a h_cnf₁
+      have h_out₂ := tseitinTransformGo_eval_eq f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) a h_cnf₂
+      have h_tseitin : (tseitinAnd (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1).eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_y := (tseitinAnd_correct (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+      have h_a_y : a (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) = true := by
+        simp at ha
+        simp [ha]
+      simp [h_a_y] at h_y
+      simp [h_out₁, h_out₂] at h_y ⊢
       try { tauto }
-      sorry
   | implies f₁ f₂ ih₁ ih₂ =>
     simp [tseitinTransformGo]
     rw [ih₁ nextVar]
@@ -408,28 +755,61 @@ theorem tseitinTransformGo_equisat (f : BoolFormula) (nextVar : Var) :
       simp [CNF.eval]
       constructor
       · -- cnf₁ is satisfied because y is fresh and does not appear in cnf₁
-        try { tauto }
-        sorry
+        have h_agree₁ : ∀ lit, lit ∈ (tseitinTransformGo f₁ nextVar).1.join → (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := tseitinTransformGo_vars_lt f₁ nextVar (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (tseitinTransformGo f₁ nextVar).1 (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₁]
+        exact ha.1.1
       constructor
       · -- cnf₂ is satisfied because y is fresh and does not appear in cnf₂
-        try { tauto }
-        sorry
+        have h_agree₂ : ∀ lit, lit ∈ (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1.join → (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := tseitinTransformGo_vars_lt f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1 (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₂]
+        exact ha.2.1
       constructor
       · -- out₁ = true
+        have h_ne₁ : (tseitinTransformGo f₁ nextVar).2.1 ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := tseitinTransformGo_outVar_lt f₁ nextVar (by omega)
+          omega
+        simp [h_ne₁]
         try { tauto }
-        sorry
       constructor
       · -- out₂ = true
+        have h_ne₂ : (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := tseitinTransformGo_outVar_lt f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega)
+          omega
+        simp [h_ne₂]
         try { tauto }
-        sorry
       · -- y = true by construction
         simp
     · -- Backward: given a satisfying assignment for the CNF, restrict to original variables
       intro ⟨a, ha⟩
       use a
-      simp at ha ⊢
+      have h_cnf₁ : (tseitinTransformGo f₁ nextVar).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_cnf₂ : (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_out₁ := tseitinTransformGo_eval_eq f₁ nextVar (by omega) a h_cnf₁
+      have h_out₂ := tseitinTransformGo_eval_eq f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) a h_cnf₂
+      have h_tseitin : (tseitinAnd (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1).eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_y := (tseitinAnd_correct (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+      have h_a_y : a (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) = true := by
+        simp at ha
+        simp [ha]
+      simp [h_a_y] at h_y
+      simp [h_out₁, h_out₂] at h_y ⊢
       try { tauto }
-      sorry
   | xor f₁ f₂ ih₁ ih₂ =>
     simp [tseitinTransformGo]
     rw [ih₁ nextVar]
@@ -446,28 +826,61 @@ theorem tseitinTransformGo_equisat (f : BoolFormula) (nextVar : Var) :
       simp [CNF.eval]
       constructor
       · -- cnf₁ is satisfied because y is fresh and does not appear in cnf₁
-        try { tauto }
-        sorry
+        have h_agree₁ : ∀ lit, lit ∈ (tseitinTransformGo f₁ nextVar).1.join → (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := tseitinTransformGo_vars_lt f₁ nextVar (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (tseitinTransformGo f₁ nextVar).1 (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₁]
+        exact ha.1.1
       constructor
       · -- cnf₂ is satisfied because y is fresh and does not appear in cnf₂
-        try { tauto }
-        sorry
+        have h_agree₂ : ∀ lit, lit ∈ (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1.join → (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := tseitinTransformGo_vars_lt f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1 (fun v => if v = nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₂]
+        exact ha.2.1
       constructor
       · -- out₁ = true
+        have h_ne₁ : (tseitinTransformGo f₁ nextVar).2.1 ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := tseitinTransformGo_outVar_lt f₁ nextVar (by omega)
+          omega
+        simp [h_ne₁]
         try { tauto }
-        sorry
       constructor
       · -- out₂ = true
+        have h_ne₂ : (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 ≠ nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := tseitinTransformGo_outVar_lt f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega)
+          omega
+        simp [h_ne₂]
         try { tauto }
-        sorry
       · -- y = true by construction
         simp
     · -- Backward: given a satisfying assignment for the CNF, restrict to original variables
       intro ⟨a, ha⟩
       use a
-      simp at ha ⊢
+      have h_cnf₁ : (tseitinTransformGo f₁ nextVar).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_cnf₂ : (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_out₁ := tseitinTransformGo_eval_eq f₁ nextVar (by omega) a h_cnf₁
+      have h_out₂ := tseitinTransformGo_eval_eq f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1) (by omega) a h_cnf₂
+      have h_tseitin : (tseitinAnd (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1).eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_y := (tseitinAnd_correct (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) (tseitinTransformGo f₁ nextVar).2.1 (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+      have h_a_y : a (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1 + (tseitinTransformGo f₂ (nextVar + (tseitinTransformGo f₁ nextVar).2.2.1)).2.2.1) = true := by
+        simp at ha
+        simp [ha]
+      simp [h_a_y] at h_y
+      simp [h_out₁, h_out₂] at h_y ⊢
       try { tauto }
-      sorry
 
 /-- The Tseitin CNF is satisfiable iff the original formula is satisfiable.
     This is the core correctness property of the Tseitin transformation. -/
@@ -475,7 +888,7 @@ theorem equisatisfiable (f : BoolFormula) :
   (∃ (assign : Var → Bool), f.eval assign = true) ↔
   (∃ (assign : Var → Bool), (tseitinTransform f).cnf.eval assign = true) := by
   simp [tseitinTransform, CNF.eval]
-  rw [tseitinTransformGo_equisat f (f.maxVar + 1)]
+  rw [tseitinTransformGo_equisat f (f.maxVar + 1) (by omega)]
   simp
 
 /-- Tseitin transformation preserves unsatisfiability.
@@ -655,17 +1068,596 @@ namespace CircuitSATResult
     (CircuitGate is inductive), so the same bottom-up argument applies. -/
 theorem equisatisfiable (c : Circuit) :
   Circuit.CircuitSAT c ↔ CNF.Satisfiable (circuitToSAT c).cnf := by
-  -- Proof by structural induction on the circuit gate, using tseitin*_correct
-  -- lemmas for each gate type. The root unit clause asserts the output variable is true.
-  sorry
+  simp [Circuit.CircuitSAT, Circuit.eval, CNF.Satisfiable, circuitToSAT, CNF.eval]
+  rw [circuitToSATGo_equisat c.gate (c.gate.maxVar + 1) (by omega)]
+  simp [circuitToSATGo]
+
+/-- Core equisatisfiability lemma for circuitToSATGo, analogous to tseitinTransformGo_equisat. -/
+/-- For any assignment satisfying the CNF, the output variable equals the gate evaluation. -/
+lemma circuitToSATGo_eval_eq (g : CircuitGate) (nextVar : Var) (h_nextVar : nextVar > g.maxVar) (a : Var → Bool) :
+  let (cnf, outVar, nAux, nCl) := circuitToSATGo g nextVar
+  cnf.eval a = true → a outVar = g.eval a := by
+  induction g generalizing nextVar with
+  | input v =>
+    simp [circuitToSATGo]
+  | const b =>
+    cases b <;> simp [circuitToSATGo, CNF.eval, Clause.eval, Literal.eval]
+  | not g ih =>
+    simp [circuitToSATGo, CNF.eval]
+    intro h_cnf
+    have h_cnf₁ : (circuitToSATGo g nextVar).1.eval a = true := by
+      simp [h_cnf]
+    have h_out : a (circuitToSATGo g nextVar).2.1 = g.eval a := ih nextVar (by omega) a h_cnf₁
+    have h_tseitin : (tseitinNot (nextVar + (circuitToSATGo g nextVar).2.2.1) (circuitToSATGo g nextVar).2.1).eval a = true := by
+      simp [h_cnf]
+    have h_y := (tseitinNot_correct (nextVar + (circuitToSATGo g nextVar).2.2.1) (circuitToSATGo g nextVar).2.1 a).mp h_tseitin
+    simp [h_y, h_out]
+  | and g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo, CNF.eval]
+    intro h_cnf
+    have h_cnf₁ : (circuitToSATGo g₁ nextVar).1.eval a = true := by
+      simp [h_cnf]
+    have h_cnf₂ : (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1.eval a = true := by
+      simp [h_cnf]
+    have h_out₁ : a (circuitToSATGo g₁ nextVar).2.1 = g₁.eval a := ih₁ nextVar (by omega) a h_cnf₁
+    have h_out₂ : a (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 = g₂.eval a := ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) a h_cnf₂
+    have h_tseitin : (tseitinAnd (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1).eval a = true := by
+      simp [h_cnf]
+    have h_y := (tseitinAnd_correct (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+    simp [h_y, h_out₁, h_out₂]
+  | or g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo, CNF.eval]
+    intro h_cnf
+    have h_cnf₁ : (circuitToSATGo g₁ nextVar).1.eval a = true := by
+      simp [h_cnf]
+    have h_cnf₂ : (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1.eval a = true := by
+      simp [h_cnf]
+    have h_out₁ : a (circuitToSATGo g₁ nextVar).2.1 = g₁.eval a := ih₁ nextVar (by omega) a h_cnf₁
+    have h_out₂ : a (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 = g₂.eval a := ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) a h_cnf₂
+    have h_tseitin : (tseitinOr (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1).eval a = true := by
+      simp [h_cnf]
+    have h_y := (tseitinOr_correct (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+    simp [h_y, h_out₁, h_out₂]
+  | xor g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo, CNF.eval]
+    intro h_cnf
+    have h_cnf₁ : (circuitToSATGo g₁ nextVar).1.eval a = true := by
+      simp [h_cnf]
+    have h_cnf₂ : (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1.eval a = true := by
+      simp [h_cnf]
+    have h_out₁ : a (circuitToSATGo g₁ nextVar).2.1 = g₁.eval a := ih₁ nextVar (by omega) a h_cnf₁
+    have h_out₂ : a (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 = g₂.eval a := ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) a h_cnf₂
+    have h_tseitin : (tseitinXor (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1).eval a = true := by
+      simp [h_cnf]
+    have h_y := (tseitinXor_correct (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+    simp [h_y, h_out₁, h_out₂]
+  | nand g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo, CNF.eval]
+    intro h_cnf
+    have h_cnf₁ : (circuitToSATGo g₁ nextVar).1.eval a = true := by
+      simp [h_cnf]
+    have h_cnf₂ : (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1.eval a = true := by
+      simp [h_cnf]
+    have h_out₁ : a (circuitToSATGo g₁ nextVar).2.1 = g₁.eval a := ih₁ nextVar (by omega) a h_cnf₁
+    have h_out₂ : a (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 = g₂.eval a := ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) a h_cnf₂
+    have h_tseitin : (tseitinNand (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1).eval a = true := by
+      simp [h_cnf]
+    have h_y := (tseitinNand_correct (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+    simp [h_y, h_out₁, h_out₂]
+
+
+lemma circuitToSATGo_equisat (g : CircuitGate) (nextVar : Var) (h_nextVar : nextVar > g.maxVar) :
+  let (cnf, outVar, nAux, nCl) := circuitToSATGo g nextVar
+  (∃ (assign : Var → Bool), g.eval assign = true) ↔
+  (∃ (assign : Var → Bool), cnf.eval assign = true ∧ assign outVar = true) := by
+  induction g generalizing nextVar with
+  | input v =>
+    simp [circuitToSATGo, CNF.eval]
+    tauto
+  | const b =>
+    cases b <;> simp [circuitToSATGo, CNF.eval, Clause.eval, Literal.eval]
+    · tauto
+    · tauto
+  | not g ih =>
+    simp [circuitToSATGo]
+    rw [ih nextVar (by omega)]
+    simp [tseitinNot_correct]
+    constructor
+    · -- Forward
+      intro ⟨a, ha⟩
+      use fun v => if v = nextVar + (circuitToSATGo g nextVar).2.2.1 then true else a v
+      simp [CNF.eval]
+      constructor
+      · -- cnf' satisfied
+        have h_agree : ∀ lit, lit ∈ (circuitToSATGo g nextVar).1.join → (fun v => if v = nextVar + (circuitToSATGo g nextVar).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (circuitToSATGo g nextVar).2.2.1 := by
+            have h_bound := circuitToSATGo_vars_lt g nextVar (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (circuitToSATGo g nextVar).1 (fun v => if v = nextVar + (circuitToSATGo g nextVar).2.2.1 then true else a v) a h_agree]
+        exact ha.1
+      constructor
+      · -- tseitinNot clause
+        have h_ne : (circuitToSATGo g nextVar).2.1 ≠ nextVar + (circuitToSATGo g nextVar).2.2.1 := by
+          have h_out := circuitToSATGo_outVar_lt g nextVar (by omega)
+          omega
+        simp [h_ne]
+        try { tauto }
+      · -- y = true
+        simp
+    · -- Backward
+      intro ⟨a, ha⟩
+      use a
+      have h_cnf : (circuitToSATGo g nextVar).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_out := circuitToSATGo_eval_eq g nextVar (by omega) a h_cnf
+      have h_tseitin : (tseitinNot (nextVar + (circuitToSATGo g nextVar).2.2.1) (circuitToSATGo g nextVar).2.1).eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_y := (tseitinNot_correct (nextVar + (circuitToSATGo g nextVar).2.2.1) (circuitToSATGo g nextVar).2.1 a).mp h_tseitin
+      have h_a_y : a (nextVar + (circuitToSATGo g nextVar).2.2.1) = true := by
+        simp at ha
+        simp [ha]
+      simp [h_a_y] at h_y
+      simp [h_out] at h_y ⊢
+      try { tauto }
+  | and g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    rw [ih₁ nextVar (by omega)]
+    rw [ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)]
+    simp [tseitinAnd_correct]
+    constructor
+    · -- Forward
+      intro ⟨a, ha⟩
+      use fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v
+      simp [CNF.eval]
+      constructor
+      · -- cnf₁ satisfied
+        have h_agree₁ : ∀ lit, lit ∈ (circuitToSATGo g₁ nextVar).1.join → (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := circuitToSATGo_vars_lt g₁ nextVar (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (circuitToSATGo g₁ nextVar).1 (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₁]
+        exact ha.1.1
+      constructor
+      · -- cnf₂ satisfied
+        have h_agree₂ : ∀ lit, lit ∈ (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1.join → (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := circuitToSATGo_vars_lt g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1 (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₂]
+        exact ha.2.1
+      constructor
+      · -- out₁ = true
+        have h_ne₁ : (circuitToSATGo g₁ nextVar).2.1 ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := circuitToSATGo_outVar_lt g₁ nextVar (by omega)
+          omega
+        simp [h_ne₁]
+        try { tauto }
+      constructor
+      · -- out₂ = true
+        have h_ne₂ : (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := circuitToSATGo_outVar_lt g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)
+          omega
+        simp [h_ne₂]
+        try { tauto }
+      · -- y = true
+        simp
+    · -- Backward
+      intro ⟨a, ha⟩
+      use a
+      have h_cnf₁ : (circuitToSATGo g₁ nextVar).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_cnf₂ : (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_out₁ := circuitToSATGo_eval_eq g₁ nextVar (by omega) a h_cnf₁
+      have h_out₂ := circuitToSATGo_eval_eq g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) a h_cnf₂
+      have h_tseitin : (tseitinAnd (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1).eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_y := (tseitinAnd_correct (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+      have h_a_y : a (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) = true := by
+        simp at ha
+        simp [ha]
+      simp [h_a_y] at h_y
+      simp [h_out₁, h_out₂] at h_y ⊢
+      try { tauto }
+  | or g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    rw [ih₁ nextVar (by omega)]
+    rw [ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)]
+    simp [tseitinOr_correct]
+    constructor
+    · -- Forward
+      intro ⟨a, ha⟩
+      use fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v
+      simp [CNF.eval]
+      constructor
+      · -- cnf₁ satisfied
+        have h_agree₁ : ∀ lit, lit ∈ (circuitToSATGo g₁ nextVar).1.join → (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := circuitToSATGo_vars_lt g₁ nextVar (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (circuitToSATGo g₁ nextVar).1 (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₁]
+        exact ha.1.1
+      constructor
+      · -- cnf₂ satisfied
+        have h_agree₂ : ∀ lit, lit ∈ (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1.join → (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := circuitToSATGo_vars_lt g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1 (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₂]
+        exact ha.2.1
+      constructor
+      · -- out₁ = true
+        have h_ne₁ : (circuitToSATGo g₁ nextVar).2.1 ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := circuitToSATGo_outVar_lt g₁ nextVar (by omega)
+          omega
+        simp [h_ne₁]
+        try { tauto }
+      constructor
+      · -- out₂ = true
+        have h_ne₂ : (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := circuitToSATGo_outVar_lt g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)
+          omega
+        simp [h_ne₂]
+        try { tauto }
+      · -- y = true
+        simp
+    · -- Backward
+      intro ⟨a, ha⟩
+      use a
+      have h_cnf₁ : (circuitToSATGo g₁ nextVar).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_cnf₂ : (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_out₁ := circuitToSATGo_eval_eq g₁ nextVar (by omega) a h_cnf₁
+      have h_out₂ := circuitToSATGo_eval_eq g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) a h_cnf₂
+      have h_tseitin : (tseitinAnd (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1).eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_y := (tseitinAnd_correct (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+      have h_a_y : a (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) = true := by
+        simp at ha
+        simp [ha]
+      simp [h_a_y] at h_y
+      simp [h_out₁, h_out₂] at h_y ⊢
+      try { tauto }
+  | xor g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    rw [ih₁ nextVar (by omega)]
+    rw [ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)]
+    simp [tseitinXor_correct]
+    constructor
+    · -- Forward
+      intro ⟨a, ha⟩
+      use fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v
+      simp [CNF.eval]
+      constructor
+      · -- cnf₁ satisfied
+        have h_agree₁ : ∀ lit, lit ∈ (circuitToSATGo g₁ nextVar).1.join → (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := circuitToSATGo_vars_lt g₁ nextVar (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (circuitToSATGo g₁ nextVar).1 (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₁]
+        exact ha.1.1
+      constructor
+      · -- cnf₂ satisfied
+        have h_agree₂ : ∀ lit, lit ∈ (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1.join → (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := circuitToSATGo_vars_lt g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1 (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₂]
+        exact ha.2.1
+      constructor
+      · -- out₁ = true
+        have h_ne₁ : (circuitToSATGo g₁ nextVar).2.1 ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := circuitToSATGo_outVar_lt g₁ nextVar (by omega)
+          omega
+        simp [h_ne₁]
+        try { tauto }
+      constructor
+      · -- out₂ = true
+        have h_ne₂ : (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := circuitToSATGo_outVar_lt g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)
+          omega
+        simp [h_ne₂]
+        try { tauto }
+      · -- y = true
+        simp
+    · -- Backward
+      intro ⟨a, ha⟩
+      use a
+      have h_cnf₁ : (circuitToSATGo g₁ nextVar).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_cnf₂ : (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_out₁ := circuitToSATGo_eval_eq g₁ nextVar (by omega) a h_cnf₁
+      have h_out₂ := circuitToSATGo_eval_eq g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) a h_cnf₂
+      have h_tseitin : (tseitinAnd (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1).eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_y := (tseitinAnd_correct (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+      have h_a_y : a (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) = true := by
+        simp at ha
+        simp [ha]
+      simp [h_a_y] at h_y
+      simp [h_out₁, h_out₂] at h_y ⊢
+      try { tauto }
+  | nand g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    rw [ih₁ nextVar (by omega)]
+    rw [ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)]
+    simp [tseitinNand_correct]
+    constructor
+    · -- Forward
+      intro ⟨a, ha⟩
+      use fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v
+      simp [CNF.eval]
+      constructor
+      · -- cnf₁ satisfied
+        have h_agree₁ : ∀ lit, lit ∈ (circuitToSATGo g₁ nextVar).1.join → (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := circuitToSATGo_vars_lt g₁ nextVar (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (circuitToSATGo g₁ nextVar).1 (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₁]
+        exact ha.1.1
+      constructor
+      · -- cnf₂ satisfied
+        have h_agree₂ : ∀ lit, lit ∈ (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1.join → (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) lit.var = a lit.var := by
+          intro lit h_lit
+          have h_ne : lit.var ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+            have h_bound := circuitToSATGo_vars_lt g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) lit h_lit
+            omega
+          simp [h_ne]
+        rw [CNF.eval_eq_of_agree (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1 (fun v => if v = nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 then true else a v) a h_agree₂]
+        exact ha.2.1
+      constructor
+      · -- out₁ = true
+        have h_ne₁ : (circuitToSATGo g₁ nextVar).2.1 ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := circuitToSATGo_outVar_lt g₁ nextVar (by omega)
+          omega
+        simp [h_ne₁]
+        try { tauto }
+      constructor
+      · -- out₂ = true
+        have h_ne₂ : (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 ≠ nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1 := by
+          have h_out := circuitToSATGo_outVar_lt g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)
+          omega
+        simp [h_ne₂]
+        try { tauto }
+      · -- y = true
+        simp
+    · -- Backward
+      intro ⟨a, ha⟩
+      use a
+      have h_cnf₁ : (circuitToSATGo g₁ nextVar).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_cnf₂ : (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).1.eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_out₁ := circuitToSATGo_eval_eq g₁ nextVar (by omega) a h_cnf₁
+      have h_out₂ := circuitToSATGo_eval_eq g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) a h_cnf₂
+      have h_tseitin : (tseitinAnd (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1).eval a = true := by
+        simp at ha
+        simp [ha]
+      have h_y := (tseitinAnd_correct (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) (circuitToSATGo g₁ nextVar).2.1 (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.1 a).mp h_tseitin
+      have h_a_y : a (nextVar + (circuitToSATGo g₁ nextVar).2.2.1 + (circuitToSATGo g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1)).2.2.1) = true := by
+        simp at ha
+        simp [ha]
+      simp [h_a_y] at h_y
+      simp [h_out₁, h_out₂] at h_y ⊢
+      try { tauto }
+
+/-- The output variable of circuitToSATGo is strictly less than nextVar + nAux. -/
+lemma circuitToSATGo_outVar_lt (g : CircuitGate) (nextVar : Var) (h_nextVar : nextVar > g.maxVar) :
+  let (cnf, outVar, nAux, nCl) := circuitToSATGo g nextVar
+  outVar < nextVar + nAux := by
+  induction g generalizing nextVar with
+  | input v => simp [circuitToSATGo]; omega
+  | const b => cases b <;> simp [circuitToSATGo]; omega
+  | not g ih =>
+    simp [circuitToSATGo]
+    have h := ih nextVar (by omega)
+    omega
+  | and g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    have h₁ := ih₁ nextVar (by omega)
+    have h₂ := ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)
+    omega
+  | or g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    have h₁ := ih₁ nextVar (by omega)
+    have h₂ := ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)
+    omega
+  | xor g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    have h₁ := ih₁ nextVar (by omega)
+    have h₂ := ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)
+    omega
+  | nand g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    have h₁ := ih₁ nextVar (by omega)
+    have h₂ := ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)
+    omega
+
+/-- All variables appearing in the CNF produced by circuitToSATGo are < nextVar + nAux. -/
+lemma circuitToSATGo_vars_lt (g : CircuitGate) (nextVar : Var) (h_nextVar : nextVar > g.maxVar) :
+  let (cnf, outVar, nAux, nCl) := circuitToSATGo g nextVar
+  ∀ lit, lit ∈ cnf.join → lit.var < nextVar + nAux := by
+  induction g generalizing nextVar with
+  | input v =>
+    simp [circuitToSATGo]
+    tauto
+  | const b =>
+    cases b <;> simp [circuitToSATGo, Literal.var] <;> tauto
+  | not g ih =>
+    simp [circuitToSATGo]
+    intro lit h_lit
+    simp at h_lit
+    rcases h_lit with h_lit | h_lit
+    · -- lit ∈ cnf'
+      apply ih nextVar (by omega) lit h_lit
+      omega
+    · -- lit ∈ (tseitinNot y out).join
+      simp [tseitinNot] at h_lit
+      rcases h_lit with h_lit | h_lit <;> simp at h_lit
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := circuitToSATGo_outVar_lt g nextVar (by omega)
+        omega
+  | and g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    intro lit h_lit
+    simp at h_lit
+    rcases h_lit with h_lit | h_lit | h_lit
+    · -- lit ∈ cnf₁
+      apply ih₁ nextVar (by omega) lit h_lit
+      omega
+    · -- lit ∈ cnf₂
+      apply ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) lit h_lit
+      omega
+    · -- lit ∈ (tseitinAnd y out₁ out₂).join
+      simp [tseitinAnd] at h_lit
+      rcases h_lit with h_lit | h_lit | h_lit <;> simp at h_lit
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := circuitToSATGo_outVar_lt g₁ nextVar (by omega)
+        omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := circuitToSATGo_outVar_lt g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)
+        omega
+  | or g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    intro lit h_lit
+    simp at h_lit
+    rcases h_lit with h_lit | h_lit | h_lit
+    · -- lit ∈ cnf₁
+      apply ih₁ nextVar (by omega) lit h_lit
+      omega
+    · -- lit ∈ cnf₂
+      apply ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) lit h_lit
+      omega
+    · -- lit ∈ (tseitinOr y out₁ out₂).join
+      simp [tseitinOr] at h_lit
+      rcases h_lit with h_lit | h_lit | h_lit <;> simp at h_lit
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := circuitToSATGo_outVar_lt g₁ nextVar (by omega)
+        omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := circuitToSATGo_outVar_lt g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)
+        omega
+  | xor g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    intro lit h_lit
+    simp at h_lit
+    rcases h_lit with h_lit | h_lit | h_lit
+    · -- lit ∈ cnf₁
+      apply ih₁ nextVar (by omega) lit h_lit
+      omega
+    · -- lit ∈ cnf₂
+      apply ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) lit h_lit
+      omega
+    · -- lit ∈ (tseitinXor y out₁ out₂).join
+      simp [tseitinXor] at h_lit
+      rcases h_lit with h_lit | h_lit | h_lit | h_lit <;> simp at h_lit
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> omega
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> omega
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := circuitToSATGo_outVar_lt g₁ nextVar (by omega)
+        omega
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := circuitToSATGo_outVar_lt g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)
+        omega
+  | nand g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    intro lit h_lit
+    simp at h_lit
+    rcases h_lit with h_lit | h_lit | h_lit
+    · -- lit ∈ cnf₁
+      apply ih₁ nextVar (by omega) lit h_lit
+      omega
+    · -- lit ∈ cnf₂
+      apply ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega) lit h_lit
+      omega
+    · -- lit ∈ (tseitinNand y out₁ out₂).join
+      simp [tseitinNand] at h_lit
+      rcases h_lit with h_lit | h_lit | h_lit <;> simp at h_lit
+      · rcases h_lit with h_lit | h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := circuitToSATGo_outVar_lt g₁ nextVar (by omega)
+        omega
+      · rcases h_lit with h_lit | h_lit <;> rw [h_lit] <;> simp [Literal.var] <;> try { omega }
+        have h_out := circuitToSATGo_outVar_lt g₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) (by omega)
+        omega
+
 
 /-- Circuit-to-SAT reduction is linear in circuit size.
     Proven by structural induction on the circuit gate, analogous to
     tseitinTransformGo_linearSize. -/
 theorem linearSize (c : Circuit) :
   (circuitToSAT c).numGateVars ≤ c.size + 1 ∧ (circuitToSAT c).numClauses ≤ 4 * c.size + 1 := by
-  -- Structural induction on the circuit gate.
-  sorry
+  simp [circuitToSAT]
+  have h := circuitToSATGo_linearSize c.gate (c.gate.maxVar + 1)
+  simp at h
+  constructor <;> omega
+
+/-- Linear size bound for circuitToSATGo. -/
+lemma circuitToSATGo_linearSize (g : CircuitGate) (nextVar : Var) :
+  let (cnf, outVar, nAux, nCl) := circuitToSATGo g nextVar
+  nAux ≤ g.size ∧ nCl ≤ 4 * g.size - 3 := by
+  induction g generalizing nextVar with
+  | input v => simp [circuitToSATGo]; constructor <;> omega
+  | const b => cases b <;> simp [circuitToSATGo]; constructor <;> omega
+  | not g ih =>
+    simp [circuitToSATGo]
+    rcases ih nextVar with ⟨h₁, h₂⟩
+    constructor <;> omega
+  | and g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    rcases ih₁ nextVar with ⟨h₁₁, h₁₂⟩
+    rcases ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) with ⟨h₂₁, h₂₂⟩
+    constructor <;> omega
+  | or g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    rcases ih₁ nextVar with ⟨h₁₁, h₁₂⟩
+    rcases ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) with ⟨h₂₁, h₂₂⟩
+    constructor <;> omega
+  | xor g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    rcases ih₁ nextVar with ⟨h₁₁, h₁₂⟩
+    rcases ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) with ⟨h₂₁, h₂₂⟩
+    constructor <;> omega
+  | nand g₁ g₂ ih₁ ih₂ =>
+    simp [circuitToSATGo]
+    rcases ih₁ nextVar with ⟨h₁₁, h₁₂⟩
+    rcases ih₂ (nextVar + (circuitToSATGo g₁ nextVar).2.2.1) with ⟨h₂₁, h₂₂⟩
+    constructor <;> omega
+
 
 end CircuitSATResult
 
