@@ -116,12 +116,25 @@ axiom equisatisfiable (f : BoolFormula) (result : TseitinResult) :
   -- & Barak 2009, Theorem 2.13).
 
 /-- Tseitin transformation preserves unsatisfiability.
-    If the original formula is UNSAT, so is the CNF. -/
-axiom unsatPreserved (f : BoolFormula) (result : TseitinResult) :
+    If the original formula is UNSAT, so is the CNF.
+    Proven as a corollary of equisatisfiability (contrapositive). -/
+theorem unsatPreserved (f : BoolFormula) (result : TseitinResult) :
   (∀ (assign : Var → Bool), f.eval assign = false) →
-  (∀ (assign : Var → Bool), result.cnf.eval assign = false)
-  -- Corollary of equisatisfiability: the contrapositive of the forward
-  -- direction. Postulated as it follows directly from equisatisfiable.
+  (∀ (assign : Var → Bool), result.cnf.eval assign = false) := by
+  intro h_unsat assign
+  by_contra h
+  -- h : ¬(result.cnf.eval assign = false), so result.cnf.eval assign = true
+  have h_cnf : result.cnf.eval assign = true := by
+    simp at h
+    exact h
+  -- CNF is satisfiable, so by equisatisfiable (backward direction), original formula is satisfiable
+  have h_f_sat : ∃ (a : Var → Bool), f.eval a = true :=
+    (equisatisfiable f result).mpr ⟨assign, h_cnf⟩
+  obtain ⟨a', ha'⟩ := h_f_sat
+  -- But h_unsat says formula is unsatisfiable: contradiction
+  have h_false := h_unsat a'
+  rw [ha'] at h_false
+  all_goals contradiction
 
 /-- Tseitin transformation produces a linear-size CNF.
     The number of auxiliary variables and clauses is O(|f|). -/
