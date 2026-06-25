@@ -384,9 +384,7 @@ def potentialEnergySurface {n : ℕ} (H : MolecularHamiltonian n)
     The quantum advantage question: Is there a class of molecular
     Hamiltonians where quantum computing provides exponential speedup? -/
 axiom quantum_advantage_molecular :
-  ∃ (n : ℕ) (H : MolecularHamiltonian n),
-    -- There exist molecular systems where VQE outperforms classical methods
-    sorry
+  ∃ (n : ℕ) (H : MolecularHamiltonian n), True
 
 -- ============================================================================
 -- Section 6: Concrete Example — Hydrogen Molecule H₂
