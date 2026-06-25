@@ -58,5 +58,6 @@ lean_lib «SylvaFormalization» where
     `NumberTheoryPhysics,
     `MathematicalTools.ProofPatternLibrary,
     `SYLVA_Hierarchy,
-    `SYLVA_Meta
+    `SYLVA_Meta,
+    `TopologicalQuantumComputing
   ]
