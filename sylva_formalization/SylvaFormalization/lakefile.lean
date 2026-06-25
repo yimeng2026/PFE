@@ -65,5 +65,7 @@ lean_lib «SylvaFormalization» where
     `SYLVA_Incompleteness,
     `SYLVA_Information,
     `SYLVA_Computability,
+    `SYLVA_Dynamics,
+    `SYLVA_Causality,
     `TopologicalQuantumComputing
   ]
