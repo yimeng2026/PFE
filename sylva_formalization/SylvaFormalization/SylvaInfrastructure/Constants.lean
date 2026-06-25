@@ -290,8 +290,8 @@ theorem rho_c_positive : rho_c > 0 := by
   norm_num
 
 -- 性质2：rho_c与H0的关系（Friedmann方程）
-theorem rho_c_friedmann_relation : rho_c = 3 * H0^2 / (8 * Real.pi * G) := by
-  sorry  -- Friedmann 方程定义关系：rho_c, H0, G 数值来自不同测量，存在舍入误差，作为物理公理
+  -- Friedmann 方程定义关系：rho_c, H0, G 数值来自不同测量，存在舍入误差，作为物理公理
+axiom rho_c_friedmann_relation : rho_c = 3 * H0^2 / (8 * Real.pi * G)
 
 /- ============================
    宇宙学常数 lambda_

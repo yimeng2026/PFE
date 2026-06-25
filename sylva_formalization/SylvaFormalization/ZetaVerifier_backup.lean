@@ -139,7 +139,66 @@ theorem zero_count_correct (hT : ZETA_ZERO_4 < T) : zeroCountUpTo T = 4 := by
 -- Error bound in verified region
 theorem error_bound_verified_region (T : ℝ) (hT : 0 < T ∧ T ≤ 100) :
     |(zeroCountUpTo T : ℝ) - T / (2 * Real.pi) * Real.log (T / (2 * Real.pi))| ≤ 50 := by
-  sorry
+  have hN : (zeroCountUpTo T : ℝ) ≤ 4 := by
+    simp [zeroCountUpTo]
+    split_ifs <;> norm_num
+  have h1 : |((zeroCountUpTo T : ℝ) - T / (2 * Real.pi) * Real.log (T / (2 * Real.pi)))| ≤
+    |(zeroCountUpTo T : ℝ)| + |T / (2 * Real.pi) * Real.log (T / (2 * Real.pi))| := by
+    apply abs_sub
+  have h2 : |(zeroCountUpTo T : ℝ)| ≤ 4 := by
+    rw [abs_of_nonneg (show (0 : ℝ) ≤ (zeroCountUpTo T : ℝ) by exact_mod_cast Nat.zero_le _)]
+    exact_mod_cast hN
+  have h3 : |T / (2 * Real.pi) * Real.log (T / (2 * Real.pi))| ≤ 46 := by
+    let u := T / (2 * Real.pi)
+    have hu_pos : 0 < u := by
+      apply div_pos
+      · exact hT.1
+      · linarith [Real.pi_pos]
+    by_cases h : u ≤ 1
+    · -- u ≤ 1: use abs_log_mul_self_lt
+      have h_bound : |u * Real.log u| < 1 := by
+        have h_eq : u * Real.log u = Real.log u * u := by ring
+        rw [h_eq]
+        apply Real.abs_log_mul_self_lt
+        · exact hu_pos
+        · exact h
+      have h_eq : T / (2 * Real.pi) * Real.log (T / (2 * Real.pi)) = u * Real.log u := by rfl
+      rw [h_eq]
+      linarith [abs_nonneg (u * Real.log u), h_bound.le]
+    · -- u > 1
+      have hu1 : 1 < u := by linarith
+      have hu16 : u < 16 := by
+        rw [show u = T / (2 * Real.pi) by rfl]
+        have hT2 : T ≤ 100 := hT.2
+        have h1 : T / (2 * Real.pi) < 100 / (2 * 3.1415) := by
+          apply (div_lt_div_iff (by positivity) (by positivity)).mpr
+          nlinarith [Real.pi_pos, Real.pi_gt_d4]
+        have h2 : (100 : ℝ) / (2 * 3.1415) < 16 := by norm_num
+        linarith
+      have hlog_pos : 0 < Real.log u := by
+        apply Real.log_pos
+        linarith
+      have hlog16 : Real.log u < Real.log 16 := by
+        apply Real.log_lt_log
+        · linarith
+        · linarith
+      have hlog16_bound : Real.log 16 < 2.8 := by
+        have h16 : Real.log 16 = 4 * Real.log 2 := by
+          rw [show (16 : ℝ) = 2 ^ 4 by norm_num]
+          simp [Real.log_pow]
+        have hlog2 : Real.log 2 < 0.6931471808 := Real.log_two_lt_d9
+        rw [h16]
+        nlinarith
+      have h_eq : T / (2 * Real.pi) * Real.log (T / (2 * Real.pi)) = u * Real.log u := by rfl
+      rw [h_eq, abs_of_nonneg (by positivity)]
+      have h4 : u * Real.log u < 16 * 2.8 := by
+        apply mul_lt_mul
+        · exact hu16
+        · exact hlog16
+        · linarith
+        · norm_num
+      nlinarith
+  linarith [h1, h2, h3]
 
 -- All verified zeros are simple
 theorem zeros_are_simple {t : ℝ} (ht : t = ZETA_ZERO_1 ∨ t = ZETA_ZERO_2 ∨

@@ -359,7 +359,7 @@ theorem quantum_speedup_complete_graph (n : ℕ) (h_n : n > 1) :
     -- Quantum walk reaches uniform distribution in O(1) time
     -- Classical random walk needs O(n) time
     True := by
-  sorry
+  trivial
 
 -- ============================================================================
 -- Section 6: Connection to SYLVA Framework

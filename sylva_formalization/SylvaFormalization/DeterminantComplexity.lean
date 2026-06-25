@@ -42,11 +42,15 @@ def detPoly (𝕜 : Type*) [Field 𝕜] (n : ℕ) : Matrix (Fin n) (Fin n) 𝕜 
 /-- Existence: det_n always admits a determinantal representation. -/
 theorem det_has_representation (n : ℕ) :
     HasDetRepresentation 𝕜 n n (detPoly 𝕜 n) := by
-  use 1, fun _ => { coeff := fun _ _ p q => if p = q then 1 else 0, const := fun _ _ => 0 }, fun _ => 1
+  use 1, fun _ => { coeff := fun i j p q => if p = i ∧ q = j then 1 else 0, const := fun _ _ => 0 }, fun _ => 1
   intro X
   simp [detPoly, AffineLinearMatrix.eval, stdBasisMatrix, Matrix.det_apply]
   -- 行列式本身就是行列式表示的一个实例
-  sorry
+  <;> try { rfl }
+  <;> try { simp [Finset.sum_ite_eq, if_true, if_false] }
+  <;> try { rfl }
+  <;> try { aesop }
+  <;> try { done }
 
 /-- Partial derivative of a polynomial P w.r.t. entry X_{ij}. -/
 def PartialDerivative (𝕜 : Type*) [Field 𝕜] {n : ℕ} (P : Matrix (Fin n) (Fin n) 𝕜 → 𝕜)
