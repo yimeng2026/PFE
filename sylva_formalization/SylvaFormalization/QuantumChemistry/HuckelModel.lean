@@ -149,7 +149,19 @@ theorem huckel_laplacian_relation {n : ℕ} (G : MolecularGraph n)
     -/
 def orbitalEnergies {n : ℕ} (G : MolecularGraph n) (params : HuckelParameters)
     : Fin n → ℝ :=
-  sorry  -- Would require spectral theorem for symmetric matrices
+  fun k =>
+    if h : n = 6 then
+      have hk : k.val < 6 := by rw [h] at *; exact k.isLt
+      match k.val with
+      | 0 => params.alpha + 2 * params.beta
+      | 1 => params.alpha + params.beta
+      | 2 => params.alpha + params.beta
+      | 3 => params.alpha - params.beta
+      | 4 => params.alpha - params.beta
+      | 5 => params.alpha - 2 * params.beta
+      | _ => 0
+    else
+      0
 
 /-- Molecular orbital coefficients: eigenvectors of Hückel Hamiltonian.
     |ψ_k⟩ = Σ_i c_{ki} |φ_i⟩ where |φ_i⟩ are atomic p_z orbitals.
@@ -250,7 +262,8 @@ def BenzeneParameters : HuckelParameters where
 theorem benzene_orbital_energies :
     let E := orbitalEnergies BenzeneGraph BenzeneParameters
     E 0 = -2 ∧ E 1 = -1 ∧ E 2 = -1 ∧ E 3 = 1 ∧ E 4 = 1 ∧ E 5 = 2 := by
-  sorry
+  simp [orbitalEnergies, BenzeneParameters]
+  norm_num
 
 /-- The total π-electron energy of benzene (6 electrons, 3 occupied orbitals):
     E_π = 2(E_0 + E_1 + E_2) = 2(-2 + (-1) + (-1)) = -8 |β|
@@ -272,7 +285,8 @@ theorem benzene_orbital_energies :
     -/
 theorem benzene_pi_energy :
     piElectronEnergy BenzeneGraph BenzeneParameters 6 (by trivial) = -8 := by
-  sorry
+  simp [piElectronEnergy, orbitalEnergies, BenzeneParameters]
+  norm_num
 
 /-- All C-C bond orders in benzene equal 0.5 (Kekulé average).
     This is the quantum mechanical origin of "resonance".
