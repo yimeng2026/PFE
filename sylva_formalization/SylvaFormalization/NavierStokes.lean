@@ -526,6 +526,88 @@ theorem sylva_navier_stokes_resolution
     h_energy_finite u₀ h₀ h_div_free h_smooth
   exact sylva_ns_regularity h_small u₀ h₀ h_div_free h_smooth h_init_energy
 
+-- ============================================================
+-- Section 8: Boundary Problem Theorems
+-- ============================================================
+
+/-- **边界问题 1: 2D vs 3D — 零解的全局正则性**
+
+    在二维和三维空间中，零初始数据 u₀ = 0 都产生全局正则的零解。
+    这是正则性问题的最简单边界。在二维中，全局正则性对非零解
+    也成立（Beale-Kato-Majda 标准在2D中给出全局控制）；在三维中，
+    非零解的正则性仍是 Clay 千禧年大奖难题。
+
+    形式化：零速度场满足 NS 方程，散度为零，且所有导数为零。 -/
+theorem zero_solution_global_regularity_2d_3d_boundary
+    (T : ℝ) (M : ℝ) (hM : M > 0) :
+    ∃ (u : VelocityField) (p : PressureField),
+      IsStrongSolution u p (fun _ _ => 0) ContinuumViscosity
+      ∧ u 0 = (fun _ => 0)
+      ∧ ¬BlowUpCriterion u T M hM := by
+  use (fun _ _ => 0), (fun _ _ => 0)
+  constructor
+  · constructor
+    · intro t x
+      constructor
+      · simp [materialDerivative, deriv_const, fderiv_const, gradient, laplacian]
+      · simp [divergence, fderiv_const, Finset.sum_const_zero]
+    constructor
+    · intro t
+      exact contDiff_const
+    constructor
+    · intro t
+      exact contDiff_const
+    · intro t x
+      simp [divergence, fderiv_const, Finset.sum_const_zero]
+  constructor
+  · funext x
+    simp
+  · intro h
+    unfold BlowUpCriterion at h
+    rcases h with (h | h | h)
+    all_goals
+      rcases h with ⟨t, ht, x, hx⟩
+      simp [fderiv_const, norm_zero, curl, e_i] at hx
+      linarith
+
+/-- **边界问题 2: 无粘性极限 — 零解的能量守恒**
+
+    当 ν = 0（Euler 方程）时，零解的总动能为零且不随时间变化。
+    这是粘性趋于零的边界问题的最简单情形。对于非零光滑解，
+    Euler 方程的能量守恒成立（因为能量耗散项消失）；但对于弱解，
+    能量守恒是开放问题（Onsager 猜想）。
+
+    形式化：零解的能量密度恒为零，因此总动能恒为零。 -/
+theorem euler_energy_conservation_zero_boundary
+    (T : ℝ) (hT : T ≥ 0) :
+    let u : VelocityField := fun _ _ => 0
+    let p : PressureField := fun _ _ => 0
+    TotalKineticEnergy u T = TotalKineticEnergy u 0 := by
+  simp [TotalKineticEnergy, EnergyDensity, norm_zero]
+  all_goals
+    try { simp }
+    try { norm_num }
+
+/-- **边界问题 3: 正则性-唯一性 — 零数据强解唯一**
+
+    具有相同零初始数据的两个强解恒等。
+    这是正则性-唯一性边界的最简单情形：在强正则性（C^∞）假设下，
+    唯一性成立。对于弱解，唯一性在三维中仍是开放问题（Leray-Hopf
+    弱解的唯一性尚未证明）。
+
+    形式化：此定理直接应用 strong_solution_uniqueness axiom。 -/
+theorem uniqueness_zero_data_boundary
+    (u v : VelocityField) (p q : PressureField) (f : ForceField) (ν : ℝ) (T : ℝ)
+    (h_u : IsStrongSolution u p f ν)
+    (h_v : IsStrongSolution v q f ν)
+    (h_init : u 0 = (fun _ => 0))
+    (h_v_init : v 0 = (fun _ => 0))
+    (h_time : T > 0) :
+    ∀ t ∈ Set.Icc 0 T, ∀ x, u t x = v t x := by
+  have h_eq : u 0 = v 0 := by
+    rw [h_init, h_v_init]
+  exact strong_solution_uniqueness h_u h_v h_eq h_time
+
 end
 
 end NavierStokes

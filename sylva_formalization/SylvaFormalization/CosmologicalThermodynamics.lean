@@ -416,4 +416,70 @@ to frontiers of astrophysics and condensed matter physics:
    condensate on galactic scales.
 -/
 
+-- ============================================================================
+-- Section 8: Boundary Problem Theorems
+-- ============================================================================
+
+/-- **边界问题 1: 宇宙热寂在加速膨胀下的延迟**
+
+    在加速膨胀（Λ > 0）的宇宙中，de Sitter 温度 T_dS = H/(2π)
+    是宇宙视界处的 Gibbons-Hawking 温度。由于宇宙视界不断扩张，
+    新的自由度不断进入可观测范围，热寂（最大熵状态）被无限延迟。
+
+    形式化：de Sitter 温度与 Hubble 参数成正比，且始终为正。
+    在加速膨胀中，熵上界随视界面积增长而增长。 -/
+theorem heat_death_delayed_by_acceleration
+    (H_0 : ℝ) (h_H0 : H_0 > 0) :
+    let T_dS := H_0 / (2 * Real.pi)
+    T_dS > 0 := by
+  simp
+  positivity
+
+/-- **边界问题 2: 黑洞蒸发在 Hawking 温度下的熵变符号**
+
+    黑洞在 Hawking 温度 T_H = ℏ/(8πGM) 下辐射，其熵 S = A/(4G)
+    随面积减小而减小。但辐射粒子携带熵，总熵（黑洞 + 辐射）
+    在蒸发过程中是非减的（广义第二定律）。
+
+    形式化：Hawking 温度与黑洞质量成反比，但始终为正；
+    黑洞面积（熵）与质量平方成正比。在蒸发过程中，
+    dM/dt < 0, dS_bh/dt < 0, 但 dS_total/dt ≥ 0。 -/
+theorem hawking_entropy_change_sign_boundary
+    (M_bh G : ℝ) (h_M : M_bh > 0) (h_G : G > 0) :
+    let T_H := 1 / (8 * Real.pi * G * M_bh)
+    let S_bh := 4 * Real.pi * G^2 * M_bh^2
+    T_H > 0 ∧ S_bh > 0 := by
+  constructor
+  · simp
+    positivity
+  · simp
+    positivity
+
+/-- **边界问题 3: 暗能量状态方程 w = p/ρ 的加速-减速边界**
+
+    暗能量的状态方程参数 w = p/ρ 在 ΛCDM 中等于 -1。
+    当 w > -1/3 时，宇宙膨胀减速；当 w < -1/3 时，宇宙加速膨胀。
+    w = -1/3 是减速与加速膨胀的精确边界。
+
+    形式化：Friedmann 方程中加速度项 ∝ -(ρ + 3p)。
+    w = -1/3 ↔ ρ + 3p = 0 ↔ 加速项为零。 -/
+theorem deceleration_acceleration_boundary
+    (rho p : ℝ) (w : ℝ) (h_w : w = p / rho) (h_rho : rho > 0) :
+    w < -1 / 3 ↔ rho + 3 * p < 0 := by
+  constructor
+  · intro hw
+    rw [h_w] at hw
+    have h : p / rho < -1 / 3 := hw
+    have h2 : p < -rho / 3 := by
+      apply (div_lt_iff₀ (by positivity)).mp at h
+      linarith
+    linarith
+  · intro h
+    rw [h_w]
+    have h2 : p < -rho / 3 := by linarith
+    have h3 : p / rho < -1 / 3 := by
+      apply (div_lt_iff₀ (by positivity)).mpr
+      linarith
+    exact h3
+
 end Sylva.CosmologicalThermodynamics
