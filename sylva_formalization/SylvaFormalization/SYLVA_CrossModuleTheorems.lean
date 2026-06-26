@@ -186,10 +186,11 @@ theorem euler_characteristic_determines_fermion_count
   constructor
   · -- Step 1: χ = 2(h^{1,1} − h^{2,1}) from the Calabi-Yau theorem.
     have h_χ : χ = 2 * (h11 - h21) := by
-      simp [SYLVA_Geometry.euler_characteristic_calabi_yau h11 h21]
+      simp [χ]
+      exact SYLVA_Geometry.euler_characteristic_calabi_yau h11 h21
     -- Step 2: Any integer multiplied by 2 is even.
     rw [h_χ]
-    simp [Int.mul_emod]
+    omega
   · -- Step 3: The supercharge dimension is 2^{n/2}, which is even for n ≥ 2.
     apply SYLVA_Symmetry.supercharge_dimension_even
     exact h_n
