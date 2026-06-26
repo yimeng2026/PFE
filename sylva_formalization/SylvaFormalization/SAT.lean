@@ -1696,6 +1696,11 @@ end CircuitSATResult
     - Arora, S. & Barak, B. (2009). *Computational Complexity: A Modern Approach*, §2.3.
 
     **Difficulty to theorem:** Research (requires ~300h formalization project).
+    
+    -- 保留为 axiom 原因：Cook-Levin 定理需要完整的形式化复杂性理论工具链：
+    -- 非确定性图灵机模型、NP 类定义、多项式时间归约、以及 SAT 的 NP-难性
+    -- 证明（通过计算历史表编码）。Mathlib 目前缺乏 Turing 机理论。
+    -- 预计工作量：~300h（需要建立计算复杂性理论的完整框架）。
     -/
 axiom SAT_is_NPComplete :
   -- SAT is NP-complete by the Cook-Levin theorem.
@@ -1732,6 +1737,11 @@ axiom SAT_is_NPComplete :
     - Sipser, M. (2006). *Introduction to the Theory of Computation*, §7.5.
 
     **Difficulty to theorem:** Research (requires SAT_is_NPComplete theorem + ~50h reduction).
+    
+    -- 保留为 axiom 原因：3-SAT 的 NP-完全性依赖于 Cook-Levin 定理（SAT_is_NPComplete）
+    -- 作为前提。归约本身是纯语法的（通过 Tseitin 风格的子句扩展将长子句拆分为
+    -- 长度为3的子句），但 NP-完全性结论需要该前提。
+    -- 预计工作量：~50h（需要完成 SAT→3-SAT 归约的形式化 + NP-完全性前提）。
     -/
 axiom ThreeSAT_is_NPComplete :
   -- 3-SAT is NP-complete by reduction from SAT:
@@ -1775,6 +1785,11 @@ axiom ThreeSAT_is_NPComplete :
     - Papadimitriou, C. H. (1994). *Computational Complexity*, §4.2.
 
     **Difficulty to theorem:** Hard (algorithm ~100h, but P-wrapper requires complexity theory).
+    
+    -- 保留为 axiom 原因：2-SAT 的 P-时间可解性需要完整的形式化图论算法链：
+    -- 蕴含图构造（2-CNF 到蕴含图的映射）、强连通分量算法（Kosaraju/Tarjan）、
+    -- SCC 正确性证明、以及蕴含图无矛盾 SCC 的等价性证明。
+    -- 预计工作量：~100h（需要图论算法 + 复杂性类 P 的定义框架）。
     -/
 axiom TwoSAT_in_P :
   -- 2-SAT is in P: the implication graph has 2n vertices (literal nodes)
@@ -1821,6 +1836,11 @@ axiom TwoSAT_in_P :
 
     **Difficulty to theorem:** Medium (~50–80h). The fixpoint theory is available in Mathlib;
     the SAT-specific application requires custom definitions.
+    
+    -- 保留为 axiom 原因：Horn-SAT 的线性时间可解性需要形式化 unit propagation 算法
+    -- 作为单调算子的最小不动点（Kleene 迭代），以及该不动点刻画可满足性的
+    -- 正确性和完备性证明。虽然 Mathlib 有一般不动点理论，但缺少 SAT 应用。
+    -- 预计工作量：~50–80h（需要 SAT 特定的不动点算法形式化）。
     -/
 axiom HornSAT_in_P :
   -- Horn-SAT is in P: the unit propagation algorithm runs in linear time.
@@ -1861,6 +1881,11 @@ axiom HornSAT_in_P :
     - Tseitin, G. S. (1968). "On the complexity of derivation in propositional calculus."
 
     **Difficulty to theorem:** Research (requires SAT_is_NPComplete + Tseitin proof completion ~100h).
+    
+    -- 保留为 axiom 原因：CircuitSAT 的 NP-完全性依赖于 Cook-Levin 定理
+    -- (SAT_is_NPComplete) 和 Tseitin 变换 (circuitToSAT) 的正确性作为前提。
+    -- Tseitin 等可满足性证明在本模块中已有结构归纳框架，但赋值扩展步骤尚未完成。
+    -- 预计工作量：~100h（需要完成 Tseitin 证明 + NP-完全性前提）。
     -/
 axiom CircuitSAT_is_NPComplete :
   -- CircuitSAT is NP-complete by composition:
@@ -1898,6 +1923,12 @@ axiom CircuitSAT_is_NPComplete :
     - Tseitin, G. S. (1968). "On the complexity of derivation in propositional calculus."
 
     **Difficulty to theorem:** Research (requires both NP-completeness theorems + Tseitin proof).
+    
+    -- 保留为 axiom 原因：SAT 与 CircuitSAT 的多项式时间等价是两个 NP-完全性定理
+    -- (SAT_is_NPComplete 和 CircuitSAT_is_NPComplete) 的直接推论。
+    -- 虽然归约本身是纯结构性的（Tseitin 变换），但"多项式时间等价"的陈述需要
+    -- 复杂性类形式化作为类型基础。
+    -- 预计工作量：研究级（需要完整复杂性理论框架）。
     -/
 axiom SAT_CircuitSAT_equivalent :
   -- SAT and CircuitSAT are polynomial-time equivalent:
@@ -1906,5 +1937,38 @@ axiom SAT_CircuitSAT_equivalent :
   -- Postulated as the proof requires both SAT_is_NPComplete and
   -- CircuitSAT_is_NPComplete.
   True
+
+/-! ## Boundary Problems: SAT Variants and Algorithmic Properties
+
+    2-SAT 和 Horn-SAT 是 SAT 的两种重要多项式时间可解变体。
+    以下定理描述它们的组合学特征，不涉及复杂性类 P/NP 的形式化。 -/
+
+/-- 空子句导致不可满足性。
+    如果一个 CNF 包含空子句（没有任何文字的子句），则该 CNF 不可满足。
+    因为空子句的析取为 false，整个合取式为 false。
+    证明：假设 CNF 可满足，则存在赋值使所有子句为 true；但空子句恒为 false，矛盾。 -/
+theorem empty_clause_unsatisfiable (cnf : CNF) (h : [] ∈ cnf) :
+  ¬ CNF.Satisfiable cnf := by
+  intro ⟨assign, ha⟩
+  simp [CNF.Satisfiable, CNF.eval] at ha
+  have h_clause : Clause.eval [] assign = true := ha [] h
+  simp [Clause.eval] at h_clause
+
+/-- 空 CNF 总是可满足的。
+    没有任何子句的 CNF 是 trivially 可满足的（true 的合取）。 -/
+theorem empty_cnf_satisfiable :
+  CNF.Satisfiable ([] : CNF) := by
+  use fun _ => true
+  simp [CNF.Satisfiable, CNF.eval]
+
+/-- 单位正子句的强制满足。
+    如果 [pos v] ∈ cnf，则任何满足赋值都必须将 v 设为 true。 -/
+theorem unit_clause_positive (cnf : CNF) (v : Var) (assign : Var → Bool)
+  (h_unit : [Literal.pos v] ∈ cnf) (h_sat : cnf.eval assign = true) :
+  assign v = true := by
+  simp [CNF.eval] at h_sat
+  have h_clause : Clause.eval [Literal.pos v] assign = true := h_sat [Literal.pos v] h_unit
+  simp [Clause.eval, Literal.eval] at h_clause
+  exact h_clause
 
 end SylvaFormalization.SAT
