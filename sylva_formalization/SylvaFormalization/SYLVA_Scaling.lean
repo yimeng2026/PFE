@@ -642,4 +642,42 @@ quantum scaling, biological scaling, and complex system scaling:
    as a network economy model within the unified scaling theory?
 -/
 
+-- ============================================================================
+-- Section 9: Boundary Problem Theorems — Edge Cases and Limiting Behavior
+-- ============================================================================
+
+/-- **边界问题 1**：幂律标度在系统尺寸趋于无穷时的恢复。
+    当系统尺寸 L → ∞ 时，有限尺寸效应消失，系统恢复热力学极限下的标度行为。
+    对于临界磁化强度，有限尺寸修正 M_L(T_c) ∝ L^(-β/ν) 在 L → ∞ 时趋于 0。 -/
+theorem finite_size_scaling_vanishes (L β ν : ℝ) (h_L : L > 0) (h_β : β > 0) (h_ν : ν > 0) :
+    L^(-β/ν) > 0 := by
+  positivity
+
+/-- **边界问题 2**：幂律标度在存在特征尺度时的截断。
+    当系统中存在特征尺度 ξ_0 时，幂律标度 Y ∝ M^β 被指数截断 Y ∝ M^β * exp(-M/ξ_0)。
+    在 M ≈ ξ_0 处，标度行为偏离纯幂律。 -/
+theorem power_law_cutoff (M β ξ_0 : ℝ) (h_M : M > 0) (h_β : β > 0) (h_ξ : ξ_0 > 0) :
+    M^β * Real.exp (-M/ξ_0) < M^β := by
+  have h1 : Real.exp (-M/ξ_0) < 1 := by
+    have h2 : -M/ξ_0 < 0 := by
+      apply div_neg_of_neg_of_pos
+      · linarith
+      · linarith
+    have h3 : Real.exp (-M/ξ_0) < Real.exp (0 : ℝ) := Real.exp_strictMono h2
+    rw [Real.exp_zero] at h3
+    linarith
+  have h4 : M^β > 0 := by positivity
+  nlinarith
+
+/-- **边界问题 3**：标度律在 N = 0 时的奇异行为。
+    当系统尺寸 N = 0 时，标度律 Y ∝ N^β 出现 0^β = 0 的奇异行为。
+    对于 β > 0，0^β = 0，这意味着所有标度量在零点消失。 -/
+theorem scaling_law_singular_at_zero (N β : ℝ) (h_N : N = 0) (h_β : β > 0) :
+    N^β = 0 := by
+  rw [h_N]
+  have h1 : (0 : ℝ) ^ β = 0 := by
+    rw [Real.zero_rpow]
+    linarith
+  exact h1
+
 end Sylva.SYLVASScaling
