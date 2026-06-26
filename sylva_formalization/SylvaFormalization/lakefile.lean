@@ -86,5 +86,6 @@ lean_lib «SylvaFormalization» where
     `SYLVA_ConnectionLaws,
     `SYLVA_HierarchyOfSciences,
     `SYLVA_ResearchProblems,
-    `SYLVA_CrossModuleTheorems
+    `SYLVA_CrossModuleTheorems,
+    `SYLVA_CrossReferences
   ]
