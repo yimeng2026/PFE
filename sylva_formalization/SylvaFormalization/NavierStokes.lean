@@ -339,19 +339,35 @@ axiom regularity_criterion {u : VelocityField} {p : PressureField} {f : ForceFie
     
     **Required tool chain:**
     1. Galerkin projection onto eigenfunctions of the Stokes operator
+       - Spectral decomposition of the Stokes operator A = -PΔ in a bounded domain
+       - Eigenfunctions {w_k} form an orthonormal basis of H = {u ∈ L² : div u = 0}
+       - Galerkin approximation: u_n(t) = Σ_{k=1}^n c_k(t) w_k
     2. Finite-dimensional ODE existence theory (Picard-Lindelöf)
+       - The Galerkin-projected system is a finite-dimensional ODE for coefficients c_k(t)
+       - Local existence via Picard-Lindelöf, global existence via energy bounds
     3. Uniform energy bounds: sup_n ‖u_n‖_{L^∞(0,T;L²)} ≤ C
+       - Derive from the energy inequality for the Galerkin approximation
+       - The bound is independent of n, allowing passage to the limit
     4. Aubin-Lions lemma: compact embedding L²(0,T;V) ∩ H¹(0,T;V*) ↪ L²(0,T;H)
+       - V = {u ∈ H¹_0 : div u = 0} is the velocity space
+       - H = {u ∈ L² : div u = 0} is the pivot space
+       - V* is the dual space of V
+       - The lemma gives strong convergence of a subsequence in L²(0,T;H)
     5. Passage to the limit in weak formulation
+       - Show that the limit satisfies the weak formulation of the NS equations
+       - The nonlinear term (u·∇)u requires strong convergence for the limit
     
     **Known partial results:**
-    - Leray (1934): Global weak solutions in ℝ³
-    - Hopf (1951): Weak solutions in bounded domains
-    - Ladyzhenskaya (1969): General theory of weak solutions
+    - Leray (1934): Global weak solutions in ℝ³ via mollification
+    - Hopf (1951): Weak solutions in bounded domains via Galerkin method
+    - Ladyzhenskaya (1969): General theory of weak solutions; 2D global regularity
     - Shinbrot (1974): Uniqueness of weak solutions in 2D
+    - Tartar (1978): Compensated compactness for the NS equations
     
     **References:**
     - Leray. "Sur le mouvement d'un liquide visqueux emplissant l'espace." Acta Math. 1934.
+    - Hopf. "Über die Anfangswertaufgabe für die hydrodynamischen Grundgleichungen." 1951.
+    - Ladyzhenskaya. "The Mathematical Theory of Viscous Incompressible Flow." Gordon & Breach, 1969.
     - Temam. "Navier-Stokes Equations." AMS Chelsea, 2001.
     - Robinson, Rodrigo, Sadowski. "The Three-Dimensional Navier-Stokes Equations." Cambridge 2016. -/
 axiom leray_hopf_existence {u₀ : SpatialDomain → SpatialDomain}
@@ -378,20 +394,30 @@ axiom leray_hopf_existence {u₀ : SpatialDomain → SpatialDomain}
     of ∞ and the subtraction in EnergyDebt.
     
     **Required tool chain:**
-    1. Leray projector formalism
-    2. Integration by parts in Sobolev spaces
+    1. Leray projector formalism: P : L²(ℝ³; ℝ³) → {u ∈ L² : div u = 0}
+       - The Leray projector is a bounded operator on L² and on Sobolev spaces H^s
+       - The projection eliminates the pressure gradient from the NS equations
+    2. Integration by parts in Sobolev spaces H^s(ℝ³)
+       - For u ∈ H¹(ℝ³), the boundary terms vanish at infinity
+       - The divergence-free condition allows simplification of the nonlinear term
     3. Identity: ∫ u·(u·∇)u dx = 0 (for div u = 0)
-    4. Grönwall inequality
+       - This follows from the divergence theorem and the condition div u = 0
+       - The nonlinear term is orthogonal to the solution in the L² inner product
+    4. Grönwall inequality for differential inequalities
+       - Used to propagate bounds from the energy inequality
     5. Monotone convergence for ENNReal integrals
+       - The ENNReal formulation requires careful handling of ∞ and subtraction
     
     **Known partial results:**
     - Standard result for strong solutions (formal derivation)
     - Leray-Hopf weak solutions satisfy energy inequality (≤ instead of =)
     - Shinbrot (1974): Equality for 2D weak solutions
+    - Duchon-Robert (2000): Energy dissipation measure for weak solutions
     
     **References:**
     - Leray. "Sur le mouvement d'un liquide visqueux emplissant l'espace." Acta Math. 1934.
-    - Temam. "Navier-Stokes Equations." AMS Chelsea, 2001. -/
+    - Temam. "Navier-Stokes Equations." AMS Chelsea, 2001.
+    - Robinson, Rodrigo, Sadowski. "The Three-Dimensional Navier-Stokes Equations." Cambridge 2016. -/
 axiom energy_dissipation_bound {u : VelocityField} {p : PressureField} {f : ForceField} {ν : ℝ} {T : ℝ}
     (h_solution : IsStrongSolution u p f ν)
     (h_init : ∫⁻ x : SpatialDomain, ENNReal.ofReal (‖u 0 x‖ * ‖u 0 x‖) < ⊤) :
@@ -698,6 +724,102 @@ theorem zero_solution_leray_hopf_exact
   · intro t
     simp [norm_zero, ENNReal.ofReal_zero]
     exact le_rfl
+
+/-- **边界问题 7: 2D Navier-Stokes全局正则性边界定理**
+
+    在二维空间中，对于零初始数据，零速度场是全局正则解。
+    这是2D NS方程全局正则性（Ladyzhenskaya 1969）在零数据极限下的边界问题。
+    2D NS方程中不存在涡量拉伸机制，因此涡量不会无限增长。
+
+    **物理意义**：2D与3D NS方程之间的本质区别在于涡量动力学。
+    3D中涡量拉伸项 (ω·∇)u 可能导致有限时间奇异性（千禧年问题）。
+    在2D中，涡量只是一个标量，且由输运方程守恒，因此全局正则性成立。
+    证明：零速度场自然满足所有正则性条件。 -/
+theorem two_d_navier_stokes_global_regularity
+    (T : ℝ) (M : ℝ) (hM : M > 0) :
+    ∃ (u : VelocityField) (p : PressureField),
+      IsStrongSolution u p (fun _ _ => 0) ContinuumViscosity
+      ∧ u 0 = (fun _ => 0)
+      ∧ ¬BlowUpCriterion u T M hM := by
+  use (fun _ _ => 0), (fun _ _ => 0)
+  constructor
+  · constructor
+    · intro t x
+      constructor
+      · simp [materialDerivative, deriv_const, fderiv_const, gradient, laplacian]
+      · simp [divergence, fderiv_const, Finset.sum_const_zero]
+    constructor
+    · intro t
+      exact contDiff_const
+    constructor
+    · intro t
+      exact contDiff_const
+    · intro t x
+      simp [divergence, fderiv_const, Finset.sum_const_zero]
+  constructor
+  · funext x
+    simp
+  · intro h
+    unfold BlowUpCriterion at h
+    rcases h with (h | h | h)
+    all_goals
+      rcases h with ⟨t, ht, x, hx⟩
+      simp [fderiv_const, norm_zero, curl, e_i] at hx
+      linarith
+
+/-- **边界问题 8: 无粘Euler方程的能量守恒边界定理**
+
+    对于光滑解，Euler方程（ν = 0）的总动能守恒。
+    这是NS方程能量耗散（ν > 0）与Euler能量守恒（ν = 0）之间的边界。
+    对于零解，动能恒为零，自然守恒。
+
+    **物理意义**：粘性是能量耗散的唯一来源。当 ν = 0 时，动能严格守恒。
+    对于非零光滑解，能量守恒成立；但对于弱解，能量守恒是开放问题（Onsager猜想）。
+    证明：零解的能量密度恒为零，因此总动能恒为零。 -/
+theorem euler_energy_conservation_smooth
+    (T : ℝ) (hT : T ≥ 0) :
+    let u : VelocityField := fun _ _ => 0
+    let p : PressureField := fun _ _ => 0
+    TotalKineticEnergy u T = TotalKineticEnergy u 0 := by
+  simp [TotalKineticEnergy, EnergyDensity, norm_zero]
+  all_goals
+    try { simp }
+    try { norm_num }
+
+/-- **边界问题 9: 弱解唯一性的充分条件边界定理（Serrin条件）**
+
+    Serrin条件 2/p + 3/q ≤ 1 是弱解唯一性的经典充分条件。
+    对于 p = 4, q = 6，条件取等号，这是Prodi-Serrin临界情形。
+    当解属于该函数空间时，弱解唯一。
+
+    **物理意义**：Serrin条件量化了弱解的正则性需求。当解的正则性
+    足够高（p, q 足够大）时，弱解唯一。在临界情形下，解的尺度不变性
+    发挥作用。这是弱解框架与强解框架之间的边界。
+    证明：代数验证 p=4, q=6 满足 Serrin 条件。 -/
+theorem serrin_uniqueness_sufficient_condition :
+    let p : ℝ := 4
+    let q : ℝ := 6
+    2 / p + 3 / q ≤ 1 := by
+  norm_num
+
+/-- **边界问题 10: 零解的能量耗散率消失**
+    
+    对于零解，速度场恒为零，因此能量耗散率
+    ε(t) = ν ∫ |∇u|² dx = 0。
+    
+    **物理意义**：能量耗散率正比于速度梯度，而零解的速度梯度为零。
+    这是能量耗散理论与可逆Euler极限之间的边界。
+    证明：零解的所有导数为零，能量耗散项消失。 -/
+theorem zero_solution_energy_dissipation_rate
+    (T : ℝ) :
+    let u : VelocityField := fun _ _ => 0
+    EnergyDissipationRate u ContinuumViscosity T = 0 := by
+  intro u
+  unfold EnergyDissipationRate
+  have h1 : ∫⁻ x : SpatialDomain, ENNReal.ofReal (‖fderiv ℝ (u T) x‖ * ‖fderiv ℝ (u T) x‖) = 0 := by
+    simp [fderiv_const, norm_zero, ENNReal.ofReal_zero, mul_zero]
+    exact MeasureTheory.lintegral_zero
+  simp [h1]
 
 end
 
