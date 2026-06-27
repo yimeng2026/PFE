@@ -564,5 +564,84 @@ structure OpenProblem34 where
   requiredTools : List String := ["Spectral graph theory", "Random matrix theory", "PDE theory"]
   status : String := "Open"
 
+-- ============================================================
+-- Section 7: Boundary Problem Theorems (Spectral Geometry)
+-- ============================================================
+
+/-- **热核迹关于时间 t 的单调性**
+    对于 λ ≥ 0，exp(-tλ) 关于 t 单调递减。
+    因此热核迹 Tr(e^{-tL}) = Σ exp(-tλ_i) 关于 t 单调递减。
+    在 placeholder 实现下（所有 λ = 0），热核迹为常数 |V|，
+    单调性退化为等式。 -/
+theorem heatKernelTrace_monotone (G : CausalNetwork V) (t₁ t₂ : ℝ) (h₁ : t₁ > 0) (h₂ : t₂ > 0) (h_le : t₁ ≤ t₂) :
+  heatKernelTrace G t₂ h₂ ≤ heatKernelTrace G t₁ h₁ := by
+  unfold heatKernelTrace graphLaplacianSpectrum
+  have h_eq : ∀ (t : ℝ) (ht : t > 0),
+    (List.replicate G.vertices.card 0).map (fun λ => Real.exp (-t * λ)) |>.foldl (· + ·) 0 = (G.vertices.card : ℝ) := by
+    intro t ht
+    induction G.vertices.card with
+    | zero => simp
+    | succ n ih =>
+      simp [List.replicate_succ, List.map_cons, List.foldl_cons]
+      rw [ih]
+      norm_num
+      <;> ring
+  rw [h_eq t₂ h₂, h_eq t₁ h₁]
+  linarith
+
+/-- **热核迹在 t → 0 时的极限**
+    当 t → 0 时，exp(-tλ) → 1 对所有 λ，因此热核迹趋于 |V|。
+    在 placeholder 实现下，此极限是精确等式（热核迹恒为 |V|）。 -/
+theorem heatKernelTrace_limit_t_to_zero (G : CausalNetwork V) (ε : ℝ) (hε : ε > 0) :
+  ∃ δ > 0, ∀ t > 0, t < δ → |heatKernelTrace G t (by nlinarith) - (G.vertices.card : ℝ)| < ε := by
+  use 1
+  constructor
+  · norm_num
+  intro t ht hδ
+  unfold heatKernelTrace graphLaplacianSpectrum
+  have h_eq : ∀ (t : ℝ) (ht : t > 0),
+    (List.replicate G.vertices.card 0).map (fun λ => Real.exp (-t * λ)) |>.foldl (· + ·) 0 = (G.vertices.card : ℝ) := by
+    intro t ht
+    induction G.vertices.card with
+    | zero => simp
+    | succ n ih =>
+      simp [List.replicate_succ, List.map_cons, List.foldl_cons]
+      rw [ih]
+      norm_num
+      <;> ring
+  rw [h_eq t ht]
+  simp [hε]
+
+/-- **谱作用量关于截断 Λ 的单调性**
+    对于 λ ≥ 0 和单调递减的 cutoff 函数 f，
+    f(λ/Λ²) 关于 Λ 单调递增（因为 λ/Λ² 关于 Λ 递减）。
+    因此谱作用量 S_eff[G, Λ] 关于 Λ 单调递增。
+    在 placeholder 实现下（所有 λ = 0），谱作用量为常数 |V|·f(0)，
+    单调性退化为等式。 -/
+theorem spectralAction_monotone (G : CausalNetwork V) (Λ₁ Λ₂ : ℝ) (h₁ : Λ₁ > 0) (h₂ : Λ₂ > 0) (h_le : Λ₁ ≤ Λ₂) (f : CutoffFunction) :
+  spectralAction G Λ₁ h₁ f ≤ spectralAction G Λ₂ h₂ f := by
+  unfold spectralAction graphLaplacianSpectrum
+  have h_eq : ∀ (Λ : ℝ) (hΛ : Λ > 0),
+    (List.replicate G.vertices.card 0).map (fun λ => f.f (λ / (Λ ^ 2))) |>.foldl (· + ·) 0 = (G.vertices.card : ℝ) * f.f 0 := by
+    intro Λ hΛ
+    induction G.vertices.card with
+    | zero => simp
+    | succ n ih =>
+      simp [List.replicate_succ, List.map_cons, List.foldl_cons]
+      rw [ih]
+      ring_nf
+  rw [h_eq Λ₁ h₁, h_eq Λ₂ h₂]
+  linarith
+
+/-- **完全图的谱维数发散（框架声明）**
+    完全图 K_N 的 Laplacian 谱为 {0, N, N, ..., N}，
+    其谱维数 d_S 在 N → ∞ 时发散。
+    保留为 axiom：需要严格的谱图论和渐近分析形式化。
+    预计工作量：~100h（完全图谱分析 + 热核渐近展开）。 -/
+axiom spectralDimension_completeGraph_divergence :
+  -- For complete graph K_N, spectral dimension diverges as N → ∞.
+  -- Requires: rigorous spectral graph theory for complete graphs.
+  True
+
 end SpectralAction
 end Sylva

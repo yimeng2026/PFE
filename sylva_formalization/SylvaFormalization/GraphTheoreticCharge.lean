@@ -343,5 +343,45 @@ axiom macroscopicChargeSpectralBound (G : CausalNetwork V)
     (h_nonempty : G.vertices.Nonempty) :
   True
 
+-- ============================================================
+-- Section D: Boundary Problem Theorems (Graph Spectral Geometry)
+-- ============================================================
+
+/-- **距离因子的对称性（无向图）**
+    当 graphDistance 对称时，distanceFactor 也对称。
+    这是无向图上电荷分析的基础：相邻节点间的距离因子相等。 -/
+theorem distanceFactor_symmetric
+    (G : CausalNetwork V)
+    (h_sym : ∀ u v, graphDistance G u v = graphDistance G v u) :
+  ∀ u v, distanceFactor G u v = distanceFactor G v u := by
+  intro u v
+  unfold distanceFactor
+  rw [h_sym u v]
+
+/-- **零距离因子的最大值**
+    当 graphDistance = 0 时，distanceFactor = 1。
+    这对应于节点与自身（或重边零距离）的距离因子取值。 -/
+theorem distanceFactor_zero_max
+    (G : CausalNetwork V) (u v : V)
+    (h_adj : graphDistance G u v = 0) :
+  distanceFactor G u v = 1 := by
+  unfold distanceFactor
+  rw [h_adj]
+  norm_num
+
+/-- **Connectivity Charge 的零邻接消失性**
+    如果节点 v 的所有入邻接权重为零，则其 connectivityCharge 为零。
+    这反映了 charge 的局部依赖结构：无邻接则无电荷积累。 -/
+theorem connectivityCharge_zero_of_no_adjacency
+    (G : CausalNetwork V) (v : V)
+    (h_zero : ∀ u, adjacencyMatrix G u v = 0) :
+  connectivityCharge G v = 0 := by
+  unfold connectivityCharge
+  have h1 : ∀ u ∈ G.vertices, adjacencyMatrix G u v * distanceFactor G u v = 0 := by
+    intro u _
+    rw [h_zero u]
+    simp
+  rw [Finset.sum_eq_zero h1]
+
 end GraphTheoreticCharge
 end Sylva

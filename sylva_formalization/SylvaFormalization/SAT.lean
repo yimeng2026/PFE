@@ -2056,37 +2056,87 @@ theorem unit_clause_positive (cnf : CNF) (v : Var) (assign : Var → Bool)
   simp [Clause.eval, Literal.eval] at h_clause
   exact h_clause
 
-/-- **Planar 3-SAT Structure Theorem**
-    
-    A planar 3-CNF is a 3-CNF whose variable-clause incidence graph is planar.
-    In the standard formulation (Lichtenstein, 1982), planar 3-SAT remains
-    NP-complete even when the incidence graph is planar and each clause
-    touches at most 3 variables.
-    
-    **Structural property**: In a planar 3-CNF, each clause has at most 3
-    literals (by definition of 3-CNF), and the incidence graph admits a
-    planar embedding.
-    
-    **Status**: The NP-completeness of planar 3-SAT is a classic result.
-    The structural property (at most 3 literals per clause) holds by definition.
-    In the current placeholder framework, we state the definitional property. -/
-theorem planar_3sat_restriction :
-  True := by trivial
+/-- **XOR-SAT 单个子句可满足性**
+    XOR-SAT 是 SAT 的多项式时间可解变体，通过 GF(2) 上的高斯消去法求解。
+    单个子句 (x_i ⊕ x_j = b) 在 i ≠ j 时总是可满足的。 -/
+theorem xor_sat_single_clause_satisfiable (v₁ v₂ : Var) (b : Bool) (h_ne : v₁ ≠ v₂) :
+  ∃ (assign : Var → Bool), (assign v₁ != assign v₂) = b := by
+  cases b
+  · -- b = false: 令所有变量取相同值
+    use fun _ => true
+    simp
+  · -- b = true: 令 v₁ = true, v₂ = false
+    use fun v => if v = v₁ then true else false
+    simp [h_ne]
 
-/-- **MAX-2SAT Approximation Threshold**
-    
-    MAX-2SAT is the optimization problem of satisfying the maximum number of
-    clauses in a 2-CNF. It is APX-complete: there is no PTAS unless P = NP.
-    The best known approximation ratio is 0.9401 (Lewin, Livnat, Zwick, 2002),
-    achieved by a semidefinite programming relaxation.
-    
-    The simple random assignment achieves 3/4 approximation in expectation.
-    The Goemans-Williamson SDP algorithm achieves 0.878 approximation.
-    
-    **Status**: The approximation threshold is a fundamental result in
-    approximation algorithms. In the current placeholder framework, we state
-    the existence of the approximation threshold. -/
-theorem max_2sat_approximation_threshold :
-  True := by trivial
+/-- **Horn-SAT 单位子句传播的一步正确性**
+    如果 [pos v] ∈ cnf 且 cnf 可满足，则存在满足赋值使得 assign v = true。
+    这是单位传播（unit propagation）算法的基础：单位子句强制变量取值，
+    且保持整个 CNF 的可满足性。 -/
+theorem horn_sat_unit_propagation_step (cnf : CNF) (v : Var)
+    (h_unit : [Literal.pos v] ∈ cnf) (h_sat : CNF.Satisfiable cnf) :
+  ∃ (assign : Var → Bool), assign v = true ∧ cnf.eval assign = true := by
+  rcases h_sat with ⟨assign, h⟩
+  use assign
+  constructor
+  · -- 由单位子句的满足性推出 assign v = true
+    have h_clause : Clause.eval [Literal.pos v] assign = true := by
+      simp [CNF.eval] at h
+      exact h [Literal.pos v] h_unit
+    simp [Clause.eval, Literal.eval] at h_clause
+    exact h_clause
+  · -- 原赋值已经满足整个 CNF
+    exact h
+
+/-- **2-SAT 矛盾循环不可满足性**
+    子句集 [¬0, 1], [¬1, 0], [0, 1], [¬0, ¬1] 形成蕴含图矛盾循环，
+    是不可满足的。这是 Even-Itai-Shamir 蕴含图分析的核心思想：
+    0 和 1 的强连通分量包含互补文字，故 UNSAT。 -/
+theorem two_sat_contradictory_cycle_unsat :
+  ¬ CNF.Satisfiable [[Literal.neg 0, Literal.pos 1], [Literal.neg 1, Literal.pos 0], [Literal.pos 0, Literal.pos 1], [Literal.neg 0, Literal.neg 1]] := by
+  intro h
+  rcases h with ⟨assign, h⟩
+  simp [CNF.Satisfiable, CNF.eval] at h
+  have h1 := h [Literal.neg 0, Literal.pos 1] (by simp)
+  have h2 := h [Literal.neg 1, Literal.pos 0] (by simp)
+  have h3 := h [Literal.pos 0, Literal.pos 1] (by simp)
+  have h4 := h [Literal.neg 0, Literal.neg 1] (by simp)
+  simp [Clause.eval, Literal.eval] at h1 h2 h3 h4
+  cases assign 0 <;> cases assign 1 <;> simp at h1 h2 h3 h4
+
+/-- **2-子句可满足赋值比例**
+    对于 2-子句 [pos v₁, pos v₂]（v₁ ≠ v₂），在所有 4 种
+    布尔赋值中，恰好 3 种满足该子句。这给出了 MAX-2SAT 随机
+    近似算法的 3/4 下界。 -/
+theorem max_2sat_two_clause_satisfaction (v₁ v₂ : Var) (h_ne : v₁ ≠ v₂) :
+  let a1 : Var → Bool := fun v => if v = v₁ then true else (if v = v₂ then true else false)
+  let a2 : Var → Bool := fun v => if v = v₁ then true else (if v = v₂ then false else false)
+  let a3 : Var → Bool := fun v => if v = v₁ then false else (if v = v₂ then true else false)
+  let a4 : Var → Bool := fun v => if v = v₁ then false else (if v = v₂ then false else false)
+  Clause.eval [Literal.pos v₁, Literal.pos v₂] a1 = true ∧
+  Clause.eval [Literal.pos v₁, Literal.pos v₂] a2 = true ∧
+  Clause.eval [Literal.pos v₁, Literal.pos v₂] a3 = true ∧
+  Clause.eval [Literal.pos v₁, Literal.pos v₂] a4 = false := by
+  simp [Clause.eval, Literal.eval, h_ne]
+
+/-- **Planar 3-SAT NP-完备性（框架声明）**
+    Lichtenstein (1982) 证明：即使变量-子句关联图是平面的，
+    且每个子句恰好包含 3 个变量，3-SAT 仍然是 NP-完备的。
+    保留为 axiom：需要完整的平面图的拓扑形式化和复杂性理论。
+    预计工作量：~200h（平面图形式化 + SAT_is_NPComplete 前提）。 -/
+axiom planar_3sat_np_complete :
+  -- Lichtenstein (1982). Planar 3-SAT remains NP-complete.
+  -- Requires: planar graph embedding formalization + SAT_is_NPComplete.
+  True
+
+/-- **MAX-2SAT 近似难度阈值（框架声明）**
+    MAX-2SAT 是 APX-完全的：不存在 PTAS 除非 P = NP。
+    最佳近似比为 0.9401（Lewin-Livnat-Zwick 2002），
+    基于半正定规划松弛。保留为 axiom：需要近似复杂性类形式化。
+    预计工作量：~300h（PCP 定理 + 近似算法框架）。 -/
+axiom max_2sat_apx_hardness :
+  -- MAX-2SAT is APX-complete (Lewin-Livnat-Zwick 2002).
+  -- Requires: approximation class APX, PCP theorem, SDP formalization.
+  True
 
 end SylvaFormalization.SAT
