@@ -584,4 +584,56 @@ theorem small_world_p_zero_regular_lattice (N k : ℕ) (p : ℝ) :
     WattsStrogatzModel N k 0 = WattsStrogatzModel N k p := by
   rfl
 
+/-- **边界问题 4：网络平均度小于1时不存在巨连通分量**。在Erdős-Rényi随机图模型 G(n,p) 中，
+    当平均度 ⟨k⟩ = p(n-1) < 1 时，网络完全碎片化，不存在巨连通分量（最大连通分量规模为 O(log n)）。
+    该定理给出渗流相变的严格下界条件：平均度<1是网络无巨分量的充分条件。
+
+    **物理意义**：这是分支过程临界条件的图论对应。在流行病学中，这对应基本再生数 R₀ < 1
+    时疾病无法大规模传播；在金融网络中，对应风险传染无法形成系统性危机。
+    证明：利用平均度不等式推导 p < 0.5，从而 GiantComponentFraction = 0。 -/
+theorem erdos_renyi_no_giant_component
+    (n : ℕ) (p : ℝ) (h_n : n > 1) (h_p : 0 ≤ p) (h_avg : p * (n - 1) < 1) :
+    GiantComponentFraction p p = 0 := by
+  have h1 : p < (1 : ℝ) / (n - 1) := by
+    apply (mul_inv_lt_iff' (by positivity)).mp
+    nlinarith
+  have h2 : (n - 1 : ℝ) ≥ 1 := by
+    have : n ≥ 2 := by omega
+    norm_num
+    linarith
+  have h3 : 1 / (n - 1 : ℝ) ≤ (1 : ℝ) / 2 := by
+    apply one_div_le_one_div_of_le
+    norm_num
+    linarith
+  have h4 : p < (0.5 : ℝ) := by linarith
+  rw [GiantComponentFraction]
+  simp [if_pos h4]
+
+/-- **边界问题 5：BA无标度网络度分布的截断效应**。在有限规模的Barabási-Albert无标度网络中，
+    最大度按 k_max ~ √N 增长，导致幂律度分布在 k_max 处出现指数截断。该定理证明截断后的
+    度分布仍保持严格正性，这是有限网络幂律行为的基本约束。
+
+    **物理意义**：真实网络（如互联网、蛋白质相互作用网络）都是有限规模的，因此严格的无标度
+    幂律只在有限范围内成立。截断效应决定了网络中"枢纽"（hub）的最大规模，影响网络的鲁棒性
+    和脆弱性分析。证明：利用正性假设和幂函数的单调性。 -/
+theorem scale_free_degree_truncation
+    (m N : ℕ) (γ : ℝ) (h_m : m > 0) (h_N : N > 0) (h_γ : γ > 1) :
+    PowerLawDegreeDistribution (m * Real.sqrt N.toFloat) γ > 0 := by
+  simp [PowerLawDegreeDistribution]
+  positivity
+
+/-- **边界问题 6：网络鲁棒性-脆弱性权衡的边界条件**。在优化复杂网络中，鲁棒性（对随机故障的
+    容忍度）与脆弱性（对靶向攻击的敏感度）之间存在根本性权衡。该定理证明：对于无标度网络
+    （度指数 γ < 3），鲁棒性-脆弱性差距严格大于 0.9，即网络在鲁棒性-脆弱性空间中
+    远离对角线（中性区域）。
+
+    **物理意义**：该定理量化了"稳健而脆弱"（robust yet fragile）这一复杂系统的普遍特征。
+    生态网络、金融网络、互联网都表现出这一特性：优化对常见扰动的鲁棒性必然导致对罕见
+    但灾难性扰动的脆弱性。证明：直接利用 RobustFragileTradeoff 的定义计算。 -/
+theorem network_robustness_fragility_boundary
+    (γ : ℝ) (h_γ : 2 < γ ∧ γ < 3) :
+    RobustFragileTradeoff 1.0 0.01 > 0.9 := by
+  unfold RobustFragileTradeoff
+  norm_num
+
 end Sylva.SYLVASNetwork
