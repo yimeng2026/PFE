@@ -90,6 +90,7 @@ lean_lib «SylvaFormalization» where
     `SYLVA_CrossReferences,
     `HiggsMass,
     `HiggsPotential,
+    `SYLVA_AdS_CFT,
     `BerryConnection_GaugeTransformationLaw,
     `BerryCurvature_GaugeInvariance,
     `BerryKubo_ChernTopology,

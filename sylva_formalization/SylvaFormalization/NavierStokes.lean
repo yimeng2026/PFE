@@ -527,6 +527,43 @@ theorem sylva_navier_stokes_resolution
   exact sylva_ns_regularity h_small u₀ h₀ h_div_free h_smooth h_init_energy
 
 -- ============================================================
+-- Section 7.5: Moderate Theorems (structural positivity)
+-- ============================================================
+
+/-- 能量密度非负：EnergyDensity = 1/2 · ‖u‖² ≥ 0。
+    由范数平方的非负性直接得出。使用 `nlinarith` 和 `norm_nonneg`。 -/
+theorem energy_density_nonneg (u : VelocityField) (t : ℝ) (x : SpatialDomain) :
+    EnergyDensity u t x ≥ 0 := by
+  unfold EnergyDensity
+  have h : ‖u t x‖ * ‖u t x‖ ≥ 0 := mul_nonneg (norm_nonneg _) (norm_nonneg _)
+  nlinarith
+
+/-- 总动能非负：TotalKineticEnergy u T ≥ 0 对于 T ≥ 0。
+    由 ENNReal 积分的非负性和 EnergyDensity 的非负性得出。 -/
+theorem total_kinetic_energy_nonneg (u : VelocityField) (T : ℝ) (hT : T ≥ 0) :
+    TotalKineticEnergy u T ≥ 0 := by
+  unfold TotalKineticEnergy
+  apply lintegral_nonneg
+  intro t _
+  apply lintegral_nonneg
+  intro x
+  simp only [EnergyDensity]
+  have h : ‖u t x‖ * ‖u t x‖ ≥ 0 := mul_nonneg (norm_nonneg _) (norm_nonneg _)
+  exact ENNReal.ofReal_nonneg
+
+/-- 能量耗散率非负：EnergyDissipationRate u ν t ≥ 0 对于 ν > 0。
+    由粘度正性和 ‖∇u‖² 的非负性得出。使用 `positivity` 和 `lintegral_nonneg`。 -/
+theorem energy_dissipation_rate_nonneg (u : VelocityField) (ν : ℝ) (t : ℝ) (hν : ν > 0) :
+    EnergyDissipationRate u ν t ≥ 0 := by
+  unfold EnergyDissipationRate
+  apply ENNReal.mul_nonneg
+  · exact ENNReal.ofReal_nonneg
+  · apply lintegral_nonneg
+    intro x
+    have h : ‖fderiv ℝ (u t) x‖ * ‖fderiv ℝ (u t) x‖ ≥ 0 := mul_nonneg (norm_nonneg _) (norm_nonneg _)
+    exact ENNReal.ofReal_nonneg
+
+-- ============================================================
 -- Section 8: Boundary Problem Theorems
 -- ============================================================
 
@@ -607,6 +644,60 @@ theorem uniqueness_zero_data_boundary
   have h_eq : u 0 = v 0 := by
     rw [h_init, h_v_init]
   exact strong_solution_uniqueness h_u h_v h_eq h_time
+
+/-- **边界问题 4: 零解的 NS Bootstrap Residual 为零**
+    
+    对于零解，NSBootstrapResidual（能量债务）恒为零。
+    这是 ns_energy_debt_analogy axiom 的边界问题：零解的能量债务
+    为零，自然满足任何正的上界。
+    证明：零解的所有能量项为零。 -/
+theorem zero_solution_nsbootstrap_residual_zero
+    (T : ℝ) (hT : T ≥ 0) :
+    let u : VelocityField := fun _ _ => 0
+    NSBootstrapResidual u T ContinuumViscosity = 0 := by
+  intro u
+  simp [NSBootstrapResidual, EnergyDebt, TotalKineticEnergy, EnergyDensity, EnergyDissipationRate, fderiv_const, norm_zero, ENNReal.ofReal_zero]
+
+/-- **边界问题 5: 零解的 Enstrophy 消失**
+    
+    零解的涡量（curl）为零，因此 Enstrophy 为零。
+    这是 beale_kato_majda_criterion axiom 的边界问题：零解的
+    涡量积分有限（为零），因此不会 blow-up。
+    证明：零解的 curl 由 fderiv_const 恒为零，ENNReal.ofReal 0 = 0，
+    且 Lebesgue 积分 of 0 = 0。 -/
+theorem zero_solution_enstrophy_vanishing
+    (T : ℝ) :
+    let u : VelocityField := fun _ _ => 0
+    Enstrophy u T = 0 := by
+  intro u
+  simp only [Enstrophy, curl, fderiv_const, norm_zero, mul_zero, ENNReal.ofReal_zero]
+  exact MeasureTheory.lintegral_zero
+
+/-- **边界问题 6: 零解的 Leray-Hopf 存在性（精确版本）**
+    
+    对于零初始数据，零解是 Leray-Hopf 弱解的精确实例。
+    这是 leray_hopf_existence axiom 的边界问题：零数据存在零解，
+    且能量不等式取等号（0 = 0）。
+    证明：构造零解并验证所有条件。 -/
+theorem zero_solution_leray_hopf_exact
+    (T : ℝ) (hT : T ≥ 0) :
+    ∃ (u : VelocityField) (p : PressureField),
+      NSEquations u p (fun _ _ => 0) ContinuumViscosity
+      ∧ u 0 = (fun _ => 0)
+      ∧ ∀ t, ∫⁻ x : SpatialDomain, ENNReal.ofReal (‖u t x‖ * ‖u t x‖) ≤
+             ∫⁻ x : SpatialDomain, ENNReal.ofReal (‖(fun _ : SpatialDomain => 0) x‖ * ‖(fun _ : SpatialDomain => 0) x‖) := by
+  use (fun _ _ => 0), (fun _ _ => 0)
+  constructor
+  · intro t x
+    constructor
+    · simp [materialDerivative, deriv_const, fderiv_const, gradient, laplacian]
+    · simp [divergence, fderiv_const, Finset.sum_const_zero]
+  constructor
+  · funext x
+    simp
+  · intro t
+    simp [norm_zero, ENNReal.ofReal_zero]
+    exact le_rfl
 
 end
 

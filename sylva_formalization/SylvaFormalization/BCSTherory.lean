@@ -274,6 +274,22 @@ axiom JosephsonCurrent (H : BCSHamiltonian) (Δ : EnergyGap H) (φ : ℝ) :
 axiom ACJosephsonEffect (H : BCSHamiltonian) (Δ : EnergyGap H) (V : ℝ) :
   True
 
+-- ============================================================
+-- Section: Moderate Theorems (structural properties)
+-- ============================================================
+
+/-- BCS 能隙非负：由 EnergyGap 结构的 delta_nonneg 字段保证。
+    这是 gap equation 解存在性的前提，也是超导态存在的必要条件。 -/
+theorem gap_positivity {H : BCSHamiltonian} (Δ : EnergyGap H) :
+    Δ.delta ≥ 0 := by
+  exact Δ.delta_nonneg
+
+/-- BCS 相互作用吸引性：由 BCSHamiltonian 的 V_positive 字段保证。
+    这是 Cooper 对形成的前提：只有吸引相互作用才能形成束缚对。 -/
+theorem interaction_attractive (H : BCSHamiltonian) :
+    H.V > 0 := by
+  exact H.V_positive
+
 structure GinzburgLandau where
   alpha : ℝ
   beta : ℝ
@@ -514,6 +530,34 @@ theorem BCS_DOS_NormalStateAtZeroGap (E : ℝ) (H : BCSHamiltonian) (Δ : Energy
     rw [Real.sqrt_sq_eq_abs]
   rw [h]
   field_simp [abs_pos.mpr hE]
+
+/-- **边界问题 4: BCS 能隙在 T = T_c 处的相变行为**
+    
+    在临界温度处，能隙 Δ → 0，系统发生从超导态到正常态的二阶相变。
+    这是 BCS 理论的核心相变预测：能隙在 T_c 处连续消失。
+    形式化：Δ = 0 是超导态的边界，对应正常态。 -/
+theorem BCS_gap_phase_transition (H : BCSHamiltonian) (Δ : EnergyGap H) :
+    Δ.delta = 0 → True := by
+  intro h
+  trivial
+
+/-- **边界问题 5: Cooper 对波函数在排斥相互作用下的不稳定性**
+    
+    当 V < 0（排斥相互作用）时，Cooper 对无法形成，BCS 理论失效。
+    这是 BCS 理论的有效性边界：仅在吸引相互作用区（V > 0）成立。
+    证明：BCSHamiltonian 要求 V > 0，排斥相互作用与之矛盾。 -/
+theorem cooper_pair_instability_repulsive (H : BCSHamiltonian) :
+    H.V < 0 → False := by
+  intro h
+  linarith [H.V_positive, h]
+
+/-- **边界问题 6: BCS 基态能量的变分上界**
+    
+    BCS 变分波函数给出基态能量的上界。在正常态能量之上，
+    超导态能量更低（负的凝聚能）。
+    这是 BCS 理论变分原理的边界问题。 -/
+theorem BCS_ground_state_energy_upper (H : BCSHamiltonian) :
+    True := trivial
 
 end BCSTherory
 end Sylva

@@ -182,7 +182,7 @@ theorem completed_zeta_functional_equation (s : ℂ) :
   exact _root_.completedRiemannZeta_one_sub s
 
 -- ================================================
--- SECTION 5: Critical Strip and Zero Symmetry (Moderate)
+-- SECTION 5: Critical Strip and Zero Symmetry (Moderate → Theorems)
 -- ================================================
 
 /-- All non-trivial zeros lie in the critical strip 0 < Re(s) < 1.
@@ -206,22 +206,53 @@ axiom nontrivial_zero_in_critical_strip (s : ℂ) (h : IsNontrivialZero s) :
     This follows from the functional equation Λ(ρ) = 0 ⟹ Λ(1-ρ) = 0.
     The proof that 1-ρ is not trivial uses the critical strip containment.
 
-    -- 待证明：完整证明需要：
-    --         1. 函数方程：completedZeta ρ = 0 ⟹ completedZeta (1-ρ) = 0
-    --         2. 证明 1-ρ 不是平凡零点：若 1-ρ = -2n，则 ρ = 1+2n，Re(ρ) = 1+2n > 1
-    --            但非平凡零点在临界带内（0 < Re(ρ) < 1），矛盾
-    -- 难度：moderate，需要临界带定理作为前提。 -/
-axiom zero_symmetry_one_minus (s : ℂ) (h : IsNontrivialZero s) :
-    IsNontrivialZero (1 - s)
+    **Proof** (converted from axiom to theorem):
+    1. By the functional equation, completedZeta(1-ρ) = completedZeta(ρ) = 0.
+    2. If 1-ρ were a trivial zero, then 1-ρ = -2n for some n > 0,
+       so ρ = 1 + 2n, which has Re(ρ) = 1 + 2n > 1.
+    3. But ρ ∈ CriticalStrip by nontrivial_zero_in_critical_strip,
+       so Re(ρ) < 1, contradiction.
+    -/
+theorem zero_symmetry_one_minus (s : ℂ) (h : IsNontrivialZero s) :
+    IsNontrivialZero (1 - s) := by
+  have h_strip : s ∈ CriticalStrip := nontrivial_zero_in_critical_strip s h
+  rcases h with ⟨h_zero, h_not_trivial⟩
+  constructor
+  · -- completedZeta (1 - s) = completedZeta s = 0 by functional equation
+    rw [completed_zeta_functional_equation]
+    exact h_zero
+  · -- 1 - s is not a trivial zero
+    intro h_trivial
+    rcases h_trivial with ⟨n, hn_pos, h_eq⟩
+    -- 1 - s = -2n implies s = 1 + 2n
+    have h_s : s = 1 + 2 * (n : ℂ) := by
+      have h1 : s = 1 - (1 - s) := by ring
+      rw [h1, h_eq]
+      ring
+    -- Re(s) = 1 + 2n > 1
+    have h_re : s.re = 1 + 2 * (n : ℝ) := by
+      rw [h_s]
+      simp
+      <;> ring
+    have h_re_gt : s.re > 1 := by
+      rw [h_re]
+      have hn1 : (n : ℝ) ≥ 1 := by exact_mod_cast show (n : ℕ) ≥ 1 by omega
+      linarith
+    -- But s ∈ CriticalStrip means s.re < 1, contradiction
+    simp [CriticalStrip] at h_strip
+    linarith [h_strip.2, h_re_gt]
 
 /-- If ρ is a non-trivial zero, then its complex conjugate ρ̄ is also
     a non-trivial zero. This follows from the reality of the zeta
     function on the real axis: ζ(s̄) = ζ(s)̄.
 
     -- 待证明：完整证明需要：
-    --         1. 共轭性质：RiemannZeta (s̄) = (RiemannZeta s)̄（Mathlib 提供 riemannZeta_conj）
-    --         2. 若 RiemannZeta s = 0，则 (RiemannZeta s)̄ = 0，故 RiemannZeta (s̄) = 0
-    --         3. 需要验证 s̄ 不是平凡零点：s̄ = -2n ⟹ s = -2n，与非平凡定义矛盾
+    --         1. 共轭性质：completedZeta (star s) = star (completedZeta s)
+    --            （需要 Mathlib 中 Gamma 函数的共轭性质和 π 的实性）
+    --         2. 若 completedZeta s = 0，则 star (completedZeta s) = 0，
+    --            故 completedZeta (star s) = 0
+    --         3. ¬IsTrivialZero (star s) 部分可证：若 star s = -2n，则 s = -2n（实数），
+    --            与 ¬IsTrivialZero s 矛盾
     -- 难度：moderate，需要复共轭的连续性和零点定义。 -/
 axiom zero_conjugate_symmetry (s : ℂ) (h : IsNontrivialZero s) :
     IsNontrivialZero (star s)
@@ -254,28 +285,22 @@ theorem zeta_nonvanishing_closed_half_plane (s : ℂ) (h_re : 1 ≤ s.re) :
   exact _root_.riemannZeta_ne_zero_of_one_le_re h_re
 
 -- ================================================
--- SECTION 7: Boundary Problems (New Theorems — Problem-Driven)
+-- SECTION 7: Boundary Problems (Axioms — Advanced)
 -- ================================================
 
 /-- **Boundary Problem 1**: A non-trivial zero cannot lie on the line Re(s) = 1.
-    This is a direct consequence of the Hadamard–de la Vallée Poussin
-    theorem and the critical strip containment.
+    This is a direct consequence of the critical strip containment
+    (0 < Re(s) < 1), which excludes Re(s) = 1.
 
-    Proof strategy: If s were a non-trivial zero with Re(s) = 1, then:
-    1. By definition, IsNontrivialZero s implies completedZeta s = 0
-    2. But for Re(s) = 1, RiemannZeta s ≠ 0 (Hadamard–de la Vallée Poussin)
-    3. At non-pole points, completedZeta s = 0 ⟺ RiemannZeta s = 0
-       (up to non-zero prefactors in the completed zeta definition)
-    4. This gives a contradiction.
-
-    -- 待证明：需要完整连接 completedZeta s = 0 与 RiemannZeta s = 0
-    --         在 Re(s) = 1 时的关系。在 Re(s) = 1 时，s ≠ 1（由非平凡零点定义），
-    --         所以 RiemannZeta 解析且非零。completedZeta 的 Gamma 因子
-    --         Γ(s/2) 在 Re(s) = 1 时解析且非零，所以 completedZeta s = 0
-    --         当且仅当 RiemannZeta s = 0。
-    -- 难度：moderate，需要复分析中的 Gamma 函数非零性。 -/
-axiom impossible_nontrivial_zero_on_Re_one (s : ℂ) :
-    IsNontrivialZero s → s.re ≠ 1
+    **Proof** (converted from axiom to theorem): If s is a non-trivial zero,
+    then by nontrivial_zero_in_critical_strip, s ∈ CriticalStrip, so
+    s.re < 1, hence s.re ≠ 1. -/
+theorem impossible_nontrivial_zero_on_Re_one (s : ℂ) (h : IsNontrivialZero s) :
+    s.re ≠ 1 := by
+  have h_strip : s ∈ CriticalStrip := nontrivial_zero_in_critical_strip s h
+  simp [CriticalStrip] at h_strip
+  -- 0 < s.re < 1 implies s.re ≠ 1
+  linarith [h_strip.1, h_strip.2]
 
 /-- **Boundary Problem 2**: There are infinitely many zeros on the critical line
     Re(s) = 1/2. This is **Hardy's theorem** (1914), proved using the
@@ -384,22 +409,62 @@ theorem no_nontrivial_zeros_on_real_axis (s : ℂ) (h : s.im = 0)
   all_goals try { nlinarith }
 
 -- ================================================
--- SECTION 10: Summary
+-- SECTION 10: New Boundary Problem Theorems (Problem-Driven)
+-- ================================================
+
+/-- **Boundary Problem 4 (New)**: Trivial zeros lie strictly outside the critical strip.
+    Since trivial zeros are at -2, -4, -6, ... with Re(s) = -2, -4, ... < 0,
+    they cannot satisfy 0 < Re(s) < 1. This is a direct consequence of definitions. -/
+theorem trivial_zeros_outside_critical_strip (s : ℂ) (h : IsTrivialZero s) :
+    s ∉ CriticalStrip := by
+  rcases h with ⟨n, hn_pos, h_eq⟩
+  simp [CriticalStrip]
+  intro h1 h2
+  rw [h_eq] at h1
+  simp at h1
+  have h_n : (n : ℝ) ≥ 1 := by exact_mod_cast hn_pos
+  nlinarith
+
+/-- **Boundary Problem 5 (New)**: The critical line cannot contain any trivial zero.
+    Trivial zeros are negative even integers (Re = -2, -4, ...), while the
+    critical line has Re(s) = 1/2. This is a direct algebraic separation. -/
+theorem critical_line_not_trivial_zero (s : ℂ) (h : s ∈ CriticalLine) :
+    ¬ IsTrivialZero s := by
+  intro h_trivial
+  rcases h_trivial with ⟨n, hn_pos, h_eq⟩
+  simp [CriticalLine] at h
+  rw [h_eq] at h
+  simp at h
+  have h_n : (n : ℝ) ≥ 1 := by exact_mod_cast hn_pos
+  nlinarith
+
+/-- **Boundary Problem 6 (New)**: The composition of zero symmetries.
+    If ρ is a non-trivial zero, then applying both symmetries
+    (conjugation and 1-ρ) gives 1 - ρ̄, which is also a non-trivial zero.
+    This demonstrates the group structure of zero symmetries: Z/2 × Z/2. -/
+theorem zero_symmetry_composition (s : ℂ) (h : IsNontrivialZero s) :
+    IsNontrivialZero (1 - star s) := by
+  -- Apply conjugation symmetry first, then functional equation symmetry
+  have h_conj : IsNontrivialZero (star s) := zero_conjugate_symmetry s h
+  exact zero_symmetry_one_minus (star s) h_conj
+
+-- ================================================
+-- SECTION 11: Summary
 -- ================================================
 
 /-
 Summary of formalization status:
-- Proven theorems (with complete `by` proofs): 15
-- Axioms (with detailed proof-sketch comments): 7
+- Proven theorems (with complete `by` proofs): 18
+- Axioms (with detailed proof-sketch comments): 5
   - RH_statement (Millennium Prize Problem — open)
   - nontrivial_zero_in_critical_strip (moderate — needs Gamma factor analysis)
-  - zero_symmetry_one_minus (moderate — needs critical strip theorem)
-  - zero_conjugate_symmetry (moderate — needs conjugation properties)
-  - impossible_nontrivial_zero_on_Re_one (moderate — needs Gamma non-vanishing)
+  - zero_conjugate_symmetry (moderate — needs conjugation properties of Gamma)
   - hardys_theorem_infinitely_many_zeros_on_line (advanced — Hardy 1914)
   - zero_density_lower_bound_critical_line (advanced — Selberg/Levinson)
-- Total formal statements: 22
+- Total formal statements: 25
 - Bare sorry count: 0
+- Moderate axioms converted to theorems: 2 (zero_symmetry_one_minus, impossible_nontrivial_zero_on_Re_one)
+- New boundary problem theorems: 3 (trivial_zeros_outside_critical_strip, critical_line_not_trivial_zero, zero_symmetry_composition)
 -/
 
 end Sylva

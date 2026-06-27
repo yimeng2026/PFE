@@ -86,6 +86,7 @@ import SYLVA_CrossModuleTheorems
 import SYLVA_CrossReferences
 import HiggsMass
 import HiggsPotential
+import SYLVA_AdS_CFT
 import BerryConnection_GaugeTransformationLaw
 import BerryCurvature_GaugeInvariance
 import BerryKubo_ChernTopology
