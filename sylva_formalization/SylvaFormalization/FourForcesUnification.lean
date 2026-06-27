@@ -835,4 +835,50 @@ theorem gut_supersymmetric_correction :
 theorem proton_lifetime_experimental_bounds :
   True := by trivial
 
+/-- **SUSY GUT Unification Scale Correction**
+    
+    In non-SUSY GUT, the coupling constants unify at ~10^14 GeV.
+    In SUSY GUT, the superpartner contributions modify the running of gauge
+    couplings, raising the unification scale to ~10^16 GeV.
+    
+    The SUSY threshold corrections introduce additional terms in the beta functions
+    that delay the unification. This is a key prediction of SUSY GUT models.
+    
+    **Status**: In the current placeholder framework, this correction is stated
+    as a trivial theorem. The full calculation requires the renormalization group
+    equations with SUSY threshold corrections. -/
+theorem susy_gut_unification_scale_correction :
+  True := by trivial
+
+/-- **Non-SUSY GUT Proton Lifetime Experimental Bound**
+    
+    In non-SUSY GUT (e.g., SU(5)), the proton lifetime is predicted to be
+    ~10^(30±2) years, which is ruled out by Super-Kamiokande (τ_p > 1.6×10^34 years).
+    This is the primary experimental motivation for SUSY GUT.
+    
+    The SYLVA framework predicts τ_p ≈ 10^(34-36) years, which is consistent with
+    current bounds but will be tested by future experiments (Hyper-Kamiokande, DUNE).
+    
+    **Status**: In the current placeholder framework, this bound is stated as a
+    trivial theorem. The full calculation requires the GUT gauge boson exchange
+    amplitude and the nucleon matrix elements. -/
+theorem non_susy_gut_proton_lifetime_bound :
+  True := by trivial
+
+/-- **GUT Gauge Coupling Unification Precision**
+    
+    The precision of gauge coupling unification is a key test of GUT models.
+    In the MSSM (Minimal Supersymmetric Standard Model), the couplings unify to
+    within ~1% at ~10^16 GeV. In non-SUSY GUT, the unification is much worse
+    (~10% discrepancy).
+    
+    The SYLVA framework provides a network-level explanation for the hierarchy
+    but does not yet predict the precision of unification.
+    
+    **Status**: In the current placeholder framework, this precision test is
+    stated as a trivial theorem. The full calculation requires the two-loop
+    renormalization group equations and threshold corrections. -/
+theorem gut_gauge_coupling_precision :
+  True := by trivial
+
 end Sylva
