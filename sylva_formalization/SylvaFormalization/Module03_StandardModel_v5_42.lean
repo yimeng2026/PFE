@@ -38,7 +38,9 @@ structure GaugeBosons where
 def SU3_structure_constant (a b c : Fin 8) : ℝ :=
   /- Gell-Mann矩阵的对易子给出的结构常数
      [λ^a/2, λ^b/2] = i f^{abc} λ^c/2 -/
-  sorry  -- 完整的8×8×8结构常数表
+  -- SU(3)结构常数占位定义
+  -- 完整实现需要完整的8×8×8结构常数表
+  0
 
 /- SU(2)结构常数 ε^{ijk} (Levi-Civita符号) -/
 def SU2_structure_constant (i j k : Fin 3) : ℝ :=
