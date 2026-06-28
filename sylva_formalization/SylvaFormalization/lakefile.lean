@@ -148,5 +148,7 @@ lean_lib «SylvaFormalization» where
     `SYLVA_HigherStructures_v5_44,
     `SYLVA_ApexLayer_v5_44,
     `SYLVA_BlochTheorem_v5_44,
-    `SYLVA_BerryGeometry_ToyModel_v5_44
+    `SYLVA_BerryGeometry_ToyModel_v5_44,
+    `SYLVA_StringTheory_v5_44,
+    `SYLVA_SpectralTheory_v5_44
   ]

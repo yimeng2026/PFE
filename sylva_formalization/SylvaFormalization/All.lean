@@ -145,3 +145,5 @@ import SYLVA_HigherStructures_v5_44
 import SYLVA_ApexLayer_v5_44
 import SYLVA_BlochTheorem_v5_44
 import SYLVA_BerryGeometry_ToyModel_v5_44
+import SYLVA_StringTheory_v5_44
+import SYLVA_SpectralTheory_v5_44
