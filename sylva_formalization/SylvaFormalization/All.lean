@@ -160,3 +160,4 @@ import SYLVA_AntiPatternDiscipline_v5_44
 import SYLVA_FizeauEffectTopological_v5_44
 import SYLVA_ZhiKongScalarGravity_v5_44
 import SYLVA_PrecisionFittingEngineering_v5_44
+import SYLVA_EngineeringToolkit_v5_44

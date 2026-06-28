@@ -170,5 +170,6 @@ lean_lib «SylvaFormalization» where
     `SYLVA_AntiPatternDiscipline_v5_44,
     `SYLVA_FizeauEffectTopological_v5_44,
     `SYLVA_ZhiKongScalarGravity_v5_44,
-    `SYLVA_PrecisionFittingEngineering_v5_44
+    `SYLVA_PrecisionFittingEngineering_v5_44,
+    `SYLVA_EngineeringToolkit_v5_44
   ]
