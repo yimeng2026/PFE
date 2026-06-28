@@ -174,5 +174,6 @@ lean_lib «SylvaFormalization» where
     `SYLVA_EngineeringToolkit_v5_44,
     `SYLVA_ProjectMeta_v5_44,
     `SYLVA_PFE_Templates_v5_44,
-    `SYLVA_PFE_TestingFramework_v5_44
+    `SYLVA_PFE_TestingFramework_v5_44,
+    `SYLVA_PFE_BestPractices_v5_44
   ]

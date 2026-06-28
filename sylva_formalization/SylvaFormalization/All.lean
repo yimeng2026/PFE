@@ -164,3 +164,4 @@ import SYLVA_EngineeringToolkit_v5_44
 import SYLVA_ProjectMeta_v5_44
 import SYLVA_PFE_Templates_v5_44
 import SYLVA_PFE_TestingFramework_v5_44
+import SYLVA_PFE_BestPractices_v5_44
