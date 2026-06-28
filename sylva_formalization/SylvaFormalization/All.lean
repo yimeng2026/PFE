@@ -158,3 +158,4 @@ import SYLVA_HigherKoszulDuality_v5_44
 import SYLVA_ChromaticHomotopyTheory_v5_44
 import SYLVA_AntiPatternDiscipline_v5_44
 import SYLVA_FizeauEffectTopological_v5_44
+import SYLVA_ZhiKongScalarGravity_v5_44
