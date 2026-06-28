@@ -152,5 +152,7 @@ lean_lib «SylvaFormalization» where
     `SYLVA_StringTheory_v5_44,
     `SYLVA_SpectralTheory_v5_44,
     `SYLVA_BerryConnection_NonAbelAbel_v5_44,
-    `SYLVA_Phase1_AxiomElimination_v5_44
+    `SYLVA_Phase1_AxiomElimination_v5_44,
+    `SYLVA_VOA_v5_44,
+    `SYLVA_UnifiedHierarchy_v5_44
   ]
