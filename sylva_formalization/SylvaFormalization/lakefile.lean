@@ -167,5 +167,9 @@ lean_lib «SylvaFormalization» where
     `SYLVA_ApexTopos_v5_44,
     `SYLVA_TranscendentalQuantization_v5_44,
     `SYLVA_AbsoluteQuantization_v5_44,
-    `SYLVA_AxiomEliminationPhase1_v5_44
+    `SYLVA_AxiomEliminationPhase1_v5_44,
+    `SYLVA_UnivalentFoundations_v5_44,
+    `SYLVA_SpectraFieldTheory_v5_44,
+    `SYLVA_KuboFormula_v5_44,
+    `SYLVA_NambuGotoPolyakov_v5_44
   ]

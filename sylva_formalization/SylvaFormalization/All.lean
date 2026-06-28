@@ -158,3 +158,7 @@ import SYLVA_ApexTopos_v5_44
 import SYLVA_TranscendentalQuantization_v5_44
 import SYLVA_AbsoluteQuantization_v5_44
 import SYLVA_AxiomEliminationPhase1_v5_44
+import SYLVA_UnivalentFoundations_v5_44
+import SYLVA_SpectraFieldTheory_v5_44
+import SYLVA_KuboFormula_v5_44
+import SYLVA_NambuGotoPolyakov_v5_44
