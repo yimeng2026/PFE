@@ -158,5 +158,7 @@ lean_lib «SylvaFormalization» where
     `SYLVA_SyntheticGeometry_v5_44,
     `SYLVA_ChromaticHomotopy_v5_44,
     `SYLVA_StabilityFlow_v5_44,
-    `SYLVA_TMFOperations_v5_44
+    `SYLVA_TMFOperations_v5_44,
+    `SYLVA_TQFT_Spectra_v5_44,
+    `SYLVA_TranscendentalCohomology_v5_44
   ]
