@@ -156,5 +156,7 @@ lean_lib «SylvaFormalization» where
     `SYLVA_VOA_v5_44,
     `SYLVA_UnifiedHierarchy_v5_44,
     `SYLVA_SyntheticGeometry_v5_44,
-    `SYLVA_ChromaticHomotopy_v5_44
+    `SYLVA_ChromaticHomotopy_v5_44,
+    `SYLVA_StabilityFlow_v5_44,
+    `SYLVA_TMFOperations_v5_44
   ]
