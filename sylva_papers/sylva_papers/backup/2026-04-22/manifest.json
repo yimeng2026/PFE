@@ -1,0 +1,103 @@
+{
+  "backup_date": "2026-04-22",
+  "backup_directory": "/root/.openclaw/workspace/sylva_papers/backup/2026-04-22/",
+  "total_papers": 10,
+  "papers": [
+    {
+      "id": "P-001",
+      "title": "Alpha Derivation",
+      "category": "mathematics",
+      "filename": "P-001_alpha_derivation.md",
+      "source_path": "/root/.openclaw/workspace/sylva_papers/mathematics/P-001_alpha_derivation.md",
+      "backup_path": "/root/.openclaw/workspace/sylva_papers/backup/2026-04-22/P-001_alpha_derivation.md",
+      "status": "completed"
+    },
+    {
+      "id": "P-002",
+      "title": "Gravity-EM Unification",
+      "category": "physics",
+      "filename": "P-002_gravity_em_unification.md",
+      "source_path": "/root/.openclaw/workspace/sylva_papers/physics/P-002_gravity_em_unification.md",
+      "backup_path": "/root/.openclaw/workspace/sylva_papers/backup/2026-04-22/P-002_gravity_em_unification.md",
+      "status": "completed"
+    },
+    {
+      "id": "P-003",
+      "title": "Four Forces Unification",
+      "category": "physics",
+      "filename": "P-003_four_forces_unification.md",
+      "source_path": "/root/.openclaw/workspace/sylva_papers/physics/P-003_four_forces_unification.md",
+      "backup_path": "/root/.openclaw/workspace/sylva_papers/backup/2026-04-22/P-003_four_forces_unification.md",
+      "status": "completed"
+    },
+    {
+      "id": "P-004",
+      "title": "Stratified Geometry",
+      "category": "mathematics",
+      "filename": "P-004_stratified_geometry.md",
+      "source_path": "/root/.openclaw/workspace/sylva_papers/mathematics/P-004_stratified_geometry.md",
+      "backup_path": "/root/.openclaw/workspace/sylva_papers/backup/2026-04-22/P-004_stratified_geometry.md",
+      "status": "completed"
+    },
+    {
+      "id": "P-005",
+      "title": "15 Constants Unification",
+      "category": "physics",
+      "filename": "P-005_15_constants_unification.md",
+      "source_path": "/root/.openclaw/workspace/sylva_papers/physics/P-005_15_constants_unification.md",
+      "backup_path": "/root/.openclaw/workspace/sylva_papers/backup/2026-04-22/P-005_15_constants_unification.md",
+      "status": "completed"
+    },
+    {
+      "id": "P-006",
+      "title": "Compilation Verification",
+      "category": "computation",
+      "filename": "P-006_compilation_verification.md",
+      "source_path": "/root/.openclaw/workspace/sylva_papers/computation/P-006_compilation_verification.md",
+      "backup_path": "/root/.openclaw/workspace/sylva_papers/backup/2026-04-22/P-006_compilation_verification.md",
+      "status": "completed"
+    },
+    {
+      "id": "P-007",
+      "title": "Lean Formalization",
+      "category": "computation",
+      "filename": "P-007_lean_formalization.md",
+      "source_path": "/root/.openclaw/workspace/sylva_papers/computation/P-007_lean_formalization.md",
+      "backup_path": "/root/.openclaw/workspace/sylva_papers/backup/2026-04-22/P-007_lean_formalization.md",
+      "status": "completed"
+    },
+    {
+      "id": "P-008",
+      "title": "Agent Writing System",
+      "category": "computation",
+      "filename": "P-008_agent_writing_system.md",
+      "source_path": "/root/.openclaw/workspace/sylva_papers/computation/P-008_agent_writing_system.md",
+      "backup_path": "/root/.openclaw/workspace/sylva_papers/backup/2026-04-22/P-008_agent_writing_system.md",
+      "status": "completed"
+    },
+    {
+      "id": "P-009",
+      "title": "Development Roadmap",
+      "category": "methodology",
+      "filename": "P-009_development_roadmap.md",
+      "source_path": "/root/.openclaw/workspace/sylva_papers/methodology/P-009_development_roadmap.md",
+      "backup_path": "/root/.openclaw/workspace/sylva_papers/backup/2026-04-22/P-009_development_roadmap.md",
+      "status": "completed"
+    },
+    {
+      "id": "P-010",
+      "title": "Scientific Management",
+      "category": "methodology",
+      "filename": "P-010_scientific_management.md",
+      "source_path": "/root/.openclaw/workspace/sylva_papers/methodology/P-010_scientific_management.md",
+      "backup_path": "/root/.openclaw/workspace/sylva_papers/backup/2026-04-22/P-010_scientific_management.md",
+      "status": "completed"
+    }
+  ],
+  "categories": {
+    "mathematics": 2,
+    "physics": 3,
+    "computation": 3,
+    "methodology": 2
+  }
+}
