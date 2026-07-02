@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-pfe-bridges/base_bridge.py — PFE 抽象桥接基类
+pfe_bridges/base_bridge.py — PFE 抽象桥接基类
 
 定义所有 PFE ↔ TOE-SYLVA 桥接模块的通用接口。
 PFE ENGINEERING NOTE: 这是工程近似层，不追求数学严格，追求有效涌现。
@@ -190,10 +190,20 @@ class PFEProblemBridge(ABC):
                 self._result_cache = {}
 
     def _save_cache(self) -> None:
-        """保存缓存到磁盘。"""
+        """保存缓存到磁盘。支持 dataclass 序列化。"""
+        import dataclasses
+
+        class _PFEEncoder(json.JSONEncoder):
+            def default(self, obj):
+                if dataclasses.is_dataclass(obj) and not isinstance(obj, type):
+                    return dataclasses.asdict(obj)
+                if isinstance(obj, Enum):
+                    return obj.value
+                return super().default(obj)
+
         cache_file = self.cache_dir / f"{self.problem_name}.json"
         with open(cache_file, "w", encoding="utf-8") as f:
-            json.dump(self._result_cache, f, ensure_ascii=False, indent=2)
+            json.dump(self._result_cache, f, cls=_PFEEncoder, ensure_ascii=False, indent=2)
 
     def _cache_key(self, *args, **kwargs) -> str:
         """生成缓存键。"""

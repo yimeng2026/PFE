@@ -34,6 +34,11 @@ __all__ = [
     "CoordinatorConfig",
     "CoordinatorReport",
     "AgentTask",
+    "RiemannBridge",
+    "NavierStokesBridge",
+    "PvsNPBridge",
+    "HodgeBridge",
+    "YangMillsBridge",
 ]
 
 from .base_bridge import (
@@ -60,3 +65,9 @@ from .agent_coordinator import (
     CoordinatorReport,
     AgentTask,
 )
+
+from .riemann_bridge import RiemannBridge
+from .navier_stokes_bridge import NavierStokesBridge
+from .p_vs_np_bridge import PvsNPBridge
+from .hodge_bridge import HodgeBridge
+from .yang_mills_bridge import YangMillsBridge

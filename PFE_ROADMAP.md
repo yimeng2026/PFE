@@ -86,9 +86,9 @@
 
 ### 3.4 千界花园集成桥接（Phase 3.5 提前完成）
 
-- [x] `pfe-bridges/base_bridge.py` — PFEProblemBridge 抽象基类
-- [x] `pfe-bridges/qianjie_bridge.py` — 千界花园 API 客户端 + 集成桥接
-- [x] `pfe-bridges/agent_coordinator.py` — 多代理调度器（9 种协作类型映射）
+- [x] `pfe_bridges/base_bridge.py` — PFEProblemBridge 抽象基类
+- [x] `pfe_bridges/qianjie_bridge.py` — 千界花园 API 客户端 + 集成桥接
+- [x] `pfe_bridges/agent_coordinator.py` — 多代理调度器（9 种协作类型映射）
 - [x] 千界花园 API 集成（sylva-sync, modules, panels, notes）
 - [x] 自动回传 PFE 验证结果到千界花园
 
@@ -105,7 +105,7 @@
 
 ### 4.2 学术-工程桥接
 
-- [x] 创建 `pfe-bridges/` 桥接模块目录结构
+- [x] 创建 `pfe_bridges/` 桥接模块目录结构
 - [x] 定义 `PFEProblemBridge` 抽象基类（数值验证 + 启发式策略 + 置信度评估 + Lean↔Python 翻译）
 - [x] 千界花园桥接（QianJieBridge）对接 backend API
 - [x] 每个千年难题独立桥接模块（Riemann, Navier-Stokes, P vs NP, Hodge, Yang-Mills）
