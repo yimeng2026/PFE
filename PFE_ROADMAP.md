@@ -84,6 +84,14 @@
 - [ ] 创建涌现质量的历史追踪
 - [ ] 建立涌现结果的同行评审机制（代理评审）
 
+### 3.4 千界花园集成桥接（Phase 3.5 提前完成）
+
+- [x] `pfe-bridges/base_bridge.py` — PFEProblemBridge 抽象基类
+- [x] `pfe-bridges/qianjie_bridge.py` — 千界花园 API 客户端 + 集成桥接
+- [x] `pfe-bridges/agent_coordinator.py` — 多代理调度器（9 种协作类型映射）
+- [x] 千界花园 API 集成（sylva-sync, modules, panels, notes）
+- [x] 自动回传 PFE 验证结果到千界花园
+
 ---
 
 ## Phase 4: 与 TOE-SYLVA 的协同深化
@@ -97,10 +105,12 @@
 
 ### 4.2 学术-工程桥接
 
-- [ ] 创建 `pfe-bridges/` 桥接模块
-- [ ] 每个桥接模块对应一个 TOE-SYLVA 的千年难题
-- [ ] 桥接模块包含：数值验证 + 工程近似 + 启发式策略 + 置信度评估
+- [x] 创建 `pfe-bridges/` 桥接模块目录结构
+- [x] 定义 `PFEProblemBridge` 抽象基类（数值验证 + 启发式策略 + 置信度评估 + Lean↔Python 翻译）
+- [x] 千界花园桥接（QianJieBridge）对接 backend API
+- [ ] 每个千年难题独立桥接模块（Riemann, Navier-Stokes, P vs NP, Hodge, Yang-Mills）
 - [ ] 实现从 Lean 代码到 Python 脚本的自动翻译（符号级）
+- [ ] 端到端自动化验证管道（PFE 调度 → 千界花园同步 → 结果聚合）
 
 ---
 
