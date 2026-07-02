@@ -108,8 +108,14 @@
 - [x] 创建 `pfe-bridges/` 桥接模块目录结构
 - [x] 定义 `PFEProblemBridge` 抽象基类（数值验证 + 启发式策略 + 置信度评估 + Lean↔Python 翻译）
 - [x] 千界花园桥接（QianJieBridge）对接 backend API
-- [ ] 每个千年难题独立桥接模块（Riemann, Navier-Stokes, P vs NP, Hodge, Yang-Mills）
-- [ ] 实现从 Lean 代码到 Python 脚本的自动翻译（符号级）
+- [x] 每个千年难题独立桥接模块（Riemann, Navier-Stokes, P vs NP, Hodge, Yang-Mills）
+  - [x] `riemann_bridge.py` — 黎曼假设桥接（zeta 零点验证、Siegel 公式、粗粒化策略）
+  - [x] `navier_stokes_bridge.py` — 纳维-斯托克斯桥接（Taylor-Green 涡模拟、爆破检测）
+  - [x] `p_vs_np_bridge.py` — P vs NP 桥接（SAT 缩放分析、熵隙估计、电路复杂度）
+  - [x] `hodge_bridge.py` — 霍奇猜想桥接（代数簇 Hodge 数计算、具体例子验证）
+  - [x] `yang_mills_bridge.py` — 杨-米尔斯桥接（格点模拟、Wilson 作用量、质量隙提取）
+- [x] 实现从 Lean 代码到 Python 脚本的符号翻译（`translate_lean_to_python` 方法）
+- [ ] 实现全自动 Lean 符号解析（当前为手动映射，未来对接 `sylva-parser.ts`）
 - [ ] 端到端自动化验证管道（PFE 调度 → 千界花园同步 → 结果聚合）
 
 ---
