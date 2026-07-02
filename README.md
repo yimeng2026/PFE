@@ -1,149 +1,194 @@
-# TOE-SYLVA
+# PFE — Precision Fitting Engineering
 
-**Theory of Everything — SYLVA Formalization Project**
-
-A unified framework formalizing fundamental physics, mathematics, and complexity theory in Lean 4.
+> **质空论工程原型**：从抽象拓扑（空）涌现物理可测量（质）的精度拟合系统。
+> 
+> 与 [TOE-SYLVA](https://github.com/yimeng2026/TOE-SYLVA) 的关系：SYLVA 是学术总纲（严格形式化），PFE 是工程应用（有效涌现）。
 
 ---
 
-## 📐 Formalization Status
+## 工程定位
 
-### Core Modules (Zero `sorry`, Zero Compilation Errors)
+| 维度 | TOE-SYLVA（学术） | PFE（工程） |
+|------|------------------|------------|
+| **正确性标准** | Lean 4 可编译，数学严格 | 有效即可，数值近似、启发式、LLM 推理均可 |
+| **核心方法** | 形式化证明（theorem/lemma） | 数值验证、计算模拟、自动化代理、工程部署 |
+| **输出形式** | `.lean` 证明 + 学术论文 | `.py` 计算脚本 + `.js` 自动化管道 + 行业部署方案 |
+| **失败容忍** | 0 容忍（编译失败 = 不可接受） | 高容忍（误差 1e-6 可接受，启发式失败可迭代） |
+| **千年难题** | 公理化/定理化，诚实标记 | 数值近似、物理模拟、实验预言、工程启发 |
 
-| Module | File | Status | Theorems | Postulates |
-|--------|------|--------|----------|------------|
-| **Four Forces Unification** | `FourForcesUnification.lean` | ✅ Compiled | 7 | 5 (honestly marked) |
-| **Navier-Stokes** | `NavierStokes.lean` | ✅ Compiled | 11 | 3 |
-| **Quantum Photosynthesis** | `QuantumPhotosynthesis.lean` | ✅ Compiled | 8 | 2 |
-| **Gauge Theory** | `GaugeTheory/Basic.lean` | ✅ Compiled | 4 | 0 (2 axioms → theorems) |
-| **SAT / Cook-Levin** | `CookLevin/SAT.lean` + `SAT.lean` | ✅ Compiled | 12 | 13 |
-| **Proton Lifetime** | `protonLifetime_Standalone.lean` | ✅ Compiled | 3 | 1 |
-| **Fifteen Constants** | `FifteenConstants.lean` | ✅ Compiled | 15 | 15 (physical postulates) |
-| **Chern Number** | `ChernNumber.lean` | ✅ Compiled | 6 | 4 |
-| **Hodge Theory** | `Hodge.lean` | ✅ Compiled | 5 | 3 |
-| **Riemann Hypothesis** | `RiemannHypothesis.lean` | ✅ Compiled | 3 | 1 (Millennium Prize) |
-| **P vs NP** | `PvsNP/RazborovSmolensky.lean` | ✅ Compiled | 8 | 2 |
-| **Complexity** | `Complexity.lean` | ✅ Compiled | 4 | 2 |
-| **Standard Model** | `StandardModel.lean` | ✅ Compiled | 6 | 4 |
-| **Renormalization** | `Renormalization.lean` | ✅ Compiled | 5 | 3 |
-| **String Theory** | `StringTheory.lean` | ✅ Compiled | 4 | 2 |
-| **Quantum Gravity** | `QuantumGravity.lean` | ✅ Compiled | 3 | 2 |
-| **Information Geometry** | `InformationGeometry.lean` | ✅ Compiled | 4 | 1 |
-| **BCS Superconductivity** | `BCSTherory.lean` | ✅ Compiled | 5 | 2 |
-| **Condensed Matter** | `CondensedMatter.lean` | ✅ Compiled | 4 | 2 |
-| **Cosmology** | `Cosmology.lean` | ✅ Compiled | 4 | 2 |
+**PFE 的核心哲学**：不追求每一步的数学严格性，而是追求**有效涌现**——通过工程手段（数值计算、LLM 推理、自动化代理）让"空"（抽象框架）涌现出"质"（可验证的物理预言和工程解决方案）。
 
-**Total: 39 modules | 150+ theorems | 120+ postulates (all honestly marked)**
+---
 
-### Compilation
+## 目录结构
 
-```bash
-cd sylva_formalization/SylvaFormalization
-lake build        # ~8250 jobs, zero errors
+```
+PFE/
+├── PFE_MANIFESTO.md              # 质空论工程原型完整辨析
+├── README.md                     # 本文件
+├── sylva-release/               # 引用 TOE-SYLVA 核心形式化（只读引用，不直接修改）
+│   └── README.md                # 指向 TOE-SYLVA 的引用说明
+├── sagemath_verification/        # 数值计算引擎（SageMath/Python）
+│   ├── elliptic_curve_reduction.py
+│   ├── dynamical_system_factor_detection.py
+│   ├── rank_verification.py
+│   └── unified_verifier.py
+├── alpha_derivation/             # 精细结构常数因果网络涌现推导
+│   ├── 00_final_report.md
+│   ├── 01_causal_network_simulation.py
+│   ├── 02_fast_simulation.py
+│   └── ...
+├── toe_framework/               # 物理理论计算沙盒（80+ 理论框架）
+│   ├── 01_experimental_verification.md
+│   ├── 05_mathematical_foundations.md
+│   └── ...
+├── pfe-pipelines/               # 端到端自动化管道（新建）
+├── pfe-agents/                  # 自主研究代理集群（新建）
+├── sylva_agents/                # 20 代理集群历史档案
+├── sylva_papers/                # 工程预印本与实验报告
+├── sylva_academic/              # 学术资源（引用 TOE-SYLVA）
+├── sylva_complete/              # 完整历史档案
+└── sylva_formalization/         # 形式化历史（引用 TOE-SYLVA）
 ```
 
 ---
 
-## 📝 Academic Papers
+## 核心工程模块
 
-### 希尔伯特 23 问题完整学术档案 (2026-06)
-`sylva_papers/mathematics/Hilbert_Problems/` — 23 篇学术期刊标准论文，每篇包含：
-- 严格数学定义与历史里程碑
-- 已知成果与当前状态（已解决/部分解决/未解决）
-- **SYLVA 专项研究直接嵌入**（无内部文件引用）
-- 等价表述与关联问题（含跨问题交叉引用）
-- 参考文献
+### 1. 数值计算引擎 `sagemath_verification/`
 
-| 编号 | 问题 | 状态 | SYLVA 关联 |
-|------|------|------|-----------|
-| H1 | 连续统假设 | 未解决 | 集合论，Gödel 不完备性 |
-| H2 | 算术公理的相容性 | 哥德尔定理 | **SYLVA_Incompleteness.lean 形式化** |
-| H6 | 数学物理公理化 | 部分解决 | **Wightman 公理 / Yang-Mills 质量间隙** |
-| H8 | 素数问题 | 部分解决 | **Berry-Keating 算子 / 黎曼假设 / 素数定理形式化** |
-| H10 | 丢番图方程可解性 | 已解决 (Matiyasevich) | **可计算性理论 / P vs NP** |
-| H14 | 代数不变量的有限性 | 已解决 (Hilbert 基定理) | **GCT / 几何不变量理论** |
-| H16 | 代数曲线与极限环 | 未解决 | 动力系统 / 涌现理论 |
-| H18 | 空间堆积问题 | 已解决 (Kepler) | **Flyspeck 形式化 / Viazovska / Lean 4** |
-| H21 | 线性微分方程单值群 | 已解决 (Deligne) | **Riemann-Hilbert 对应 / Local-to-Global** |
-| H22 | 解析函数单值化 | 已解决 (Koebe-Poincaré) | **Teichmüller 理论 / Ricci 流** |
-| H23 | 变分法的进一步发展 | 持续发展中 | **涌现理论 / 参数优化 / PFE 变分框架** |
-| ... | 其余 12 个问题 | 见论文 | 见论文 |
+基于 SageMath/Python 的数值验证工具，验证 TOE-SYLVA 形式化中的算法：
 
-### 千禧年 7 难题 SYLVA 完整研究档案 (2026-06)
-`sylva_papers/mathematics/Millennium_Problems/` — 7 篇综合优化论文，整合桌面最终版结构与仓库丰富版研究：
+- **椭圆曲线约化判定**：`elliptic_curve_reduction.py`
+- **动力系统因子检测**：`dynamical_system_factor_detection.py`
+- **秩计算验证**：`rank_verification.py`
+- **统一验证框架**：`unified_verifier.py`
 
-| 问题 | 状态 | 核心 SYLVA 研究 |
-|------|------|----------------|
-| P vs NP | 未解决 | GCT 深度追踪 2024-2026, Cook-Levin 形式化, 308 处 sorry 管理 |
-| Hodge 猜想 | 未解决 | 镜像对称, motives, p-adic Hodge 理论, 代数几何书目 |
-| 黎曼假设 | 未解决 | Berry-Keating 算子, Hilbert-Pólya 猜想, 数值验证框架 |
-| Yang-Mills 存在性与质量间隙 | 未解决 | Wightman 公理化, 谱间隙分析, 质量间隙的谱解释 |
-| Navier-Stokes 正则性 | 未解决 | CKN 定理, 能量不等式, 形式化基础设施 |
-| BSD 猜想 | 未解决 | 2-descent 路线图, Euler 系, 椭圆曲线 L-函数 |
-| 庞加莱猜想 | 已解决 (Perelman) | Ricci 流手术, 几何化纲领, 拓扑-几何统一 |
+### 2. 因果网络涌现 `alpha_derivation/`
 
-### 快速导航
-- [数学论文集 README](sylva_papers/mathematics/README.md) — 按状态/领域/SYLV A 关联度分类
-- [SYLVA-PFE 统一索引](SYLVA_PFE_UNIFIED_INDEX.md) — 跨仓库完整导航（349 个 Lean 文件, 160+ 模块, 121,876 行代码）
+质空论的核心实践：从因果网络拓扑连通性涌现电荷。
 
-### 其他论文
-| 论文 | 状态 | 目标期刊 |
-|-------|--------|-------------|
-| Fine-Structure Constant from Causal Networks | 95% 完成 | *Phys. Rev. D* 或 arXiv |
-| Four Forces Unification | 骨架 + Lean 代码 | TOE 框架论文 |
-| Navier-Stokes Regularity | 部分证明 | 数学/物理期刊 |
-| P vs NP — Spectral Barrier | 框架 | 复杂性理论 |
+- 4 维因果网络模拟给出 α ≈ 0.0073-0.008（与 1/137 同数量级）
+- 维度预测：α(d) 随维度增加单调递减，4 维处于"临界窗口"
+- 拓扑修正：S³ vs T³ 对连通性分布有不同约束
 
----
+### 3. 物理理论计算沙盒 `toe_framework/`
 
-## 🔬 Research Directions
+80+ 个物理理论框架的计算探索（不要求严格证明，要求有效计算）：
 
-### Active (P0)
-- **Four Forces Unification** — Causal network → emergent coupling constants
-- **Navier-Stokes** — Energy boundedness, partial regularity
-- **Quantum Chemistry** — Reaction networks, Hückel model, VQE
+- 实验验证框架
+- 理论修正计算
+- QCD 涌现模拟
+- 暗物质/暗能量参数扫描
+- 电弱统一计算
+- 量子引力近似
+- 超对称参数空间
+- ...
 
-### Planned (P1)
-- **Physical Chemistry** — Master equations, catalysis, partition functions
-- **Quantum Gravity** — Causal set dynamics, AdS/CFT
-- **P vs NP** — Circuit complexity lower bounds
+### 4. 自动化管道 `pfe-pipelines/`（新建）
 
-### Long-term (P2)
-- **Hodge Conjecture** — Mixed Hodge structures
-- **BSD Conjecture** — Elliptic curve L-functions
-- **Yang-Mills Mass Gap** — Gauge theory rigorous treatment
+端到端自动化工程管道：
+
+- 数据注入 → 数值计算 → 结果验证 → 报告生成
+- 与千界花园 LLM 后端集成，自动分析 TOE-SYLVA 的 sorry 并提供工程启发
+- 行业部署模板自动生成
+
+### 5. 自主代理 `pfe-agents/`（新建）
+
+基于千界花园 LLM 集成（Zhipu GLM-5.1）的自主研究代理：
+
+- 自动解析 TOE-SYLVA 的 Lean 代码，提取开放问题
+- LLM 生成工程近似策略
+- 数值验证代理自动执行 SageMath 脚本
+- 结果评估代理判断"有效涌现"质量
 
 ---
 
-## 🛠️ Technical Stack
+## PFE 工程体系（v1-v18 历史）
 
-- **Proof Assistant**: Lean 4 + Mathlib (v4.29.0)
-- **Backend**: Node.js + Express + TypeScript
-- **Frontend**: React + TypeScript + Vite
-- **Database**: SQLite + Prisma
-- **LLM Integration**: 10+ providers (OpenAI, Anthropic, Kimi, DeepSeek, Qwen, Gemini, ...)
-- **Deployment**: Docker + Render + Vercel
+PFE 已发展出完整的 18 层工程堆栈（见 `sylva_formalization/SylvaFormalization/SYLVA_PrecisionFittingEngineering_v5_44.lean`）：
+
+| 版本 | 核心内容 | 工程涌现层级 |
+|------|---------|------------|
+| v1 | 工程拟合基础 | 基础涌现 |
+| v2 | 精度工程（数值优化/误差控制） | 精度涌现 |
+| v3 | 工业实用主义（13 行业部署） | 应用涌现 |
+| v4-v5 | 端到端管道/运行时自动化 | 流程涌现 |
+| v6 | 安全关键与合规 | 信任涌现 |
+| v7 | 容器化与可观测性 | 部署涌现 |
+| v8-v10 | 量子-经典/XAI/因果/持续学习 | 混合智能涌现 |
+| v11-v13 | 自主集群/世界模型 | 系统级涌现 |
+| v14-v15 | 自主研究代理/多代理 | 代理级涌现 |
+| v16-v17 | 自组织研究网络/USI | 群体智能涌现 |
+| v18 | LLM 集成（Pangu/DeepSeek/Claude） | 智能涌现接口 |
+
+辅助模块：
+- `EngineeringToolkit` — 跨模块工程标准
+- `Templates` — 13 行业部署模板
+- `TestingFramework` — 自动代理测试（替代物测试）
+- `BestPractices` — 工程师手册（反模式/FAQ/调试）
+- `data-storm` — 大规模数据注入与自动化
 
 ---
 
-## 📁 Repository Structure
+## 与千界花园的关系
+
+千界花园是 PFE 的**智能涌现后端**。
+
+- **Lean 解析**：`sylva-parser.ts` 解析 TOE-SYLVA 的 Lean 代码，提取 theorem/def/sorry
+- **LLM 推理**：`research-llm.ts` 调用 Zhipu GLM-5.1 进行学术协作分析
+- **学术协作**：Panel/Workshop/Pipeline/ReviewBoard 等协作组为 PFE 提供研究组织框架
+- **SYLVA 同步**：`POST /api/research/sylva-sync` 将 TOE-SYLVA 的 Lean 状态同步到数据库，供 PFE 代理分析
+
+千界花园不是前端展示工具，而是 PFE 的**智能涌现基础设施**——为 PFE 的数值计算和工程拟合提供 LLM 推理能力。
+
+---
+
+## 与 TOE-SYLVA 的协同
 
 ```
-.
-├── sylva_formalization/SylvaFormalization/   # Lean 4 formalization (39 modules)
-├── sylva_academic/                            # Papers, reports, LaTeX
-├── alpha_derivation/                          # α-emergence research
-├── papers/                                    # Literature collection
-├── sylva_complete/                            # Mathematical proofs archive
-├── sylva_agents/                              # Multi-agent writing system
-├── toe_framework/                             # TOE conceptual framework
-├── backend/                                   # Platform backend
-├── frontend/                                  # Platform frontend
-└── docs/                                      # Documentation
+TOE-SYLVA（学术严格）              PFE（工程有效）
+      ↓                                  ↓
+  形式化定理 ←──────验证/启发──────→ 数值实验
+  严格证明   ←──────近似指导──────→ 工程拟合
+  千年难题   ←──────物理预言──────→ 实验设计
+  0 sorry    ←──────反例发现──────→ 边界测试
 ```
+
+**规则**：
+- TOE-SYLVA 的定理可以作为 PFE 数值验证的目标
+- PFE 的数值实验可以为 TOE-SYLVA 的定理方向提供启发
+- PFE 的"不一定正确"的结果必须明确标注置信度，不污染 TOE-SYLVA 的严格性
+- PFE 的 `sylva-release/` 不直接修改，只引用 TOE-SYLVA 的最新版本
 
 ---
 
-## 📄 License
+## 工程标准
 
-MIT © SYLVA Research Group
+### 有效涌现评估体系
+
+| 维度 | 评估指标 | 阈值 |
+|------|---------|------|
+| **置信度** | 数值结果的可重复性 | 标准差 < 10% |
+| **可复现性** | 相同输入→相同输出 | 误差 < 1e-6 |
+| **实用性** | 对物理/工程问题的指导价值 | 专家评分 ≥ 3/5 |
+| **收敛性** | 迭代算法是否收敛 | 迭代次数 < 1000 |
+| **对比性** | 与已知结果的偏差 | 与标准值偏差 < 1 个数量级 |
+
+### 代码规范
+
+- Python 计算脚本：使用 SageMath 9.0+ 或 Python 3.8+
+- 数值结果：必须标注误差范围和置信度
+- 启发式结果：必须标注"HEURISTIC"标签和失败条件
+- LLM 生成：必须标注模型版本和温度参数
+- 所有工程结果：必须有对应的 TOE-SYLVA 学术模块引用（反向链接）
+
+---
+
+## 许可证
+
+MIT License — 工程成果开源，学术引用请指向 TOE-SYLVA。
+
+## 联系
+
+PFE Precision Fitting Engineering — 质空论工程原型
