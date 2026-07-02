@@ -186,6 +186,9 @@ theorem sigma_star_hypothesis (lam t : ℝ) (hlam : lam > 1)
   -- 1. The functional equation xi(s) = xi(1-s)
   -- 2. The symmetry of the coarse-graining operator
   -- 3. The convexity of B_lambda in sigma
+  -- Proof strategy: Show B_lambda(1/2,t) ≤ B_lambda(sigma,t) using convexity of
+  -- BootstrapResidual in sigma (BootstrapResidual_convex) and the symmetry xi(s)=xi(1-s).
+  -- The critical line sigma=1/2 is the fixed point of the symmetry, hence the minimizer.
   -- For now, we use the fact that the critical line is the locus of symmetry
   sorry  -- Requires full convexity analysis
 
@@ -344,6 +347,8 @@ theorem variational_bootstrap_rh :
     -- 1. Showing that at a zero, B_lambda is minimized at rho.re
     -- 2. Combining with sigma_star_converges_to_half
     -- 3. Concluding rho.re = 1/2
+    -- Proof strategy: Combine sigma_star_converges_to_half (minimizer → 1/2) with
+    -- BootstrapResidual_zero_iff (zero ↔ residual = 0) to show the zero must lie on Re=1/2.
     sorry  -- Full proof requires additional machinery
 
 
@@ -435,6 +440,8 @@ theorem BootstrapResidual_convex (t : ℝ) (lam : ℝ) (hlam : lam ≥ lambda_c)
   -- 1. The squared norm is convex
   -- 2. The coarse-graining is a linear operator
   -- 3. The composition preserves convexity
+  -- Proof strategy: Use ConvexOn.comp_of_convexOn_of_convexMonotone (normSq is convex,
+  -- coarse-graining is linear/affine) and Mathlib lemmas for ConvexOn.
   sorry  -- Requires detailed analysis of convexity using Mathlib tools
 
 
@@ -489,6 +496,8 @@ theorem RiemannXi_functional_equation (s : ℂ) :
   unfold RiemannXi
   -- The functional equation is a standard result in analytic number theory
   -- It follows from the Mellin transform of theta function and Poisson summation
+  -- Proof strategy: Use riemannZeta_functional_equation from Mathlib, then substitute
+  -- the definition of RiemannXi and simplify using Gamma reflection and power laws.
   sorry  -- Requires full proof using zeta functional equation
 
 /-- On the critical line sigma = 1/2, |xi(sigma+i*t)| is minimized at zeros
@@ -506,18 +515,57 @@ theorem Xi_critical_line_property (t : ℝ) (ht : t ≠ 0) :
   -- On the critical line, the symmetry is manifest
   -- xi(1/2 + it) = xi(1/2 - it) by the functional equation
   constructor
-  · -- If xi(s) = 0, then zeta(s) = 0 (since other factors are non-zero)
+  · -- Forward: If xi(s) = 0, then zeta(s) = 0 (prefactors non-zero on critical line)
     intro h_xi_zero
-    -- The prefactors are non-zero for s = 1/2 + it with t ≠ 0
-    -- - s = 1/2 + it ≠ 0
-    -- - s - 1 = -1/2 + it ≠ 0
-    -- - pi^(-s/2) ≠ 0
-    -- - Gamma(s/2) ≠ 0 for s/2 = 1/4 + it/2
     simp at *
-    sorry  -- Show the prefactors are non-zero
-  · -- If zeta(s) = 0, then xi(s) = 0 (by definition)
+    -- s = 1/2 + it with t ≠ 0, so s ≠ 0
+    have h_s_ne_zero : s ≠ 0 := by
+      intro h
+      have h_im : s.im = 0 := by rw [h]; simp
+      have h_im_t : s.im = t := by simp [s]
+      rw [h_im_t] at h_im
+      contradiction
+    -- s - 1 = -1/2 + it ≠ 0 since t ≠ 0
+    have h_s1_ne_zero : s - 1 ≠ 0 := by
+      intro h
+      have h_re : s.re = 1 := by
+        have : s.re - 1 = 0 := by simpa using congr_arg Complex.re h
+        linarith
+      have h_re_half : s.re = 1 / 2 := by simp [s]
+      linarith
+    -- pi^(-s/2) ≠ 0 since pi > 0
+    have h_pi : (Real.pi : ℂ) ^ (-s / 2 : ℂ) ≠ 0 := by
+      apply Complex.cpow_ne_zero
+      · norm_num
+      · refine (fun h => ?_)
+        simp [s, Complex.ext_iff] at h
+        norm_num at h
+        tauto
+    -- Gamma(s/2) ≠ 0 for s/2 = 1/4 + it/2 (Re > 0, no zeros in right half-plane)
+    have h_gamma : Complex.Gamma (s / 2) ≠ 0 := by
+      -- Proof strategy: Apply Complex.Gamma_ne_zero (or similar Mathlib lemma) since
+      -- Gamma has no zeros in the complex plane (only poles at non-positive integers).
+      -- Gamma has no zeros in the right half-plane
+      -- s/2 = 1/4 + it/2, Re(s/2) = 1/4 > 0
+      sorry
+    -- The product of all prefactors is non-zero
+    have h_product_ne_zero : (1 / 2 : ℂ) * s * (s - 1) * (Real.pi : ℂ) ^ (-s / 2) * Complex.Gamma (s / 2) ≠ 0 := by
+      apply mul_ne_zero
+      · apply mul_ne_zero
+        · apply mul_ne_zero
+          · apply mul_ne_zero
+            · norm_num
+            · exact h_s_ne_zero
+          · exact h_s1_ne_zero
+        · exact h_pi
+      · exact h_gamma
+    -- Since product * zeta = 0 and product ≠ 0, we have zeta = 0
+    have h_zeta_zero : riemannZeta s = 0 := by
+      apply (mul_eq_zero.mp h_xi_zero).resolve_left
+      exact h_product_ne_zero
+    exact h_zeta_zero
+  · -- Backward: If zeta(s) = 0, then xi(s) = 0 (by definition, zeta is a factor)
     intro h_zeta_zero
-    -- xi(s) contains zeta(s) as a factor
     simp [h_zeta_zero]
 
 
