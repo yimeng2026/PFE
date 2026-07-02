@@ -1,0 +1,66 @@
+{
+  "timestamp": "2026-07-02T22:22:21.998980",
+  "pipeline": "PFE Precision Fitting Engineering",
+  "philosophy": "Effective Emergence from Void to Mass (ZhiKong)",
+  "sylva_summary": {
+    "total_modules": 10,
+    "total_sorry": 38,
+    "total_theorems": 18,
+    "total_axioms": 0,
+    "sorry_by_file": [
+      [
+        "NavierStokes.lean",
+        14
+      ],
+      [
+        "NumericalZeros.lean",
+        9
+      ],
+      [
+        "Complexity.lean",
+        8
+      ],
+      [
+        "RiemannHypothesis.lean",
+        6
+      ],
+      [
+        "Hodge.lean",
+        1
+      ]
+    ],
+    "open_theorems": [
+      {
+        "file": "Complexity.lean",
+        "theorem": "sat_in_p_implies_peqnp",
+        "line": 373,
+        "sorry_count": 1
+      },
+      {
+        "file": "Hodge.lean",
+        "theorem": "betti_number_eq_sum_hodge",
+        "line": 506,
+        "sorry_count": 1
+      },
+      {
+        "file": "RiemannHypothesis.lean",
+        "theorem": "sigma_star_eq_half",
+        "line": 170,
+        "sorry_count": 1
+      },
+      {
+        "file": "RiemannHypothesis.lean",
+        "theorem": "RiemannXi_functional_equation",
+        "line": 511,
+        "sorry_count": 1
+      }
+    ]
+  },
+  "verification_results": [],
+  "quality_metrics": {
+    "total_pass": 0,
+    "total_fail": 0,
+    "total_heuristic": 0,
+    "average_confidence": 0
+  }
+}

@@ -1,0 +1,16 @@
+作为 PFE 工程代理，分析以下 TOE-SYLVA 的开放问题，
+为每个问题提供数值验证策略或工程近似方案。
+
+开放问题列表：
+- Complexity.lean::sat_in_p_implies_peqnp (line 373, 1 sorry)
+- Hodge.lean::betti_number_eq_sum_hodge (line 506, 1 sorry)
+- RiemannHypothesis.lean::sigma_star_eq_half (line 170, 1 sorry)
+- RiemannHypothesis.lean::RiemannXi_functional_equation (line 511, 1 sorry)
+
+请为每个问题提供：
+1. 数值验证方法（如果有）
+2. 工程近似策略（如果数值验证不可行）
+3. 置信度评估（0-1）
+4. 所需的计算工具（SageMath/Python/Mathematica）
+
+注意：PFE 追求有效涌现，不要求数学严格性。
