@@ -82,7 +82,85 @@ class BridgeRunResult:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
-class PFEProblemBridge(ABC):
+# ─── 千界花园集成混入类 ───
+
+class QianJieIntegrationMixin:
+    """
+    千界花园集成混入类。
+
+    为 PFEProblemBridge 提供向千界花园推送验证结果的能力。
+    通过可选的 _qianjie_client 属性与千界花园 API 交互。
+
+    PFE ENGINEERING NOTE: 混入类不强制要求千界花园在线，
+    所有方法都提供 fallback 数据返回。
+    """
+
+    _qianjie_client: Any = None
+
+    def push_to_qianjie(self, result: BridgeRunResult) -> Dict[str, Any]:
+        """
+        将验证结果推送到千界花园 /api/research/notes。
+
+        如果未配置 qianjie_client，返回 fallback 数据。
+        如果推送失败，返回包含错误信息和 fallback 标志的响应。
+        """
+        if not hasattr(self, "_qianjie_client") or self._qianjie_client is None:
+            return {
+                "success": False,
+                "error": "No qianjie_client configured. Set qianjie_client on bridge initialization.",
+                "fallback": True,
+                "note": {
+                    "title": f"PFE验证: {result.problem_name}",
+                    "content": result.report_markdown or self._generate_fallback_report(result),
+                    "tags": ["pfe-bridge", result.problem_name, result.status.value],
+                },
+            }
+
+        try:
+            report = result.report_markdown or self._generate_fallback_report(result)
+
+            # 兼容 QianJieClient 实例
+            if hasattr(self._qianjie_client, "push_verification_result"):
+                return self._qianjie_client.push_verification_result(result)
+            # 兼容 ResearchNoteClient 实例
+            elif hasattr(self._qianjie_client, "create_note"):
+                return self._qianjie_client.create_note(
+                    title=f"PFE验证: {result.problem_name}",
+                    content=report,
+                    tags=["pfe-bridge", result.problem_name, result.status.value],
+                )
+            else:
+                return {
+                    "success": False,
+                    "error": "Unknown qianjie_client type: expected QianJieClient or ResearchNoteClient",
+                    "fallback": True,
+                }
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e),
+                "fallback": True,
+            }
+
+    def _generate_fallback_report(self, result: BridgeRunResult) -> str:
+        """生成 fallback Markdown 报告（千界花园不可用时本地使用）。"""
+        lines = [
+            f"## PFE Bridge Result: {result.problem_name}",
+            f"- Status: {result.status.value}",
+            f"- Confidence: {result.confidence_summary:.2f}",
+            f"- Time: {result.execution_time_ms}ms",
+            "",
+        ]
+        for nr in result.numerical_results:
+            lines.append(
+                f"- {nr.target_name}: computed={nr.computed_value}, status={nr.status.value}"
+            )
+        return "\n".join(lines)
+
+
+# ─── PFEProblemBridge 抽象基类 ───
+
+class PFEProblemBridge(ABC, QianJieIntegrationMixin):
     """
     PFE 千年难题桥接抽象基类。
 
@@ -92,16 +170,24 @@ class PFEProblemBridge(ABC):
     - 置信度评估
     - Lean ↔ Python 符号翻译
     - 完整验证管道执行
+    - 千界花园结果推送（通过 QianJieIntegrationMixin，可选）
     """
 
-    def __init__(self, problem_name: str, cache_dir: Optional[str] = None,
-                 lean_file_path: Optional[str] = None,
-                 numerical_backend: Any = None,
-                 llm_backend: Any = None):
+    def __init__(
+        self,
+        problem_name: str,
+        cache_dir: Optional[str] = None,
+        lean_file_path: Optional[str] = None,
+        numerical_backend: Any = None,
+        llm_backend: Any = None,
+        *,
+        qianjie_client: Any = None,
+    ):
         self.problem_name = problem_name
         self.lean_file_path = lean_file_path
         self.numerical_backend = numerical_backend
         self.llm_backend = llm_backend
+        self._qianjie_client = qianjie_client
         self.cache_dir = Path(cache_dir) if cache_dir else Path(__file__).parent / ".cache"
         self.cache_dir.mkdir(parents=True, exist_ok=True)
         self._result_cache: Dict[str, Any] = {}
@@ -209,13 +295,6 @@ class PFEProblemBridge(ABC):
         """生成缓存键。"""
         content = json.dumps({"args": args, "kwargs": kwargs}, sort_keys=True)
         return hashlib.sha256(content.encode()).hexdigest()[:16]
-
-    def get_cached(self, key: str) -> Optional[Any]:
-        return self._result_cache.get(key)
-
-    def set_cached(self, key: str, value: Any) -> None:
-        self._result_cache[key] = value
-        self._save_cache()
 
     def parse_lean_symbols(self, lean_statement: str) -> Dict[str, List[str]]:
         """

@@ -11,7 +11,7 @@ PFE ENGINEERING NOTE: 协调器是涌现控制层，不保证全局最优，
 
 import asyncio
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Any, Optional, Callable, Type
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from enum import Enum
@@ -66,6 +66,34 @@ ACADEMIC_TO_ENGINEERING: Dict[str, PFEEngineeringMode] = {
 ENGINEERING_TO_ACADEMIC: Dict[PFEEngineeringMode, str] = {
     v: k for k, v in ACADEMIC_TO_ENGINEERING.items()
 }
+
+
+# ─── 千界花园原生协作类型与学科枚举（匹配 collaborations/init 端点）───
+
+class QianJieCollaborationType(Enum):
+    """
+    千界花园 5 种协作类型（匹配 /api/research/collaborations/init 端点）。
+
+    PFE 协调器可直接使用这些类型调用千界花园 API，
+    无需经过 ACADEMIC_TO_ENGINEERING 映射。
+    """
+    FULL_RESEARCH = "full_research"
+    THEOREM_PROVING = "theorem_proving"
+    PAPER_WRITING = "paper_writing"
+    PEER_REVIEW = "peer_review"
+    EDUCATIONAL = "educational"
+
+
+class QianJieDomain(Enum):
+    """
+    千界花园 3 个学科模板（匹配 collaborations/init 端点 EXPERT_TEMPLATES）。
+
+    每个学科对应一组预置专家角色（lead_validator / validator / checker）。
+    """
+    MATHEMATICS = "mathematics"
+    PHYSICS = "physics"
+    AI = "ai"
+    INTERDISCIPLINARY = "interdisciplinary"
 
 
 @dataclass
@@ -366,6 +394,204 @@ class PFEAgentCoordinator:
     def get_qianjie_status(self) -> Dict[str, Any]:
         """获取千界花园连接状态。"""
         return self.qianjie.health_check()
+
+    # ─── 千界花园核心集成方法（新增） ───
+
+    def initialize_millennium_problem(self, problem_id: Optional[str] = None) -> Dict[str, Any]:
+        """
+        调用 MillenniumInitClient 初始化千年难题研究生态。
+
+        对应千界花园 /api/research/millennium/init 端点。
+        如果千界花园未运行，返回包含 fallback 标志的响应。
+
+        Args:
+            problem_id: 可选，指定问题 ID（如 "p-vs-np"），
+                       但千界花园端点会一次性初始化所有 4 个千年难题。
+
+        Returns:
+            千界花园 API 响应，包含 {success, data: {problems: [...]}}
+        """
+        try:
+            result = self.qianjie.millennium.init()
+            if result.get("success"):
+                problems = result.get("data", {}).get("problems", [])
+                print(
+                    f"[Coordinator] Initialized {len(problems)} millennium problems"
+                    + (f" [{problem_id}]" if problem_id else "")
+                )
+            else:
+                print(f"[Coordinator] Millennium init failed: {result.get('error')}")
+            return result
+        except Exception as e:
+            print(f"[Coordinator] Millennium init exception: {e}")
+            return {"success": False, "error": str(e), "fallback": True}
+
+    def sync_sylva_to_qianjie(
+        self,
+        toe_sylva_path: Optional[str] = None,
+        analyze_with_llm: bool = True,
+        create_tasks: bool = True,
+    ) -> Dict[str, Any]:
+        """
+        调用 SylvaParserClient 解析 TOE-SYLVA 文件并同步到千界花园。
+
+        策略：
+        1. 优先调用千界花园 /api/research/sylva-sync 端点（千界花园在线时）
+        2. 如果 API 不可用，使用本地 SylvaParserClient 解析 Lean 文件
+        3. 将解析结果通过 ResearchNoteClient 推送到千界花园 notes
+
+        Args:
+            toe_sylva_path: TOE-SYLVA 本地路径，默认使用记忆中的路径
+            analyze_with_llm: 是否启用 LLM 分析 sorry（仅 API 模式有效）
+            create_tasks: 是否为 sorry 创建 AcademicTask（仅 API 模式有效）
+
+        Returns:
+            同步结果 dict，包含 mode（api_sync 或 local_parse）、统计信息
+        """
+        # 阶段 1: 尝试通过千界花园 API 同步
+        try:
+            result = self.qianjie.sync_sylva(
+                analyze_with_llm=analyze_with_llm, create_tasks=create_tasks
+            )
+            status = self.qianjie.get_sylva_status()
+            if status.files_parsed > 0 or result.raw_response.get("success"):
+                print(
+                    f"[Coordinator] SYLVA API sync: {status.files_parsed} files, "
+                    f"{status.sorry_total} sorry, {status.modules_total} modules"
+                )
+                return {
+                    "success": True,
+                    "mode": "api_sync",
+                    "files_parsed": status.files_parsed,
+                    "modules_total": status.modules_total,
+                    "theorems_total": status.theorems_total,
+                    "sorry_total": status.sorry_total,
+                    "raw_response": result.raw_response,
+                }
+        except Exception as e:
+            print(f"[Coordinator] API sync failed, falling back to local parser: {e}")
+
+        # 阶段 2: Fallback — 本地解析 + 推送 notes
+        try:
+            from pathlib import Path
+            toe_path = Path(
+                toe_sylva_path
+                or "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull"
+            )
+            files: List[Dict[str, str]] = []
+            for lean_file in toe_path.rglob("*.lean"):
+                path_str = str(lean_file)
+                if ".lake" in path_str or "lake-packages" in path_str:
+                    continue
+                content = lean_file.read_text(encoding="utf-8")
+                files.append({
+                    "path": str(lean_file.relative_to(toe_path)).replace("\\", "/"),
+                    "content": content,
+                })
+
+            parser = self.qianjie.parser
+            parsed = parser.parse_sylva_project(files)
+
+            # 将解析结果推送到千界花园 notes
+            notes_created = 0
+            for module in parsed.modules:
+                note_result = self.qianjie.notes.create_note(
+                    title=f"SYLVA解析: {module.fileName}",
+                    content=json.dumps(
+                        {
+                            "filePath": module.filePath,
+                            "totalLines": module.totalLines,
+                            "theoremCount": len(module.theorems),
+                            "definitionCount": len(module.definitions),
+                            "sorryCount": module.sorryCount,
+                            "theorems": [asdict(t) for t in module.theorems],
+                        },
+                        ensure_ascii=False,
+                        indent=2,
+                    ),
+                    tags=["sylva-sync", "local-parse", module.fileName],
+                )
+                if note_result.get("success"):
+                    notes_created += 1
+
+            print(
+                f"[Coordinator] Local parse: {len(files)} files, "
+                f"{parsed.totalSorry} sorry, {notes_created} notes pushed"
+            )
+            return {
+                "success": True,
+                "mode": "local_parse",
+                "files_parsed": len(files),
+                "modules_total": len(parsed.modules),
+                "theorems_total": parsed.totalTheorems,
+                "sorry_total": parsed.totalSorry,
+                "notes_created": notes_created,
+            }
+        except Exception as e:
+            print(f"[Coordinator] Local parse fallback failed: {e}")
+            return {"success": False, "error": str(e), "fallback": True}
+
+    def init_qianjie_collaboration(
+        self,
+        domain: QianJieDomain,
+        topic: str,
+        collaboration_type: QianJieCollaborationType,
+    ) -> Dict[str, Any]:
+        """
+        使用千界花园 5 种协作类型和 3 个学科模板初始化协作生态。
+
+        对应 /api/research/collaborations/init 端点。
+
+        Args:
+            domain: 学科领域（mathematics / physics / ai / interdisciplinary）
+            topic: 研究主题
+            collaboration_type: 协作类型（full_research / theorem_proving / ...）
+        """
+        try:
+            result = self.qianjie.collaborations.init_collaboration(
+                domain=domain.value,
+                topic=topic,
+                collaboration_type=collaboration_type.value,
+            )
+            if result.get("success"):
+                print(
+                    f"[Coordinator] Collaboration init OK: {collaboration_type.value} "
+                    f"in {domain.value} for '{topic}'"
+                )
+            else:
+                print(f"[Coordinator] Collaboration init failed: {result.get('error')}")
+            return result
+        except Exception as e:
+            print(f"[Coordinator] Collaboration init exception: {e}")
+            return {"success": False, "error": str(e), "fallback": True}
+
+    def create_qianjie_panel(
+        self,
+        name: str,
+        description: str = "",
+        domain: QianJieDomain = QianJieDomain.INTERDISCIPLINARY,
+        strategy: Optional[Dict[str, Any]] = None,
+    ) -> Dict[str, Any]:
+        """
+        通过 AcademicPanelClient 创建千界花园专家组。
+
+        对应 /api/research/panels 端点。
+        """
+        try:
+            result = self.qianjie.panels.create_panel(
+                name=name,
+                description=description,
+                domain=domain.value,
+                strategy=strategy or {},
+            )
+            if result.get("success"):
+                print(f"[Coordinator] Panel created: {name}")
+            else:
+                print(f"[Coordinator] Panel create failed: {result.get('error')}")
+            return result
+        except Exception as e:
+            print(f"[Coordinator] Panel create exception: {e}")
+            return {"success": False, "error": str(e), "fallback": True}
 
     def dispatch_by_mode(
         self,
