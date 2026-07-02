@@ -20,6 +20,31 @@ open CrystalStructure
 
 /-- 倒格子矢量 -/
 def ReciprocalVector (n : ℕ) := Fin n → ℝ
+
+/-- 倒格子结构 -/
+structure ReciprocalLattice (n : ℕ) where
+  vectors : Fin n → ReciprocalVector n
+  -- 与原晶格的关系
+  dualRelation : ∀ i j, innerProduct (bravais.primitiveVectors i) (vectors j) = 2 * Real.pi * if i = j then 1 else 0
+  bravais : BravaisLattice n
+
+/-- 第一布里渊区 -/
+structure FirstBrillouinZone (n : ℕ) where
+  reciprocal : ReciprocalLattice n
+  zoneBoundary : ReciprocalVector n → Prop  -- 定义布里渊区边界
+  center : ReciprocalVector n  -- Γ点
+
+-- ============================================
+-- Section 2: Bloch定理与能带
+-- ============================================
+
+/-- Bloch波函数 -/
+structure BlochWave (n : ℕ) where
+  k : ReciprocalVector n  -- 晶体动量
+  u : RealVector n → ℂ    -- 周期部分
+  periodicity : ∀ r R, u (r + R) = u r  -- 周期性条件
+
+/-- Bloch定理的形式化表述 -/
 theorem Bloch_theorem {n : ℕ} (ψ : RealVector n → ℂ) (H : (RealVector n → ℂ) → (RealVector n → ℂ))
     (crystal : CrystalStructure n) :
     (∃ E, H ψ = E • ψ) →
@@ -82,7 +107,9 @@ structure TightBindingParams where
   hoppingT : ℝ      -- 最近邻跃迁t
   nextNearestT : ℝ  -- 次近邻跃迁t'
   chemicalPotential : ℝ  -- 化学势μ
-theorem tightBindingHamiltonian (params : TightBindingParams) (crystal : CrystalStructure n)
+
+/-- 紧束缚哈密顿量 -/
+def tightBindingHamiltonian (params : TightBindingParams) (crystal : CrystalStructure n)
     (k : ReciprocalVector n) : Matrix (Fin n) (Fin n) ℂ :=
   -- H_ij(k) = ε δ_ij + Σ_R t(R) e^{ik·R}
   0  -- ENGINEERING NOTE: Tight-binding model placeholder; matrix elements populated from Slater-Koster integrals. PIPELINE: BandTheory.lean → pfe_bridges/numerics. STATUS: EMERGENT — parameterized by DFT fit. LEMMAS NEEDED: Discrete Fourier transform on lattice. TACTICS NEEDED: Finite-dimensional linear algebra.
