@@ -1,0 +1,725 @@
+[
+  {
+    "title": "SYLVA模块: BandTheory.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\BandTheory.lean\",\n  \"totalLines\": 247,\n  \"theoremCount\": 1,\n  \"definitionCount\": 27,\n  \"sorryCount\": 0,\n  \"namespace\": \"BandTheory\",\n  \"imports\": [\n    \"Mathlib\",\n    \"CrystalStructure\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "BandTheory"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Basic.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\Basic.lean\",\n  \"totalLines\": 294,\n  \"theoremCount\": 0,\n  \"definitionCount\": 1,\n  \"sorryCount\": 0,\n  \"namespace\": \"Sylva\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Basic"
+    ]
+  },
+  {
+    "title": "SYLVA模块: BasicTutorial.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\BasicTutorial.lean\",\n  \"totalLines\": 486,\n  \"theoremCount\": 13,\n  \"definitionCount\": 6,\n  \"sorryCount\": 0,\n  \"namespace\": \"MetaAxiom\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "BasicTutorial"
+    ]
+  },
+  {
+    "title": "SYLVA模块: BSD.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\BSD.lean\",\n  \"totalLines\": 507,\n  \"theoremCount\": 1,\n  \"definitionCount\": 13,\n  \"sorryCount\": 0,\n  \"namespace\": \"ShortWeierstrassCurve\",\n  \"imports\": [\n    \"Mathlib.AlgebraicGeometry.EllipticCurve.Weierstrass\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "BSD"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Complexity.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\Complexity.lean\",\n  \"totalLines\": 528,\n  \"theoremCount\": 1,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"SAT\",\n  \"imports\": [\n    \"Mathlib.Computability.Language\",\n    \"Mathlib.SetTheory.Cardinal.Basic\",\n    \"Mathlib.Order.LiminfLimsup\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Complexity"
+    ]
+  },
+  {
+    "title": "SYLVA模块: CookLevin.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\CookLevin.lean\",\n  \"totalLines\": 469,\n  \"theoremCount\": 10,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"SylvaFormalization\",\n  \"imports\": [\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "CookLevin"
+    ]
+  },
+  {
+    "title": "SYLVA模块: CookLevin_theorem.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\CookLevin_theorem.lean\",\n  \"totalLines\": 620,\n  \"theoremCount\": 11,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"SylvaFormalization\",\n  \"imports\": [\n    \"Mathlib.Computability.TuringMachine\",\n    \"Mathlib.Computability.ComplexityClasses\",\n    \"Mathlib.Data.List.Basic\",\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.CP004\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "CookLevin_theorem"
+    ]
+  },
+  {
+    "title": "SYLVA模块: CP004.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\CP004.lean\",\n  \"totalLines\": 323,\n  \"theoremCount\": 6,\n  \"definitionCount\": 3,\n  \"sorryCount\": 0,\n  \"namespace\": \"CP004\",\n  \"imports\": [\n    \"Mathlib.Order.Basic\",\n    \"Mathlib.Order.Lattice\",\n    \"Mathlib.Order.Bounds.Defs\",\n    \"Mathlib.Data.Nat.Basic\",\n    \"Mathlib.Data.Set.Basic\",\n    \"Mathlib.Data.Real.Basic\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "CP004"
+    ]
+  },
+  {
+    "title": "SYLVA模块: CP004_B2.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\CP004_B2.lean\",\n  \"totalLines\": 143,\n  \"theoremCount\": 6,\n  \"definitionCount\": 4,\n  \"sorryCount\": 0,\n  \"namespace\": \"CP004_B2\",\n  \"imports\": [\n    \"Mathlib.Order.Bounds.Defs\",\n    \"Mathlib.Data.Nat.Basic\",\n    \"Mathlib.Data.Set.Basic\",\n    \"Mathlib.Data.List.Basic\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "CP004_B2"
+    ]
+  },
+  {
+    "title": "SYLVA模块: CP004_B2_new_header.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\CP004_B2_new_header.lean\",\n  \"totalLines\": 41,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": [\n    \"Mathlib.Order.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "CP004_B2_new_header"
+    ]
+  },
+  {
+    "title": "SYLVA模块: CrystalStructure.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\CrystalStructure.lean\",\n  \"totalLines\": 200,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"CrystalStructure\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "CrystalStructure"
+    ]
+  },
+  {
+    "title": "SYLVA模块: DynamicalSystem.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\DynamicalSystem.lean\",\n  \"totalLines\": 206,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"SylvaFormalization\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "DynamicalSystem"
+    ]
+  },
+  {
+    "title": "SYLVA模块: EllipticCurveReduction.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\EllipticCurveReduction.lean\",\n  \"totalLines\": 398,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"EllipticCurveReduction\",\n  \"imports\": [\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "EllipticCurveReduction"
+    ]
+  },
+  {
+    "title": "SYLVA模块: EmergentMath.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\EmergentMath.lean\",\n  \"totalLines\": 482,\n  \"theoremCount\": 0,\n  \"definitionCount\": 3,\n  \"sorryCount\": 0,\n  \"namespace\": \"EmergentMath\",\n  \"imports\": [\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "EmergentMath"
+    ]
+  },
+  {
+    "title": "SYLVA模块: EntropyGapSpectral.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\EntropyGapSpectral.lean\",\n  \"totalLines\": 627,\n  \"theoremCount\": 6,\n  \"definitionCount\": 1,\n  \"sorryCount\": 0,\n  \"namespace\": \"Sylva\",\n  \"imports\": [\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "EntropyGapSpectral"
+    ]
+  },
+  {
+    "title": "SYLVA模块: GF3Advanced.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\GF3Advanced.lean\",\n  \"totalLines\": 295,\n  \"theoremCount\": 18,\n  \"definitionCount\": 3,\n  \"sorryCount\": 0,\n  \"namespace\": \"Polynomials\",\n  \"imports\": [\n    \"Sylva.Tutorial.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "GF3Advanced"
+    ]
+  },
+  {
+    "title": "SYLVA模块: GravitationalField.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\GravitationalField.lean\",\n  \"totalLines\": 600,\n  \"theoremCount\": 0,\n  \"definitionCount\": 8,\n  \"sorryCount\": 0,\n  \"namespace\": \"EnergyClass\",\n  \"imports\": [\n    \"Mathlib.Data.Finset.Basic\",\n    \"Mathlib.Data.Set.Basic\",\n    \"Mathlib.Data.List.Basic\",\n    \"Mathlib.Data.Graph.Defs\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "GravitationalField"
+    ]
+  },
+  {
+    "title": "SYLVA模块: LocalGlobalTemplate.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\LocalGlobalTemplate.lean\",\n  \"totalLines\": 373,\n  \"theoremCount\": 2,\n  \"definitionCount\": 3,\n  \"sorryCount\": 0,\n  \"namespace\": \"RiemannHypothesisTemplate\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "LocalGlobalTemplate"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Main.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\Main.lean\",\n  \"totalLines\": 154,\n  \"theoremCount\": 0,\n  \"definitionCount\": 1,\n  \"sorryCount\": 0,\n  \"namespace\": \"SylvaConsumer\",\n  \"imports\": [\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.RiemannHypothesis\",\n    \"SylvaFormalization.Complexity\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Main"
+    ]
+  },
+  {
+    "title": "SYLVA模块: MathAgent.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\MathAgent.lean\",\n  \"totalLines\": 785,\n  \"theoremCount\": 0,\n  \"definitionCount\": 1,\n  \"sorryCount\": 0,\n  \"namespace\": \"AgentState\",\n  \"imports\": [\n    \"Mathlib.Data.String.Defs\",\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.NumericalZeros\",\n    \"SylvaFormalization.RiemannHypothesis\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "MathAgent"
+    ]
+  },
+  {
+    "title": "SYLVA模块: NavierStokes.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\NavierStokes.lean\",\n  \"totalLines\": 549,\n  \"theoremCount\": 12,\n  \"definitionCount\": 17,\n  \"sorryCount\": 0,\n  \"namespace\": \"DifferentialOperators\",\n  \"imports\": [\n    \"Mathlib\",\n    \"Mathlib.Analysis.FunctionalSpaces.SobolevInequality\",\n    \"Mathlib.Analysis.Calculus.Deriv.Pi\",\n    \"Mathlib.Analysis.InnerProductSpace.EuclideanDist\",\n    \"Mathlib.Analysis.InnerProductSpace.NormPow\",\n    \"Mathlib.MeasureTheory.Integral.IntegralEqImproper\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "NavierStokes"
+    ]
+  },
+  {
+    "title": "SYLVA模块: NumericalZeros.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\NumericalZeros.lean\",\n  \"totalLines\": 435,\n  \"theoremCount\": 5,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"NumericalVerification\",\n  \"imports\": [\n    \"Mathlib.NumberTheory.LSeries.RiemannZeta\",\n    \"Mathlib.Data.Complex.Basic\",\n    \"Mathlib.Analysis.SpecialFunctions.Gamma.Basic\",\n    \"Mathlib.Analysis.SpecialFunctions.Complex.Log\",\n    \"Mathlib.Analysis.Complex.Arg\",\n    \"Mathlib.Analysis.SpecialFunctions.Pow.Complex\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "NumericalZeros"
+    ]
+  },
+  {
+    "title": "SYLVA模块: ProvingTechniques.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\ProvingTechniques.lean\",\n  \"totalLines\": 621,\n  \"theoremCount\": 10,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"Sylva.Tutorial.ProvingTechniques\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "ProvingTechniques"
+    ]
+  },
+  {
+    "title": "SYLVA模块: QFT.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\QFT.lean\",\n  \"totalLines\": 63,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"Sylva\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "QFT"
+    ]
+  },
+  {
+    "title": "SYLVA模块: QuantumArithmetic.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\QuantumArithmetic.lean\",\n  \"totalLines\": 6,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"SylvaFormalization\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "QuantumArithmetic"
+    ]
+  },
+  {
+    "title": "SYLVA模块: RadiationTracker.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\RadiationTracker.lean\",\n  \"totalLines\": 408,\n  \"theoremCount\": 0,\n  \"definitionCount\": 3,\n  \"sorryCount\": 0,\n  \"namespace\": \"RadiationTracker\",\n  \"imports\": [\n    \"Lean\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "RadiationTracker"
+    ]
+  },
+  {
+    "title": "SYLVA模块: RazborovSmolensky.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\RazborovSmolensky.lean\",\n  \"totalLines\": 979,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"RazborovSmolensky\",\n  \"imports\": [\n    \"Mathlib.FieldTheory.Finite.GaloisField\",\n    \"Mathlib.Probability.Distributions.Uniform\",\n    \"Mathlib.LinearAlgebra.FiniteDimensional.Defs\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "RazborovSmolensky"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Renormalization_Group_Formalization.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\Renormalization_Group_Formalization.lean\",\n  \"totalLines\": 462,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"NonlinearSigmaModel\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Renormalization_Group_Formalization"
+    ]
+  },
+  {
+    "title": "SYLVA模块: RH_Step1.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\RH_Step1.lean\",\n  \"totalLines\": 97,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"RH\",\n  \"imports\": [\n    \"Mathlib.NumberTheory.LSeries.RiemannZeta\",\n    \"Mathlib.NumberTheory.LSeries.Basic\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "RH_Step1"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SAIPFillTest.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\SAIPFillTest.lean\",\n  \"totalLines\": 116,\n  \"theoremCount\": 10,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"Phi\",\n  \"imports\": [\n    \"Mathlib\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SAIPFillTest"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SAIPTest.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\SAIPTest.lean\",\n  \"totalLines\": 28,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"TestSAIP\",\n  \"imports\": [\n    \"Mathlib\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SAIPTest"
+    ]
+  },
+  {
+    "title": "SYLVA模块: StatisticalMechanics.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\StatisticalMechanics.lean\",\n  \"totalLines\": 78,\n  \"theoremCount\": 3,\n  \"definitionCount\": 0,\n  \"sorryCount\": 3,\n  \"namespace\": \"Sylva\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "StatisticalMechanics"
+    ]
+  },
+  {
+    "title": "策略: Widom_scaling",
+    "content": "文件: C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\StatisticalMechanics.lean\n行号: 47\n类型: theorem\nsorry 数量: 1\n策略: \n声明: theorem Widom_scaling (cp : CriticalPoint) : cp.gamma = cp.beta * (cp.delta - 1)",
+    "tags": [
+      "sorry",
+      "proof-strategy",
+      "theorem",
+      "StatisticalMechanics"
+    ]
+  },
+  {
+    "title": "策略: Fisher_scaling",
+    "content": "文件: C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\StatisticalMechanics.lean\n行号: 48\n类型: theorem\nsorry 数量: 1\n策略: \n声明: theorem Fisher_scaling (cp : CriticalPoint) : cp.gamma = (2 - cp.eta) * cp.nu",
+    "tags": [
+      "sorry",
+      "proof-strategy",
+      "theorem",
+      "StatisticalMechanics"
+    ]
+  },
+  {
+    "title": "策略: Josephson_scaling",
+    "content": "文件: C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\StatisticalMechanics.lean\n行号: 49\n类型: theorem\nsorry 数量: 1\n策略: \n声明: theorem Josephson_scaling (d : ℕ) (cp : CriticalPoint) : (d : ℝ) * cp.nu = 2 - cp.alpha",
+    "tags": [
+      "sorry",
+      "proof-strategy",
+      "theorem",
+      "StatisticalMechanics"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Superconductivity_Material_Derivation.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\Superconductivity_Material_Derivation.lean\",\n  \"totalLines\": 427,\n  \"theoremCount\": 1,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"SuperconductivityMaterialDerivation\",\n  \"imports\": [\n    \"CrystalStructure\",\n    \"BandTheory\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Superconductivity_Material_Derivation"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Superconductivity_Meta_Theorem.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\Superconductivity_Meta_Theorem.lean\",\n  \"totalLines\": 689,\n  \"theoremCount\": 1,\n  \"definitionCount\": 1,\n  \"sorryCount\": 0,\n  \"namespace\": \"SuperconductivityMetaTheorem\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Superconductivity_Meta_Theorem"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Superconductivity_Pairing_Framework.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\Superconductivity_Pairing_Framework.lean\",\n  \"totalLines\": 527,\n  \"theoremCount\": 7,\n  \"definitionCount\": 5,\n  \"sorryCount\": 0,\n  \"namespace\": \"Spin\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Superconductivity_Pairing_Framework"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Superconductivity_Symmetry_Classification.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\Superconductivity_Symmetry_Classification.lean\",\n  \"totalLines\": 646,\n  \"theoremCount\": 0,\n  \"definitionCount\": 1,\n  \"sorryCount\": 0,\n  \"namespace\": \"SuperconductivitySymmetryClassification\",\n  \"imports\": [\n    \"Mathlib.RepresentationTheory.Basic\",\n    \"Mathlib.RepresentationTheory.Subrepresentation\",\n    \"Mathlib.RepresentationTheory.Character\",\n    \"Mathlib.GroupTheory.Sylow\",\n    \"Mathlib.GroupTheory.Coset\",\n    \"Mathlib.Topology.Algebra.Group.Basic\",\n    \"Mathlib.LinearAlgebra.TensorAlgebra.Basic\",\n    \"Mathlib.LinearAlgebra.ExteriorAlgebra.Basic\",\n    \"Mathlib.Algebra.Group.FiniteSum\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Superconductivity_Symmetry_Classification"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SylvaConsumer.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\SylvaConsumer.lean\",\n  \"totalLines\": 4,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": [\n    \"SylvaConsumer.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SylvaConsumer"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SylvaExamples.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\SylvaExamples.lean\",\n  \"totalLines\": 551,\n  \"theoremCount\": 1,\n  \"definitionCount\": 21,\n  \"sorryCount\": 0,\n  \"namespace\": \"Summary\",\n  \"imports\": [\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.RiemannHypothesis\",\n    \"SylvaFormalization.Complexity\",\n    \"SylvaFormalization.NumericalZeros\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SylvaExamples"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SylvaFormalization.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\SylvaFormalization.lean\",\n  \"totalLines\": 53,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": [\n    \"SylvaFormalization.Basic_current_fixed\",\n    \"SylvaFormalization.Complexity_amputated\",\n    \"SylvaFormalization.BSD\",\n    \"SylvaFormalization.NavierStokes\",\n    \"SylvaFormalization.CP004\",\n    \"SylvaFormalization.CookLevin\",\n    \"SylvaFormalization.SylvaInfrastructure\",\n    \"SylvaFormalization.MathAgent\",\n    \"SylvaFormalization.RiemannHypothesis\",\n    \"SylvaFormalization.ZetaVerifier_fixed\",\n    \"SylvaFormalization.NumericalZeros\",\n    \"SylvaFormalization.Hodge\",\n    \"SylvaFormalization.LocalGlobal_fixed\",\n    \"SylvaFormalization.EmergentMath\",\n    \"SylvaFormalization.EntropyGapSpectral\",\n    \"SylvaFormalization.GF3Advanced\",\n    \"SylvaFormalization.BandTheory\",\n    \"SylvaFormalization.CrystalStructure\",\n    \"SylvaFormalization.DynamicalSystem\",\n    \"SylvaFormalization.EllipticCurveReduction\",\n    \"SylvaFormalization.GravitationalField\",\n    \"SylvaFormalization.QFT\",\n    \"SylvaFormalization.QuantumArithmetic\",\n    \"SylvaFormalization.RadiationTracker\",\n    \"SylvaFormalization.RazborovSmolensky\",\n    \"SylvaFormalization.Renormalization_Group_Formalization\",\n    \"SylvaFormalization.RH_Step1\",\n    \"SylvaFormalization.StatisticalMechanics\",\n    \"SylvaFormalization.Superconductivity_Material_Derivation\",\n    \"SylvaFormalization.Superconductivity_Meta_Theorem\",\n    \"SylvaFormalization.Superconductivity_Pairing_Framework\",\n    \"SylvaFormalization.Superconductivity_Symmetry_Classification\",\n    \"SylvaFormalization.ProvingTechniques\",\n    \"SylvaFormalization.TutorialTemplate\",\n    \"SylvaFormalization.SylvaExamples\",\n    \"SylvaFormalization.Test\",\n    \"SylvaFormalization.TestSuite\",\n    \"SylvaFormalization.VerificationTests\",\n    \"SylvaFormalization.SAIPFillTest\",\n    \"SylvaFormalization.SAIPTest\",\n    \"SylvaFormalization.CP004_B2\",\n    \"SylvaFormalization.sylva_auto_proofs\",\n    \"SylvaFormalization.sylva_test\",\n    \"SylvaFormalization.sylva_test_suite\",\n    \"SylvaFormalization.SylvaTest\",\n    \"SylvaFormalization.SylvaTestSuite\",\n    \"SylvaFormalization.SylvaTestSuiteComplete\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SylvaFormalization"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SylvaInfrastructure.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\SylvaInfrastructure.lean\",\n  \"totalLines\": 100,\n  \"theoremCount\": 3,\n  \"definitionCount\": 9,\n  \"sorryCount\": 0,\n  \"namespace\": \"SylvaFormalization\",\n  \"imports\": [\n    \"Mathlib\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SylvaInfrastructure"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SylvaInfrastructure_interface.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\SylvaInfrastructure_interface.lean\",\n  \"totalLines\": 81,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"SylvaFormalization\",\n  \"imports\": [\n    \"Mathlib\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SylvaInfrastructure_interface"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SylvaTest.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\SylvaTest.lean\",\n  \"totalLines\": 14,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": [\n    \"SylvaFormalization\",\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.Complexity\",\n    \"SylvaFormalization.MathAgent\",\n    \"SylvaFormalization.RH_Step1\",\n    \"SylvaFormalization.RiemannHypothesis\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SylvaTest"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SylvaTestSuite.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\SylvaTestSuite.lean\",\n  \"totalLines\": 187,\n  \"theoremCount\": 14,\n  \"definitionCount\": 7,\n  \"sorryCount\": 0,\n  \"namespace\": \"TestSuite\",\n  \"imports\": [\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.NumericalZeros\",\n    \"SylvaFormalization.RiemannHypothesis\",\n    \"SylvaFormalization.Complexity\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SylvaTestSuite"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SylvaTestSuiteComplete.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\SylvaTestSuiteComplete.lean\",\n  \"totalLines\": 607,\n  \"theoremCount\": 0,\n  \"definitionCount\": 6,\n  \"sorryCount\": 0,\n  \"namespace\": \"Sylva.TestSuiteComplete\",\n  \"imports\": [\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.Complexity\",\n    \"SylvaFormalization.CP004\",\n    \"SylvaFormalization.NumericalZeros\",\n    \"SylvaFormalization.CookLevin\",\n    \"SylvaFormalization.BSD\",\n    \"SylvaFormalization.NavierStokes\",\n    \"SylvaFormalization.SylvaInfrastructure\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SylvaTestSuiteComplete"
+    ]
+  },
+  {
+    "title": "SYLVA模块: sylva_auto_proofs.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\sylva_auto_proofs.lean\",\n  \"totalLines\": 379,\n  \"theoremCount\": 0,\n  \"definitionCount\": 4,\n  \"sorryCount\": 0,\n  \"namespace\": \"MetaAxiom\",\n  \"imports\": [\n    \"Mathlib.NumberTheory.LSeries.RiemannZeta\",\n    \"Mathlib.NumberTheory.LSeries.Basic\",\n    \"Mathlib.Analysis.SpecialFunctions.Gamma.Basic\",\n    \"Mathlib.Data.Complex.Basic\",\n    \"Mathlib.Topology.Basic\",\n    \"Mathlib.Order.Filter.Basic\",\n    \"SylvaAutoProofs\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "sylva_auto_proofs"
+    ]
+  },
+  {
+    "title": "SYLVA模块: sylva_test.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\sylva_test.lean\",\n  \"totalLines\": 25,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": [\n    \"SylvaFormalization.RiemannHypothesis\",\n    \"SylvaFormalization.Complexity\",\n    \"SylvaFormalization.MathAgent\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "sylva_test"
+    ]
+  },
+  {
+    "title": "SYLVA模块: sylva_test_suite.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\sylva_test_suite.lean\",\n  \"totalLines\": 378,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"SmokeTests\",\n  \"imports\": [\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.RiemannHypothesis\",\n    \"SylvaFormalization.NumericalZeros\",\n    \"SylvaFormalization.Complexity\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "sylva_test_suite"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Test.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\Test.lean\",\n  \"totalLines\": 162,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"Test\",\n  \"imports\": [\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.NumericalZeros\",\n    \"SylvaFormalization.Complexity\",\n    \"SylvaFormalization.Hodge\",\n    \"SylvaFormalization.NavierStokes\",\n    \"SylvaFormalization.CP004\",\n    \"SylvaFormalization.CookLevin\",\n    \"SylvaFormalization.SylvaInfrastructure\",\n    \"SylvaFormalization.MathAgent\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Test"
+    ]
+  },
+  {
+    "title": "SYLVA模块: TestMul.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\TestMul.lean\",\n  \"totalLines\": 5,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": [\n    \"Mathlib\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "TestMul"
+    ]
+  },
+  {
+    "title": "SYLVA模块: TestNP.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\TestNP.lean\",\n  \"totalLines\": 23,\n  \"theoremCount\": 1,\n  \"definitionCount\": 1,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": [\n    \"Mathlib.Data.Set.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "TestNP"
+    ]
+  },
+  {
+    "title": "SYLVA模块: TestSInf.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\TestSInf.lean\",\n  \"totalLines\": 11,\n  \"theoremCount\": 1,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": [\n    \"Mathlib.Order.Basic\",\n    \"Mathlib.Order.Lattice\",\n    \"Mathlib.Order.Bounds.Defs\",\n    \"Mathlib.Data.Nat.Basic\",\n    \"Mathlib.Data.Set.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "TestSInf"
+    ]
+  },
+  {
+    "title": "SYLVA模块: TestSuite.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\TestSuite.lean\",\n  \"totalLines\": 413,\n  \"theoremCount\": 0,\n  \"definitionCount\": 13,\n  \"sorryCount\": 0,\n  \"namespace\": \"TestSuite\",\n  \"imports\": [\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.CookLevin\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "TestSuite"
+    ]
+  },
+  {
+    "title": "SYLVA模块: test_postulate.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\test_postulate.lean\",\n  \"totalLines\": 3,\n  \"theoremCount\": 0,\n  \"definitionCount\": 1,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "test_postulate"
+    ]
+  },
+  {
+    "title": "SYLVA模块: TutorialTemplate.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\TutorialTemplate.lean\",\n  \"totalLines\": 143,\n  \"theoremCount\": 3,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"Sylva.Tutorial\",\n  \"imports\": [\n    \"Mathlib\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "TutorialTemplate"
+    ]
+  },
+  {
+    "title": "SYLVA模块: VerificationTests.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\VerificationTests.lean\",\n  \"totalLines\": 173,\n  \"theoremCount\": 2,\n  \"definitionCount\": 9,\n  \"sorryCount\": 0,\n  \"namespace\": \"NumericalZerosTypeTests\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "VerificationTests"
+    ]
+  },
+  {
+    "title": "SYLVA模块: ZetaVerifier.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_complete\\\\ZetaVerifier.lean\",\n  \"totalLines\": 337,\n  \"theoremCount\": 14,\n  \"definitionCount\": 9,\n  \"sorryCount\": 0,\n  \"namespace\": \"SylvaFormalization\",\n  \"imports\": [\n    \"Mathlib.NumberTheory.LSeries.RiemannZeta\",\n    \"Mathlib.Topology.Order.IntermediateValue\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "ZetaVerifier"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Main.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_consumer\\\\Main.lean\",\n  \"totalLines\": 173,\n  \"theoremCount\": 16,\n  \"definitionCount\": 2,\n  \"sorryCount\": 0,\n  \"namespace\": \"SylvaConsumer\",\n  \"imports\": [\n    \"Mathlib\",\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.RiemannHypothesis\",\n    \"SylvaFormalization.Complexity\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Main"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SylvaConsumer.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_consumer\\\\SylvaConsumer.lean\",\n  \"totalLines\": 4,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": [\n    \"SylvaConsumer.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SylvaConsumer"
+    ]
+  },
+  {
+    "title": "SYLVA模块: 66_beyond_standard_model.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\toe_framework\\\\66_beyond_standard_model.lean\",\n  \"totalLines\": 1004,\n  \"theoremCount\": 24,\n  \"definitionCount\": 44,\n  \"sorryCount\": 0,\n  \"namespace\": \"BSMPhysics\",\n  \"imports\": [\n    \"Mathlib\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "66_beyond_standard_model"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Basic.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_consumer\\\\SylvaConsumer\\\\Basic.lean\",\n  \"totalLines\": 2,\n  \"theoremCount\": 0,\n  \"definitionCount\": 1,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": []\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Basic"
+    ]
+  },
+  {
+    "title": "SYLVA模块: 04_NavierStokes_Formalization_Fixed.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_academic\\\\desktop_zip_extracted\\\\04_NavierStokes_Formalization_Fixed.lean\",\n  \"totalLines\": 534,\n  \"theoremCount\": 9,\n  \"definitionCount\": 18,\n  \"sorryCount\": 0,\n  \"namespace\": \"NavierStokes\",\n  \"imports\": [\n    \"Mathlib\",\n    \"Mathlib.Analysis.Calculus.Deriv.Pi\",\n    \"Mathlib.Analysis.InnerProductSpace.EuclideanDist\",\n    \"Mathlib.Analysis.InnerProductSpace.NormPow\",\n    \"Mathlib.MeasureTheory.Integral.IntegralEqImproper\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "04_NavierStokes_Formalization_Fixed"
+    ]
+  },
+  {
+    "title": "SYLVA模块: 05_FourForcesUnification_Formalization_Fixed.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_academic\\\\desktop_zip_extracted\\\\05_FourForcesUnification_Formalization_Fixed.lean\",\n  \"totalLines\": 756,\n  \"theoremCount\": 15,\n  \"definitionCount\": 24,\n  \"sorryCount\": 0,\n  \"namespace\": \"UnifiedField\",\n  \"imports\": [\n    \"Mathlib\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "05_FourForcesUnification_Formalization_Fixed"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Basic.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva_academic\\\\desktop_zip_extracted\\\\Basic.lean\",\n  \"totalLines\": 76,\n  \"theoremCount\": 0,\n  \"definitionCount\": 4,\n  \"sorryCount\": 0,\n  \"namespace\": \"Level\",\n  \"imports\": [\n    \"Mathlib\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Basic"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SylvaExamples.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\examples\\\\SylvaExamples.lean\",\n  \"totalLines\": 553,\n  \"theoremCount\": 1,\n  \"definitionCount\": 21,\n  \"sorryCount\": 0,\n  \"namespace\": \"Summary\",\n  \"imports\": [\n    \"Mathlib\",\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.RiemannHypothesis\",\n    \"SylvaFormalization.Complexity\",\n    \"SylvaFormalization.NumericalZeros\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SylvaExamples"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Basic.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\src\\\\Basic.lean\",\n  \"totalLines\": 137,\n  \"theoremCount\": 4,\n  \"definitionCount\": 12,\n  \"sorryCount\": 0,\n  \"namespace\": \"MetaAxiom\",\n  \"imports\": [\n    \"Mathlib\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Basic"
+    ]
+  },
+  {
+    "title": "SYLVA模块: BSD.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\src\\\\BSD.lean\",\n  \"totalLines\": 531,\n  \"theoremCount\": 3,\n  \"definitionCount\": 33,\n  \"sorryCount\": 0,\n  \"namespace\": \"ShortWeierstrassCurve\",\n  \"imports\": [\n    \"Mathlib\",\n    \"Mathlib.AlgebraicGeometry.EllipticCurve.Weierstrass\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "BSD"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Complexity.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\src\\\\Complexity.lean\",\n  \"totalLines\": 746,\n  \"theoremCount\": 20,\n  \"definitionCount\": 18,\n  \"sorryCount\": 0,\n  \"namespace\": \"YangMills\",\n  \"imports\": [\n    \"Mathlib\",\n    \"Mathlib.Computability.TuringMachine\",\n    \"Mathlib.Computability.Halting\",\n    \"Mathlib.Computability.Language\",\n    \"Mathlib.Computability.TuringMachine.Computable\",\n    \"Mathlib.SetTheory.Cardinal.Basic\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Complexity"
+    ]
+  },
+  {
+    "title": "SYLVA模块: Hodge.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\src\\\\Hodge.lean\",\n  \"totalLines\": 544,\n  \"theoremCount\": 11,\n  \"definitionCount\": 12,\n  \"sorryCount\": 0,\n  \"namespace\": \"Hodge\",\n  \"imports\": [\n    \"Mathlib\",\n    \"Mathlib.AlgebraicGeometry.Scheme\",\n    \"Mathlib.AlgebraicGeometry.ProjectiveSpectrum.Scheme\",\n    \"Mathlib.Geometry.Manifold.SmoothManifoldWithCorners\",\n    \"Mathlib.Analysis.Complex.Basic\",\n    \"Mathlib.LinearAlgebra.TensorProduct.Basic\",\n    \"Mathlib.Algebra.Homology.ShortComplex.Basic\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "Hodge"
+    ]
+  },
+  {
+    "title": "SYLVA模块: MathAgent.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\src\\\\MathAgent.lean\",\n  \"totalLines\": 851,\n  \"theoremCount\": 0,\n  \"definitionCount\": 65,\n  \"sorryCount\": 0,\n  \"namespace\": \"AgentState\",\n  \"imports\": [\n    \"Mathlib\",\n    \"Mathlib.Data.String.Defs\",\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.NumericalZeros\",\n    \"SylvaFormalization.RiemannHypothesis\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "MathAgent"
+    ]
+  },
+  {
+    "title": "SYLVA模块: NavierStokes.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\src\\\\NavierStokes.lean\",\n  \"totalLines\": 650,\n  \"theoremCount\": 10,\n  \"definitionCount\": 17,\n  \"sorryCount\": 0,\n  \"namespace\": \"DifferentialOperators\",\n  \"imports\": [\n    \"Mathlib\",\n    \"Mathlib.Analysis.FunctionalSpaces.SobolevInequality\",\n    \"Mathlib.Analysis.Calculus.Deriv.Pi\",\n    \"Mathlib.Analysis.InnerProductSpace.EuclideanDist\",\n    \"Mathlib.Analysis.InnerProductSpace.NormPow\",\n    \"Mathlib.MeasureTheory.Integral.IntegralEqImproper\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "NavierStokes"
+    ]
+  },
+  {
+    "title": "SYLVA模块: NumericalZeros.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\src\\\\NumericalZeros.lean\",\n  \"totalLines\": 613,\n  \"theoremCount\": 26,\n  \"definitionCount\": 3,\n  \"sorryCount\": 0,\n  \"namespace\": \"NumericalVerification\",\n  \"imports\": [\n    \"Mathlib\",\n    \"Mathlib.NumberTheory.LSeries.RiemannZeta\",\n    \"Mathlib.Data.Complex.Basic\",\n    \"Mathlib.Analysis.SpecialFunctions.Gamma.Basic\",\n    \"Mathlib.Analysis.SpecialFunctions.Complex.Log\",\n    \"Mathlib.Analysis.Complex.Arg\",\n    \"Mathlib.Analysis.SpecialFunctions.Pow.Complex\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "NumericalZeros"
+    ]
+  },
+  {
+    "title": "SYLVA模块: RH_Step1.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\src\\\\RH_Step1.lean\",\n  \"totalLines\": 102,\n  \"theoremCount\": 0,\n  \"definitionCount\": 3,\n  \"sorryCount\": 0,\n  \"namespace\": \"RH\",\n  \"imports\": [\n    \"Mathlib\",\n    \"Mathlib.NumberTheory.LSeries.RiemannZeta\",\n    \"Mathlib.NumberTheory.LSeries.Basic\",\n    \"SylvaFormalization.Basic\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "RH_Step1"
+    ]
+  },
+  {
+    "title": "SYLVA模块: RiemannHypothesis.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\src\\\\RiemannHypothesis.lean\",\n  \"totalLines\": 694,\n  \"theoremCount\": 24,\n  \"definitionCount\": 2,\n  \"sorryCount\": 0,\n  \"namespace\": \"OmniBase\",\n  \"imports\": [\n    \"Mathlib\",\n    \"Mathlib.NumberTheory.LSeries.RiemannZeta\",\n    \"Mathlib.NumberTheory.LSeries.Basic\",\n    \"Mathlib.Analysis.SpecialFunctions.Gamma.Basic\",\n    \"Mathlib.Data.Complex.Basic\",\n    \"Mathlib.Topology.Basic\",\n    \"Mathlib.Order.Filter.Basic\",\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.NumericalZeros\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "RiemannHypothesis"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SylvaFormalization.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\src\\\\SylvaFormalization.lean\",\n  \"totalLines\": 7,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": [\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.RiemannHypothesis\",\n    \"SylvaFormalization.Complexity\",\n    \"SylvaFormalization.MathAgent\",\n    \"SylvaFormalization.NumericalZeros\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SylvaFormalization"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SylvaTest.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\test\\\\SylvaTest.lean\",\n  \"totalLines\": 14,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": [\n    \"SylvaFormalization\",\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.Complexity\",\n    \"SylvaFormalization.MathAgent\",\n    \"SylvaFormalization.RH_Step1\",\n    \"SylvaFormalization.RiemannHypothesis\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SylvaTest"
+    ]
+  },
+  {
+    "title": "SYLVA模块: SylvaTestSuite.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\test\\\\SylvaTestSuite.lean\",\n  \"totalLines\": 189,\n  \"theoremCount\": 14,\n  \"definitionCount\": 7,\n  \"sorryCount\": 0,\n  \"namespace\": \"TestSuite\",\n  \"imports\": [\n    \"Mathlib\",\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.NumericalZeros\",\n    \"SylvaFormalization.RiemannHypothesis\",\n    \"SylvaFormalization.Complexity\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "SylvaTestSuite"
+    ]
+  },
+  {
+    "title": "SYLVA模块: sylva_test.lean",
+    "content": "{\n  \"filePath\": \"C:\\\\Users\\\\一梦\\\\Documents\\\\TOE-SYLVA-pull\\\\sylva-release\\\\test\\\\sylva_test.lean\",\n  \"totalLines\": 27,\n  \"theoremCount\": 0,\n  \"definitionCount\": 0,\n  \"sorryCount\": 0,\n  \"namespace\": \"\",\n  \"imports\": [\n    \"SylvaFormalization.Basic\",\n    \"SylvaFormalization.RiemannHypothesis\",\n    \"SylvaFormalization.Complexity\",\n    \"SylvaFormalization.MathAgent\"\n  ]\n}",
+    "tags": [
+      "sylva-sync",
+      "module",
+      "sylva_test"
+    ]
+  }
+]

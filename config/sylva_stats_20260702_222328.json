@@ -1,0 +1,544 @@
+{
+  "timestamp": "2026-07-02T22:23:28.231560",
+  "modules": [
+    {
+      "name": "BandTheory.lean",
+      "theorems": 1,
+      "definitions": 27,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\BandTheory.lean"
+    },
+    {
+      "name": "Basic.lean",
+      "theorems": 0,
+      "definitions": 1,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Basic.lean"
+    },
+    {
+      "name": "BasicTutorial.lean",
+      "theorems": 13,
+      "definitions": 6,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\BasicTutorial.lean"
+    },
+    {
+      "name": "BSD.lean",
+      "theorems": 1,
+      "definitions": 13,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\BSD.lean"
+    },
+    {
+      "name": "Complexity.lean",
+      "theorems": 1,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Complexity.lean"
+    },
+    {
+      "name": "CookLevin.lean",
+      "theorems": 10,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\CookLevin.lean"
+    },
+    {
+      "name": "CookLevin_theorem.lean",
+      "theorems": 11,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\CookLevin_theorem.lean"
+    },
+    {
+      "name": "CP004.lean",
+      "theorems": 6,
+      "definitions": 3,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\CP004.lean"
+    },
+    {
+      "name": "CP004_B2.lean",
+      "theorems": 6,
+      "definitions": 4,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\CP004_B2.lean"
+    },
+    {
+      "name": "CP004_B2_new_header.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\CP004_B2_new_header.lean"
+    },
+    {
+      "name": "CrystalStructure.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\CrystalStructure.lean"
+    },
+    {
+      "name": "DynamicalSystem.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\DynamicalSystem.lean"
+    },
+    {
+      "name": "EllipticCurveReduction.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\EllipticCurveReduction.lean"
+    },
+    {
+      "name": "EmergentMath.lean",
+      "theorems": 0,
+      "definitions": 3,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\EmergentMath.lean"
+    },
+    {
+      "name": "EntropyGapSpectral.lean",
+      "theorems": 6,
+      "definitions": 1,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\EntropyGapSpectral.lean"
+    },
+    {
+      "name": "GF3Advanced.lean",
+      "theorems": 18,
+      "definitions": 3,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\GF3Advanced.lean"
+    },
+    {
+      "name": "GravitationalField.lean",
+      "theorems": 0,
+      "definitions": 8,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\GravitationalField.lean"
+    },
+    {
+      "name": "LocalGlobalTemplate.lean",
+      "theorems": 2,
+      "definitions": 3,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\LocalGlobalTemplate.lean"
+    },
+    {
+      "name": "Main.lean",
+      "theorems": 0,
+      "definitions": 1,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Main.lean"
+    },
+    {
+      "name": "MathAgent.lean",
+      "theorems": 0,
+      "definitions": 1,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\MathAgent.lean"
+    },
+    {
+      "name": "NavierStokes.lean",
+      "theorems": 12,
+      "definitions": 17,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\NavierStokes.lean"
+    },
+    {
+      "name": "NumericalZeros.lean",
+      "theorems": 5,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\NumericalZeros.lean"
+    },
+    {
+      "name": "ProvingTechniques.lean",
+      "theorems": 10,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\ProvingTechniques.lean"
+    },
+    {
+      "name": "QFT.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\QFT.lean"
+    },
+    {
+      "name": "QuantumArithmetic.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\QuantumArithmetic.lean"
+    },
+    {
+      "name": "RadiationTracker.lean",
+      "theorems": 0,
+      "definitions": 3,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\RadiationTracker.lean"
+    },
+    {
+      "name": "RazborovSmolensky.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\RazborovSmolensky.lean"
+    },
+    {
+      "name": "Renormalization_Group_Formalization.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Renormalization_Group_Formalization.lean"
+    },
+    {
+      "name": "RH_Step1.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\RH_Step1.lean"
+    },
+    {
+      "name": "SAIPFillTest.lean",
+      "theorems": 10,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SAIPFillTest.lean"
+    },
+    {
+      "name": "SAIPTest.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SAIPTest.lean"
+    },
+    {
+      "name": "StatisticalMechanics.lean",
+      "theorems": 3,
+      "definitions": 0,
+      "sorry": 3,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\StatisticalMechanics.lean"
+    },
+    {
+      "name": "Superconductivity_Material_Derivation.lean",
+      "theorems": 1,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Superconductivity_Material_Derivation.lean"
+    },
+    {
+      "name": "Superconductivity_Meta_Theorem.lean",
+      "theorems": 1,
+      "definitions": 1,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Superconductivity_Meta_Theorem.lean"
+    },
+    {
+      "name": "Superconductivity_Pairing_Framework.lean",
+      "theorems": 7,
+      "definitions": 5,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Superconductivity_Pairing_Framework.lean"
+    },
+    {
+      "name": "Superconductivity_Symmetry_Classification.lean",
+      "theorems": 0,
+      "definitions": 1,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Superconductivity_Symmetry_Classification.lean"
+    },
+    {
+      "name": "SylvaConsumer.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaConsumer.lean"
+    },
+    {
+      "name": "SylvaExamples.lean",
+      "theorems": 1,
+      "definitions": 21,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaExamples.lean"
+    },
+    {
+      "name": "SylvaFormalization.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaFormalization.lean"
+    },
+    {
+      "name": "SylvaInfrastructure.lean",
+      "theorems": 3,
+      "definitions": 9,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaInfrastructure.lean"
+    },
+    {
+      "name": "SylvaInfrastructure_interface.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaInfrastructure_interface.lean"
+    },
+    {
+      "name": "SylvaTest.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaTest.lean"
+    },
+    {
+      "name": "SylvaTestSuite.lean",
+      "theorems": 14,
+      "definitions": 7,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaTestSuite.lean"
+    },
+    {
+      "name": "SylvaTestSuiteComplete.lean",
+      "theorems": 0,
+      "definitions": 6,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaTestSuiteComplete.lean"
+    },
+    {
+      "name": "sylva_auto_proofs.lean",
+      "theorems": 0,
+      "definitions": 4,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\sylva_auto_proofs.lean"
+    },
+    {
+      "name": "sylva_test.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\sylva_test.lean"
+    },
+    {
+      "name": "sylva_test_suite.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\sylva_test_suite.lean"
+    },
+    {
+      "name": "Test.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Test.lean"
+    },
+    {
+      "name": "TestMul.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\TestMul.lean"
+    },
+    {
+      "name": "TestNP.lean",
+      "theorems": 1,
+      "definitions": 1,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\TestNP.lean"
+    },
+    {
+      "name": "TestSInf.lean",
+      "theorems": 1,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\TestSInf.lean"
+    },
+    {
+      "name": "TestSuite.lean",
+      "theorems": 0,
+      "definitions": 13,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\TestSuite.lean"
+    },
+    {
+      "name": "test_postulate.lean",
+      "theorems": 0,
+      "definitions": 1,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\test_postulate.lean"
+    },
+    {
+      "name": "TutorialTemplate.lean",
+      "theorems": 3,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\TutorialTemplate.lean"
+    },
+    {
+      "name": "VerificationTests.lean",
+      "theorems": 2,
+      "definitions": 9,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\VerificationTests.lean"
+    },
+    {
+      "name": "ZetaVerifier.lean",
+      "theorems": 14,
+      "definitions": 9,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\ZetaVerifier.lean"
+    },
+    {
+      "name": "Main.lean",
+      "theorems": 16,
+      "definitions": 2,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_consumer\\Main.lean"
+    },
+    {
+      "name": "SylvaConsumer.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_consumer\\SylvaConsumer.lean"
+    },
+    {
+      "name": "66_beyond_standard_model.lean",
+      "theorems": 24,
+      "definitions": 44,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\toe_framework\\66_beyond_standard_model.lean"
+    },
+    {
+      "name": "Basic.lean",
+      "theorems": 0,
+      "definitions": 1,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_consumer\\SylvaConsumer\\Basic.lean"
+    },
+    {
+      "name": "04_NavierStokes_Formalization_Fixed.lean",
+      "theorems": 9,
+      "definitions": 18,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_academic\\desktop_zip_extracted\\04_NavierStokes_Formalization_Fixed.lean"
+    },
+    {
+      "name": "05_FourForcesUnification_Formalization_Fixed.lean",
+      "theorems": 15,
+      "definitions": 24,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_academic\\desktop_zip_extracted\\05_FourForcesUnification_Formalization_Fixed.lean"
+    },
+    {
+      "name": "Basic.lean",
+      "theorems": 0,
+      "definitions": 4,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_academic\\desktop_zip_extracted\\Basic.lean"
+    },
+    {
+      "name": "SylvaExamples.lean",
+      "theorems": 1,
+      "definitions": 21,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\examples\\SylvaExamples.lean"
+    },
+    {
+      "name": "Basic.lean",
+      "theorems": 4,
+      "definitions": 12,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\src\\Basic.lean"
+    },
+    {
+      "name": "BSD.lean",
+      "theorems": 3,
+      "definitions": 33,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\src\\BSD.lean"
+    },
+    {
+      "name": "Complexity.lean",
+      "theorems": 20,
+      "definitions": 18,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\src\\Complexity.lean"
+    },
+    {
+      "name": "Hodge.lean",
+      "theorems": 11,
+      "definitions": 12,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\src\\Hodge.lean"
+    },
+    {
+      "name": "MathAgent.lean",
+      "theorems": 0,
+      "definitions": 65,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\src\\MathAgent.lean"
+    },
+    {
+      "name": "NavierStokes.lean",
+      "theorems": 10,
+      "definitions": 17,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\src\\NavierStokes.lean"
+    },
+    {
+      "name": "NumericalZeros.lean",
+      "theorems": 26,
+      "definitions": 3,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\src\\NumericalZeros.lean"
+    },
+    {
+      "name": "RH_Step1.lean",
+      "theorems": 0,
+      "definitions": 3,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\src\\RH_Step1.lean"
+    },
+    {
+      "name": "RiemannHypothesis.lean",
+      "theorems": 24,
+      "definitions": 2,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\src\\RiemannHypothesis.lean"
+    },
+    {
+      "name": "SylvaFormalization.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\src\\SylvaFormalization.lean"
+    },
+    {
+      "name": "SylvaTest.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\test\\SylvaTest.lean"
+    },
+    {
+      "name": "SylvaTestSuite.lean",
+      "theorems": 14,
+      "definitions": 7,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\test\\SylvaTestSuite.lean"
+    },
+    {
+      "name": "sylva_test.lean",
+      "theorems": 0,
+      "definitions": 0,
+      "sorry": 0,
+      "filePath": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva-release\\test\\sylva_test.lean"
+    }
+  ]
+}
