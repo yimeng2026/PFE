@@ -1,0 +1,1833 @@
+[
+  {
+    "file_name": "BandTheory.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\BandTheory.lean",
+    "total_lines": 211,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 10,
+    "sorry_lines": [
+      49,
+      59,
+      67,
+      77,
+      95,
+      103,
+      107,
+      133,
+      141,
+      195
+    ],
+    "imports": [
+      "CrystalStructure"
+    ],
+    "namespace": "BandTheory",
+    "description": ""
+  },
+  {
+    "file_name": "Basic.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Basic.lean",
+    "total_lines": 294,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [],
+    "namespace": "Sylva",
+    "description": ""
+  },
+  {
+    "file_name": "BasicTutorial.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\BasicTutorial.lean",
+    "total_lines": 466,
+    "theorems": [
+      {
+        "name": "solution_1_3",
+        "type": "theorem",
+        "line": 399,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem solution_1_3 (a : GF3) : GF3.add a GF3.zero = a := by"
+      },
+      {
+        "name": "solution_5_2",
+        "type": "theorem",
+        "line": 453,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem solution_5_2 (a : MetaAxiom) : MetaAxiom.description a ≠ \"\" := by"
+      }
+    ],
+    "definitions": [
+      {
+        "name": "add",
+        "type": "def",
+        "line": 55,
+        "has_sorry": true,
+        "sorry_count": 2,
+        "sorry_lines": [
+          91,
+          98
+        ],
+        "statement": "def add (a b : GF3) : GF3 := a + b"
+      },
+      {
+        "name": "mul",
+        "type": "def",
+        "line": 56,
+        "has_sorry": true,
+        "sorry_count": 3,
+        "sorry_lines": [
+          91,
+          98,
+          105
+        ],
+        "statement": "def mul (a b : GF3) : GF3 := a * b"
+      },
+      {
+        "name": "neg",
+        "type": "def",
+        "line": 57,
+        "has_sorry": true,
+        "sorry_count": 3,
+        "sorry_lines": [
+          91,
+          98,
+          105
+        ],
+        "statement": "def neg (a : GF3) : GF3 := -a"
+      }
+    ],
+    "axioms": [],
+    "sorry_count": 13,
+    "sorry_lines": [
+      91,
+      98,
+      105,
+      176,
+      185,
+      196,
+      253,
+      262,
+      313,
+      320,
+      353,
+      360,
+      381
+    ],
+    "imports": [],
+    "namespace": "MetaAxiom",
+    "description": ""
+  },
+  {
+    "file_name": "BSD.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\BSD.lean",
+    "total_lines": 507,
+    "theorems": [
+      {
+        "name": "discriminant_eq",
+        "type": "lemma",
+        "line": 56,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "lemma discriminant_eq (E : ShortWeierstrassCurve) :"
+      }
+    ],
+    "definitions": [
+      {
+        "name": "rank_EllipticCurve",
+        "type": "def",
+        "line": 90,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def rank_EllipticCurve (E : ShortWeierstrassCurve) : ℕ :="
+      },
+      {
+        "name": "analytic_rank",
+        "type": "def",
+        "line": 152,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def analytic_rank (E : ShortWeierstrassCurve) : ℕ :="
+      },
+      {
+        "name": "LFunction_leading_coefficient",
+        "type": "def",
+        "line": 166,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def LFunction_leading_coefficient (E : ShortWeierstrassCurve) : ℝ :="
+      },
+      {
+        "name": "Sha",
+        "type": "def",
+        "line": 194,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def Sha (E : ShortWeierstrassCurve) : Type :="
+      },
+      {
+        "name": "period_lattice",
+        "type": "def",
+        "line": 317,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def period_lattice (E : ShortWeierstrassCurve) : Set ℂ :="
+      },
+      {
+        "name": "Conductor",
+        "type": "def",
+        "line": 366,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def Conductor (E : ShortWeierstrassCurve) : ℕ :="
+      },
+      {
+        "name": "Tamagawa_product",
+        "type": "def",
+        "line": 377,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def Tamagawa_product (E : ShortWeierstrassCurve) : ℕ :="
+      },
+      {
+        "name": "sylva_bsd_formula",
+        "type": "def",
+        "line": 435,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def sylva_bsd_formula (E : ShortWeierstrassCurve) : Prop :="
+      },
+      {
+        "name": "BSD_conjecture_complete",
+        "type": "def",
+        "line": 445,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def BSD_conjecture_complete (E : ShortWeierstrassCurve) : Prop :="
+      }
+    ],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "Mathlib.AlgebraicGeometry.EllipticCurve.Weierstrass",
+      "SylvaFormalization.Basic"
+    ],
+    "namespace": "ShortWeierstrassCurve",
+    "description": ""
+  },
+  {
+    "file_name": "Complexity.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Complexity.lean",
+    "total_lines": 528,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 24,
+    "sorry_lines": [
+      4,
+      14,
+      91,
+      106,
+      130,
+      169,
+      179,
+      212,
+      238,
+      249,
+      275,
+      325,
+      335,
+      351,
+      365,
+      374,
+      386,
+      413,
+      431,
+      441,
+      459,
+      486,
+      511,
+      525
+    ],
+    "imports": [
+      "Mathlib.Computability.Language",
+      "Mathlib.SetTheory.Cardinal.Basic",
+      "Mathlib.Order.LiminfLimsup",
+      "SylvaFormalization.Basic"
+    ],
+    "namespace": "SAT",
+    "description": ""
+  },
+  {
+    "file_name": "CookLevin.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\CookLevin.lean",
+    "total_lines": 469,
+    "theorems": [
+      {
+        "name": "circuit_to_cnf_forward",
+        "type": "lemma",
+        "line": 299,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "lemma circuit_to_cnf_forward (C : BooleanCircuit) :"
+      },
+      {
+        "name": "circuit_to_cnf_backward",
+        "type": "lemma",
+        "line": 318,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "lemma circuit_to_cnf_backward (C : BooleanCircuit) :"
+      },
+      {
+        "name": "unit_cnf_satisfiable",
+        "type": "lemma",
+        "line": 464,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "lemma unit_cnf_satisfiable (l : Literal) : CNFSatisfiable [[l]] := by"
+      }
+    ],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 1,
+    "sorry_lines": [
+      16
+    ],
+    "imports": [
+      "SylvaFormalization.Basic"
+    ],
+    "namespace": "SylvaFormalization",
+    "description": ""
+  },
+  {
+    "file_name": "CookLevin_theorem.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\CookLevin_theorem.lean",
+    "total_lines": 620,
+    "theorems": [
+      {
+        "name": "circuit_to_cnf_forward",
+        "type": "lemma",
+        "line": 318,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "lemma circuit_to_cnf_forward (C : BooleanCircuit) :"
+      },
+      {
+        "name": "circuit_to_cnf_backward",
+        "type": "lemma",
+        "line": 360,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "lemma circuit_to_cnf_backward (C : BooleanCircuit) :"
+      },
+      {
+        "name": "unit_cnf_satisfiable",
+        "type": "lemma",
+        "line": 549,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "lemma unit_cnf_satisfiable (l : Literal) : CNFSatisfiable [[l]] := by"
+      }
+    ],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 7,
+    "sorry_lines": [
+      10,
+      509,
+      524,
+      605,
+      607,
+      609,
+      617
+    ],
+    "imports": [
+      "Mathlib.Computability.TuringMachine",
+      "Mathlib.Computability.ComplexityClasses",
+      "Mathlib.Data.List.Basic",
+      "SylvaFormalization.Basic",
+      "SylvaFormalization.CP004"
+    ],
+    "namespace": "SylvaFormalization",
+    "description": ""
+  },
+  {
+    "file_name": "CP004.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\CP004.lean",
+    "total_lines": 323,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 2,
+    "sorry_lines": [
+      260,
+      305
+    ],
+    "imports": [
+      "Mathlib.Order.Basic",
+      "Mathlib.Order.Lattice",
+      "Mathlib.Order.Bounds.Defs",
+      "Mathlib.Data.Nat.Basic",
+      "Mathlib.Data.Set.Basic",
+      "Mathlib.Data.Real.Basic",
+      "SylvaFormalization.Basic"
+    ],
+    "namespace": "CP004",
+    "description": ""
+  },
+  {
+    "file_name": "CP004_B2.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\CP004_B2.lean",
+    "total_lines": 143,
+    "theorems": [],
+    "definitions": [
+      {
+        "name": "encodeCNF",
+        "type": "def",
+        "line": 113,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def encodeCNF (_f : CNF) : List Bool := [true]"
+      }
+    ],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "Mathlib.Order.Bounds.Defs",
+      "Mathlib.Data.Nat.Basic",
+      "Mathlib.Data.Set.Basic",
+      "Mathlib.Data.List.Basic",
+      "SylvaFormalization.Basic"
+    ],
+    "namespace": "CP004_B2",
+    "description": ""
+  },
+  {
+    "file_name": "CP004_B2_new_header.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\CP004_B2_new_header.lean",
+    "total_lines": 41,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "Mathlib.Order.Basic"
+    ],
+    "namespace": "",
+    "description": ""
+  },
+  {
+    "file_name": "CrystalStructure.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\CrystalStructure.lean",
+    "total_lines": 200,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [],
+    "namespace": "CrystalStructure",
+    "description": ""
+  },
+  {
+    "file_name": "DynamicalSystem.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\DynamicalSystem.lean",
+    "total_lines": 206,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 5,
+    "sorry_lines": [
+      84,
+      134,
+      141,
+      177,
+      194
+    ],
+    "imports": [],
+    "namespace": "SylvaFormalization",
+    "description": ""
+  },
+  {
+    "file_name": "EllipticCurveReduction.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\EllipticCurveReduction.lean",
+    "total_lines": 398,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "SylvaFormalization.Basic"
+    ],
+    "namespace": "EllipticCurveReduction",
+    "description": ""
+  },
+  {
+    "file_name": "EmergentMath.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\EmergentMath.lean",
+    "total_lines": 421,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 11,
+    "sorry_lines": [
+      99,
+      137,
+      139,
+      184,
+      185,
+      270,
+      271,
+      272,
+      273,
+      274,
+      348
+    ],
+    "imports": [
+      "SylvaFormalization.Basic"
+    ],
+    "namespace": "EmergentMath",
+    "description": ""
+  },
+  {
+    "file_name": "EntropyGapSpectral.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\EntropyGapSpectral.lean",
+    "total_lines": 627,
+    "theorems": [
+      {
+        "name": "diagonalization_spectral",
+        "type": "lemma",
+        "line": 487,
+        "has_sorry": true,
+        "sorry_count": 3,
+        "sorry_lines": [
+          496,
+          517,
+          529
+        ],
+        "statement": "lemma diagonalization_spectral (spec : EntropyGapSpectrum) :"
+      }
+    ],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 32,
+    "sorry_lines": [
+      2,
+      90,
+      98,
+      186,
+      198,
+      210,
+      250,
+      268,
+      301,
+      309,
+      317,
+      325,
+      333,
+      341,
+      349,
+      357,
+      378,
+      397,
+      411,
+      423,
+      444,
+      457,
+      470,
+      483,
+      496,
+      517,
+      529,
+      538,
+      546,
+      559,
+      569,
+      622
+    ],
+    "imports": [
+      "SylvaFormalization.Basic"
+    ],
+    "namespace": "Sylva",
+    "description": ""
+  },
+  {
+    "file_name": "GF3Advanced.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\GF3Advanced.lean",
+    "total_lines": 295,
+    "theorems": [
+      {
+        "name": "exercise_1_1_add_comm",
+        "type": "theorem",
+        "line": 72,
+        "has_sorry": true,
+        "sorry_count": 5,
+        "sorry_lines": [
+          73,
+          77,
+          81,
+          85,
+          91
+        ],
+        "statement": "theorem exercise_1_1_add_comm (a b : GF3) : a + b = b + a := by"
+      },
+      {
+        "name": "exercise_1_2_mul_assoc",
+        "type": "theorem",
+        "line": 76,
+        "has_sorry": true,
+        "sorry_count": 4,
+        "sorry_lines": [
+          77,
+          81,
+          85,
+          91
+        ],
+        "statement": "theorem exercise_1_2_mul_assoc (a b c : GF3) : (a * b) * c = a * (b * c) := by"
+      },
+      {
+        "name": "exercise_1_3_mul_comm",
+        "type": "theorem",
+        "line": 80,
+        "has_sorry": true,
+        "sorry_count": 3,
+        "sorry_lines": [
+          81,
+          85,
+          91
+        ],
+        "statement": "theorem exercise_1_3_mul_comm (a b : GF3) : a * b = b * a := by"
+      },
+      {
+        "name": "exercise_1_4_distrib",
+        "type": "theorem",
+        "line": 84,
+        "has_sorry": true,
+        "sorry_count": 2,
+        "sorry_lines": [
+          85,
+          91
+        ],
+        "statement": "theorem exercise_1_4_distrib (a b c : GF3) : a * (b + c) = a * b + a * c := by"
+      },
+      {
+        "name": "exercise_3_1_mul",
+        "type": "theorem",
+        "line": 211,
+        "has_sorry": true,
+        "sorry_count": 3,
+        "sorry_lines": [
+          212,
+          217,
+          256
+        ],
+        "statement": "theorem exercise_3_1_mul (a b : GF3) : F (a * b) = F a * F b := by"
+      },
+      {
+        "name": "exercise_3_2_add",
+        "type": "theorem",
+        "line": 216,
+        "has_sorry": true,
+        "sorry_count": 2,
+        "sorry_lines": [
+          217,
+          256
+        ],
+        "statement": "theorem exercise_3_2_add (a b : GF3) : F (a + b) = F a + F b := by"
+      },
+      {
+        "name": "solution_1_1",
+        "type": "theorem",
+        "line": 266,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem solution_1_1 (a b : GF3) : a + b = b + a := by"
+      },
+      {
+        "name": "solution_1_2",
+        "type": "theorem",
+        "line": 271,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem solution_1_2 (a b c : GF3) : (a * b) * c = a * (b * c) := by"
+      },
+      {
+        "name": "solution_1_3",
+        "type": "theorem",
+        "line": 276,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem solution_1_3 (a b : GF3) : a * b = b * a := by"
+      },
+      {
+        "name": "solution_1_4",
+        "type": "theorem",
+        "line": 281,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem solution_1_4 (a b c : GF3) : a * (b + c) = a * b + a * c := by"
+      }
+    ],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 11,
+    "sorry_lines": [
+      73,
+      77,
+      81,
+      85,
+      91,
+      148,
+      153,
+      158,
+      212,
+      217,
+      256
+    ],
+    "imports": [
+      "Sylva.Tutorial.Basic"
+    ],
+    "namespace": "Polynomials",
+    "description": ""
+  },
+  {
+    "file_name": "GravitationalField.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\GravitationalField.lean",
+    "total_lines": 600,
+    "theorems": [],
+    "definitions": [
+      {
+        "name": "compute",
+        "type": "def",
+        "line": 150,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def compute (t₁ t₂ : TheoremNode) : GravitationalStrength :="
+      },
+      {
+        "name": "analyzeGravitationalField",
+        "type": "def",
+        "line": 370,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def analyzeGravitationalField (universe : TheoremUniverse) : GravitationalFieldAnalysis :="
+      },
+      {
+        "name": "formatGravitationalFieldReport",
+        "type": "def",
+        "line": 569,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def formatGravitationalFieldReport (analysis : GravitationalFieldAnalysis) : String :="
+      }
+    ],
+    "axioms": [],
+    "sorry_count": 1,
+    "sorry_lines": [
+      478
+    ],
+    "imports": [
+      "Mathlib.Data.Finset.Basic",
+      "Mathlib.Data.Set.Basic",
+      "Mathlib.Data.List.Basic",
+      "Mathlib.Data.Graph.Defs"
+    ],
+    "namespace": "EnergyClass",
+    "description": ""
+  },
+  {
+    "file_name": "LocalGlobalTemplate.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\LocalGlobalTemplate.lean",
+    "total_lines": 373,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 2,
+    "sorry_lines": [
+      211,
+      328
+    ],
+    "imports": [],
+    "namespace": "RiemannHypothesisTemplate",
+    "description": ""
+  },
+  {
+    "file_name": "Main.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Main.lean",
+    "total_lines": 154,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "SylvaFormalization.Basic",
+      "SylvaFormalization.RiemannHypothesis",
+      "SylvaFormalization.Complexity"
+    ],
+    "namespace": "SylvaConsumer",
+    "description": ""
+  },
+  {
+    "file_name": "MathAgent.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\MathAgent.lean",
+    "total_lines": 785,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 1,
+    "sorry_lines": [
+      167
+    ],
+    "imports": [
+      "Mathlib.Data.String.Defs",
+      "SylvaFormalization.Basic",
+      "SylvaFormalization.NumericalZeros",
+      "SylvaFormalization.RiemannHypothesis"
+    ],
+    "namespace": "AgentState",
+    "description": ""
+  },
+  {
+    "file_name": "NavierStokes.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\NavierStokes.lean",
+    "total_lines": 549,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "Mathlib",
+      "Mathlib.Analysis.FunctionalSpaces.SobolevInequality",
+      "Mathlib.Analysis.Calculus.Deriv.Pi",
+      "Mathlib.Analysis.InnerProductSpace.EuclideanDist",
+      "Mathlib.Analysis.InnerProductSpace.NormPow",
+      "Mathlib.MeasureTheory.Integral.IntegralEqImproper",
+      "SylvaFormalization.Basic"
+    ],
+    "namespace": "DifferentialOperators",
+    "description": ""
+  },
+  {
+    "file_name": "NumericalZeros.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\NumericalZeros.lean",
+    "total_lines": 435,
+    "theorems": [
+      {
+        "name": "eta_zeta_relation",
+        "type": "lemma",
+        "line": 105,
+        "has_sorry": true,
+        "sorry_count": 5,
+        "sorry_lines": [
+          107,
+          109,
+          141,
+          146,
+          151
+        ],
+        "statement": "lemma eta_zeta_relation {s : ℂ} (hs : s ≠ 1) :"
+      }
+    ],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 12,
+    "sorry_lines": [
+      107,
+      109,
+      141,
+      146,
+      151,
+      156,
+      276,
+      316,
+      418,
+      428,
+      430,
+      431
+    ],
+    "imports": [
+      "Mathlib.NumberTheory.LSeries.RiemannZeta",
+      "Mathlib.Data.Complex.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Gamma.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Complex.Log",
+      "Mathlib.Analysis.Complex.Arg",
+      "Mathlib.Analysis.SpecialFunctions.Pow.Complex"
+    ],
+    "namespace": "NumericalVerification",
+    "description": ""
+  },
+  {
+    "file_name": "ProvingTechniques.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\ProvingTechniques.lean",
+    "total_lines": 547,
+    "theorems": [
+      {
+        "name": "fib_sum",
+        "type": "theorem",
+        "line": 311,
+        "has_sorry": true,
+        "sorry_count": 2,
+        "sorry_lines": [
+          331,
+          341
+        ],
+        "statement": "theorem fib_sum (n : ℕ) : ∑ i in Finset.range (n + 1), fib i = fib (n + 2) - 1 := by"
+      },
+      {
+        "name": "solution_1_1",
+        "type": "theorem",
+        "line": 456,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem solution_1_1 (a b : ℝ) : a^3 - b^3 = (a - b) * (a^2 + a*b + b^2) := by"
+      },
+      {
+        "name": "solution_1_3",
+        "type": "theorem",
+        "line": 465,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem solution_1_3 {φ : ℝ} (hφ : φ^2 = φ + 1) : φ^5 = 5*φ + 3 := by"
+      },
+      {
+        "name": "solution_2_2",
+        "type": "theorem",
+        "line": 500,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem solution_2_2 (a b c d : ℝ) : (a^2 + b^2) * (c^2 + d^2) ≥ (a*c + b*d)^2 := by"
+      },
+      {
+        "name": "solution_4_1",
+        "type": "theorem",
+        "line": 519,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem solution_4_1 (n : ℕ) : ∑ i in Finset.range (n + 1), (2 : ℕ)^i = 2^(n + 1) - 1 := by"
+      }
+    ],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 12,
+    "sorry_lines": [
+      114,
+      121,
+      128,
+      195,
+      203,
+      259,
+      266,
+      331,
+      341,
+      416,
+      425,
+      446
+    ],
+    "imports": [],
+    "namespace": "Sylva",
+    "description": ""
+  },
+  {
+    "file_name": "QFT.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\QFT.lean",
+    "total_lines": 63,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [],
+    "namespace": "Sylva",
+    "description": ""
+  },
+  {
+    "file_name": "QuantumArithmetic.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\QuantumArithmetic.lean",
+    "total_lines": 6,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [],
+    "namespace": "SylvaFormalization",
+    "description": ""
+  },
+  {
+    "file_name": "RadiationTracker.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\RadiationTracker.lean",
+    "total_lines": 408,
+    "theorems": [],
+    "definitions": [
+      {
+        "name": "fromNat",
+        "type": "def",
+        "line": 40,
+        "has_sorry": true,
+        "sorry_count": 2,
+        "sorry_lines": [
+          71,
+          72
+        ],
+        "statement": "def fromNat (n : Nat) : Option Layer :="
+      }
+    ],
+    "axioms": [],
+    "sorry_count": 5,
+    "sorry_lines": [
+      7,
+      10,
+      71,
+      72,
+      334
+    ],
+    "imports": [
+      "Lean"
+    ],
+    "namespace": "RadiationTracker",
+    "description": ""
+  },
+  {
+    "file_name": "RazborovSmolensky.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\RazborovSmolensky.lean",
+    "total_lines": 979,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 31,
+    "sorry_lines": [
+      20,
+      236,
+      367,
+      375,
+      407,
+      415,
+      483,
+      508,
+      564,
+      572,
+      592,
+      615,
+      623,
+      631,
+      659,
+      681,
+      690,
+      713,
+      723,
+      731,
+      759,
+      767,
+      775,
+      783,
+      791,
+      814,
+      823,
+      933,
+      942,
+      965,
+      974
+    ],
+    "imports": [
+      "Mathlib.FieldTheory.Finite.GaloisField",
+      "Mathlib.Probability.Distributions.Uniform",
+      "Mathlib.LinearAlgebra.FiniteDimensional.Defs"
+    ],
+    "namespace": "RazborovSmolensky",
+    "description": ""
+  },
+  {
+    "file_name": "Renormalization_Group_Formalization.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Renormalization_Group_Formalization.lean",
+    "total_lines": 462,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 1,
+    "sorry_lines": [
+      457
+    ],
+    "imports": [],
+    "namespace": "NonlinearSigmaModel",
+    "description": ""
+  },
+  {
+    "file_name": "RH_Step1.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\RH_Step1.lean",
+    "total_lines": 97,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "Mathlib.NumberTheory.LSeries.RiemannZeta",
+      "Mathlib.NumberTheory.LSeries.Basic",
+      "SylvaFormalization.Basic"
+    ],
+    "namespace": "RH",
+    "description": ""
+  },
+  {
+    "file_name": "SAIPFillTest.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SAIPFillTest.lean",
+    "total_lines": 116,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 2,
+    "sorry_lines": [
+      6,
+      7
+    ],
+    "imports": [
+      "Mathlib"
+    ],
+    "namespace": "Phi",
+    "description": ""
+  },
+  {
+    "file_name": "SAIPTest.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SAIPTest.lean",
+    "total_lines": 28,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "Mathlib"
+    ],
+    "namespace": "TestSAIP",
+    "description": ""
+  },
+  {
+    "file_name": "StatisticalMechanics.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\StatisticalMechanics.lean",
+    "total_lines": 78,
+    "theorems": [
+      {
+        "name": "Widom_scaling",
+        "type": "theorem",
+        "line": 47,
+        "has_sorry": true,
+        "sorry_count": 3,
+        "sorry_lines": [
+          47,
+          48,
+          49
+        ],
+        "statement": "theorem Widom_scaling (cp : CriticalPoint) : cp.gamma = cp.beta * (cp.delta - 1) := by sorry"
+      },
+      {
+        "name": "Fisher_scaling",
+        "type": "theorem",
+        "line": 48,
+        "has_sorry": true,
+        "sorry_count": 2,
+        "sorry_lines": [
+          48,
+          49
+        ],
+        "statement": "theorem Fisher_scaling (cp : CriticalPoint) : cp.gamma = (2 - cp.eta) * cp.nu := by sorry"
+      }
+    ],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 4,
+    "sorry_lines": [
+      46,
+      47,
+      48,
+      49
+    ],
+    "imports": [],
+    "namespace": "Sylva",
+    "description": ""
+  },
+  {
+    "file_name": "Superconductivity_Material_Derivation.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Superconductivity_Material_Derivation.lean",
+    "total_lines": 387,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 25,
+    "sorry_lines": [
+      3,
+      140,
+      141,
+      159,
+      162,
+      163,
+      169,
+      180,
+      181,
+      197,
+      207,
+      218,
+      219,
+      220,
+      238,
+      249,
+      269,
+      275,
+      276,
+      277,
+      300,
+      318,
+      335,
+      382,
+      383
+    ],
+    "imports": [
+      "CrystalStructure",
+      "BandTheory"
+    ],
+    "namespace": "SuperconductivityMaterialDerivation",
+    "description": ""
+  },
+  {
+    "file_name": "Superconductivity_Meta_Theorem.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Superconductivity_Meta_Theorem.lean",
+    "total_lines": 689,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 5,
+    "sorry_lines": [
+      221,
+      324,
+      361,
+      419,
+      619
+    ],
+    "imports": [],
+    "namespace": "SuperconductivityMetaTheorem",
+    "description": ""
+  },
+  {
+    "file_name": "Superconductivity_Pairing_Framework.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Superconductivity_Pairing_Framework.lean",
+    "total_lines": 527,
+    "theorems": [
+      {
+        "name": "opposite_involutive",
+        "type": "theorem",
+        "line": 68,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem opposite_involutive (s : Spin) : (s.opposite).opposite = s := by"
+      },
+      {
+        "name": "opposite_ne_self",
+        "type": "theorem",
+        "line": 71,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem opposite_ne_self (s : Spin) : s.opposite ≠ s := by"
+      }
+    ],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 2,
+    "sorry_lines": [
+      302,
+      453
+    ],
+    "imports": [],
+    "namespace": "Spin",
+    "description": ""
+  },
+  {
+    "file_name": "Superconductivity_Symmetry_Classification.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Superconductivity_Symmetry_Classification.lean",
+    "total_lines": 620,
+    "theorems": [],
+    "definitions": [
+      {
+        "name": "Proportional",
+        "type": "def",
+        "line": 111,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def Proportional (f g : ℝ → ℝ → ℝ) : Prop :="
+      }
+    ],
+    "axioms": [],
+    "sorry_count": 13,
+    "sorry_lines": [
+      312,
+      343,
+      388,
+      399,
+      421,
+      433,
+      451,
+      462,
+      473,
+      486,
+      492,
+      503,
+      575
+    ],
+    "imports": [
+      "Mathlib.RepresentationTheory.Basic",
+      "Mathlib.RepresentationTheory.Subrepresentation",
+      "Mathlib.RepresentationTheory.Character",
+      "Mathlib.GroupTheory.Sylow",
+      "Mathlib.GroupTheory.Coset",
+      "Mathlib.Topology.Algebra.Group.Basic",
+      "Mathlib.LinearAlgebra.TensorAlgebra.Basic",
+      "Mathlib.LinearAlgebra.ExteriorAlgebra.Basic",
+      "Mathlib.Algebra.Group.FiniteSum"
+    ],
+    "namespace": "SuperconductivitySymmetryClassification",
+    "description": ""
+  },
+  {
+    "file_name": "SylvaConsumer.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaConsumer.lean",
+    "total_lines": 4,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "SylvaConsumer.Basic"
+    ],
+    "namespace": "",
+    "description": "This module serves as the root of the `SylvaConsumer` library. Import modules here that should be built as part of the library."
+  },
+  {
+    "file_name": "SylvaExamples.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaExamples.lean",
+    "total_lines": 551,
+    "theorems": [],
+    "definitions": [
+      {
+        "name": "assignment",
+        "type": "def",
+        "line": 332,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def assignment (v : Var) : Bool := v == 1  -- x1 = true, 其他 = false"
+      },
+      {
+        "name": "phiZeroRelation",
+        "type": "def",
+        "line": 435,
+        "has_sorry": true,
+        "sorry_count": 1,
+        "sorry_lines": [
+          463
+        ],
+        "statement": "def phiZeroRelation (n : ℕ) : Option ℝ :="
+      }
+    ],
+    "axioms": [],
+    "sorry_count": 6,
+    "sorry_lines": [
+      141,
+      417,
+      418,
+      419,
+      420,
+      463
+    ],
+    "imports": [
+      "SylvaFormalization.Basic",
+      "SylvaFormalization.RiemannHypothesis",
+      "SylvaFormalization.Complexity",
+      "SylvaFormalization.NumericalZeros"
+    ],
+    "namespace": "Summary",
+    "description": ""
+  },
+  {
+    "file_name": "SylvaFormalization.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaFormalization.lean",
+    "total_lines": 53,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "SylvaFormalization.Basic_current_fixed",
+      "SylvaFormalization.Complexity_amputated",
+      "SylvaFormalization.BSD",
+      "SylvaFormalization.NavierStokes",
+      "SylvaFormalization.CP004",
+      "SylvaFormalization.CookLevin",
+      "SylvaFormalization.SylvaInfrastructure",
+      "SylvaFormalization.MathAgent",
+      "SylvaFormalization.RiemannHypothesis",
+      "SylvaFormalization.ZetaVerifier_fixed",
+      "SylvaFormalization.NumericalZeros",
+      "SylvaFormalization.Hodge",
+      "SylvaFormalization.LocalGlobal_fixed",
+      "SylvaFormalization.EmergentMath",
+      "SylvaFormalization.EntropyGapSpectral",
+      "SylvaFormalization.GF3Advanced",
+      "SylvaFormalization.BandTheory",
+      "SylvaFormalization.CrystalStructure",
+      "SylvaFormalization.DynamicalSystem",
+      "SylvaFormalization.EllipticCurveReduction",
+      "SylvaFormalization.GravitationalField",
+      "SylvaFormalization.QFT",
+      "SylvaFormalization.QuantumArithmetic",
+      "SylvaFormalization.RadiationTracker",
+      "SylvaFormalization.RazborovSmolensky",
+      "SylvaFormalization.Renormalization_Group_Formalization",
+      "SylvaFormalization.RH_Step1",
+      "SylvaFormalization.StatisticalMechanics",
+      "SylvaFormalization.Superconductivity_Material_Derivation",
+      "SylvaFormalization.Superconductivity_Meta_Theorem",
+      "SylvaFormalization.Superconductivity_Pairing_Framework",
+      "SylvaFormalization.Superconductivity_Symmetry_Classification",
+      "SylvaFormalization.ProvingTechniques",
+      "SylvaFormalization.TutorialTemplate",
+      "SylvaFormalization.SylvaExamples",
+      "SylvaFormalization.Test",
+      "SylvaFormalization.TestSuite",
+      "SylvaFormalization.VerificationTests",
+      "SylvaFormalization.SAIPFillTest",
+      "SylvaFormalization.SAIPTest",
+      "SylvaFormalization.CP004_B2",
+      "SylvaFormalization.sylva_auto_proofs",
+      "SylvaFormalization.sylva_test",
+      "SylvaFormalization.sylva_test_suite",
+      "SylvaFormalization.SylvaTest",
+      "SylvaFormalization.SylvaTestSuite",
+      "SylvaFormalization.SylvaTestSuiteComplete"
+    ],
+    "namespace": "",
+    "description": ""
+  },
+  {
+    "file_name": "SylvaInfrastructure.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaInfrastructure.lean",
+    "total_lines": 100,
+    "theorems": [
+      {
+        "name": "kolmogorov_upper_bound",
+        "type": "theorem",
+        "line": 57,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem kolmogorov_upper_bound (x : List Bool) :"
+      },
+      {
+        "name": "bigO_refl",
+        "type": "theorem",
+        "line": 81,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem bigO_refl {α : Type} (f : α → ℝ) : BigO f f := by"
+      }
+    ],
+    "definitions": [
+      {
+        "name": "BigO",
+        "type": "def",
+        "line": 72,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def BigO {α : Type} (f g : α → ℝ) : Prop := True"
+      },
+      {
+        "name": "BigOmega",
+        "type": "def",
+        "line": 75,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def BigOmega {α : Type} (f g : α → ℝ) : Prop := True"
+      },
+      {
+        "name": "BigTheta",
+        "type": "def",
+        "line": 78,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "def BigTheta {α : Type} (f g : α → ℝ) : Prop := True"
+      }
+    ],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "Mathlib",
+      "SylvaFormalization.Basic"
+    ],
+    "namespace": "SylvaFormalization",
+    "description": ""
+  },
+  {
+    "file_name": "SylvaInfrastructure_interface.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaInfrastructure_interface.lean",
+    "total_lines": 81,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "Mathlib",
+      "SylvaFormalization.Basic"
+    ],
+    "namespace": "SylvaFormalization",
+    "description": ""
+  },
+  {
+    "file_name": "SylvaTest.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaTest.lean",
+    "total_lines": 14,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "SylvaFormalization",
+      "SylvaFormalization.Basic",
+      "SylvaFormalization.Complexity",
+      "SylvaFormalization.MathAgent",
+      "SylvaFormalization.RH_Step1",
+      "SylvaFormalization.RiemannHypothesis"
+    ],
+    "namespace": "",
+    "description": "Sylva Module Import Verification Test This file tests that all Sylva modules can be imported without errors If this file compiles successfully, all imports are working"
+  },
+  {
+    "file_name": "SylvaTestSuite.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaTestSuite.lean",
+    "total_lines": 187,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "SylvaFormalization.Basic",
+      "SylvaFormalization.NumericalZeros",
+      "SylvaFormalization.RiemannHypothesis",
+      "SylvaFormalization.Complexity"
+    ],
+    "namespace": "TestSuite",
+    "description": ""
+  },
+  {
+    "file_name": "SylvaTestSuiteComplete.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\SylvaTestSuiteComplete.lean",
+    "total_lines": 607,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 1,
+    "sorry_lines": [
+      579
+    ],
+    "imports": [
+      "SylvaFormalization.Basic",
+      "SylvaFormalization.Complexity",
+      "SylvaFormalization.CP004",
+      "SylvaFormalization.NumericalZeros",
+      "SylvaFormalization.CookLevin",
+      "SylvaFormalization.BSD",
+      "SylvaFormalization.NavierStokes",
+      "SylvaFormalization.SylvaInfrastructure"
+    ],
+    "namespace": "Sylva",
+    "description": ""
+  },
+  {
+    "file_name": "sylva_auto_proofs.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\sylva_auto_proofs.lean",
+    "total_lines": 379,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "Mathlib.NumberTheory.LSeries.RiemannZeta",
+      "Mathlib.NumberTheory.LSeries.Basic",
+      "Mathlib.Analysis.SpecialFunctions.Gamma.Basic",
+      "Mathlib.Data.Complex.Basic",
+      "Mathlib.Topology.Basic",
+      "Mathlib.Order.Filter.Basic",
+      "SylvaAutoProofs"
+    ],
+    "namespace": "MetaAxiom",
+    "description": ""
+  },
+  {
+    "file_name": "sylva_test.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\sylva_test.lean",
+    "total_lines": 25,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "SylvaFormalization.RiemannHypothesis",
+      "SylvaFormalization.Complexity",
+      "SylvaFormalization.MathAgent"
+    ],
+    "namespace": "",
+    "description": "Sylva 形式化项目验证测试 -/\\n\\nimport SylvaFormalization.Basic 测试基本定义"
+  },
+  {
+    "file_name": "sylva_test_suite.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\sylva_test_suite.lean",
+    "total_lines": 378,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "SylvaFormalization.Basic",
+      "SylvaFormalization.RiemannHypothesis",
+      "SylvaFormalization.NumericalZeros",
+      "SylvaFormalization.Complexity"
+    ],
+    "namespace": "SmokeTests",
+    "description": ""
+  },
+  {
+    "file_name": "Test.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\Test.lean",
+    "total_lines": 162,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "SylvaFormalization.Basic",
+      "SylvaFormalization.NumericalZeros",
+      "SylvaFormalization.Complexity",
+      "SylvaFormalization.Hodge",
+      "SylvaFormalization.NavierStokes",
+      "SylvaFormalization.CP004",
+      "SylvaFormalization.CookLevin",
+      "SylvaFormalization.SylvaInfrastructure",
+      "SylvaFormalization.MathAgent"
+    ],
+    "namespace": "Test",
+    "description": ""
+  },
+  {
+    "file_name": "TestMul.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\TestMul.lean",
+    "total_lines": 5,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "Mathlib"
+    ],
+    "namespace": "",
+    "description": ""
+  },
+  {
+    "file_name": "TestNP.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\TestNP.lean",
+    "total_lines": 23,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "Mathlib.Data.Set.Basic"
+    ],
+    "namespace": "",
+    "description": ""
+  },
+  {
+    "file_name": "TestSInf.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\TestSInf.lean",
+    "total_lines": 11,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "Mathlib.Order.Basic",
+      "Mathlib.Order.Lattice",
+      "Mathlib.Order.Bounds.Defs",
+      "Mathlib.Data.Nat.Basic",
+      "Mathlib.Data.Set.Basic"
+    ],
+    "namespace": "",
+    "description": ""
+  },
+  {
+    "file_name": "TestSuite.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\TestSuite.lean",
+    "total_lines": 413,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [
+      "SylvaFormalization.Basic",
+      "SylvaFormalization.CookLevin"
+    ],
+    "namespace": "TestSuite",
+    "description": ""
+  },
+  {
+    "file_name": "test_postulate.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\test_postulate.lean",
+    "total_lines": 3,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [],
+    "namespace": "",
+    "description": ""
+  },
+  {
+    "file_name": "TutorialTemplate.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\TutorialTemplate.lean",
+    "total_lines": 143,
+    "theorems": [
+      {
+        "name": "exercise_1_solution",
+        "type": "theorem",
+        "line": 128,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem exercise_1_solution (x : ℕ) : x = x := by"
+      }
+    ],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 5,
+    "sorry_lines": [
+      13,
+      87,
+      94,
+      102,
+      121
+    ],
+    "imports": [
+      "Mathlib"
+    ],
+    "namespace": "Sylva",
+    "description": ""
+  },
+  {
+    "file_name": "VerificationTests.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\VerificationTests.lean",
+    "total_lines": 173,
+    "theorems": [],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 0,
+    "sorry_lines": [],
+    "imports": [],
+    "namespace": "NumericalZerosTypeTests",
+    "description": "Lean楠岃瘉娴嬭瘯濂椾欢 鐢ㄤ簬楠岃瘉LocalGlobal鍜孨umericalZeros淇鏁堟灉"
+  },
+  {
+    "file_name": "ZetaVerifier.lean",
+    "file_path": "C:\\Users\\一梦\\Documents\\TOE-SYLVA-pull\\sylva_complete\\ZetaVerifier.lean",
+    "total_lines": 337,
+    "theorems": [
+      {
+        "name": "zero_count_correct",
+        "type": "theorem",
+        "line": 199,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem zero_count_correct (hT : ZETA_ZERO_4 < T) : zeroCountUpTo T = 4 := by"
+      },
+      {
+        "name": "gram_point_bounds",
+        "type": "theorem",
+        "line": 324,
+        "has_sorry": false,
+        "sorry_count": 0,
+        "sorry_lines": [],
+        "statement": "theorem gram_point_bounds (n : ℕ) :"
+      }
+    ],
+    "definitions": [],
+    "axioms": [],
+    "sorry_count": 1,
+    "sorry_lines": [
+      321
+    ],
+    "imports": [
+      "Mathlib.NumberTheory.LSeries.RiemannZeta",
+      "Mathlib.Topology.Order.IntermediateValue",
+      "SylvaFormalization.Basic"
+    ],
+    "namespace": "SylvaFormalization",
+    "description": ""
+  }
+]

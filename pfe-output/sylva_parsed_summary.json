@@ -1,0 +1,116 @@
+{
+  "total_modules": 56,
+  "total_sorry": 245,
+  "total_theorems": 35,
+  "total_axioms": 0,
+  "sorry_by_file": [
+    [
+      "EntropyGapSpectral.lean",
+      32
+    ],
+    [
+      "RazborovSmolensky.lean",
+      31
+    ],
+    [
+      "Superconductivity_Material_Derivation.lean",
+      25
+    ],
+    [
+      "Complexity.lean",
+      24
+    ],
+    [
+      "BasicTutorial.lean",
+      13
+    ],
+    [
+      "Superconductivity_Symmetry_Classification.lean",
+      13
+    ],
+    [
+      "NumericalZeros.lean",
+      12
+    ],
+    [
+      "ProvingTechniques.lean",
+      12
+    ],
+    [
+      "EmergentMath.lean",
+      11
+    ],
+    [
+      "GF3Advanced.lean",
+      11
+    ]
+  ],
+  "open_theorems": [
+    {
+      "file": "EntropyGapSpectral.lean",
+      "theorem": "diagonalization_spectral",
+      "line": 487,
+      "sorry_count": 3
+    },
+    {
+      "file": "GF3Advanced.lean",
+      "theorem": "exercise_1_1_add_comm",
+      "line": 72,
+      "sorry_count": 5
+    },
+    {
+      "file": "GF3Advanced.lean",
+      "theorem": "exercise_1_2_mul_assoc",
+      "line": 76,
+      "sorry_count": 4
+    },
+    {
+      "file": "GF3Advanced.lean",
+      "theorem": "exercise_1_3_mul_comm",
+      "line": 80,
+      "sorry_count": 3
+    },
+    {
+      "file": "GF3Advanced.lean",
+      "theorem": "exercise_1_4_distrib",
+      "line": 84,
+      "sorry_count": 2
+    },
+    {
+      "file": "GF3Advanced.lean",
+      "theorem": "exercise_3_1_mul",
+      "line": 211,
+      "sorry_count": 3
+    },
+    {
+      "file": "GF3Advanced.lean",
+      "theorem": "exercise_3_2_add",
+      "line": 216,
+      "sorry_count": 2
+    },
+    {
+      "file": "NumericalZeros.lean",
+      "theorem": "eta_zeta_relation",
+      "line": 105,
+      "sorry_count": 5
+    },
+    {
+      "file": "ProvingTechniques.lean",
+      "theorem": "fib_sum",
+      "line": 311,
+      "sorry_count": 2
+    },
+    {
+      "file": "StatisticalMechanics.lean",
+      "theorem": "Widom_scaling",
+      "line": 47,
+      "sorry_count": 3
+    },
+    {
+      "file": "StatisticalMechanics.lean",
+      "theorem": "Fisher_scaling",
+      "line": 48,
+      "sorry_count": 2
+    }
+  ]
+}
