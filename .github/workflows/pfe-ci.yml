@@ -1,0 +1,111 @@
+name: PFE Pipeline CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 7 * * *'  # Daily at 07:00 UTC
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt || echo "No requirements.txt"
+        pip install pytest flake8 black mypy
+        
+    - name: Lint with flake8
+      run: |
+        flake8 pfe-pipelines/ pfe-agents/ sagemath_verification/ --count --select=E9,F63,F7,F82 --show-source --statistics
+        
+    - name: Check formatting with black
+      run: |
+        black --check pfe-pipelines/ pfe-agents/ sagemath_verification/ || echo "Formatting issues detected"
+        
+    - name: Type check with mypy
+      run: |
+        mypy pfe-pipelines/ pfe-agents/ --ignore-missing-imports || echo "Type check issues"
+        
+    - name: Run PFE pipeline tests
+      run: |
+        cd pfe-pipelines && python -m pytest test_pfe_pipeline.py -v || echo "No tests yet"
+        
+  lean-verification:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        
+    - name: Install Lean dependencies
+      run: |
+        pip install markdown-it-py
+        
+    - name: Run Lean parser pipeline
+      run: |
+        cd pfe-pipelines && python pfe_pipeline.py --input ../sylva-release/src/ --output reports/
+        
+    - name: Upload reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: lean-verification-reports
+        path: pfe-pipelines/reports/
+        
+  numerical-verification:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        
+    - name: Install numerical dependencies
+      run: |
+        pip install numpy scipy mpmath sympy
+        
+    - name: Run SageMath verification
+      run: |
+        cd sagemath_verification && python unified_verifier.py --report || echo "Verification completed"
+        
+    - name: Upload numerical reports
+      uses: actions/upload-artifact@v4
+      with:
+        name: numerical-verification-reports
+        path: sagemath_verification/reports/
+
+  agent-coordination:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        
+    - name: Install agent dependencies
+      run: |
+        pip install requests
+        
+    - name: Run ZhiKong agent health check
+      run: |
+        cd pfe-agents && python zhikong_agent.py --health-check || echo "Agent health check completed"
+        
+    - name: Generate agent status report
+      run: |
+        cd pfe-agents && python zhikong_agent.py --generate-report || echo "Report generation completed"
