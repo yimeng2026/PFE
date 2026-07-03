@@ -1,0 +1,17 @@
+作为 PFE 工程代理，分析以下 TOE-SYLVA 的开放问题，
+为每个问题提供数值验证策略或工程近似方案。
+
+开放问题列表：
+- EntropyGapSpectral.lean::diagonalization_spectral (line 665, 2 sorry)
+- NumericalZeros.lean::eta_zeta_relation (line 105, 5 sorry)
+- StatisticalMechanics.lean::Rushbrooke_scaling (line 66, 4 sorry)
+- StatisticalMechanics.lean::Widom_scaling (line 74, 3 sorry)
+- StatisticalMechanics.lean::Fisher_scaling (line 82, 2 sorry)
+
+请为每个问题提供：
+1. 数值验证方法（如果有）
+2. 工程近似策略（如果数值验证不可行）
+3. 置信度评估（0-1）
+4. 所需的计算工具（SageMath/Python/Mathematica）
+
+注意：PFE 追求有效涌现，不要求数学严格性。

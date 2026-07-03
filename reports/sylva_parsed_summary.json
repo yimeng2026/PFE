@@ -1,0 +1,80 @@
+{
+  "total_modules": 56,
+  "total_sorry": 141,
+  "total_theorems": 36,
+  "total_axioms": 0,
+  "sorry_by_file": [
+    [
+      "Complexity.lean",
+      22
+    ],
+    [
+      "RazborovSmolensky.lean",
+      18
+    ],
+    [
+      "Superconductivity_Symmetry_Classification.lean",
+      13
+    ],
+    [
+      "EntropyGapSpectral.lean",
+      12
+    ],
+    [
+      "NumericalZeros.lean",
+      12
+    ],
+    [
+      "Superconductivity_Material_Derivation.lean",
+      9
+    ],
+    [
+      "EmergentMath.lean",
+      8
+    ],
+    [
+      "CookLevin_theorem.lean",
+      6
+    ],
+    [
+      "SylvaExamples.lean",
+      6
+    ],
+    [
+      "DynamicalSystem.lean",
+      5
+    ]
+  ],
+  "open_theorems": [
+    {
+      "file": "EntropyGapSpectral.lean",
+      "theorem": "diagonalization_spectral",
+      "line": 665,
+      "sorry_count": 2
+    },
+    {
+      "file": "NumericalZeros.lean",
+      "theorem": "eta_zeta_relation",
+      "line": 105,
+      "sorry_count": 5
+    },
+    {
+      "file": "StatisticalMechanics.lean",
+      "theorem": "Rushbrooke_scaling",
+      "line": 66,
+      "sorry_count": 4
+    },
+    {
+      "file": "StatisticalMechanics.lean",
+      "theorem": "Widom_scaling",
+      "line": 74,
+      "sorry_count": 3
+    },
+    {
+      "file": "StatisticalMechanics.lean",
+      "theorem": "Fisher_scaling",
+      "line": 82,
+      "sorry_count": 2
+    }
+  ]
+}
