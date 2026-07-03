@@ -1,0 +1,576 @@
+{
+  "timestamp": "2026-07-03 10:47:27",
+  "version": "v4.12",
+  "summary": {
+    "total_files": 56,
+    "total_theorems": 280,
+    "total_lemmas": 64,
+    "total_defs": 280,
+    "total_axioms": 31,
+    "total_sorry": 147,
+    "proven_count": 31,
+    "try_blocks": 37
+  },
+  "file_stats": [
+    {
+      "file": "Complexity.lean",
+      "theorems": 1,
+      "lemmas": 1,
+      "defs": 11,
+      "axioms": 0,
+      "sorry": 22,
+      "try": 0,
+      "lines": 529
+    },
+    {
+      "file": "RazborovSmolensky.lean",
+      "theorems": 6,
+      "lemmas": 2,
+      "defs": 5,
+      "axioms": 0,
+      "sorry": 19,
+      "try": 0,
+      "lines": 973
+    },
+    {
+      "file": "EntropyGapSpectral.lean",
+      "theorems": 0,
+      "lemmas": 5,
+      "defs": 3,
+      "axioms": 0,
+      "sorry": 13,
+      "try": 0,
+      "lines": 797
+    },
+    {
+      "file": "Superconductivity_Symmetry_Classification.lean",
+      "theorems": 46,
+      "lemmas": 0,
+      "defs": 1,
+      "axioms": 0,
+      "sorry": 13,
+      "try": 6,
+      "lines": 645
+    },
+    {
+      "file": "NumericalZeros.lean",
+      "theorems": 6,
+      "lemmas": 2,
+      "defs": 25,
+      "axioms": 0,
+      "sorry": 12,
+      "try": 0,
+      "lines": 434
+    },
+    {
+      "file": "Superconductivity_Material_Derivation.lean",
+      "theorems": 1,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 9,
+      "try": 0,
+      "lines": 426
+    },
+    {
+      "file": "EmergentMath.lean",
+      "theorems": 8,
+      "lemmas": 0,
+      "defs": 4,
+      "axioms": 0,
+      "sorry": 8,
+      "try": 0,
+      "lines": 481
+    },
+    {
+      "file": "CookLevin_theorem.lean",
+      "theorems": 3,
+      "lemmas": 14,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 6,
+      "try": 9,
+      "lines": 637
+    },
+    {
+      "file": "SylvaExamples.lean",
+      "theorems": 1,
+      "lemmas": 0,
+      "defs": 21,
+      "axioms": 0,
+      "sorry": 6,
+      "try": 0,
+      "lines": 550
+    },
+    {
+      "file": "DynamicalSystem.lean",
+      "theorems": 2,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 5,
+      "try": 0,
+      "lines": 220
+    },
+    {
+      "file": "RadiationTracker.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 3,
+      "axioms": 0,
+      "sorry": 5,
+      "try": 0,
+      "lines": 407
+    },
+    {
+      "file": "Superconductivity_Meta_Theorem.lean",
+      "theorems": 1,
+      "lemmas": 0,
+      "defs": 1,
+      "axioms": 10,
+      "sorry": 5,
+      "try": 0,
+      "lines": 701
+    },
+    {
+      "file": "TutorialTemplate.lean",
+      "theorems": 3,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 5,
+      "try": 0,
+      "lines": 142
+    },
+    {
+      "file": "StatisticalMechanics.lean",
+      "theorems": 4,
+      "lemmas": 0,
+      "defs": 10,
+      "axioms": 0,
+      "sorry": 4,
+      "try": 0,
+      "lines": 138
+    },
+    {
+      "file": "CP004.lean",
+      "theorems": 1,
+      "lemmas": 6,
+      "defs": 7,
+      "axioms": 0,
+      "sorry": 2,
+      "try": 2,
+      "lines": 322
+    },
+    {
+      "file": "LocalGlobalTemplate.lean",
+      "theorems": 0,
+      "lemmas": 2,
+      "defs": 3,
+      "axioms": 0,
+      "sorry": 2,
+      "try": 2,
+      "lines": 372
+    },
+    {
+      "file": "SAIPFillTest.lean",
+      "theorems": 12,
+      "lemmas": 1,
+      "defs": 2,
+      "axioms": 0,
+      "sorry": 2,
+      "try": 0,
+      "lines": 115
+    },
+    {
+      "file": "Superconductivity_Pairing_Framework.lean",
+      "theorems": 7,
+      "lemmas": 0,
+      "defs": 31,
+      "axioms": 0,
+      "sorry": 2,
+      "try": 2,
+      "lines": 526
+    },
+    {
+      "file": "BandTheory.lean",
+      "theorems": 3,
+      "lemmas": 0,
+      "defs": 10,
+      "axioms": 0,
+      "sorry": 1,
+      "try": 0,
+      "lines": 246
+    },
+    {
+      "file": "CookLevin.lean",
+      "theorems": 2,
+      "lemmas": 14,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 1,
+      "try": 9,
+      "lines": 468
+    },
+    {
+      "file": "GravitationalField.lean",
+      "theorems": 22,
+      "lemmas": 0,
+      "defs": 4,
+      "axioms": 0,
+      "sorry": 1,
+      "try": 0,
+      "lines": 599
+    },
+    {
+      "file": "MathAgent.lean",
+      "theorems": 15,
+      "lemmas": 0,
+      "defs": 1,
+      "axioms": 0,
+      "sorry": 1,
+      "try": 0,
+      "lines": 784
+    },
+    {
+      "file": "Renormalization_Group_Formalization.lean",
+      "theorems": 3,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 1,
+      "try": 0,
+      "lines": 461
+    },
+    {
+      "file": "SylvaTestSuiteComplete.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 6,
+      "axioms": 0,
+      "sorry": 1,
+      "try": 5,
+      "lines": 606
+    },
+    {
+      "file": "ZetaVerifier.lean",
+      "theorems": 16,
+      "lemmas": 2,
+      "defs": 17,
+      "axioms": 0,
+      "sorry": 1,
+      "try": 1,
+      "lines": 336
+    },
+    {
+      "file": "Basic.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 5,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 294
+    },
+    {
+      "file": "BasicTutorial.lean",
+      "theorems": 13,
+      "lemmas": 0,
+      "defs": 9,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 485
+    },
+    {
+      "file": "BSD.lean",
+      "theorems": 6,
+      "lemmas": 1,
+      "defs": 18,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 507
+    },
+    {
+      "file": "CP004_B2.lean",
+      "theorems": 2,
+      "lemmas": 4,
+      "defs": 10,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 142
+    },
+    {
+      "file": "CP004_B2_new_header.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 41
+    },
+    {
+      "file": "CrystalStructure.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 199
+    },
+    {
+      "file": "EllipticCurveReduction.lean",
+      "theorems": 2,
+      "lemmas": 1,
+      "defs": 1,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 398
+    },
+    {
+      "file": "GF3Advanced.lean",
+      "theorems": 18,
+      "lemmas": 0,
+      "defs": 2,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 341
+    },
+    {
+      "file": "Main.lean",
+      "theorems": 4,
+      "lemmas": 0,
+      "defs": 1,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 153
+    },
+    {
+      "file": "NavierStokes.lean",
+      "theorems": 7,
+      "lemmas": 0,
+      "defs": 23,
+      "axioms": 20,
+      "sorry": 0,
+      "try": 0,
+      "lines": 548
+    },
+    {
+      "file": "ProvingTechniques.lean",
+      "theorems": 10,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 620
+    },
+    {
+      "file": "QFT.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 62
+    },
+    {
+      "file": "QuantumArithmetic.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 5
+    },
+    {
+      "file": "RH_Step1.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 1,
+      "lines": 96
+    },
+    {
+      "file": "SAIPTest.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 27
+    },
+    {
+      "file": "SylvaConsumer.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 3
+    },
+    {
+      "file": "SylvaFormalization.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 52
+    },
+    {
+      "file": "SylvaInfrastructure.lean",
+      "theorems": 4,
+      "lemmas": 0,
+      "defs": 7,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 99
+    },
+    {
+      "file": "SylvaInfrastructure_interface.lean",
+      "theorems": 2,
+      "lemmas": 0,
+      "defs": 2,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 80
+    },
+    {
+      "file": "SylvaTest.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 13
+    },
+    {
+      "file": "SylvaTestSuite.lean",
+      "theorems": 18,
+      "lemmas": 0,
+      "defs": 7,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 186
+    },
+    {
+      "file": "sylva_auto_proofs.lean",
+      "theorems": 31,
+      "lemmas": 0,
+      "defs": 5,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 378
+    },
+    {
+      "file": "sylva_test.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 24
+    },
+    {
+      "file": "sylva_test_suite.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 1,
+      "sorry": 0,
+      "try": 0,
+      "lines": 377
+    },
+    {
+      "file": "Test.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 161
+    },
+    {
+      "file": "TestMul.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 1,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 4
+    },
+    {
+      "file": "TestNP.lean",
+      "theorems": 0,
+      "lemmas": 1,
+      "defs": 1,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 22
+    },
+    {
+      "file": "TestSInf.lean",
+      "theorems": 0,
+      "lemmas": 1,
+      "defs": 0,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 10
+    },
+    {
+      "file": "TestSuite.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 13,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 412
+    },
+    {
+      "file": "test_postulate.lean",
+      "theorems": 0,
+      "lemmas": 0,
+      "defs": 1,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 2
+    },
+    {
+      "file": "VerificationTests.lean",
+      "theorems": 0,
+      "lemmas": 7,
+      "defs": 9,
+      "axioms": 0,
+      "sorry": 0,
+      "try": 0,
+      "lines": 172
+    }
+  ]
+}
