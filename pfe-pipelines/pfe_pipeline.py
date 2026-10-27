@@ -46,113 +46,156 @@ class VerificationResult:
 
 
 class LeanParser:
-    """
-    千界花园 sylva-parser.ts 的 Python 实现
-    
-    解析 Lean 文件，提取 theorem/lemma/def/axiom/sorry 信息。
-    纯文本解析，不依赖 lake/lean 编译。
-    """
-    
+    """轻量 Lean 文本扫描器；结果不是 Lean 编译或证明状态。"""
+
     THEOREM_PATTERN = re.compile(
-        r'^(theorem|lemma|def|axiom|conjecture|structure|inductive|instance)\s+'
-        r'([a-zA-Z_][a-zA-Z0-9_\']*)\s*(?:\{[^}]*\})?\s*\([^)]*\)\s*:'
+        r"^(theorem|lemma|def|axiom|conjecture|structure|inductive|instance)\s+"
+        r"([a-zA-Z_][a-zA-Z0-9_']*)\b"
     )
-    
-    SORRY_PATTERN = re.compile(r'\bsorry\b')
-    COMMENT_PATTERN = re.compile(r'--\s*(.+)')
-    IMPORT_PATTERN = re.compile(r'^import\s+(.+)')
-    NAMESPACE_PATTERN = re.compile(r'^namespace\s+([a-zA-Z_][a-zA-Z0-9_]*)')
-    
+    DECLARATION_START_PATTERN = re.compile(
+        r"^(theorem|lemma|def|axiom|conjecture|structure|inductive|instance|example)\b"
+    )
+    SORRY_PATTERN = re.compile(r"\bsorry\b")
+    STRING_LITERAL_PATTERN = re.compile(r'"(?:\\.|[^"\\])*"')
+    IMPORT_PATTERN = re.compile(r"^import\s+(.+)")
+    NAMESPACE_PATTERN = re.compile(r"^namespace\s+([a-zA-Z_][a-zA-Z0-9_]*)")
+
     def __init__(self, lean_dir: str):
         self.lean_dir = Path(lean_dir)
-        self.modules = []
-    
+        self.modules: List[Dict] = []
+
+    @classmethod
+    def _strip_comments(cls, lines: List[str]) -> List[str]:
+        """移除行注释和可嵌套块注释，同时保留字符串与原始行号。"""
+        cleaned = []
+        block_depth = 0
+        in_string = False
+        for line in lines:
+            output = []
+            i = 0
+            while i < len(line):
+                pair = line[i:i + 2]
+                char = line[i]
+                if block_depth:
+                    if pair == "/-":
+                        block_depth += 1
+                        i += 2
+                    elif pair == "-/":
+                        block_depth -= 1
+                        i += 2
+                    else:
+                        i += 1
+                    continue
+                if in_string:
+                    output.append(char)
+                    if char == "\\" and i + 1 < len(line):
+                        output.append(line[i + 1])
+                        i += 2
+                        continue
+                    if char == '"':
+                        in_string = False
+                    i += 1
+                    continue
+                if pair == "--":
+                    break
+                if pair == "/-":
+                    block_depth = 1
+                    i += 2
+                    continue
+                output.append(char)
+                if char == '"':
+                    in_string = True
+                i += 1
+            cleaned.append("".join(output))
+        return cleaned
+
+    @classmethod
+    def _has_sorry(cls, line: str) -> bool:
+        code = cls.STRING_LITERAL_PATTERN.sub('""', line)
+        return cls.SORRY_PATTERN.search(code) is not None
+
     def parse_file(self, file_path: Path) -> Dict:
-        """解析单个 Lean 文件"""
-        content = file_path.read_text(encoding='utf-8')
-        lines = content.split('\n')
-        
-        module = {
-            'file_name': file_path.name,
-            'file_path': str(file_path),
-            'total_lines': len(lines),
-            'theorems': [],
-            'definitions': [],
-            'axioms': [],
-            'sorry_count': 0,
-            'sorry_lines': [],
-            'imports': [],
-            'namespace': '',
-            'description': ''
+        """解析单个 Lean 文件；接受 Path 或路径字符串。"""
+        file_path = Path(file_path)
+        content = file_path.read_text(encoding="utf-8")
+        raw_lines = content.split("\n")
+        lines = self._strip_comments(raw_lines)
+
+        module: Dict = {
+            "file_name": file_path.name,
+            "file_path": str(file_path),
+            "total_lines": len(raw_lines),
+            "theorems": [],
+            "definitions": [],
+            "axioms": [],
+            "sorry_count": 0,
+            "sorry_lines": [],
+            "imports": [],
+            "namespace": "",
+            "description": "",
+            "analysis_mode": "text_only_not_compiled",
         }
-        
-        # 提取文件顶部注释作为描述
+
         desc_lines = []
-        for line in lines[:30]:
-            if line.strip().startswith('-') or line.strip().startswith('/'):
-                desc_lines.append(line.strip().lstrip('-/').strip())
-            elif line.strip() and not line.strip().startswith('import'):
+        for line in raw_lines[:30]:
+            if line.strip().startswith("-") or line.strip().startswith("/"):
+                desc_lines.append(line.strip().lstrip("-/").strip())
+            elif line.strip() and not line.strip().startswith("import"):
                 break
-        module['description'] = ' '.join(desc_lines)[:200]
-        
-        # 解析每一行
+        module["description"] = " ".join(desc_lines)[:200]
+
         for i, line in enumerate(lines, 1):
-            # 导入
-            if m := self.IMPORT_PATTERN.match(line.strip()):
-                module['imports'].append(m.group(1).strip())
-            
-            # 命名空间
-            if m := self.NAMESPACE_PATTERN.match(line.strip()):
-                module['namespace'] = m.group(1)
-            
-            # 定理/引理/定义/公理
-            if m := self.THEOREM_PATTERN.match(line.strip()):
+            stripped = line.strip()
+            if m := self.IMPORT_PATTERN.match(stripped):
+                module["imports"].append(m.group(1).strip())
+            if m := self.NAMESPACE_PATTERN.match(stripped):
+                module["namespace"] = m.group(1)
+
+            if m := self.THEOREM_PATTERN.match(stripped):
                 decl_type = m.group(1)
                 decl_name = m.group(2)
-                
-                # 检查该声明内是否有 sorry
                 decl_sorry_lines = []
-                # 简单启发：从声明行开始向后搜索 50 行或到下一个声明
-                for j in range(i, min(i + 50, len(lines) + 1)):
-                    if j < len(lines) and self.SORRY_PATTERN.search(lines[j - 1]):
+                for j in range(i, len(lines) + 1):
+                    candidate = lines[j - 1].strip()
+                    if j > i and self.DECLARATION_START_PATTERN.match(candidate):
+                        break
+                    if self._has_sorry(candidate):
                         decl_sorry_lines.append(j)
-                
+
                 decl = {
-                    'name': decl_name,
-                    'type': decl_type,
-                    'line': i,
-                    'has_sorry': len(decl_sorry_lines) > 0,
-                    'sorry_count': len(decl_sorry_lines),
-                    'sorry_lines': decl_sorry_lines,
-                    'statement': line.strip()[:200]
+                    "name": decl_name,
+                    "type": decl_type,
+                    "line": i,
+                    "has_sorry": bool(decl_sorry_lines),
+                    "sorry_count": len(decl_sorry_lines),
+                    "sorry_lines": decl_sorry_lines,
+                    "statement": stripped[:200],
                 }
-                
-                if decl_type in ('theorem', 'lemma'):
-                    module['theorems'].append(decl)
-                elif decl_type == 'def':
-                    module['definitions'].append(decl)
-                elif decl_type == 'axiom':
-                    module['axioms'].append(decl)
-            
-            # 全局 sorry 计数
-            if self.SORRY_PATTERN.search(line):
-                module['sorry_count'] += 1
-                module['sorry_lines'].append(i)
-        
+                if decl_type in ("theorem", "lemma"):
+                    module["theorems"].append(decl)
+                elif decl_type == "def":
+                    module["definitions"].append(decl)
+                elif decl_type == "axiom":
+                    module["axioms"].append(decl)
+
+            if self._has_sorry(line):
+                module["sorry_count"] += 1
+                module["sorry_lines"].append(i)
+
         return module
-    
+
     def parse_all(self) -> List[Dict]:
-        """解析所有 Lean 文件"""
-        for lean_file in self.lean_dir.rglob('*.lean'):
-            # 跳过 .lake 和 archive 目录
-            if '.lake' in str(lean_file) or 'archive' in str(lean_file):
+        """解析全部输入；缺失目录、空输入和读取错误均明确失败。"""
+        if not self.lean_dir.is_dir():
+            raise FileNotFoundError(f"Lean input directory not found: {self.lean_dir}")
+        self.modules = []
+        lean_files = sorted(self.lean_dir.rglob("*.lean"))
+        for lean_file in lean_files:
+            if ".lake" in lean_file.parts or "archive" in lean_file.parts:
                 continue
-            try:
-                module = self.parse_file(lean_file)
-                self.modules.append(module)
-            except Exception as e:
-                print(f"Warning: Failed to parse {lean_file}: {e}")
-        
+            self.modules.append(self.parse_file(lean_file))
+        if not self.modules:
+            raise ValueError(f"No Lean files found outside .lake/archive: {self.lean_dir}")
         return self.modules
     
     def get_sorry_summary(self) -> Dict:
@@ -334,7 +377,7 @@ class PFEEngineeringPipeline:
         print(f"  -> Report saved to {report_path}")
         return report_path
     
-    def run_full_pipeline(self, target_modules: List[str] = None, llm_api: Optional[str] = None):
+    def run_full_pipeline(self, target_modules: Optional[List[str]] = None, llm_api: Optional[str] = None):
         """执行完整管道"""
         print("=" * 60)
         print("PFE Precision Fitting Engineering Pipeline")

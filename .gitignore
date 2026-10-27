@@ -4,3 +4,8 @@ __pycache__/
 *.pyc
 .pfe-bridge-cache/
 .cache/
+.pytest_cache/
+.mypy_cache/
+pfe-output/
+pfe-pipelines/reports/
+sagemath_verification/reports/

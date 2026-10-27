@@ -178,17 +178,13 @@ class SimpleVoid(Void):
         return self._dim
 
     def connectivity(self, node_id: Union[int, str]) -> float:
+        """Return the weighted degree, counting each incident edge once."""
         nid = int(node_id)
-        conn = sum(1 for e in self.edges if nid in e)
-        if conn == 0:
-            return 0.0
-        # 加权连通性
-        weighted = sum(
-            self.edges.get((min(nid, other), max(nid, other)), 1.0)
-            for other in self.nodes
-            if other != nid
-            and (min(nid, other), max(nid, other)) in self.edges
-        )
+        weighted = 0.0
+        for u, v in self.edges:
+            if nid == u or nid == v:
+                key = (min(u, v), max(u, v))
+                weighted += self.weights.get(key, 1.0)
         return weighted
 
     def _average_degree(self) -> float:
@@ -201,7 +197,7 @@ class SimpleVoid(Void):
         self.weights[(min(u, v), max(u, v))] = weight
 
     @classmethod
-    def from_random(cls, n_nodes: int, n_edges: int, dim: int = 4, seed: int = None) -> SimpleVoid:
+    def from_random(cls, n_nodes: int, n_edges: int, dim: int = 4, seed: Optional[int] = None) -> SimpleVoid:
         """生成随机 Void 网络"""
         if seed is not None:
             random.seed(seed)
@@ -315,7 +311,7 @@ class StabilityConvergenceCriterion(ConvergenceCriterion):
         mean = sum(values) / len(values)
         variance = sum((v - mean) ** 2 for v in values) / len(values)
         std_dev = math.sqrt(variance)
-        relative_std = std_dev / abs(mean) if mean != 0 else float('inf')
+        relative_std = std_dev / abs(mean) if mean != 0 else (0.0 if std_dev == 0 else float("inf"))
         return relative_std < self._threshold and mass.confidence() > 0.5
 
     def name(self) -> str:
@@ -333,14 +329,10 @@ class ZhiKongEngine:
     工作流：
         1. 接收 Void 输入（抽象拓扑网络）
         2. 应用 EmergenceRule 生成候选 Mass
-        3. 使用 ConvergenceCriterion 评估涌现质量
-        4. 迭代优化直到收敛或达到最大迭代次数
-        5. 输出有效 Mass 或标记为失败
+        3. 只有提供 state_update 时才执行状态迭代和收敛判定
+        4. 无状态更新时仅做单次评估，返回 converged=False
 
-    PFE 工程原则：
-        - 不追求数学严格，追求有效涌现
-        - 容忍数值误差 1e-6
-        - 允许启发式失败，可迭代改进
+    数值稳定或启发式收敛不是物理真实性的证据。
     """
 
     def __init__(
@@ -349,39 +341,45 @@ class ZhiKongEngine:
         criterion: Optional[ConvergenceCriterion] = None,
         max_iterations: int = 100,
         verbose: bool = False,
+        state_update: Optional[Callable[[Void, Mass, int], Void]] = None,
     ):
+        if max_iterations < 1:
+            raise ValueError("max_iterations must be at least 1")
         self.rule = rule or ConnectivityEmergenceRule()
         self.criterion = criterion or StabilityConvergenceCriterion()
         self.max_iterations = max_iterations
         self.verbose = verbose
+        self.state_update = state_update
         self._history: List[Mass] = []
         self._iteration_count = 0
 
     def run(self, void: Void) -> Tuple[Mass, bool]:
-        """
-        运行涌现引擎。
-
-        Returns:
-            (mass, converged): 涌现结果和是否收敛
-        """
+        """Return ``(mass, converged)``; a static evaluation is not convergence."""
         self._history = []
         self._iteration_count = 0
 
-        for i in range(self.max_iterations):
-            self._iteration_count = i + 1
+        if self.state_update is None:
+            self._iteration_count = 1
             mass = self.rule.apply(void)
             self._history.append(mass)
+            if self.verbose:
+                print("[ZhiKong] Static single-pass evaluation; no iterative convergence claimed")
+            return mass, False
 
+        current_void = void
+        for i in range(self.max_iterations):
+            self._iteration_count = i + 1
+            mass = self.rule.apply(current_void)
+            self._history.append(mass)
             converged = self.criterion.evaluate(mass, self._history)
 
             if self.verbose:
                 print(f"[ZhiKong] Iteration {i+1}: {mass}, converged={converged}")
-
             if converged:
                 return mass, True
+            current_void = self.state_update(current_void, mass, i)
 
-        # 未收敛，返回最后结果
-        return self._history[-1] if self._history else SimpleMass(), False
+        return self._history[-1], False
 
     def run_batch(self, voids: List[Void]) -> List[Tuple[Mass, bool]]:
         """批量运行涌现引擎"""
@@ -429,8 +427,8 @@ def demo():
 
     mass, converged = engine.run(void)
 
-    print(f"\n[Result] Converged={converged}")
-    print(f"[Result] Mass={mass}")
+    print(f"\n[Result] Iterative converged={converged} (no state_update: static single-pass only)")
+    print(f"[Result] Heuristic mass={mass}; this is not physical confirmation")
 
     return mass, converged
 

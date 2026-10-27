@@ -7,7 +7,9 @@ date: "2026-06-17"
 
 # Abstract
 
-We propose a novel framework in which the fine-structure constant $\alpha$ emerges as a topological invariant of causal network dynamics. By treating charge as a measure of network connectivity and embedding the network in a stratified three-dimensional space with curvature-torsion coupling, numerical simulations yield $\alpha \approx 0.0073\text{--}0.008$, achieving $5\text{--}6\%$ agreement with the experimental value $1/137.036 \approx 0.007297$. We identify $\alpha^{-1}$ with the Chern-Simons topological invariant $n_{CS} = 137$, offering a first-principles path toward the long-standing "large-number puzzle" of fundamental constants. The framework connects causal set theory, emergent gravity, and topological quantum field theory through a unified graph-theoretic language.
+> **Evidence-status correction (2026-10-27):** This is a historical draft. The earlier generic 5–6% agreement claim and the identification with $n_{CS}=137$ are not established results; see the repository README and `verify_simulation_results.py` for the current audit scope.
+
+We explore a heuristic causal-network model in which charge is represented by connectivity. In the stored `02_fast_simulation.py` batch, the statistic called $\alpha$ is approximately 0.00767–0.00773 for simulation dimension 3 and 0.00346–0.00350 for dimension 4 across the recorded finite sizes. These parameter-dependent network statistics do not constitute a first-principles derivation of the physical fine-structure constant or evidence for a special four-dimensional critical window. The proposed Chern–Simons relationship remains a conjecture requiring an independent derivation and falsifiable predictions.
 
 **Keywords:** fine-structure constant, causal networks, emergence, topological field theory, Chern-Simons invariant, graph theory, quantum gravity
 

@@ -8,8 +8,7 @@ import matplotlib.pyplot as plt
 from typing import List, Dict
 from dataclasses import dataclass
 import json
-import warnings
-warnings.filterwarnings('ignore')
+from pathlib import Path
 
 # 设置中文字体
 plt.rcParams['font.sans-serif'] = ['DejaVu Sans']
@@ -255,13 +254,14 @@ if __name__ == "__main__":
         deviation = abs(data['alpha_mean'] - target_alpha) / target_alpha * 100
         print(f"  {param}: α={data['alpha_mean']:.8f}, 偏差={deviation:.2f}%")
     
-    # 保存结果
-    with open('/root/.openclaw/workspace/alpha_derivation/simulation_results.json', 'w') as f:
+    # 保存到脚本所属目录，避免依赖另一台机器的绝对路径。
+    output_path = Path(__file__).with_name('simulation_results.json')
+    with open(output_path, 'w', encoding='utf-8') as f:
         json.dump({
             'main_results': all_results,
             'c_sensitivity': c_results,
             'L_sensitivity': L_results,
             'target_alpha': target_alpha
         }, f, indent=2)
-    
-    print(f"\n结果已保存到 simulation_results.json")
+
+    print(f"\n结果已保存到 {output_path}")
